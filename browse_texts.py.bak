@@ -282,7 +282,7 @@ class CustomHTTPRequestHandler(http.server.SimpleHTTPRequestHandler):
                         color: #e0e0e0; 
                     }}
                     h1, h2, h3 {{ color: #ffffff; }}
-                    a {{ color: #bb86fc; text-decoration: none; }}
+                    a {{ color: #ffffff; text-decoration: none; }}
                     a:hover {{ text-decoration: underline; }}
                     .container {{ max-width: 1200px; margin: 0 auto; }}
                     .text-display {{ 
@@ -432,7 +432,7 @@ class CustomHTTPRequestHandler(http.server.SimpleHTTPRequestHandler):
                             color: #e0e0e0; 
                         }}
                         h1, h2, h3 {{ color: #ffffff; }}
-                        a {{ color: #bb86fc; text-decoration: none; }}
+                        a {{ color: #ffffff; text-decoration: none; }}
                         a:hover {{ text-decoration: underline; }}
                         .container {{ max-width: 1200px; margin: 0 auto; }}
                         .text-display {{ 
@@ -721,7 +721,7 @@ class CustomHTTPRequestHandler(http.server.SimpleHTTPRequestHandler):
                                 color: #333;
                                 font-family: Arial, sans-serif;
                             }}
-                            a {{ color: #0066cc; text-decoration: none; }}
+                            a {{ color: #ffffff; text-decoration: none; }}
                             a:hover {{ text-decoration: underline; }}
                             .container {{ 
                                 max-width: 800px; 
@@ -766,6 +766,73 @@ class CustomHTTPRequestHandler(http.server.SimpleHTTPRequestHandler):
                             }}
                             .shutdown-btn {{
                                 color: #ff5252 !important;
+                            }}
+                            
+                            /* Enhanced reader styles */
+                            .revision-history {{
+                                margin: 20px 0;
+                                padding: 15px;
+                                background-color: #f5f5f5;
+                                border-left: 4px solid #0066cc;
+                                border-radius: 4px;
+                            }}
+                            .bibliography {{
+                                color: #666;
+                                font-style: italic;
+                                font-size: 0.9em;
+                                margin-right: 10px;
+                            }}
+                            .section {{
+                                margin: 30px 0;
+                                padding-bottom: 20px;
+                                border-bottom: 1px solid #eee;
+                            }}
+                            .section-title {{
+                                font-size: 1.4em;
+                                color: #333;
+                                margin-bottom: 15px;
+                                font-weight: bold;
+                            }}
+                            .paragraph {{
+                                margin-bottom: 15px;
+                                line-height: 1.8;
+                                text-indent: 2em;
+                            }}
+                            .quote {{
+                                margin: 15px 30px;
+                                padding: 10px 20px;
+                                border-left: 3px solid #0066cc;
+                                font-style: italic;
+                                background-color: #f9f9f9;
+                            }}
+                            .page-break {{
+                                text-align: right;
+                                font-size: 0.85em;
+                                color: #777;
+                                margin: 15px 0;
+                                padding: 5px 0;
+                                border-top: 1px dashed #ccc;
+                            }}
+                            .document-header {{
+                                background-color: #f5f5f5;
+                                padding: 15px;
+                                margin-bottom: 20px;
+                                border-radius: 4px;
+                            }}
+                            .section-head {{
+                                text-align: center;
+                                font-size: 1.3em;
+                                margin: 20px 0;
+                                font-weight: normal;
+                                color: #444;
+                            }}
+                            .main-content {{
+                                line-height: 1.8;
+                            }}
+                            .xml-tag {{
+                                color: #999;
+                                font-size: 0.9em;
+                                font-family: monospace;
                             }}
                         </style>
                     </head>
@@ -939,7 +1006,7 @@ class CustomHTTPRequestHandler(http.server.SimpleHTTPRequestHandler):
                         color: #e0e0e0; 
                     }}
                     h1, h2, h3 { color: #ffffff; }}
-                    a { color: #bb86fc; text-decoration: none; }}
+                    a { color: #ffffff; text-decoration: none; }}
                     a:hover { text-decoration: underline; }}
                     .container {{ max-width: 1200px; margin: 0 auto; }}
                     .text-display {{ 
@@ -1025,7 +1092,7 @@ class CustomHTTPRequestHandler(http.server.SimpleHTTPRequestHandler):
                         color: #e0e0e0; 
                     }}
                     h1, h2, h3 {{ color: #ffffff; }}
-                    a {{ color: #bb86fc; text-decoration: none; }}
+                    a {{ color: #ffffff; text-decoration: none; }}
                     a:hover {{ text-decoration: underline; }}
                     .container {{ max-width: 1200px; margin: 0 auto; }}
                     .text-display {{ 
@@ -1131,7 +1198,7 @@ class CustomHTTPRequestHandler(http.server.SimpleHTTPRequestHandler):
                                 color: #e0e0e0; 
                             }}
                             h1, h2, h3 {{ color: #ffffff; }}
-                            a {{ color: #bb86fc; text-decoration: none; }}
+                            a {{ color: #ffffff; text-decoration: none; }}
                             a:hover {{ text-decoration: underline; }}
                             .container {{ max-width: 1200px; margin: 0 auto; }}
                             .text-display {{ 
@@ -1245,7 +1312,7 @@ class CustomHTTPRequestHandler(http.server.SimpleHTTPRequestHandler):
                         color: #e0e0e0; 
                     }}
                     h1, h2, h3 {{ color: #ffffff; }}
-                    a {{ color: #bb86fc; text-decoration: none; }}
+                    a {{ color: #ffffff; text-decoration: none; }}
                     a:hover {{ text-decoration: underline; }}
                     .container {{ max-width: 1200px; margin: 0 auto; }}
                     .text-display {{ 
@@ -1375,7 +1442,7 @@ class CustomHTTPRequestHandler(http.server.SimpleHTTPRequestHandler):
                             color: #e0e0e0; 
                         }}
                         h1, h2, h3 {{ color: #ffffff; }}
-                        a {{ color: #bb86fc; text-decoration: none; }}
+                        a {{ color: #ffffff; text-decoration: none; }}
                         a:hover {{ text-decoration: underline; }}
                         .container {{ max-width: 1200px; margin: 0 auto; }}
                         .text-display {{ 
@@ -1626,50 +1693,143 @@ class CustomHTTPRequestHandler(http.server.SimpleHTTPRequestHandler):
     
     def process_xml_for_reading(self, xml_content):
         """Process XML content for reader-friendly display"""
-        # This is a simplified XML processor for reading
-        # You would likely want a more sophisticated parser for production use
-        
         # First, escape the content to prevent script injection
         content = escape(xml_content)
         
-        # Extract and format the actual text content more readably
-        # This is a simplified approach - a real implementation would use a proper XML parser
+        # Basic replacements for better display
+        # Replace some common tags with more readable formats
         
+        # Handle revision history
+        revision_pattern = r'&lt;revisionDesc&gt;(.*?)&lt;/revisionDesc&gt;'
+        revision_match = re.search(revision_pattern, content, re.DOTALL)
+        revision_html = ""
+        
+        if revision_match:
+            revision_content = revision_match.group(1)
+            # Extract change records
+            change_pattern = r'&lt;change when="([^"]*)" who="([^"]*)"&gt;(.*?)&lt;/change&gt;'
+            changes = re.findall(change_pattern, revision_content, re.DOTALL)
+            
+            if changes:
+                revision_html = '<div class="revision-history"><h3>Revision History</h3><ul>'
+                for date, person, desc in changes:
+                    revision_html += f'<li><strong>{date}</strong> by <em>{person}</em>: {desc}</li>'
+                revision_html += '</ul></div>'
+        
+        # Handle div elements with type="textpart"
+        textpart_pattern = r'&lt;div type="textpart" subtype="([^"]*)" [^&]*?n="([^"]*)"&gt;(.*?)&lt;/div&gt;'
+        
+        # Function to process a textpart div
+        def process_textpart(match):
+            subtype = match.group(1)
+            section_num = match.group(2)
+            content = match.group(3)
+            
+            # Process paragraphs inside the section
+            content = re.sub(r'&lt;p[^&]*?&gt;(.*?)&lt;/p&gt;', 
+                           r'<div class="paragraph">\1</div>', 
+                           content)
+            
+            # Process bibliographical references
+            content = re.sub(r'&lt;bibl[^&]*?&gt;(.*?)&lt;/bibl&gt;', 
+                           r'<span class="bibliography">\1</span>', 
+                           content)
+            
+            # Process quotes
+            content = re.sub(r'&lt;q&gt;(.*?)&lt;/q&gt;', 
+                           r'<blockquote class="quote">\1</blockquote>', 
+                           content)
+            
+            return f'''
+            <div class="section">
+                <h3 class="section-title">{subtype.capitalize()} {section_num}</h3>
+                {content}
+            </div>
+            '''
+        
+        # Replace all textpart divs
+        content = re.sub(textpart_pattern, process_textpart, content, flags=re.DOTALL)
+        
+        # Handle page breaks
+        content = re.sub(r'&lt;pb facs="([^"]*)"/?&gt;', 
+                       r'<div class="page-break">Page: <a href="#" title="Facsimile reference">\1</a></div>', 
+                       content)
+        
+        # Handle XML headers more elegantly
+        header_pattern = r'&lt;teiHeader&gt;(.*?)&lt;/teiHeader&gt;'
+        header_match = re.search(header_pattern, content, re.DOTALL)
+        header_html = ""
+        
+        if header_match:
+            header_content = header_match.group(1)
+            
+            # Extract title info
+            title_pattern = r'&lt;title[^&]*?&gt;(.*?)&lt;/title&gt;'
+            titles = re.findall(title_pattern, header_content)
+            
+            # Extract editor info
+            editor_pattern = r'&lt;editor&gt;(.*?)&lt;/editor&gt;'
+            editors = re.findall(editor_pattern, header_content)
+            
+            if titles or editors:
+                header_html = '<div class="document-header">'
+                if titles:
+                    header_html += '<div class="document-titles"><h3>Document Titles</h3><ul>'
+                    for title in titles:
+                        header_html += f'<li>{title}</li>'
+                    header_html += '</ul></div>'
+                
+                if editors:
+                    header_html += '<div class="document-editors"><h3>Editors</h3><ul>'
+                    for editor in editors:
+                        header_html += f'<li>{editor}</li>'
+                    header_html += '</ul></div>'
+                
+                header_html += '</div>'
+        
+        # Process main text body
+        body_pattern = r'&lt;text&gt;\s*&lt;body&gt;(.*?)&lt;/body&gt;\s*&lt;/text&gt;'
+        body_match = re.search(body_pattern, content, re.DOTALL)
+        
+        if body_match:
+            body_content = body_match.group(1)
+            # Remove div wrappers that we've already processed
+            body_html = body_content
+            
+            # Process any remaining divs
+            body_html = re.sub(r'&lt;div [^&]*?&gt;', '<div class="text-division">', body_html)
+            body_html = re.sub(r'&lt;/div&gt;', '</div>', body_html)
+            
+            # Format other elements
+            body_html = re.sub(r'&lt;head[^&]*?&gt;(.*?)&lt;/head&gt;', r'<h2 class="section-head">\1</h2>', body_html)
+            body_html = re.sub(r'&lt;p[^&]*?&gt;(.*?)&lt;/p&gt;', r'<p>\1</p>', body_html)
+            
+            # We've handled specific elements - now clean up any remaining tags
+            # This helps with nested tags that weren't caught by the patterns above
+            body_html = re.sub(r'&lt;[^&]*?&gt;', ' ', body_html)
+            
+            # Create the final content structure
+            final_html = f'''
+            {header_html}
+            {revision_html}
+            <div class="main-content">
+                {body_html}
+            </div>
+            '''
+            
+            return final_html
+        
+        # If structured processing didn't work, fall back to a simpler representation
         # Remove XML declaration and other processing instructions
-        content = re.sub(r'<\?[^>]*\?>', '', content)
+        content = re.sub(r'&lt;\?[^&]*\?&gt;', '', content)
         
-        # Replace line breaks with HTML line breaks
+        # Replace tag brackets with styling
+        content = re.sub(r'&lt;([^&]*)&gt;', r'<span class="xml-tag">&lt;\1&gt;</span>', content)
+        
+        # Add line breaks
         content = content.replace('\n', '<br>')
         
-        # Split into sections for better readability
-        sections = []
-        
-        # Check for div type="textpart" elements
-        parts = re.split(r'(&lt;div type="textpart"[^>]*&gt;)', content)
-        
-        if len(parts) > 1:
-            current_section = ""
-            for i, part in enumerate(parts):
-                if i % 2 == 1:  # This is a div start tag
-                    # Extract section number or label if available
-                    section_label = re.search(r'n="([^"]*)"', part)
-                    if section_label:
-                        if current_section:  # Add the previous section
-                            sections.append(f'<div class="xml-section">{current_section}</div>')
-                        current_section = f'<h3>Section {section_label.group(1)}</h3>'
-                    else:
-                        current_section += part
-                else:
-                    current_section += part
-            
-            # Add the last section
-            if current_section:
-                sections.append(f'<div class="xml-section">{current_section}</div>')
-        else:
-            # If no section divs found, just use the whole content
-            sections.append(f'<div class="xml-section">{content}</div>')
-        
-        return ''.join(sections)
+        return f'<div class="raw-xml">{content}</div>'
 
     def delayed_shutdown(self):
         """Shut down the server after a short delay to allow the response to be sent"""
