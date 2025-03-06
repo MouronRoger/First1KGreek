@@ -8,13 +8,95 @@ from html import escape
 import webbrowser
 from urllib.parse import parse_qs, urlparse, quote
 import re
+import threading
+import time
 
 PORT = 8000
+
+# Global reference to the server
+server_instance = None
 
 class CustomHTTPRequestHandler(http.server.SimpleHTTPRequestHandler):
     def do_GET(self):
         parsed_url = urlparse(self.path)
         path = parsed_url.path
+        
+        # Handle shutdown request
+        if path == "/shutdown":
+            self.send_response(200)
+            self.send_header("Content-type", "text/html")
+            self.end_headers()
+            
+            html = """
+            <!DOCTYPE html>
+            <html>
+            <head>
+                <meta charset="UTF-8">
+                <meta http-equiv="refresh" content="5;url=about:blank" />
+                <title>Server Shutdown - First 1K Greek Texts</title>
+                <style>
+                    body { 
+                        font-family: Arial, sans-serif; 
+                        margin: 0; 
+                        padding: 20px; 
+                        line-height: 1.6; 
+                        background-color: #121212; 
+                        color: #e0e0e0;
+                        text-align: center;
+                        padding-top: 100px;
+                    }
+                    h1, h2, h3 { color: #ffffff; }
+                    .container { max-width: 600px; margin: 0 auto; }
+                    .shutdown-message {
+                        padding: 30px;
+                        background-color: #1e1e1e;
+                        border-radius: 8px;
+                        border: 1px solid #333;
+                        margin-top: 30px;
+                    }
+                    .countdown {
+                        font-size: 24px;
+                        font-weight: bold;
+                        margin-top: 20px;
+                        color: #03dac6;
+                    }
+                </style>
+                <script>
+                    let countdown = 5;
+                    function updateCountdown() {
+                        document.getElementById('countdown').innerText = countdown;
+                        countdown--;
+                        if (countdown >= 0) {
+                            setTimeout(updateCountdown, 1000);
+                        }
+                    }
+                    window.onload = function() {
+                        updateCountdown();
+                    };
+                </script>
+            </head>
+            <body>
+                <div class="container">
+                    <h1>Server Shutting Down</h1>
+                    <div class="shutdown-message">
+                        <p>The First 1K Greek Texts server is shutting down.</p>
+                        <p>This window will close automatically in <span id="countdown">5</span> seconds.</p>
+                        <p>Thank you for using the application!</p>
+                    </div>
+                </div>
+            </body>
+            </html>
+            """
+            
+            self.wfile.write(html.encode())
+            
+            # Start a separate thread to shut down the server after a short delay
+            # to allow the page to be displayed
+            shutdown_thread = threading.Thread(target=self.delayed_shutdown)
+            shutdown_thread.daemon = True
+            shutdown_thread.start()
+            
+            return
         
         # Serve the HTML interface for the root path
         if path == "/":
@@ -101,6 +183,9 @@ class CustomHTTPRequestHandler(http.server.SimpleHTTPRequestHandler):
                         border-radius: 4px;
                         cursor: pointer;
                     }
+                    .shutdown-btn {
+                        color: #ff5252 !important;
+                    }
                 </style>
             </head>
             <body>
@@ -108,11 +193,13 @@ class CustomHTTPRequestHandler(http.server.SimpleHTTPRequestHandler):
                     <h1>First 1K Greek Texts Browser</h1>
                     
                     <div class="navigation">
+                        <a href="/">Home</a> | 
                         <a href="/authors">Browse Authors</a> | 
                         <a href="/editors">Browse by Editor</a> | 
                         <a href="/raw">Browse Raw Files</a> | 
                         <a href="/search">Search Corpus</a> | 
-                        <a href="/about">About</a>
+                        <a href="/about">About</a> | 
+                        <a href="/shutdown" class="shutdown-btn" onclick="return confirm('Are you sure you want to shut down the server?')">Shutdown Server</a>
                     </div>
                     
                     <div class="search-form">
@@ -232,7 +319,8 @@ class CustomHTTPRequestHandler(http.server.SimpleHTTPRequestHandler):
                         <a href="/">Home</a> | 
                         <a href="/authors">Browse Authors</a> | 
                         <a href="/raw">Browse Raw Files</a> | 
-                        <a href="/about">About</a>
+                        <a href="/about">About</a> | 
+                        <a href="/shutdown" class="shutdown-btn" onclick="return confirm('Are you sure you want to shut down the server?')">Shutdown Server</a>
                     </div>
                     
                     <div class="text-display">
@@ -382,7 +470,8 @@ class CustomHTTPRequestHandler(http.server.SimpleHTTPRequestHandler):
                             <a href="/">Home</a> | 
                             <a href="/authors">Browse Authors</a> | 
                             <a href="/raw">Browse Raw Files</a> | 
-                            <a href="/about">About</a>
+                            <a href="/about">About</a> | 
+                            <a href="/shutdown" class="shutdown-btn" onclick="return confirm('Are you sure you want to shut down the server?')">Shutdown Server</a>
                         </div>
                         
                         <div class="text-display">
@@ -508,6 +597,9 @@ class CustomHTTPRequestHandler(http.server.SimpleHTTPRequestHandler):
                         margin-top: 10px;
                         font-size: 0.9em;
                     }}
+                    .shutdown-btn {
+                        color: #ff5252 !important;
+                    }
                 </style>
             </head>
             <body>
@@ -520,7 +612,8 @@ class CustomHTTPRequestHandler(http.server.SimpleHTTPRequestHandler):
                         <a href="/editors">Browse by Editor</a> | 
                         <a href="/raw">Browse Raw Files</a> | 
                         <a href="/search">Search Corpus</a> | 
-                        <a href="/about">About</a>
+                        <a href="/about">About</a> | 
+                        <a href="/shutdown" class="shutdown-btn" onclick="return confirm('Are you sure you want to shut down the server?')">Shutdown Server</a>
                     </div>
                     
                     <div class="search-form">
@@ -663,6 +756,13 @@ class CustomHTTPRequestHandler(http.server.SimpleHTTPRequestHandler):
                             .xml-section {{
                                 margin-bottom: 30px;
                             }}
+                            .view-links {
+                                margin-top: 10px;
+                                font-size: 0.9em;
+                            }
+                            .shutdown-btn {
+                                color: #ff5252 !important;
+                            }
                         </style>
                     </head>
                     <body>
@@ -673,7 +773,8 @@ class CustomHTTPRequestHandler(http.server.SimpleHTTPRequestHandler):
                                 <a href="/editors">Browse by Editor</a> | 
                                 <a href="/raw">Browse Raw Files</a> | 
                                 <a href="/search">Search Corpus</a> | 
-                                <a href="/about">About</a>
+                                <a href="/about">About</a> | 
+                                <a href="/shutdown" class="shutdown-btn" onclick="return confirm('Are you sure you want to shut down the server?')">Shutdown Server</a>
                             </div>
                             
                             <div class="header">
@@ -773,6 +874,13 @@ class CustomHTTPRequestHandler(http.server.SimpleHTTPRequestHandler):
                                 margin-top: 15px;
                                 text-align: right;
                             }}
+                            .view-links {
+                                margin-top: 10px;
+                                font-size: 0.9em;
+                            }
+                            .shutdown-btn {
+                                color: #ff5252 !important;
+                            }
                         </style>
                     </head>
                     <body>
@@ -785,7 +893,8 @@ class CustomHTTPRequestHandler(http.server.SimpleHTTPRequestHandler):
                                 <a href="/editors">Browse by Editor</a> | 
                                 <a href="/raw">Browse Raw Files</a> | 
                                 <a href="/search">Search Corpus</a> | 
-                                <a href="/about">About</a>
+                                <a href="/about">About</a> | 
+                                <a href="/shutdown" class="shutdown-btn" onclick="return confirm('Are you sure you want to shut down the server?')">Shutdown Server</a>
                             </div>
                             
                             <div class="text-display">
@@ -843,6 +952,13 @@ class CustomHTTPRequestHandler(http.server.SimpleHTTPRequestHandler):
                         border-radius: 8px;
                         border: 1px solid #333;
                     }
+                    .view-links {
+                        margin-top: 10px;
+                        font-size: 0.9em;
+                    }
+                    .shutdown-btn {
+                        color: #ff5252 !important;
+                    }
                 </style>
             </head>
             <body>
@@ -853,7 +969,8 @@ class CustomHTTPRequestHandler(http.server.SimpleHTTPRequestHandler):
                         <a href="/">Home</a> | 
                         <a href="/authors">Browse Authors</a> | 
                         <a href="/raw">Browse Raw Files</a> | 
-                        <a href="/about">About</a>
+                        <a href="/about">About</a> | 
+                        <a href="/shutdown" class="shutdown-btn" onclick="return confirm('Are you sure you want to shut down the server?')">Shutdown Server</a>
                     </div>
                     
                     <div class="text-display">
@@ -935,6 +1052,13 @@ class CustomHTTPRequestHandler(http.server.SimpleHTTPRequestHandler):
                         transform: translateY(-3px);
                         box-shadow: 0 4px 8px rgba(0,0,0,0.3);
                     }}
+                    .view-links {
+                        margin-top: 10px;
+                        font-size: 0.9em;
+                    }
+                    .shutdown-btn {
+                        color: #ff5252 !important;
+                    }
                 </style>
             </head>
             <body>
@@ -945,7 +1069,8 @@ class CustomHTTPRequestHandler(http.server.SimpleHTTPRequestHandler):
                         <a href="/">Home</a> | 
                         <a href="/authors">Browse Authors</a> | 
                         <a href="/raw">Browse Raw Files</a> | 
-                        <a href="/about">About</a>
+                        <a href="/about">About</a> | 
+                        <a href="/shutdown" class="shutdown-btn" onclick="return confirm('Are you sure you want to shut down the server?')">Shutdown Server</a>
                     </div>
                     
                     <div class="text-display">
@@ -1045,6 +1170,13 @@ class CustomHTTPRequestHandler(http.server.SimpleHTTPRequestHandler):
                                 font-family: monospace;
                                 margin-bottom: 15px;
                             }}
+                            .view-links {
+                                margin-top: 10px;
+                                font-size: 0.9em;
+                            }
+                            .shutdown-btn {
+                                color: #ff5252 !important;
+                            }
                         </style>
                     </head>
                     <body>
@@ -1055,7 +1187,8 @@ class CustomHTTPRequestHandler(http.server.SimpleHTTPRequestHandler):
                                 <a href="/">Home</a> | 
                                 <a href="/authors">Browse Authors</a> | 
                                 <a href="/raw">Browse Raw Files</a> | 
-                                <a href="/about">About</a>
+                                <a href="/about">About</a> | 
+                                <a href="/shutdown" class="shutdown-btn" onclick="return confirm('Are you sure you want to shut down the server?')">Shutdown Server</a>
                             </div>
                             
                             <div class="text-display">
@@ -1143,6 +1276,13 @@ class CustomHTTPRequestHandler(http.server.SimpleHTTPRequestHandler):
                         border-left: 4px solid #03dac6; 
                         background-color: #1e352f;
                     }}
+                    .view-links {
+                        margin-top: 10px;
+                        font-size: 0.9em;
+                    }
+                    .shutdown-btn {
+                        color: #ff5252 !important;
+                    }
                 </style>
             </head>
             <body>
@@ -1154,7 +1294,8 @@ class CustomHTTPRequestHandler(http.server.SimpleHTTPRequestHandler):
                         <a href="/authors">Browse Authors</a> | 
                         <a href="/editors">Browse by Editor</a> | 
                         <a href="/raw">Browse Raw Files</a> | 
-                        <a href="/about">About</a>
+                        <a href="/about">About</a> | 
+                        <a href="/shutdown" class="shutdown-btn" onclick="return confirm('Are you sure you want to shut down the server?')">Shutdown Server</a>
                     </div>
                     
                     <div class="text-display">
@@ -1257,6 +1398,13 @@ class CustomHTTPRequestHandler(http.server.SimpleHTTPRequestHandler):
                         .work-item:last-child {{
                             border-bottom: none;
                         }}
+                        .view-links {
+                            margin-top: 10px;
+                            font-size: 0.9em;
+                        }
+                        .shutdown-btn {
+                            color: #ff5252 !important;
+                        }
                     </style>
                 </head>
                 <body>
@@ -1268,7 +1416,8 @@ class CustomHTTPRequestHandler(http.server.SimpleHTTPRequestHandler):
                             <a href="/authors">Browse Authors</a> | 
                             <a href="/editors">Browse by Editor</a> | 
                             <a href="/raw">Browse Raw Files</a> | 
-                            <a href="/about">About</a>
+                            <a href="/about">About</a> | 
+                            <a href="/shutdown" class="shutdown-btn" onclick="return confirm('Are you sure you want to shut down the server?')">Shutdown Server</a>
                         </div>
                         
                         <div class="text-display">
@@ -1518,11 +1667,45 @@ class CustomHTTPRequestHandler(http.server.SimpleHTTPRequestHandler):
         
         return ''.join(sections)
 
+    def delayed_shutdown(self):
+        """Shut down the server after a short delay to allow the response to be sent"""
+        time.sleep(2)  # Wait for the response to be sent
+        print("Server shutting down...")
+        global server_instance
+        if server_instance:
+            server_instance.shutdown()
+
+def add_shutdown_button(html):
+    """Add a shutdown button to the HTML navigation bar"""
+    # Find the navigation div
+    nav_start = html.find('<div class="navigation">')
+    if nav_start > 0:
+        nav_end = html.find('</div>', nav_start)
+        if nav_end > 0:
+            # Get the navigation content
+            nav_content = html[nav_start:nav_end]
+            # Add the shutdown button
+            shutdown_button = ' | <a href="/shutdown" style="color: #ff5252;" onclick="return confirm(\'Are you sure you want to shut down the server?\')">Shutdown Server</a>'
+            modified_nav = nav_content + shutdown_button
+            # Replace the navigation content
+            return html[:nav_start] + modified_nav + html[nav_end:]
+    
+    # If we couldn't find the navigation, return the original HTML
+    return html
+
 def run_server():
-    with socketserver.TCPServer(("", PORT), CustomHTTPRequestHandler) as httpd:
-        print(f"Server running at http://localhost:{PORT}/")
-        webbrowser.open(f"http://localhost:{PORT}/")
-        httpd.serve_forever()
+    global server_instance
+    server_instance = socketserver.TCPServer(("", PORT), CustomHTTPRequestHandler)
+    print(f"Server running at http://localhost:{PORT}/")
+    webbrowser.open(f"http://localhost:{PORT}/")
+    
+    try:
+        server_instance.serve_forever()
+    except KeyboardInterrupt:
+        print("Server stopped by user")
+    finally:
+        server_instance.server_close()
+        print("Server closed")
 
 if __name__ == "__main__":
     run_server() 
