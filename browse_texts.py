@@ -6,7 +6,7 @@ import socketserver
 import json
 from html import escape
 import webbrowser
-from urllib.parse import parse_qs, urlparse
+from urllib.parse import parse_qs, urlparse, quote
 import re
 
 PORT = 8000
@@ -38,7 +38,7 @@ class CustomHTTPRequestHandler(http.server.SimpleHTTPRequestHandler):
                         color: #e0e0e0; 
                     }
                     h1, h2, h3 { color: #ffffff; }
-                    a { color: #bb86fc; text-decoration: none; }
+                    a { color: #ffffff; text-decoration: none; }
                     a:hover { text-decoration: underline; }
                     .container { max-width: 1200px; margin: 0 auto; }
                     .text-display { 
@@ -79,6 +79,28 @@ class CustomHTTPRequestHandler(http.server.SimpleHTTPRequestHandler):
                     .greek { 
                         font-family: 'New Athena Unicode', 'GFS Artemisia', 'Arial Unicode MS', 'Lucida Sans Unicode', 'Cardo', sans-serif; 
                     }
+                    .search-form {
+                        margin: 20px 0;
+                        padding: 15px;
+                        background-color: #252525;
+                        border-radius: 8px;
+                    }
+                    .search-form input[type="text"] {
+                        width: 70%;
+                        padding: 8px;
+                        border: 1px solid #555;
+                        background-color: #1e1e1e;
+                        color: #e0e0e0;
+                        border-radius: 4px;
+                    }
+                    .search-form input[type="submit"] {
+                        padding: 8px 16px;
+                        background-color: #03dac6;
+                        color: #000;
+                        border: none;
+                        border-radius: 4px;
+                        cursor: pointer;
+                    }
                 </style>
             </head>
             <body>
@@ -89,7 +111,15 @@ class CustomHTTPRequestHandler(http.server.SimpleHTTPRequestHandler):
                         <a href="/authors">Browse Authors</a> | 
                         <a href="/editors">Browse by Editor</a> | 
                         <a href="/raw">Browse Raw Files</a> | 
+                        <a href="/search">Search Corpus</a> | 
                         <a href="/about">About</a>
+                    </div>
+                    
+                    <div class="search-form">
+                        <form action="/search" method="get">
+                            <input type="text" name="q" placeholder="Search for a phrase in the corpus...">
+                            <input type="submit" value="Search">
+                        </form>
                     </div>
                     
                     <div class="text-display">
@@ -367,6 +397,308 @@ class CustomHTTPRequestHandler(http.server.SimpleHTTPRequestHandler):
                 self.wfile.write(html.encode())
                 return
         
+        # Search functionality
+        elif path == "/search":
+            self.send_response(200)
+            self.send_header("Content-type", "text/html")
+            self.end_headers()
+            
+            query = parse_qs(parsed_url.query)
+            search_term = query.get("q", [""])[0].strip()
+            
+            search_results = []
+            if search_term:
+                search_results = self.search_corpus(search_term)
+            
+            # Create HTML for search results
+            results_html = ""
+            if search_term:
+                if search_results:
+                    for result in search_results:
+                        # Create a snippet with context
+                        context = result["context"]
+                        # Highlight the search term
+                        highlighted_context = context.replace(search_term, f'<span style="background-color: #03dac6; color: #000; padding: 2px 4px; border-radius: 3px;">{search_term}</span>')
+                        
+                        results_html += f"""
+                        <div class="result-item">
+                            <h3><a href="/view?path={result['file_path']}">{result['title']}</a></h3>
+                            <p>Author: {result['author']}</p>
+                            <p>Editor: {result.get('editor', 'Unknown')}</p>
+                            <div class="result-context greek">{highlighted_context}</div>
+                            <p class="view-links">
+                                <a href="/view?path={result['file_path']}">View in default mode</a> | 
+                                <a href="/reader?path={result['file_path']}">View in reader mode</a>
+                            </p>
+                        </div>
+                        """
+                else:
+                    results_html = "<p>No results found for your search term.</p>"
+            
+            html = f"""
+            <!DOCTYPE html>
+            <html>
+            <head>
+                <meta charset="UTF-8">
+                <title>Search Results - First 1K Greek Texts</title>
+                <style>
+                    body {{ 
+                        font-family: Arial, sans-serif; 
+                        margin: 0; 
+                        padding: 20px; 
+                        line-height: 1.6; 
+                        background-color: #121212; 
+                        color: #e0e0e0; 
+                    }}
+                    h1, h2, h3 {{ color: #ffffff; }}
+                    a {{ color: #ffffff; text-decoration: none; }}
+                    a:hover {{ text-decoration: underline; }}
+                    .container {{ max-width: 1200px; margin: 0 auto; }}
+                    .text-display {{ 
+                        border: 1px solid #333; 
+                        padding: 20px; 
+                        margin-top: 20px;
+                        background-color: #1e1e1e;
+                        border-radius: 8px;
+                    }}
+                    .navigation {{ 
+                        margin-bottom: 20px; 
+                        padding: 12px;
+                        background-color: #1e1e1e;
+                        border-radius: 8px;
+                        border: 1px solid #333;
+                    }}
+                    .search-form {{
+                        margin: 20px 0;
+                        padding: 15px;
+                        background-color: #252525;
+                        border-radius: 8px;
+                    }}
+                    .search-form input[type="text"] {{
+                        width: 70%;
+                        padding: 8px;
+                        border: 1px solid #555;
+                        background-color: #1e1e1e;
+                        color: #e0e0e0;
+                        border-radius: 4px;
+                    }}
+                    .search-form input[type="submit"] {{
+                        padding: 8px 16px;
+                        background-color: #03dac6;
+                        color: #000;
+                        border: none;
+                        border-radius: 4px;
+                        cursor: pointer;
+                    }}
+                    .result-item {{ 
+                        margin-bottom: 30px; 
+                        padding: 20px; 
+                        background-color: #252525;
+                        border-radius: 8px;
+                        border-left: 4px solid #03dac6;
+                    }}
+                    .result-context {{
+                        padding: 15px;
+                        margin: 10px 0;
+                        background-color: #1e1e1e;
+                        border-radius: 4px;
+                        font-family: 'New Athena Unicode', 'GFS Artemisia', 'Arial Unicode MS', 'Lucida Sans Unicode', 'Cardo', sans-serif;
+                    }}
+                    .view-links {{
+                        margin-top: 10px;
+                        font-size: 0.9em;
+                    }}
+                </style>
+            </head>
+            <body>
+                <div class="container">
+                    <h1>First 1K Greek Texts Browser</h1>
+                    
+                    <div class="navigation">
+                        <a href="/">Home</a> | 
+                        <a href="/authors">Browse Authors</a> | 
+                        <a href="/editors">Browse by Editor</a> | 
+                        <a href="/raw">Browse Raw Files</a> | 
+                        <a href="/search">Search Corpus</a> | 
+                        <a href="/about">About</a>
+                    </div>
+                    
+                    <div class="search-form">
+                        <form action="/search" method="get">
+                            <input type="text" name="q" value="{escape(search_term)}" placeholder="Search for a phrase in the corpus...">
+                            <input type="submit" value="Search">
+                        </form>
+                    </div>
+                    
+                    <div class="text-display">
+                        <h2>Search Results</h2>
+                        <p>{f'Showing {len(search_results)} results for "{escape(search_term)}"' if search_term else 'Enter a search term to find texts in the corpus'}</p>
+                        {results_html}
+                    </div>
+                </div>
+            </body>
+            </html>
+            """
+            
+            self.wfile.write(html.encode())
+            return
+        
+        # Reader mode for XML files
+        elif path == "/reader":
+            query = parse_qs(parsed_url.query)
+            if "path" in query:
+                file_path = query["path"][0]
+                if os.path.exists(file_path) and file_path.endswith(".xml"):
+                    self.send_response(200)
+                    self.send_header("Content-type", "text/html")
+                    self.end_headers()
+                    
+                    try:
+                        with open(file_path, 'r', encoding='utf-8') as f:
+                            content = f.read()
+                            
+                            # Process XML content for readability
+                            processed_content = self.process_xml_for_reading(content)
+                            
+                            # Get metadata
+                            author_name = "Unknown"
+                            work_title = os.path.basename(file_path)
+                            editor_name = "Unknown"
+                            
+                            # Extract editor from XML if possible
+                            editor_matches = re.findall(r'<editor>(.*?)</editor>', content)
+                            if editor_matches and len(editor_matches[0].strip()) > 0:
+                                editor_name = editor_matches[0]
+                            
+                            # Try to get the author and work info from the file path
+                            path_parts = file_path.split(os.sep)
+                            if len(path_parts) >= 4 and path_parts[0] == "data":
+                                author_id = path_parts[1]
+                                work_id = path_parts[2]
+                                
+                                # Get author name
+                                author_cts = os.path.join("data", author_id, "__cts__.xml")
+                                if os.path.exists(author_cts):
+                                    with open(author_cts, 'r', encoding='utf-8') as f_author:
+                                        author_content = f_author.read()
+                                        name_start = author_content.find("<ti:groupname")
+                                        if name_start > 0:
+                                            name_end = author_content.find("</ti:groupname>", name_start)
+                                            if name_end > 0:
+                                                tag_end = author_content.find(">", name_start)
+                                                author_name = author_content[tag_end+1:name_end].strip()
+                                
+                                # Get work title
+                                work_cts = os.path.join("data", author_id, work_id, "__cts__.xml")
+                                if os.path.exists(work_cts):
+                                    with open(work_cts, 'r', encoding='utf-8') as f_work:
+                                        work_content = f_work.read()
+                                        title_start = work_content.find("<ti:title")
+                                        if title_start > 0:
+                                            title_end = work_content.find("</ti:title>", title_start)
+                                            if title_end > 0:
+                                                tag_end = work_content.find(">", title_start)
+                                                work_title = work_content[tag_end+1:title_end].strip()
+                    except Exception as e:
+                        processed_content = f"Error reading file: {str(e)}"
+                        author_name = "Error"
+                        work_title = "Error"
+                        editor_name = "Error"
+                    
+                    html = f"""
+                    <!DOCTYPE html>
+                    <html>
+                    <head>
+                        <meta charset="UTF-8">
+                        <title>{work_title} - Reader Mode - First 1K Greek Texts</title>
+                        <style>
+                            body {{ 
+                                font-family: 'New Athena Unicode', 'GFS Artemisia', 'Arial Unicode MS', 'Lucida Sans Unicode', 'Cardo', serif; 
+                                margin: 0; 
+                                padding: 0;
+                                line-height: 1.8; 
+                                background-color: #f9f9f9; 
+                                color: #000000; 
+                            }}
+                            h1, h2, h3 {{ 
+                                color: #333;
+                                font-family: Arial, sans-serif;
+                            }}
+                            a {{ color: #0066cc; text-decoration: none; }}
+                            a:hover {{ text-decoration: underline; }}
+                            .container {{ 
+                                max-width: 800px; 
+                                margin: 0 auto; 
+                                padding: 20px;
+                                background-color: #ffffff;
+                                box-shadow: 0 0 10px rgba(0,0,0,0.1);
+                                min-height: 100vh;
+                            }}
+                            .header {{
+                                margin-bottom: 30px;
+                                border-bottom: 1px solid #eee;
+                                padding-bottom: 20px;
+                            }}
+                            .metadata {{
+                                margin-bottom: 20px;
+                                font-style: italic;
+                                color: #666;
+                            }}
+                            .reader-content {{ 
+                                font-size: 18px;
+                                line-height: 1.8;
+                            }}
+                            .navigation {{ 
+                                margin-bottom: 20px; 
+                                padding: 12px;
+                                border-bottom: 1px solid #eee;
+                            }}
+                            .toggle-view {{
+                                background-color: #f0f0f0;
+                                padding: 10px;
+                                border-radius: 4px;
+                                margin-top: 20px;
+                                text-align: center;
+                            }}
+                            .xml-section {{
+                                margin-bottom: 30px;
+                            }}
+                        </style>
+                    </head>
+                    <body>
+                        <div class="container">
+                            <div class="navigation">
+                                <a href="/">Home</a> | 
+                                <a href="/authors">Browse Authors</a> | 
+                                <a href="/editors">Browse by Editor</a> | 
+                                <a href="/raw">Browse Raw Files</a> | 
+                                <a href="/search">Search Corpus</a> | 
+                                <a href="/about">About</a>
+                            </div>
+                            
+                            <div class="header">
+                                <h1>{work_title}</h1>
+                                <div class="metadata">
+                                    <p>Author: {author_name}</p>
+                                    <p>Editor: {editor_name}</p>
+                                </div>
+                            </div>
+                            
+                            <div class="reader-content">
+                                {processed_content}
+                            </div>
+                            
+                            <div class="toggle-view">
+                                <a href="/view?path={file_path}">Switch to Default View</a>
+                            </div>
+                        </div>
+                    </body>
+                    </html>
+                    """
+                    
+                    self.wfile.write(html.encode())
+                    return
+        
         # View a specific XML file
         elif path == "/view":
             query = parse_qs(parsed_url.query)
@@ -400,7 +732,7 @@ class CustomHTTPRequestHandler(http.server.SimpleHTTPRequestHandler):
                                 color: #e0e0e0; 
                             }}
                             h1, h2, h3 {{ color: #ffffff; }}
-                            a {{ color: #bb86fc; text-decoration: none; }}
+                            a {{ color: #ffffff; text-decoration: none; }}
                             a:hover {{ text-decoration: underline; }}
                             .container {{ max-width: 1200px; margin: 0 auto; }}
                             .text-display {{ 
@@ -437,6 +769,10 @@ class CustomHTTPRequestHandler(http.server.SimpleHTTPRequestHandler):
                                 font-family: monospace;
                                 margin-bottom: 15px;
                             }}
+                            .toggle-view {{
+                                margin-top: 15px;
+                                text-align: right;
+                            }}
                         </style>
                     </head>
                     <body>
@@ -446,13 +782,18 @@ class CustomHTTPRequestHandler(http.server.SimpleHTTPRequestHandler):
                             <div class="navigation">
                                 <a href="/">Home</a> | 
                                 <a href="/authors">Browse Authors</a> | 
+                                <a href="/editors">Browse by Editor</a> | 
                                 <a href="/raw">Browse Raw Files</a> | 
+                                <a href="/search">Search Corpus</a> | 
                                 <a href="/about">About</a>
                             </div>
                             
                             <div class="text-display">
                                 <h2>{os.path.basename(file_path)}</h2>
                                 <div class="path-info">Path: {file_path}</div>
+                                <div class="toggle-view">
+                                    <a href="/reader?path={file_path}">Switch to Reader Mode</a>
+                                </div>
                                 <div class="xml-content greek">{escaped_content}</div>
                             </div>
                         </div>
@@ -1028,6 +1369,155 @@ class CustomHTTPRequestHandler(http.server.SimpleHTTPRequestHandler):
         
         return editors_list
         
+    def search_corpus(self, search_term):
+        """Search for a phrase in all XML files and return results with context"""
+        results = []
+        
+        # Walk through all XML files in the data directory
+        for root, dirs, files in os.walk("data"):
+            for file in files:
+                if file.endswith(".xml") and file != "__cts__.xml":
+                    file_path = os.path.join(root, file)
+                    
+                    try:
+                        with open(file_path, 'r', encoding='utf-8') as f:
+                            content = f.read()
+                            
+                            # Check if search term exists in the content
+                            if search_term.lower() in content.lower():
+                                # Get context around the search term (case insensitive search)
+                                content_lower = content.lower()
+                                positions = []
+                                start_pos = 0
+                                
+                                while True:
+                                    pos = content_lower.find(search_term.lower(), start_pos)
+                                    if pos == -1:
+                                        break
+                                    positions.append(pos)
+                                    start_pos = pos + len(search_term)
+                                
+                                # If found, get metadata and context
+                                if positions:
+                                    # Get author and work info
+                                    path_parts = file_path.split(os.sep)
+                                    if len(path_parts) >= 4 and path_parts[0] == "data":
+                                        author_id = path_parts[1]
+                                        work_id = path_parts[2]
+                                        
+                                        # Get author name
+                                        author_name = author_id
+                                        author_cts = os.path.join("data", author_id, "__cts__.xml")
+                                        if os.path.exists(author_cts):
+                                            with open(author_cts, 'r', encoding='utf-8') as f_author:
+                                                author_content = f_author.read()
+                                                name_start = author_content.find("<ti:groupname")
+                                                if name_start > 0:
+                                                    name_end = author_content.find("</ti:groupname>", name_start)
+                                                    if name_end > 0:
+                                                        tag_end = author_content.find(">", name_start)
+                                                        author_name = author_content[tag_end+1:name_end].strip()
+                                        
+                                        # Get work title
+                                        work_title = work_id
+                                        work_cts = os.path.join("data", author_id, work_id, "__cts__.xml")
+                                        if os.path.exists(work_cts):
+                                            with open(work_cts, 'r', encoding='utf-8') as f_work:
+                                                work_content = f_work.read()
+                                                title_start = work_content.find("<ti:title")
+                                                if title_start > 0:
+                                                    title_end = work_content.find("</ti:title>", title_start)
+                                                    if title_end > 0:
+                                                        tag_end = work_content.find(">", title_start)
+                                                        work_title = work_content[tag_end+1:title_end].strip()
+                                        
+                                        # Extract editor information
+                                        editor_name = "Unknown"
+                                        editor_matches = re.findall(r'<editor>(.*?)</editor>', content)
+                                        if editor_matches and len(editor_matches[0].strip()) > 0:
+                                            editor_name = editor_matches[0]
+                                        
+                                        # Get context for the first occurrence
+                                        pos = positions[0]
+                                        start_context = max(0, pos - 100)
+                                        end_context = min(len(content), pos + len(search_term) + 100)
+                                        context = content[start_context:end_context]
+                                        
+                                        # Clean up context by removing partial tags at edges
+                                        if start_context > 0:
+                                            tag_start = context.find("<", 0, 50)
+                                            if tag_start > 0:
+                                                context = context[tag_start:]
+                                        
+                                        if end_context < len(content):
+                                            last_close_tag = context.rfind(">", len(context) - 50)
+                                            if last_close_tag > 0:
+                                                context = context[:last_close_tag + 1]
+                                        
+                                        # Add to results
+                                        results.append({
+                                            "file_path": file_path,
+                                            "author": author_name,
+                                            "title": work_title,
+                                            "editor": editor_name,
+                                            "context": escape(context),
+                                            "occurrence_count": len(positions)
+                                        })
+                    except Exception as e:
+                        print(f"Error searching {file_path}: {str(e)}")
+        
+        # Sort results by number of occurrences
+        results.sort(key=lambda x: x["occurrence_count"], reverse=True)
+        
+        return results
+    
+    def process_xml_for_reading(self, xml_content):
+        """Process XML content for reader-friendly display"""
+        # This is a simplified XML processor for reading
+        # You would likely want a more sophisticated parser for production use
+        
+        # First, escape the content to prevent script injection
+        content = escape(xml_content)
+        
+        # Extract and format the actual text content more readably
+        # This is a simplified approach - a real implementation would use a proper XML parser
+        
+        # Remove XML declaration and other processing instructions
+        content = re.sub(r'<\?[^>]*\?>', '', content)
+        
+        # Replace line breaks with HTML line breaks
+        content = content.replace('\n', '<br>')
+        
+        # Split into sections for better readability
+        sections = []
+        
+        # Check for div type="textpart" elements
+        parts = re.split(r'(&lt;div type="textpart"[^>]*&gt;)', content)
+        
+        if len(parts) > 1:
+            current_section = ""
+            for i, part in enumerate(parts):
+                if i % 2 == 1:  # This is a div start tag
+                    # Extract section number or label if available
+                    section_label = re.search(r'n="([^"]*)"', part)
+                    if section_label:
+                        if current_section:  # Add the previous section
+                            sections.append(f'<div class="xml-section">{current_section}</div>')
+                        current_section = f'<h3>Section {section_label.group(1)}</h3>'
+                    else:
+                        current_section += part
+                else:
+                    current_section += part
+            
+            # Add the last section
+            if current_section:
+                sections.append(f'<div class="xml-section">{current_section}</div>')
+        else:
+            # If no section divs found, just use the whole content
+            sections.append(f'<div class="xml-section">{content}</div>')
+        
+        return ''.join(sections)
+
 def run_server():
     with socketserver.TCPServer(("", PORT), CustomHTTPRequestHandler) as httpd:
         print(f"Server running at http://localhost:{PORT}/")
