@@ -721,7 +721,7 @@ class CustomHTTPRequestHandler(http.server.SimpleHTTPRequestHandler):
                                 color: #333;
                                 font-family: Arial, sans-serif;
                             }}
-                            a {{ color: #ffffff; text-decoration: none; }}
+                            a {{ color: #0066cc; text-decoration: none; }}
                             a:hover {{ text-decoration: underline; }}
                             .container {{ 
                                 max-width: 800px; 
@@ -833,6 +833,56 @@ class CustomHTTPRequestHandler(http.server.SimpleHTTPRequestHandler):
                                 color: #999;
                                 font-size: 0.9em;
                                 font-family: monospace;
+                            }}
+                            
+                            /* Additional Greek text specific styles */
+                            .fragment {{
+                                margin: 30px 0;
+                                padding: 20px;
+                                background-color: #fcfcfc;
+                                border-radius: 8px;
+                                border-left: 4px solid #0066cc;
+                                box-shadow: 0 2px 4px rgba(0,0,0,0.05);
+                            }}
+                            .fragment-number {{
+                                font-weight: bold;
+                                font-size: 1.2em;
+                                color: #0066cc;
+                                margin-bottom: 15px;
+                                border-bottom: 1px solid #eee;
+                                padding-bottom: 5px;
+                            }}
+                            .greek-text {{
+                                font-family: 'New Athena Unicode', 'GFS Artemisia', 'Arial Unicode MS', 'Lucida Sans Unicode', 'Cardo', serif;
+                                line-height: 1.8;
+                            }}
+                            .latin-text {{
+                                font-style: italic;
+                                color: #666;
+                            }}
+                            .bibl-reference {{
+                                font-weight: bold;
+                                color: #555;
+                                margin-right: 10px;
+                                font-size: 0.9em;
+                            }}
+                            .blockquote {{
+                                margin: 15px 30px;
+                                padding: 15px;
+                                background-color: #f7f7f7;
+                                border-left: 3px solid #0066cc;
+                                font-style: italic;
+                            }}
+                            .indent {{
+                                padding-left: 2em;
+                            }}
+                            .edition-info {{
+                                margin-bottom: 20px;
+                                font-style: italic;
+                                color: #666;
+                                padding: 10px;
+                                background-color: #f5f5f5;
+                                border-radius: 4px;
                             }}
                         </style>
                     </head>
@@ -1692,12 +1742,19 @@ class CustomHTTPRequestHandler(http.server.SimpleHTTPRequestHandler):
         return results
     
     def process_xml_for_reading(self, xml_content):
-        """Process XML content for reader-friendly display"""
+        """Process XML content for reader-friendly display with improved handling of Greek fragments"""
         # First, escape the content to prevent script injection
         content = escape(xml_content)
         
-        # Basic replacements for better display
-        # Replace some common tags with more readable formats
+        # Extract edition information if available
+        edition_pattern = r'&lt;div type="edition" n="([^"]*)" xml:lang="([^"]*)"&gt;'
+        edition_match = re.search(edition_pattern, content)
+        edition_html = ""
+        
+        if edition_match:
+            edition_id = edition_match.group(1)
+            edition_lang = edition_match.group(2)
+            edition_html = f'<div class="edition-info">Edition: {edition_id} (Language: {edition_lang})</div>'
         
         # Handle revision history
         revision_pattern = r'&lt;revisionDesc&gt;(.*?)&lt;/revisionDesc&gt;'
@@ -1716,46 +1773,77 @@ class CustomHTTPRequestHandler(http.server.SimpleHTTPRequestHandler):
                     revision_html += f'<li><strong>{date}</strong> by <em>{person}</em>: {desc}</li>'
                 revision_html += '</ul></div>'
         
-        # Handle div elements with type="textpart"
-        textpart_pattern = r'&lt;div type="textpart" subtype="([^"]*)" [^&]*?n="([^"]*)"&gt;(.*?)&lt;/div&gt;'
+        # Process fragments (textpart divs)
+        fragments_html = ""
+        fragment_pattern = r'&lt;div type="textpart" subtype="fragment" [^&]*?n="([^"]*)"&gt;(.*?)&lt;/div&gt;'
+        fragments = re.findall(fragment_pattern, content, re.DOTALL)
         
-        # Function to process a textpart div
-        def process_textpart(match):
-            subtype = match.group(1)
-            section_num = match.group(2)
-            content = match.group(3)
-            
-            # Process paragraphs inside the section
-            content = re.sub(r'&lt;p[^&]*?&gt;(.*?)&lt;/p&gt;', 
-                           r'<div class="paragraph">\1</div>', 
-                           content)
-            
-            # Process bibliographical references
-            content = re.sub(r'&lt;bibl[^&]*?&gt;(.*?)&lt;/bibl&gt;', 
-                           r'<span class="bibliography">\1</span>', 
-                           content)
-            
-            # Process quotes
-            content = re.sub(r'&lt;q&gt;(.*?)&lt;/q&gt;', 
-                           r'<blockquote class="quote">\1</blockquote>', 
-                           content)
-            
+        if fragments:
+            for fragment_num, fragment_content in fragments:
+                # Process paragraph content
+                processed_content = fragment_content
+                
+                # Handle paragraph tags with optional rend attribute
+                processed_content = re.sub(r'&lt;p rend="([^"]*)"&gt;(.*?)&lt;/p&gt;', 
+                                         r'<div class="paragraph \1">\2</div>', 
+                                         processed_content)
+                processed_content = re.sub(r'&lt;p&gt;(.*?)&lt;/p&gt;', 
+                                         r'<div class="paragraph">\1</div>', 
+                                         processed_content)
+                
+                # Handle bibliographical references
+                processed_content = re.sub(r'&lt;bibl xml:lang="([^"]*)"&gt;(.*?)&lt;/bibl&gt;', 
+                                         r'<span class="bibl-reference" lang="\1">\2</span>', 
+                                         processed_content)
+                
+                # Handle quotes with rend attribute
+                processed_content = re.sub(r'&lt;quote rend="blockquote"&gt;(.*?)&lt;/quote&gt;', 
+                                         r'<div class="blockquote">\1</div>', 
+                                         processed_content)
+                processed_content = re.sub(r'&lt;quote&gt;(.*?)&lt;/quote&gt;', 
+                                         r'<span class="quote">\1</span>', 
+                                         processed_content)
+                
+                # Handle foreign language text
+                processed_content = re.sub(r'&lt;foreign xml:lang="([^"]*)"&gt;(.*?)&lt;/foreign&gt;', 
+                                         r'<span class="latin-text" lang="\1">\2</span>', 
+                                         processed_content)
+                
+                # Handle page breaks
+                processed_content = re.sub(r'&lt;pb facs="([^"]*)"/?&gt;', 
+                                         r'<div class="page-break">Page Reference: <a href="#" title="Facsimile reference">\1</a></div>', 
+                                         processed_content)
+                
+                # Clean up any remaining XML tags (with care)
+                # This is a simplified approach - we're removing tags but preserving content
+                processed_content = re.sub(r'&lt;[^&]*?&gt;', ' ', processed_content)
+                
+                # Create fragment HTML
+                fragments_html += f'''
+                <div class="fragment">
+                    <div class="fragment-number">Fragment {fragment_num}</div>
+                    <div class="greek-text">
+                        {processed_content}
+                    </div>
+                </div>
+                '''
+        
+        # If we successfully processed fragments, return the complete HTML
+        if fragments_html:
             return f'''
-            <div class="section">
-                <h3 class="section-title">{subtype.capitalize()} {section_num}</h3>
-                {content}
+            {edition_html}
+            {revision_html}
+            <div class="fragments-container">
+                {fragments_html}
             </div>
             '''
         
-        # Replace all textpart divs
-        content = re.sub(textpart_pattern, process_textpart, content, flags=re.DOTALL)
-        
-        # Handle page breaks
+        # Handle page breaks that aren't in fragments
         content = re.sub(r'&lt;pb facs="([^"]*)"/?&gt;', 
-                       r'<div class="page-break">Page: <a href="#" title="Facsimile reference">\1</a></div>', 
+                       r'<div class="page-break">Page Reference: <a href="#" title="Facsimile reference">\1</a></div>', 
                        content)
         
-        # Handle XML headers more elegantly
+        # If no fragments were found, try to process the TEI header
         header_pattern = r'&lt;teiHeader&gt;(.*?)&lt;/teiHeader&gt;'
         header_match = re.search(header_pattern, content, re.DOTALL)
         header_html = ""
@@ -1787,31 +1875,41 @@ class CustomHTTPRequestHandler(http.server.SimpleHTTPRequestHandler):
                 
                 header_html += '</div>'
         
-        # Process main text body
+        # Try to process the main body if fragments weren't found
         body_pattern = r'&lt;text&gt;\s*&lt;body&gt;(.*?)&lt;/body&gt;\s*&lt;/text&gt;'
         body_match = re.search(body_pattern, content, re.DOTALL)
         
         if body_match:
             body_content = body_match.group(1)
-            # Remove div wrappers that we've already processed
-            body_html = body_content
             
-            # Process any remaining divs
+            # Process paragraphs
+            body_html = re.sub(r'&lt;p[^&]*?&gt;(.*?)&lt;/p&gt;', r'<p>\1</p>', body_content)
+            
+            # Process any regular divs
             body_html = re.sub(r'&lt;div [^&]*?&gt;', '<div class="text-division">', body_html)
             body_html = re.sub(r'&lt;/div&gt;', '</div>', body_html)
             
-            # Format other elements
+            # Format headers
             body_html = re.sub(r'&lt;head[^&]*?&gt;(.*?)&lt;/head&gt;', r'<h2 class="section-head">\1</h2>', body_html)
-            body_html = re.sub(r'&lt;p[^&]*?&gt;(.*?)&lt;/p&gt;', r'<p>\1</p>', body_html)
+            
+            # Process foreign language text
+            body_html = re.sub(r'&lt;foreign xml:lang="([^"]*)"&gt;(.*?)&lt;/foreign&gt;', 
+                             r'<span class="latin-text" lang="\1">\2</span>', 
+                             body_html)
+            
+            # Process quotes
+            body_html = re.sub(r'&lt;quote[^&]*?&gt;(.*?)&lt;/quote&gt;', 
+                             r'<blockquote class="quote">\1</blockquote>', 
+                             body_html)
             
             # We've handled specific elements - now clean up any remaining tags
-            # This helps with nested tags that weren't caught by the patterns above
             body_html = re.sub(r'&lt;[^&]*?&gt;', ' ', body_html)
             
             # Create the final content structure
             final_html = f'''
             {header_html}
             {revision_html}
+            {edition_html}
             <div class="main-content">
                 {body_html}
             </div>
@@ -1823,7 +1921,7 @@ class CustomHTTPRequestHandler(http.server.SimpleHTTPRequestHandler):
         # Remove XML declaration and other processing instructions
         content = re.sub(r'&lt;\?[^&]*\?&gt;', '', content)
         
-        # Replace tag brackets with styling
+        # Try to make it somewhat readable by styling tags differently
         content = re.sub(r'&lt;([^&]*)&gt;', r'<span class="xml-tag">&lt;\1&gt;</span>', content)
         
         # Add line breaks
