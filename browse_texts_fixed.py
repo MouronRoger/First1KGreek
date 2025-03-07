@@ -373,7 +373,7 @@ class CustomHTTPRequestHandler(http.server.SimpleHTTPRequestHandler):
         return add_shutdown_button(html)
     
     def get_authors_page(self):
-        """Generate the authors listing page"""
+        """Generate the authors listing page with rich styling matching the original version"""
         # Get author directories from the data folder
         author_dirs = []
         for item in os.listdir('data'):
@@ -384,24 +384,75 @@ class CustomHTTPRequestHandler(http.server.SimpleHTTPRequestHandler):
         # Sort the author directories
         author_dirs.sort()
         
-        # Build the HTML
+        # Get author names from catalog or XML files
+        author_names = {}
+        for author_id in author_dirs:
+            # Try to find an author name from any XML file
+            author_name = self.get_author_name_from_files(author_id)
+            author_names[author_id] = author_name if author_name else author_id
+        
+        # Build the HTML with grid layout
         html = """
         <!DOCTYPE html>
         <html>
         <head>
-            <title>First1K Greek - Authors</title>
+            <title>First 1K Greek - Authors</title>
             <meta charset="UTF-8">
             <style>
-                body { font-family: Arial, sans-serif; margin: 0; padding: 0; line-height: 1.6; }
-                .container { max-width: 900px; margin: 0 auto; padding: 20px; }
-                h1 { color: #333; }
-                .nav { margin: 20px 0; }
-                .nav a { display: inline-block; margin-right: 15px; background: #0066cc; color: white; 
-                        padding: 10px 15px; text-decoration: none; border-radius: 4px; }
-                .nav a:hover { background: #004080; }
-                .author-list { margin-top: 20px; }
-                .author-item { padding: 10px; border-bottom: 1px solid #eee; }
-                .author-item:hover { background: #f8f8f8; }
+                body { 
+                    font-family: Arial, sans-serif; 
+                    margin: 0; 
+                    padding: 0; 
+                    line-height: 1.6; 
+                    background-color: #1a1a1a;
+                    color: #fff;
+                }
+                .container { 
+                    max-width: 1200px; 
+                    margin: 0 auto; 
+                    padding: 20px; 
+                }
+                h1 { 
+                    color: #fff; 
+                    margin-bottom: 30px;
+                }
+                .nav { 
+                    margin: 20px 0; 
+                }
+                .nav a { 
+                    display: inline-block; 
+                    margin-right: 15px; 
+                    background: #0066cc; 
+                    color: white; 
+                    padding: 10px 15px; 
+                    text-decoration: none; 
+                    border-radius: 4px; 
+                }
+                .nav a:hover { 
+                    background: #004080; 
+                }
+                .author-grid {
+                    display: grid;
+                    grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+                    grid-gap: 20px;
+                    margin-top: 20px;
+                }
+                .author-card {
+                    background-color: #2d2d2d;
+                    border-radius: 5px;
+                    padding: 20px;
+                    transition: transform 0.3s;
+                    cursor: pointer;
+                }
+                .author-card:hover {
+                    transform: translateY(-5px);
+                    background-color: #333;
+                }
+                .author-count {
+                    margin-top: 10px;
+                    font-size: 0.9em;
+                    color: #aaa;
+                }
             </style>
         </head>
         <body>
@@ -414,11 +465,22 @@ class CustomHTTPRequestHandler(http.server.SimpleHTTPRequestHandler):
                     <a href="/search">Search</a>
                 </div>
                 
-                <div class="author-list">
+                <p>Showing {len(author_dirs)} authors, alphabetically ordered by name</p>
+                
+                <div class="author-grid">
         """
         
-        for author in author_dirs:
-            html += f'<div class="author-item"><a href="/works?author={author}">{author}</a></div>\n'
+        for author_id in author_dirs:
+            author_name = author_names[author_id]
+            display_name = f"{author_name} ({author_id})" if author_name != author_id else author_id
+            
+            html += f'''
+            <a href="/works?author={author_id}">
+                <div class="author-card">
+                    <div class="author-name">{display_name}</div>
+                </div>
+            </a>
+            '''
         
         html += """
                 </div>
@@ -427,6 +489,33 @@ class CustomHTTPRequestHandler(http.server.SimpleHTTPRequestHandler):
         </html>
         """
         return add_shutdown_button(html)
+    
+    def get_author_name_from_files(self, author_id):
+        """Attempt to find an author name from XML files"""
+        author_path = os.path.join('data', author_id)
+        if not os.path.exists(author_path):
+            return None
+            
+        # Check a few files to find the author name
+        for work_dir in os.listdir(author_path):
+            work_path = os.path.join(author_path, work_dir)
+            if os.path.isdir(work_path):
+                for file in os.listdir(work_path):
+                    if file.endswith('.xml') and not file == '__cts__.xml':
+                        file_path = os.path.join(work_path, file)
+                        try:
+                            with open(file_path, 'r', encoding='utf-8') as f:
+                                content = f.read(10000)  # Just read the beginning where metadata usually is
+                                
+                            # Look for author tag with reasonable content
+                            author_matches = re.findall(r'<author[^>]*>(.*?)</author>', content)
+                            if author_matches and len(author_matches[0].strip()) > 0:
+                                return author_matches[0].strip()
+                                
+                        except Exception as e:
+                            pass
+        
+        return None
     
     def get_works_page(self, author_id):
         """Generate the works listing page for an author"""
@@ -591,30 +680,102 @@ class CustomHTTPRequestHandler(http.server.SimpleHTTPRequestHandler):
             return f"<h1>Error</h1><p>Error processing file for reading: {str(e)}</p>"
 
     def get_editors_page(self):
-        """Generate the editors listing page"""
+        """Generate the editors listing page with rich styling matching the original version"""
         # Get editor data
         editors_data = self.get_editors_data()
         editors_data.sort(key=lambda x: x["name"])
         
-        # Build the HTML
+        # Select a featured editor (one with multiple works)
+        featured_editor = None
+        for editor in editors_data:
+            if editor["count"] >= 2:
+                featured_editor = editor
+                break
+        
+        if not featured_editor and editors_data:
+            featured_editor = editors_data[0]
+        
+        # Build the HTML with modern styling
         html = """
         <!DOCTYPE html>
         <html>
         <head>
-            <title>First1K Greek - Editors</title>
+            <title>First 1K Greek - Editors</title>
             <meta charset="UTF-8">
             <style>
-                body { font-family: Arial, sans-serif; margin: 0; padding: 0; line-height: 1.6; }
-                .container { max-width: 900px; margin: 0 auto; padding: 20px; }
-                h1 { color: #333; }
-                .nav { margin: 20px 0; }
-                .nav a { display: inline-block; margin-right: 15px; background: #0066cc; color: white; 
-                        padding: 10px 15px; text-decoration: none; border-radius: 4px; }
-                .nav a:hover { background: #004080; }
-                .editor-list { margin-top: 20px; }
-                .editor-item { padding: 10px; border-bottom: 1px solid #eee; }
-                .editor-item:hover { background: #f8f8f8; }
-                .editor-count { color: #666; font-size: 0.9em; }
+                body { 
+                    font-family: Arial, sans-serif; 
+                    margin: 0; 
+                    padding: 0; 
+                    line-height: 1.6; 
+                    background-color: #1a1a1a;
+                    color: #fff;
+                }
+                .container { 
+                    max-width: 1200px; 
+                    margin: 0 auto; 
+                    padding: 20px; 
+                }
+                h1, h2 { 
+                    color: #fff; 
+                    margin-bottom: 20px;
+                }
+                .nav { 
+                    margin: 20px 0; 
+                }
+                .nav a { 
+                    display: inline-block; 
+                    margin-right: 15px; 
+                    background: #0066cc; 
+                    color: white; 
+                    padding: 10px 15px; 
+                    text-decoration: none; 
+                    border-radius: 4px; 
+                }
+                .nav a:hover { 
+                    background: #004080; 
+                }
+                .featured-editor {
+                    background-color: #1e392a;
+                    border-left: 4px solid #2ecc71;
+                    border-radius: 5px;
+                    padding: 20px;
+                    margin-bottom: 30px;
+                }
+                .featured-editor-bio {
+                    margin-top: 10px;
+                    font-style: italic;
+                    color: #aaa;
+                }
+                .featured-editor-link {
+                    display: inline-block;
+                    margin-top: 15px;
+                    color: #2ecc71;
+                    text-decoration: none;
+                }
+                .featured-editor-link:hover {
+                    text-decoration: underline;
+                }
+                .editors-grid {
+                    display: grid;
+                    grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+                    grid-gap: 20px;
+                }
+                .editor-card {
+                    background-color: #2d2d2d;
+                    border-radius: 5px;
+                    padding: 20px;
+                    transition: transform 0.3s;
+                }
+                .editor-card:hover {
+                    transform: translateY(-5px);
+                    background-color: #333;
+                }
+                .editor-count {
+                    margin-top: 10px;
+                    font-size: 0.9em;
+                    color: #aaa;
+                }
             </style>
         </head>
         <body>
@@ -627,13 +788,41 @@ class CustomHTTPRequestHandler(http.server.SimpleHTTPRequestHandler):
                     <a href="/search">Search</a>
                 </div>
                 
-                <div class="editor-list">
+                <p>Showing {len(editors_data)} editors with their edited works</p>
+        """
+        
+        # Add featured editor section if available
+        if featured_editor:
+            name = featured_editor["name"]
+            count = featured_editor["count"]
+            bio = self.get_editor_bio(name)
+            
+            html += f"""
+                <h2>Featured Editor</h2>
+                <div class="featured-editor">
+                    <h3>{name}</h3>
+                    <div class="featured-editor-bio">{bio}</div>
+                    <div class="editor-count">Edited {count} works</div>
+                    <a href="/editor_works?name={quote(name)}" class="featured-editor-link">Click to view works edited by {name}</a>
+                </div>
+            """
+        
+        html += """
+                <h2>All Editors</h2>
+                <div class="editors-grid">
         """
         
         for editor in editors_data:
             name = editor["name"]
             count = editor["count"]
-            html += f'<div class="editor-item"><a href="/editor_works?name={quote(name)}">{name}</a> <span class="editor-count">({count} works)</span></div>\n'
+            html += f"""
+                <a href="/editor_works?name={quote(name)}" style="text-decoration: none; color: inherit;">
+                    <div class="editor-card">
+                        <h3>{name}</h3>
+                        <div class="editor-count">Edited {count} work{'s' if count != 1 else ''}</div>
+                    </div>
+                </a>
+            """
         
         html += """
                 </div>
@@ -643,10 +832,24 @@ class CustomHTTPRequestHandler(http.server.SimpleHTTPRequestHandler):
         """
         return add_shutdown_button(html)
     
+    def get_editor_bio(self, editor_name):
+        """Get a biography for an editor if available"""
+        # Map of notable editors to their bios
+        editor_bios = {
+            "Hans Friedrich August von Arnim": "German classical scholar (1859-1931) who specialized in Greek philosophy and rhetoric",
+            "A. B. Drachmann": "Danish classical philologist known for his work on ancient Greek literature",
+            "Jean Baptiste Pitra": "French cardinal and archaeologist (1812-1889)",
+            "Otto Schneider": "German classical scholar and philologist",
+            "A. W. Mair": "Scottish scholar and translator of classical texts"
+        }
+        
+        return editor_bios.get(editor_name, "Classical scholar and editor")
+
     def get_editor_works_page(self, editor_name):
-        """Generate page showing works by a specific editor"""
+        """Generate page showing works by a specific editor with rich styling matching the original version"""
         # Find all works by this editor
         works = []
+        
         for root, dirs, files in os.walk('data'):
             for file in files:
                 if file.endswith('.xml') and not file == '__cts__.xml':
@@ -657,34 +860,115 @@ class CustomHTTPRequestHandler(http.server.SimpleHTTPRequestHandler):
                             content = f.read()
                             
                         if f'<editor>{editor_name}</editor>' in content or f'editor>{editor_name}</editor>' in content:
+                            # Get author information
+                            author_name = "Unknown"
+                            author_matches = re.findall(r'<author.*?>(.*?)</author>', content)
+                            if author_matches and len(author_matches[0].strip()) > 0:
+                                author_name = author_matches[0].strip()
+                            
+                            # Get title information
+                            work_title = "Unknown"
+                            title_matches = re.findall(r'<title.*?>(.*?)</title>', content)
+                            if title_matches and len(title_matches[0].strip()) > 0:
+                                work_title = title_matches[0].strip()
+                                
+                            # Get work ID
+                            work_id = "Unknown"
+                            parts = file_path.split('/')
+                            if len(parts) > 2:
+                                author_id = parts[-3]
+                                work_dir = parts[-2]
+                                work_id = work_dir
+                            
                             works.append({
                                 "path": file_path,
-                                "file": file
+                                "file": file,
+                                "title": work_title,
+                                "author": author_name,
+                                "author_id": author_id if 'author_id' in locals() else "",
+                                "work_id": work_id
                             })
                     except Exception as e:
                         print(f"Error reading {file_path}: {str(e)}")
         
-        # Sort works by path
-        works.sort(key=lambda x: x["path"])
+        # Sort works by title
+        works.sort(key=lambda x: x["title"])
         
-        # Build the HTML
+        # Build the HTML with modern styling
         html = f"""
         <!DOCTYPE html>
         <html>
         <head>
-            <title>First1K Greek - Works edited by {editor_name}</title>
+            <title>First 1K Greek - Works edited by {editor_name}</title>
             <meta charset="UTF-8">
             <style>
-                body {{ font-family: Arial, sans-serif; margin: 0; padding: 0; line-height: 1.6; }}
-                .container {{ max-width: 900px; margin: 0 auto; padding: 20px; }}
-                h1 {{ color: #333; }}
-                .nav {{ margin: 20px 0; }}
-                .nav a {{ display: inline-block; margin-right: 15px; background: #0066cc; color: white; 
-                        padding: 10px 15px; text-decoration: none; border-radius: 4px; }}
-                .nav a:hover {{ background: #004080; }}
-                .work-list {{ margin-top: 20px; }}
-                .work-item {{ padding: 10px; border-bottom: 1px solid #eee; }}
-                .work-item:hover {{ background: #f8f8f8; }}
+                body {{ 
+                    font-family: Arial, sans-serif; 
+                    margin: 0; 
+                    padding: 0; 
+                    line-height: 1.6; 
+                    background-color: #1a1a1a;
+                    color: #fff;
+                }}
+                .container {{ 
+                    max-width: 1200px; 
+                    margin: 0 auto; 
+                    padding: 20px; 
+                }}
+                h1, h2 {{ 
+                    color: #fff; 
+                    margin-bottom: 20px;
+                }}
+                .nav {{ 
+                    margin: 20px 0; 
+                }}
+                .nav a {{ 
+                    display: inline-block; 
+                    margin-right: 15px; 
+                    background: #0066cc; 
+                    color: white; 
+                    padding: 10px 15px; 
+                    text-decoration: none; 
+                    border-radius: 4px; 
+                }}
+                .nav a:hover {{ 
+                    background: #004080; 
+                }}
+                .work-list {{
+                    margin-top: 20px;
+                }}
+                .work-item {{
+                    background-color: #2d2d2d;
+                    border-radius: 5px;
+                    padding: 20px;
+                    margin-bottom: 20px;
+                }}
+                .work-title {{
+                    font-size: 1.3em;
+                    font-weight: bold;
+                    margin-bottom: 10px;
+                }}
+                .work-author {{
+                    color: #aaa;
+                    margin-bottom: 15px;
+                }}
+                .work-id {{
+                    font-family: monospace;
+                    color: #888;
+                    margin-bottom: 15px;
+                }}
+                .work-actions {{
+                    margin-top: 15px;
+                }}
+                .work-actions a {{
+                    display: inline-block;
+                    margin-right: 10px;
+                    color: #4299e1;
+                    text-decoration: none;
+                }}
+                .work-actions a:hover {{
+                    text-decoration: underline;
+                }}
             </style>
         </head>
         <body>
@@ -696,13 +980,23 @@ class CustomHTTPRequestHandler(http.server.SimpleHTTPRequestHandler):
                     <a href="/editors">Back to Editors</a>
                 </div>
                 
+                <p>Found {len(works)} works</p>
+                
                 <div class="work-list">
         """
         
         for work in works:
-            path = work["path"]
-            file = work["file"]
-            html += f'<div class="work-item"><a href="/view?path={path}">{file}</a></div>\n'
+            html += f"""
+                <div class="work-item">
+                    <div class="work-title">{work["title"]}</div>
+                    <div class="work-author">Author: {work["author"]}</div>
+                    <div class="work-id">Work ID: {work["work_id"]}</div>
+                    <div class="work-actions">
+                        <a href="/view?path={work["path"]}">View XML</a>
+                        <a href="/reader?path={work["path"]}">Open in Reader</a>
+                    </div>
+                </div>
+            """
         
         html += """
                 </div>
