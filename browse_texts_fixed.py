@@ -223,11 +223,15 @@ class CustomHTTPRequestHandler(http.server.SimpleHTTPRequestHandler):
             # Extract the numeric part from tlgXXXX
             if author_id.startswith('tlg'):
                 try:
-                    return int(author_id[3:])
+                    # Return a tuple with a sort category and the numeric value
+                    return (0, int(author_id[3:]))
                 except ValueError:
-                    return 999999  # Default high value for non-numeric parts
-            return author_id  # For non-tlg ids
+                    # For non-numeric parts, use a high number
+                    return (0, 999999)
+            # For non-tlg ids (like heb), use a different category
+            return (1, author_id)
             
+        # Sort by the tuple - first by category, then by value
         author_dirs.sort(key=sort_key)
         
         # Get author names from catalog or XML files
