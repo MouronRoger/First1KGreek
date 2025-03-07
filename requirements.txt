@@ -1,0 +1,4 @@
+# First1KGreek Project Dependencies
+# These are the minimal dependencies needed to run the application
+
+# No external dependencies beyond Python 3.6+ standard library 
