@@ -11,6 +11,8 @@ from urllib.parse import parse_qs, urlparse, quote
 import re
 import threading
 import time
+import socket
+import xml.etree.ElementTree as ET
 
 # Create a backup of the file
 shutil.copy('browse_texts.py', 'browse_texts.py.bak')
@@ -19,6 +21,178 @@ PORT = 8000
 
 # Global reference to the server
 server_instance = None
+
+# Reader mode stylesheet
+READER_STYLESHEET = """
+body { 
+    font-family: 'New Athena Unicode', 'GFS Artemisia', 'Arial Unicode MS', 'Lucida Sans Unicode', 'Cardo', serif; 
+    margin: 0; 
+    padding: 0;
+    line-height: 1.8; 
+    background-color: #f9f9f9; 
+    color: #000000; 
+}
+h1, h2, h3 { 
+    color: #333;
+    font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif;
+    margin-top: 1.5em;
+    margin-bottom: 0.5em;
+}
+a { color: #0066cc; text-decoration: none; }
+a:hover { text-decoration: underline; }
+.container { 
+    max-width: 800px; 
+    margin: 0 auto; 
+    padding: 20px;
+    background-color: #ffffff;
+    box-shadow: 0 0 10px rgba(0,0,0,0.1);
+    min-height: 100vh;
+}
+.header {
+    margin-bottom: 30px;
+    border-bottom: 1px solid #eee;
+    padding-bottom: 20px;
+}
+.metadata {
+    margin-bottom: 20px;
+    font-style: italic;
+    color: #666;
+}
+.reader-content { 
+    font-size: 18px;
+    line-height: 1.8;
+}
+.navigation { 
+    margin-bottom: 20px; 
+    padding: 12px;
+    border-bottom: 1px solid #eee;
+}
+.toggle-view {
+    background-color: #f0f0f0;
+    padding: 10px;
+    border-radius: 4px;
+    margin-top: 20px;
+    text-align: center;
+}
+.xml-section {
+    margin-bottom: 30px;
+}
+.view-links {
+    margin-top: 10px;
+    font-size: 0.9em;
+}
+.shutdown-btn {
+    color: #ff5252 !important;
+}
+
+/* Enhanced reader styles */
+.revision-history {
+    margin: 20px 0;
+    padding: 15px;
+    background-color: #f5f5f5;
+    border-left: 4px solid #0066cc;
+    border-radius: 4px;
+}
+.bibl-reference {
+    font-weight: bold;
+    color: #555;
+    margin-right: 10px;
+    font-size: 0.9em;
+}
+.fragment {
+    margin: 30px 0;
+    padding: 20px;
+    background-color: #fcfcfc;
+    border-radius: 8px;
+    border-left: 4px solid #0066cc;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.05);
+}
+.fragment-number {
+    font-weight: bold;
+    font-size: 1.2em;
+    color: #0066cc;
+    margin-bottom: 15px;
+    border-bottom: 1px solid #eee;
+    padding-bottom: 5px;
+}
+.greek-text {
+    font-family: 'New Athena Unicode', 'GFS Artemisia', 'Arial Unicode MS', 'Lucida Sans Unicode', 'Cardo', serif;
+    line-height: 1.8;
+}
+.latin-text {
+    font-style: italic;
+    color: #666;
+}
+.blockquote {
+    margin: 15px 30px;
+    padding: 15px;
+    background-color: #f7f7f7;
+    border-left: 3px solid #0066cc;
+    font-style: italic;
+}
+.paragraph {
+    margin-bottom: 15px;
+    line-height: 1.8;
+}
+.paragraph.indent {
+    text-indent: 2em;
+    padding-left: 2em;
+}
+.edition-info {
+    margin: 20px 0;
+    padding: 15px;
+    background-color: #f5f5f5;
+    border-radius: 4px;
+    color: #666;
+    font-style: italic;
+}
+.page-break {
+    text-align: right;
+    font-size: 0.85em;
+    color: #777;
+    margin: 15px 0;
+    padding: 5px 0;
+    border-top: 1px dashed #ccc;
+}
+.fragment-marker {
+    background-color: #e0efff;
+    padding: 5px 10px;
+    margin: 10px 0;
+    font-weight: bold;
+    color: #0066cc;
+    border-radius: 4px;
+}
+.paragraph-marker {
+    background-color: #f0f0f0;
+    padding: 3px 8px;
+    margin: 5px 0;
+    color: #666;
+    border-radius: 3px;
+    font-size: 0.9em;
+}
+.bibl-marker {
+    font-weight: bold;
+    color: #0066cc;
+    padding: 0 3px;
+}
+.quote {
+    font-style: italic;
+}
+"""
+
+# Function to check if port is in use
+def is_port_in_use(port):
+    with socket.socket(socket.AF_INET, socket.SOCK_STREAM) as s:
+        return s.connect_ex(('localhost', port)) == 0
+
+# Function to find an available port
+def find_available_port(start_port=8000, max_attempts=10):
+    port = start_port
+    for _ in range(max_attempts):
+        if not is_port_in_use(port):
+            return port
+        port += 1
+    return None
 
 class CustomHTTPRequestHandler(http.server.SimpleHTTPRequestHandler):
     def do_GET(self):
@@ -37,7 +211,7 @@ class CustomHTTPRequestHandler(http.server.SimpleHTTPRequestHandler):
             <head>
                 <meta charset="UTF-8">
                 <meta http-equiv="refresh" content="5;url=about:blank" />
-                <title>Server Shutdown - First 1K Greek Texts</title>
+                <title>Server Shutdown - Greek Texts</title>
                 <style>
                     body { 
                         font-family: Arial, sans-serif; 
@@ -83,7 +257,7 @@ class CustomHTTPRequestHandler(http.server.SimpleHTTPRequestHandler):
                 <div class="container">
                     <h1>Server Shutting Down</h1>
                     <div class="shutdown-message">
-                        <p>The First 1K Greek Texts server is shutting down.</p>
+                        <p>Greek Texts server is shutting down.</p>
                         <p>This window will close automatically in <span id="countdown">5</span> seconds.</p>
                         <p>Thank you for using the application!</p>
                     </div>
@@ -113,7 +287,7 @@ class CustomHTTPRequestHandler(http.server.SimpleHTTPRequestHandler):
             <html>
             <head>
                 <meta charset="UTF-8">
-                <title>First 1K Greek Texts Browser</title>
+                <title>Greek Texts Browser</title>
                 <style>
                     body { 
                         font-family: Arial, sans-serif; 
@@ -194,7 +368,7 @@ class CustomHTTPRequestHandler(http.server.SimpleHTTPRequestHandler):
             </head>
             <body>
                 <div class="container">
-                    <h1>First 1K Greek Texts Browser</h1>
+                    <h1>Greek Texts Browser</h1>
                     
                     <div class="navigation">
                         <a href="/">Home</a> | 
@@ -214,7 +388,7 @@ class CustomHTTPRequestHandler(http.server.SimpleHTTPRequestHandler):
                     </div>
                     
                     <div class="text-display">
-                        <h2>Welcome to the First 1K Greek Texts Browser</h2>
+                        <h2>Welcome to the Greek Texts Browser</h2>
                         <p>This is a simple browser for the First 1K Greek Project texts. The project aims to provide digital versions of Greek texts from the first thousand years of Greek literature.</p>
                         <p>Use the navigation links above to explore the texts by author, editor, or browse the raw files.</p>
                     </div>
@@ -317,7 +491,7 @@ class CustomHTTPRequestHandler(http.server.SimpleHTTPRequestHandler):
             </head>
             <body>
                 <div class="container">
-                    <h1>First 1K Greek Texts Browser</h1>
+                    <h1>Greek Texts Browser</h1>
                     
                     <div class="navigation">
                         <a href="/">Home</a> | 
@@ -709,181 +883,7 @@ class CustomHTTPRequestHandler(http.server.SimpleHTTPRequestHandler):
                         <meta charset="UTF-8">
                         <title>{work_title} - Reader Mode - First 1K Greek Texts</title>
                         <style>
-                            body {{ 
-                                font-family: 'New Athena Unicode', 'GFS Artemisia', 'Arial Unicode MS', 'Lucida Sans Unicode', 'Cardo', serif; 
-                                margin: 0; 
-                                padding: 0;
-                                line-height: 1.8; 
-                                background-color: #f9f9f9; 
-                                color: #000000; 
-                            }}
-                            h1, h2, h3 {{ 
-                                color: #333;
-                                font-family: Arial, sans-serif;
-                            }}
-                            a {{ color: #0066cc; text-decoration: none; }}
-                            a:hover {{ text-decoration: underline; }}
-                            .container {{ 
-                                max-width: 800px; 
-                                margin: 0 auto; 
-                                padding: 20px;
-                                background-color: #ffffff;
-                                box-shadow: 0 0 10px rgba(0,0,0,0.1);
-                                min-height: 100vh;
-                            }}
-                            .header {{
-                                margin-bottom: 30px;
-                                border-bottom: 1px solid #eee;
-                                padding-bottom: 20px;
-                            }}
-                            .metadata {{
-                                margin-bottom: 20px;
-                                font-style: italic;
-                                color: #666;
-                            }}
-                            .reader-content {{ 
-                                font-size: 18px;
-                                line-height: 1.8;
-                            }}
-                            .navigation {{ 
-                                margin-bottom: 20px; 
-                                padding: 12px;
-                                border-bottom: 1px solid #eee;
-                            }}
-                            .toggle-view {{
-                                background-color: #f0f0f0;
-                                padding: 10px;
-                                border-radius: 4px;
-                                margin-top: 20px;
-                                text-align: center;
-                            }}
-                            .xml-section {{
-                                margin-bottom: 30px;
-                            }}
-                            .view-links {{
-                                margin-top: 10px;
-                                font-size: 0.9em;
-                            }}
-                            .shutdown-btn {{
-                                color: #ff5252 !important;
-                            }}
-                            
-                            /* Enhanced reader styles */
-                            .revision-history {{
-                                margin: 20px 0;
-                                padding: 15px;
-                                background-color: #f5f5f5;
-                                border-left: 4px solid #0066cc;
-                                border-radius: 4px;
-                            }}
-                            .bibliography {{
-                                color: #666;
-                                font-style: italic;
-                                font-size: 0.9em;
-                                margin-right: 10px;
-                            }}
-                            .section {{
-                                margin: 30px 0;
-                                padding-bottom: 20px;
-                                border-bottom: 1px solid #eee;
-                            }}
-                            .section-title {{
-                                font-size: 1.4em;
-                                color: #333;
-                                margin-bottom: 15px;
-                                font-weight: bold;
-                            }}
-                            .paragraph {{
-                                margin-bottom: 15px;
-                                line-height: 1.8;
-                                text-indent: 2em;
-                            }}
-                            .quote {{
-                                margin: 15px 30px;
-                                padding: 10px 20px;
-                                border-left: 3px solid #0066cc;
-                                font-style: italic;
-                                background-color: #f9f9f9;
-                            }}
-                            .page-break {{
-                                text-align: right;
-                                font-size: 0.85em;
-                                color: #777;
-                                margin: 15px 0;
-                                padding: 5px 0;
-                                border-top: 1px dashed #ccc;
-                            }}
-                            .document-header {{
-                                background-color: #f5f5f5;
-                                padding: 15px;
-                                margin-bottom: 20px;
-                                border-radius: 4px;
-                            }}
-                            .section-head {{
-                                text-align: center;
-                                font-size: 1.3em;
-                                margin: 20px 0;
-                                font-weight: normal;
-                                color: #444;
-                            }}
-                            .main-content {{
-                                line-height: 1.8;
-                            }}
-                            .xml-tag {{
-                                color: #999;
-                                font-size: 0.9em;
-                                font-family: monospace;
-                            }}
-                            
-                            /* Additional Greek text specific styles */
-                            .fragment {{
-                                margin: 30px 0;
-                                padding: 20px;
-                                background-color: #fcfcfc;
-                                border-radius: 8px;
-                                border-left: 4px solid #0066cc;
-                                box-shadow: 0 2px 4px rgba(0,0,0,0.05);
-                            }}
-                            .fragment-number {{
-                                font-weight: bold;
-                                font-size: 1.2em;
-                                color: #0066cc;
-                                margin-bottom: 15px;
-                                border-bottom: 1px solid #eee;
-                                padding-bottom: 5px;
-                            }}
-                            .greek-text {{
-                                font-family: 'New Athena Unicode', 'GFS Artemisia', 'Arial Unicode MS', 'Lucida Sans Unicode', 'Cardo', serif;
-                                line-height: 1.8;
-                            }}
-                            .latin-text {{
-                                font-style: italic;
-                                color: #666;
-                            }}
-                            .bibl-reference {{
-                                font-weight: bold;
-                                color: #555;
-                                margin-right: 10px;
-                                font-size: 0.9em;
-                            }}
-                            .blockquote {{
-                                margin: 15px 30px;
-                                padding: 15px;
-                                background-color: #f7f7f7;
-                                border-left: 3px solid #0066cc;
-                                font-style: italic;
-                            }}
-                            .indent {{
-                                padding-left: 2em;
-                            }}
-                            .edition-info {{
-                                margin-bottom: 20px;
-                                font-style: italic;
-                                color: #666;
-                                padding: 10px;
-                                background-color: #f5f5f5;
-                                border-radius: 4px;
-                            }}
+                            {READER_STYLESHEET}
                         </style>
                     </head>
                     <body>
@@ -1742,192 +1742,167 @@ class CustomHTTPRequestHandler(http.server.SimpleHTTPRequestHandler):
         return results
     
     def process_xml_for_reading(self, xml_content):
-        """Process XML content for reader-friendly display with improved handling of Greek fragments"""
+        """Process XML content for reader-friendly display using structured XML parsing"""
+        try:
+            # Clean up XML namespaces for easier parsing
+            xml_content = re.sub(r'xmlns="[^"]*"', '', xml_content)
+            xml_content = re.sub(r'xmlns:[^=]*="[^"]*"', '', xml_content)
+            
+            # Remove XML declaration
+            xml_content = re.sub(r'<\?xml[^>]*\?>', '', xml_content)
+            
+            # Prefix all tags to create a simplified pseudo-namespace
+            xml_content = re.sub(r'<([/]?)([a-zA-Z0-9_\-]+):', r'<\1tei_\2', xml_content)
+            
+            # Wrap in a root element if needed
+            if not xml_content.strip().startswith('<'):
+                xml_content = f'<root>{xml_content}</root>'
+            
+            # Parse the XML
+            try:
+                root = ET.fromstring(xml_content)
+            except ET.ParseError:
+                # If parsing fails, fall back to the escaped HTML approach
+                return self.fallback_xml_rendering(xml_content)
+            
+            # Start building the HTML output
+            html_output = []
+            
+            # Process revision description if present
+            revision_desc = root.find('.//revisionDesc') or root.find('.//tei_revisionDesc')
+            if revision_desc is not None:
+                html_output.append('<div class="revision-history"><h3>Revision History</h3><ul>')
+                for change in revision_desc.findall('.//change') or revision_desc.findall('.//tei_change'):
+                    date = change.get('when', '')
+                    person = change.get('who', '')
+                    desc = ''.join(change.itertext()).strip()
+                    html_output.append(f'<li><strong>{date}</strong> by <em>{person}</em>: {desc}</li>')
+                html_output.append('</ul></div>')
+            
+            # Process edition information if present
+            edition_div = root.find('.//div[@type="edition"]') or root.find('.//tei_div[@type="edition"]')
+            if edition_div is not None:
+                edition_id = edition_div.get('n', '')
+                edition_lang = edition_div.get('xml:lang', '') or edition_div.get('lang', '')
+                if edition_id:
+                    html_output.append(f'<div class="edition-info">Edition: {edition_id} (Language: {edition_lang})</div>')
+            
+            # Process fragments
+            fragments = root.findall('.//div[@type="textpart"][@subtype="fragment"]') or root.findall('.//tei_div[@type="textpart"][@subtype="fragment"]')
+            if fragments:
+                html_output.append('<div class="fragments-container">')
+                for fragment in fragments:
+                    fragment_num = fragment.get('n', 'Unknown')
+                    html_output.append(f'<div class="fragment">')
+                    html_output.append(f'<div class="fragment-number">Fragment {fragment_num}</div>')
+                    html_output.append(f'<div class="greek-text">')
+                    
+                    # Process page breaks
+                    for pb in fragment.findall('.//pb') or fragment.findall('.//tei_pb'):
+                        facs = pb.get('facs', '')
+                        if facs:
+                            html_output.append(f'<div class="page-break">Page Reference: <a href="#" title="Facsimile reference">{facs}</a></div>')
+                    
+                    # Process paragraphs
+                    for p in fragment.findall('.//p') or fragment.findall('.//tei_p'):
+                        rend = p.get('rend', '')
+                        p_class = f'paragraph {rend}' if rend else 'paragraph'
+                        html_output.append(f'<div class="{p_class}">')
+                        
+                        # Process bibliographical references
+                        for bibl in p.findall('.//bibl') or p.findall('.//tei_bibl'):
+                            bibl_lang = bibl.get('xml:lang', '') or bibl.get('lang', '')
+                            bibl_text = ''.join(bibl.itertext()).strip()
+                            html_output.append(f'<span class="bibl-reference" lang="{bibl_lang}">{bibl_text}</span>')
+                        
+                        # Process quotes
+                        for quote in p.findall('.//quote') or p.findall('.//tei_quote'):
+                            quote_rend = quote.get('rend', '')
+                            quote_text = ''.join(quote.itertext()).strip()
+                            if quote_rend == 'blockquote':
+                                html_output.append(f'<div class="blockquote">{quote_text}</div>')
+                            else:
+                                html_output.append(f'<span class="quote">{quote_text}</span>')
+                        
+                        # Process foreign language text
+                        for foreign in p.findall('.//foreign') or p.findall('.//tei_foreign'):
+                            foreign_lang = foreign.get('xml:lang', '') or foreign.get('lang', '')
+                            foreign_text = ''.join(foreign.itertext()).strip()
+                            html_output.append(f'<span class="latin-text" lang="{foreign_lang}">{foreign_text}</span>')
+                        
+                        # Get all text directly in the paragraph, including between child elements
+                        paragraph_parts = []
+                        if p.text:
+                            paragraph_parts.append(p.text)
+                        
+                        for child in p:
+                            if child.tail:
+                                paragraph_parts.append(child.tail)
+                        
+                        paragraph_text = ' '.join(paragraph_parts).strip()
+                        if paragraph_text:
+                            html_output.append(paragraph_text)
+                        
+                        html_output.append('</div>') # Close paragraph
+                    
+                    html_output.append('</div>') # Close greek-text
+                    html_output.append('</div>') # Close fragment
+                
+                html_output.append('</div>') # Close fragments-container
+                
+                return '\n'.join(html_output)
+            
+            # If no fragments, try to extract the full text
+            body = root.find('.//body') or root.find('.//tei_body')
+            if body is not None:
+                html_output.append('<div class="main-content">')
+                
+                # Process all text elements
+                text_elements = body.findall('.//*')
+                for elem in text_elements:
+                    tag = elem.tag
+                    if tag.endswith('p') or tag.endswith('tei_p'):
+                        html_output.append(f'<p>{elem.text or ""}</p>')
+                    elif tag.endswith('head') or tag.endswith('tei_head'):
+                        html_output.append(f'<h2 class="section-head">{elem.text or ""}</h2>')
+                    elif tag.endswith('quote') or tag.endswith('tei_quote'):
+                        html_output.append(f'<blockquote class="quote">{elem.text or ""}</blockquote>')
+                    elif tag.endswith('foreign') or tag.endswith('tei_foreign'):
+                        lang = elem.get('xml:lang', '') or elem.get('lang', '')
+                        html_output.append(f'<span class="latin-text" lang="{lang}">{elem.text or ""}</span>')
+                
+                html_output.append('</div>') # Close main-content
+                
+                return '\n'.join(html_output)
+            
+            # If neither fragments nor body could be processed, fall back to simple rendering
+            return self.fallback_xml_rendering(xml_content)
+        
+        except Exception as e:
+            print(f"Error processing XML: {str(e)}")
+            return self.fallback_xml_rendering(xml_content)
+    
+    def fallback_xml_rendering(self, xml_content):
+        """Fallback method for rendering XML content when structured parsing fails"""
         # First, escape the content to prevent script injection
         content = escape(xml_content)
-        
-        # Extract edition information if available
-        edition_pattern = r'&lt;div type="edition" n="([^"]*)" xml:lang="([^"]*)"&gt;'
-        edition_match = re.search(edition_pattern, content)
-        edition_html = ""
-        
-        if edition_match:
-            edition_id = edition_match.group(1)
-            edition_lang = edition_match.group(2)
-            edition_html = f'<div class="edition-info">Edition: {edition_id} (Language: {edition_lang})</div>'
-        
-        # Handle revision history
-        revision_pattern = r'&lt;revisionDesc&gt;(.*?)&lt;/revisionDesc&gt;'
-        revision_match = re.search(revision_pattern, content, re.DOTALL)
-        revision_html = ""
-        
-        if revision_match:
-            revision_content = revision_match.group(1)
-            # Extract change records
-            change_pattern = r'&lt;change when="([^"]*)" who="([^"]*)"&gt;(.*?)&lt;/change&gt;'
-            changes = re.findall(change_pattern, revision_content, re.DOTALL)
-            
-            if changes:
-                revision_html = '<div class="revision-history"><h3>Revision History</h3><ul>'
-                for date, person, desc in changes:
-                    revision_html += f'<li><strong>{date}</strong> by <em>{person}</em>: {desc}</li>'
-                revision_html += '</ul></div>'
-        
-        # Process fragments (textpart divs)
-        fragments_html = ""
-        fragment_pattern = r'&lt;div type="textpart" subtype="fragment" [^&]*?n="([^"]*)"&gt;(.*?)&lt;/div&gt;'
-        fragments = re.findall(fragment_pattern, content, re.DOTALL)
-        
-        if fragments:
-            for fragment_num, fragment_content in fragments:
-                # Process paragraph content
-                processed_content = fragment_content
-                
-                # Handle paragraph tags with optional rend attribute
-                processed_content = re.sub(r'&lt;p rend="([^"]*)"&gt;(.*?)&lt;/p&gt;', 
-                                         r'<div class="paragraph \1">\2</div>', 
-                                         processed_content)
-                processed_content = re.sub(r'&lt;p&gt;(.*?)&lt;/p&gt;', 
-                                         r'<div class="paragraph">\1</div>', 
-                                         processed_content)
-                
-                # Handle bibliographical references
-                processed_content = re.sub(r'&lt;bibl xml:lang="([^"]*)"&gt;(.*?)&lt;/bibl&gt;', 
-                                         r'<span class="bibl-reference" lang="\1">\2</span>', 
-                                         processed_content)
-                
-                # Handle quotes with rend attribute
-                processed_content = re.sub(r'&lt;quote rend="blockquote"&gt;(.*?)&lt;/quote&gt;', 
-                                         r'<div class="blockquote">\1</div>', 
-                                         processed_content)
-                processed_content = re.sub(r'&lt;quote&gt;(.*?)&lt;/quote&gt;', 
-                                         r'<span class="quote">\1</span>', 
-                                         processed_content)
-                
-                # Handle foreign language text
-                processed_content = re.sub(r'&lt;foreign xml:lang="([^"]*)"&gt;(.*?)&lt;/foreign&gt;', 
-                                         r'<span class="latin-text" lang="\1">\2</span>', 
-                                         processed_content)
-                
-                # Handle page breaks
-                processed_content = re.sub(r'&lt;pb facs="([^"]*)"/?&gt;', 
-                                         r'<div class="page-break">Page Reference: <a href="#" title="Facsimile reference">\1</a></div>', 
-                                         processed_content)
-                
-                # Clean up any remaining XML tags (with care)
-                # This is a simplified approach - we're removing tags but preserving content
-                processed_content = re.sub(r'&lt;[^&]*?&gt;', ' ', processed_content)
-                
-                # Create fragment HTML
-                fragments_html += f'''
-                <div class="fragment">
-                    <div class="fragment-number">Fragment {fragment_num}</div>
-                    <div class="greek-text">
-                        {processed_content}
-                    </div>
-                </div>
-                '''
-        
-        # If we successfully processed fragments, return the complete HTML
-        if fragments_html:
-            return f'''
-            {edition_html}
-            {revision_html}
-            <div class="fragments-container">
-                {fragments_html}
-            </div>
-            '''
-        
-        # Handle page breaks that aren't in fragments
-        content = re.sub(r'&lt;pb facs="([^"]*)"/?&gt;', 
-                       r'<div class="page-break">Page Reference: <a href="#" title="Facsimile reference">\1</a></div>', 
-                       content)
-        
-        # If no fragments were found, try to process the TEI header
-        header_pattern = r'&lt;teiHeader&gt;(.*?)&lt;/teiHeader&gt;'
-        header_match = re.search(header_pattern, content, re.DOTALL)
-        header_html = ""
-        
-        if header_match:
-            header_content = header_match.group(1)
-            
-            # Extract title info
-            title_pattern = r'&lt;title[^&]*?&gt;(.*?)&lt;/title&gt;'
-            titles = re.findall(title_pattern, header_content)
-            
-            # Extract editor info
-            editor_pattern = r'&lt;editor&gt;(.*?)&lt;/editor&gt;'
-            editors = re.findall(editor_pattern, header_content)
-            
-            if titles or editors:
-                header_html = '<div class="document-header">'
-                if titles:
-                    header_html += '<div class="document-titles"><h3>Document Titles</h3><ul>'
-                    for title in titles:
-                        header_html += f'<li>{title}</li>'
-                    header_html += '</ul></div>'
-                
-                if editors:
-                    header_html += '<div class="document-editors"><h3>Editors</h3><ul>'
-                    for editor in editors:
-                        header_html += f'<li>{editor}</li>'
-                    header_html += '</ul></div>'
-                
-                header_html += '</div>'
-        
-        # Try to process the main body if fragments weren't found
-        body_pattern = r'&lt;text&gt;\s*&lt;body&gt;(.*?)&lt;/body&gt;\s*&lt;/text&gt;'
-        body_match = re.search(body_pattern, content, re.DOTALL)
-        
-        if body_match:
-            body_content = body_match.group(1)
-            
-            # Process paragraphs
-            body_html = re.sub(r'&lt;p[^&]*?&gt;(.*?)&lt;/p&gt;', r'<p>\1</p>', body_content)
-            
-            # Process any regular divs
-            body_html = re.sub(r'&lt;div [^&]*?&gt;', '<div class="text-division">', body_html)
-            body_html = re.sub(r'&lt;/div&gt;', '</div>', body_html)
-            
-            # Format headers
-            body_html = re.sub(r'&lt;head[^&]*?&gt;(.*?)&lt;/head&gt;', r'<h2 class="section-head">\1</h2>', body_html)
-            
-            # Process foreign language text
-            body_html = re.sub(r'&lt;foreign xml:lang="([^"]*)"&gt;(.*?)&lt;/foreign&gt;', 
-                             r'<span class="latin-text" lang="\1">\2</span>', 
-                             body_html)
-            
-            # Process quotes
-            body_html = re.sub(r'&lt;quote[^&]*?&gt;(.*?)&lt;/quote&gt;', 
-                             r'<blockquote class="quote">\1</blockquote>', 
-                             body_html)
-            
-            # We've handled specific elements - now clean up any remaining tags
-            body_html = re.sub(r'&lt;[^&]*?&gt;', ' ', body_html)
-            
-            # Create the final content structure
-            final_html = f'''
-            {header_html}
-            {revision_html}
-            {edition_html}
-            <div class="main-content">
-                {body_html}
-            </div>
-            '''
-            
-            return final_html
-        
-        # If structured processing didn't work, fall back to a simpler representation
-        # Remove XML declaration and other processing instructions
-        content = re.sub(r'&lt;\?[^&]*\?&gt;', '', content)
-        
-        # Try to make it somewhat readable by styling tags differently
-        content = re.sub(r'&lt;([^&]*)&gt;', r'<span class="xml-tag">&lt;\1&gt;</span>', content)
         
         # Add line breaks
         content = content.replace('\n', '<br>')
         
-        return f'<div class="raw-xml">{content}</div>'
+        # Format special tags
+        content = re.sub(r'&lt;div type="textpart" subtype="fragment" [^&]*?n="([^"]*)"&gt;', 
+                      r'<div class="fragment-marker">--- Fragment \1 ---</div>', content)
+        content = re.sub(r'&lt;p rend="indent"&gt;', 
+                      r'<div class="paragraph-marker">--- Paragraph ---</div>', content)
+        content = re.sub(r'&lt;bibl[^&]*?&gt;(.*?)&lt;/bibl&gt;', 
+                      r'<span class="bibl-marker">\1</span>', content)
+        content = re.sub(r'&lt;quote[^&]*?&gt;(.*?)&lt;/quote&gt;', 
+                      r'<blockquote>\1</blockquote>', content)
+        content = re.sub(r'&lt;foreign[^&]*?&gt;(.*?)&lt;/foreign&gt;', 
+                      r'<i>\1</i>', content)
+        
+        return f'<div class="raw-xml"><h3>XML Content (Simplified View)</h3>{content}</div>'
 
     def delayed_shutdown(self):
         """Shut down the server after a short delay to allow the response to be sent"""
@@ -1957,17 +1932,32 @@ def add_shutdown_button(html):
 
 def run_server():
     global server_instance
-    server_instance = socketserver.TCPServer(("", PORT), CustomHTTPRequestHandler)
-    print(f"Server running at http://localhost:{PORT}/")
-    webbrowser.open(f"http://localhost:{PORT}/")
+    global PORT
+    
+    # Check if the default port is in use
+    if is_port_in_use(PORT):
+        print(f"Port {PORT} is already in use. Trying to find an available port...")
+        available_port = find_available_port(PORT + 1)
+        if available_port:
+            PORT = available_port
+            print(f"Using alternative port: {PORT}")
+        else:
+            print("Could not find an available port. Please close any running instances and try again.")
+            return
     
     try:
+        server_instance = socketserver.TCPServer(("", PORT), CustomHTTPRequestHandler)
+        print(f"Server running at http://localhost:{PORT}/")
+        webbrowser.open(f"http://localhost:{PORT}/")
         server_instance.serve_forever()
     except KeyboardInterrupt:
         print("Server stopped by user")
+    except Exception as e:
+        print(f"Error starting server: {str(e)}")
     finally:
-        server_instance.server_close()
-        print("Server closed")
+        if server_instance:
+            server_instance.server_close()
+            print("Server closed")
 
 if __name__ == "__main__":
     run_server() 
