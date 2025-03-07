@@ -17,7 +17,7 @@ import xml.etree.ElementTree as ET
 # Create a backup of the file
 shutil.copy('browse_texts.py', 'browse_texts.py.bak')
 
-PORT = 8000
+PORT = 8001  # Changed from 8000 to 8001 to avoid conflicts
 
 # Global reference to the server
 server_instance = None
@@ -1960,4 +1960,15 @@ def run_server():
             print("Server closed")
 
 if __name__ == "__main__":
-    run_server() 
+    try:
+        print(f"Starting server on port {PORT}...")
+        run_server()
+    except OSError as e:
+        if e.errno == 48:  # Address already in use
+            print(f"Error: Port {PORT} is already in use.")
+            print("Try closing any running instances or use the following command to force close:")
+            print(f"lsof -i :{PORT} | grep Python | awk '{{print $2}}' | xargs kill -9")
+        else:
+            print(f"Error starting server: {str(e)}")
+    except Exception as e:
+        print(f"Error starting server: {str(e)}") 
