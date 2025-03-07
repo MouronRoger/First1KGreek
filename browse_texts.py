@@ -37,7 +37,7 @@ class CustomHTTPRequestHandler(http.server.SimpleHTTPRequestHandler):
             <head>
                 <meta charset="UTF-8">
                 <meta http-equiv="refresh" content="5;url=about:blank" />
-                <title>Server Shutdown - First 1K Greek Texts</title>
+                <title>Server Shutdown - Greek Texts</title>
                 <style>
                     body { 
                         font-family: Arial, sans-serif; 
@@ -83,7 +83,7 @@ class CustomHTTPRequestHandler(http.server.SimpleHTTPRequestHandler):
                 <div class="container">
                     <h1>Server Shutting Down</h1>
                     <div class="shutdown-message">
-                        <p>The First 1K Greek Texts server is shutting down.</p>
+                        <p>Greek Texts server is shutting down.</p>
                         <p>This window will close automatically in <span id="countdown">5</span> seconds.</p>
                         <p>Thank you for using the application!</p>
                     </div>
@@ -113,7 +113,7 @@ class CustomHTTPRequestHandler(http.server.SimpleHTTPRequestHandler):
             <html>
             <head>
                 <meta charset="UTF-8">
-                <title>First 1K Greek Texts Browser</title>
+                <title>Greek Texts Browser</title>
                 <style>
                     body { 
                         font-family: Arial, sans-serif; 
@@ -194,7 +194,7 @@ class CustomHTTPRequestHandler(http.server.SimpleHTTPRequestHandler):
             </head>
             <body>
                 <div class="container">
-                    <h1>First 1K Greek Texts Browser</h1>
+                    <h1>Greek Texts Browser</h1>
                     
                     <div class="navigation">
                         <a href="/">Home</a> | 
@@ -214,7 +214,7 @@ class CustomHTTPRequestHandler(http.server.SimpleHTTPRequestHandler):
                     </div>
                     
                     <div class="text-display">
-                        <h2>Welcome to the First 1K Greek Texts Browser</h2>
+                        <h2>Welcome to the Greek Texts Browser</h2>
                         <p>This is a simple browser for the First 1K Greek Project texts. The project aims to provide digital versions of Greek texts from the first thousand years of Greek literature.</p>
                         <p>Use the navigation links above to explore the texts by author, editor, or browse the raw files.</p>
                     </div>
@@ -317,7 +317,7 @@ class CustomHTTPRequestHandler(http.server.SimpleHTTPRequestHandler):
             </head>
             <body>
                 <div class="container">
-                    <h1>First 1K Greek Texts Browser</h1>
+                    <h1>Greek Texts Browser</h1>
                     
                     <div class="navigation">
                         <a href="/">Home</a> | 
