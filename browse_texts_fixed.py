@@ -595,13 +595,21 @@ class CustomHTTPRequestHandler(http.server.SimpleHTTPRequestHandler):
             author_id = parts[1] if len(parts) > 1 else ""
             work_id = parts[2] if len(parts) > 2 else ""
             
+            # Generate a cache-busting timestamp for CSS
+            cache_buster = int(time.time())
+            
             html = f"""
             <!DOCTYPE html>
             <html>
             <head>
                 <title>First 1K Greek - View XML</title>
                 <meta charset="UTF-8">
+                <meta name="viewport" content="width=device-width, initial-scale=1.0">
+                <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
+                <meta http-equiv="Pragma" content="no-cache">
+                <meta http-equiv="Expires" content="0">
                 <style>
+                    /* Cache-busting CSS v{cache_buster} */
                     body {{ 
                         font-family: Arial, sans-serif; 
                         margin: 0; 
@@ -722,13 +730,21 @@ class CustomHTTPRequestHandler(http.server.SimpleHTTPRequestHandler):
             except:
                 pass  # Ignore errors in metadata extraction
             
+            # Generate a cache-busting timestamp for CSS
+            cache_buster = int(time.time())
+            
             html = f"""
             <!DOCTYPE html>
             <html>
             <head>
                 <title>First 1K Greek - Reader Mode</title>
                 <meta charset="UTF-8">
+                <meta name="viewport" content="width=device-width, initial-scale=1.0">
+                <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
+                <meta http-equiv="Pragma" content="no-cache">
+                <meta http-equiv="Expires" content="0">
                 <style>
+                    /* Cache-busting CSS v{cache_buster} */
                     body {{ 
                         font-family: 'New Athena Unicode', 'GFS Artemisia', 'Arial Unicode MS', 'Lucida Sans Unicode', 'Cardo', serif; 
                         margin: 0; 
