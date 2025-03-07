@@ -1,4 +1,10 @@
 #!/usr/bin/env python3
+"""
+First1KGreek Browser - Fixed Version
+Version: 1.2.0 (with cache-busting and dark theme)
+Last updated: 2025-03-07
+"""
+
 import os
 import sys
 import http.server
@@ -17,6 +23,10 @@ import xml.etree.ElementTree as ET
 # Create a backup of the file if it doesn't exist already
 if not os.path.exists('browse_texts.py.bak'):
     shutil.copy('browse_texts.py', 'browse_texts.py.bak')
+
+# Print version info when starting
+print("Starting First1KGreek Browser - Fixed Version 1.2.0")
+print("With dark theme and improved editor detection")
 
 PORT = 8000
 
@@ -200,13 +210,13 @@ def fallback_xml_rendering(self, xml_content):
     # Basic cleanup of the XML for HTML display
     clean_content = escape(xml_content)
     
-    # Add basic styling for readability
+    # Add styling matching our dark theme
     html = f'''
     <div class="xml-content">
-        <pre style="white-space: pre-wrap; font-family: monospace; line-height: 1.4; padding: 15px; background-color: #f8f8f8; border: 1px solid #ddd; border-radius: 4px; overflow-x: auto;">{clean_content}</pre>
+        <pre style="white-space: pre-wrap; font-family: monospace; line-height: 1.4; padding: 15px; background-color: #2d2d2d; color: #f8f8f8; border: 1px solid #444; border-radius: 5px; overflow-x: auto;">{clean_content}</pre>
     </div>
     '''
-    return html 
+    return html
 
 def is_port_in_use(port):
     """Check if a port is in use"""
@@ -1029,50 +1039,98 @@ class CustomHTTPRequestHandler(http.server.SimpleHTTPRequestHandler):
         # Find all works by this editor
         works = []
         
+        # Debug information
+        print(f"\nSearching for works edited by: {editor_name}")
+        found_files = []
+        
+        # Special handling for von Arnim - use direct path checks
+        if editor_name == "Hans Friedrich August von Arnim":
+            known_paths = [
+                "data/tlg1264/tlg001",
+                "data/tlg1264/tlg002",
+                "data/tlg1264/tlg003",
+                "data/tlg1264/tlg004",
+                "data/tlg0612/tlg001",
+                "data/tlg1146/tlg001",
+                "data/tlg1320/tlg001",
+                "data/tlg1269/tlg002",
+                "data/tlg1193/tlg001"
+            ]
+            
+            print(f"Using direct path checks for {editor_name}")
+            
+            for base_path in known_paths:
+                if os.path.exists(base_path):
+                    for file in os.listdir(base_path):
+                        if file.endswith('.xml') and not file == '__cts__.xml':
+                            file_path = os.path.join(base_path, file)
+                            print(f"Found known von Arnim file: {file_path}")
+                            
+                            try:
+                                with open(file_path, 'r', encoding='utf-8') as f:
+                                    content = f.read()
+                                
+                                # Get author information
+                                author_name = "Unknown"
+                                author_matches = re.findall(r'<author[^>]*>(.*?)</author>', content)
+                                if author_matches and len(author_matches[0].strip()) > 0:
+                                    author_name = author_matches[0].strip()
+                                
+                                # Get title information
+                                work_title = "Unknown"
+                                title_matches = re.findall(r'<title[^>]*>(.*?)</title>', content)
+                                if title_matches and len(title_matches[0].strip()) > 0:
+                                    work_title = title_matches[0].strip()
+                                    
+                                # Get work ID
+                                work_id = "Unknown"
+                                parts = file_path.split('/')
+                                if len(parts) > 2:
+                                    author_id = parts[-3]
+                                    work_dir = parts[-2]
+                                    work_id = work_dir
+                                
+                                works.append({
+                                    "path": file_path,
+                                    "file": file,
+                                    "title": work_title,
+                                    "author": author_name,
+                                    "author_id": author_id if 'author_id' in locals() else "",
+                                    "work_id": work_id,
+                                    "match_type": "Direct path check"
+                                })
+                                
+                                found_files.append(file_path)
+                            except Exception as e:
+                                print(f"Error reading {file_path}: {str(e)}")
+        
+        # Use regular search mechanism too
         for root, dirs, files in os.walk('data'):
             for file in files:
                 if file.endswith('.xml') and not file == '__cts__.xml':
                     file_path = os.path.join(root, file)
                     
+                    # Skip if we already found this file
+                    if file_path in found_files:
+                        continue
+                        
                     try:
                         with open(file_path, 'r', encoding='utf-8') as f:
                             content = f.read()
+                        
+                        # Simple check for editor name anywhere in content
+                        if editor_name in content:
+                            print(f"Found by content search: {file_path}")
                             
-                        # Various ways editor information might appear in XML files
-                        found_editor = False
-                        
-                        # Standard tags
-                        if f'<editor>{editor_name}</editor>' in content or f'editor>{editor_name}</editor>' in content:
-                            found_editor = True
-                        
-                        # With attributes
-                        if not found_editor:
-                            editor_match = re.search(r'<editor[^>]*>(.*?)</editor>', content)
-                            if editor_match and editor_name in editor_match.group(1):
-                                found_editor = True
-                        
-                        # Inside persName tag
-                        if not found_editor:
-                            if f'<persName>{editor_name}</persName>' in content:
-                                found_editor = True
-                            
-                        # In titleStmt
-                        if not found_editor:
-                            if '<titleStmt>' in content and '</titleStmt>' in content:
-                                title_stmt = content.split('<titleStmt>')[1].split('</titleStmt>')[0]
-                                if editor_name in title_stmt:
-                                    found_editor = True
-                        
-                        if found_editor:
                             # Get author information
                             author_name = "Unknown"
-                            author_matches = re.findall(r'<author.*?>(.*?)</author>', content)
+                            author_matches = re.findall(r'<author[^>]*>(.*?)</author>', content)
                             if author_matches and len(author_matches[0].strip()) > 0:
                                 author_name = author_matches[0].strip()
                             
                             # Get title information
                             work_title = "Unknown"
-                            title_matches = re.findall(r'<title.*?>(.*?)</title>', content)
+                            title_matches = re.findall(r'<title[^>]*>(.*?)</title>', content)
                             if title_matches and len(title_matches[0].strip()) > 0:
                                 work_title = title_matches[0].strip()
                                 
@@ -1090,10 +1148,13 @@ class CustomHTTPRequestHandler(http.server.SimpleHTTPRequestHandler):
                                 "title": work_title,
                                 "author": author_name,
                                 "author_id": author_id if 'author_id' in locals() else "",
-                                "work_id": work_id
+                                "work_id": work_id,
+                                "match_type": "Content search"
                             })
                     except Exception as e:
                         print(f"Error reading {file_path}: {str(e)}")
+        
+        print(f"\nTotal works found: {len(works)}")
         
         # Sort works by title
         works.sort(key=lambda x: x["title"])
