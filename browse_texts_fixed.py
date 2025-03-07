@@ -599,17 +599,68 @@ class CustomHTTPRequestHandler(http.server.SimpleHTTPRequestHandler):
             <!DOCTYPE html>
             <html>
             <head>
-                <title>First1K Greek - View XML</title>
+                <title>First 1K Greek - View XML</title>
                 <meta charset="UTF-8">
                 <style>
-                    body {{ font-family: Arial, sans-serif; margin: 0; padding: 0; line-height: 1.6; }}
-                    .container {{ max-width: 1000px; margin: 0 auto; padding: 20px; }}
-                    h1 {{ color: #333; }}
-                    .nav {{ margin: 20px 0; }}
-                    .nav a {{ display: inline-block; margin-right: 15px; background: #0066cc; color: white; 
-                            padding: 10px 15px; text-decoration: none; border-radius: 4px; }}
-                    .reader-link {{ display: inline-block; margin-top: 10px; }}
-                    pre {{ background: #f8f8f8; padding: 15px; border: 1px solid #ddd; overflow-x: auto; line-height: 1.4; }}
+                    body {{ 
+                        font-family: Arial, sans-serif; 
+                        margin: 0; 
+                        padding: 0; 
+                        line-height: 1.6; 
+                        background-color: #1a1a1a;
+                        color: #fff;
+                    }}
+                    .container {{ 
+                        max-width: 1200px; 
+                        margin: 0 auto; 
+                        padding: 20px; 
+                    }}
+                    h1, h2 {{ 
+                        color: #fff; 
+                        margin-bottom: 20px;
+                    }}
+                    .nav {{ 
+                        margin: 20px 0; 
+                    }}
+                    .nav a {{ 
+                        display: inline-block; 
+                        margin-right: 15px; 
+                        background: #0066cc; 
+                        color: white; 
+                        padding: 10px 15px; 
+                        text-decoration: none; 
+                        border-radius: 4px; 
+                    }}
+                    .nav a:hover {{ 
+                        background: #004080; 
+                    }}
+                    .reader-link {{ 
+                        display: inline-block; 
+                        margin-top: 10px;
+                        margin-bottom: 20px;
+                        color: #4299e1; 
+                        text-decoration: none; 
+                    }}
+                    .reader-link:hover {{
+                        text-decoration: underline;
+                    }}
+                    .file-info {{
+                        background-color: #2d2d2d;
+                        border-left: 4px solid #4299e1;
+                        padding: 10px 15px;
+                        margin-bottom: 20px;
+                        border-radius: 4px;
+                    }}
+                    pre {{ 
+                        background: #2d2d2d; 
+                        padding: 15px; 
+                        border: 1px solid #444; 
+                        border-radius: 5px;
+                        overflow-x: auto; 
+                        line-height: 1.4; 
+                        color: #f8f8f8;
+                        font-family: monospace;
+                    }}
                 </style>
             </head>
             <body>
@@ -622,7 +673,11 @@ class CustomHTTPRequestHandler(http.server.SimpleHTTPRequestHandler):
                         {f'<a href="/works?author={author_id}">Back to Works</a>' if author_id else ''}
                     </div>
                     
-                    <a href="/reader?path={file_path}" class="reader-link">Open in Reader Mode</a>
+                    <div class="file-info">
+                        Path: {file_path}
+                    </div>
+                    
+                    <a href="/reader?path={file_path}" class="reader-link">Switch to Reader Mode</a>
                     
                     <pre>{escaped_content}</pre>
                 </div>
@@ -647,13 +702,117 @@ class CustomHTTPRequestHandler(http.server.SimpleHTTPRequestHandler):
             # Process the XML content for reader-friendly display
             processed_content = self.process_xml_for_reading(content)
             
+            # Get additional metadata
+            metadata = {}
+            try:
+                # Extract author information
+                author_matches = re.findall(r'<author[^>]*>(.*?)</author>', content)
+                if author_matches and len(author_matches[0].strip()) > 0:
+                    metadata["author"] = author_matches[0].strip()
+                
+                # Extract title information
+                title_matches = re.findall(r'<title[^>]*>(.*?)</title>', content)
+                if title_matches and len(title_matches[0].strip()) > 0:
+                    metadata["title"] = title_matches[0].strip()
+                
+                # Extract editor information
+                editor_matches = re.findall(r'<editor[^>]*>(.*?)</editor>', content)
+                if editor_matches and len(editor_matches[0].strip()) > 0:
+                    metadata["editor"] = editor_matches[0].strip()
+            except:
+                pass  # Ignore errors in metadata extraction
+            
             html = f"""
             <!DOCTYPE html>
             <html>
             <head>
-                <title>First1K Greek - Reader Mode</title>
+                <title>First 1K Greek - Reader Mode</title>
                 <meta charset="UTF-8">
                 <style>
+                    body {{ 
+                        font-family: 'New Athena Unicode', 'GFS Artemisia', 'Arial Unicode MS', 'Lucida Sans Unicode', 'Cardo', serif; 
+                        margin: 0; 
+                        padding: 0;
+                        line-height: 1.8; 
+                        background-color: #1a1a1a; 
+                        color: #f2f2f2; 
+                    }}
+                    h1, h2, h3 {{ 
+                        color: #fff;
+                        font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif;
+                        margin-top: 1.5em;
+                        margin-bottom: 0.5em;
+                    }}
+                    a {{ color: #4299e1; text-decoration: none; }}
+                    a:hover {{ text-decoration: underline; }}
+                    .container {{ 
+                        max-width: 1200px; 
+                        margin: 0 auto; 
+                        padding: 20px;
+                        background-color: #2a2a2a;
+                        box-shadow: 0 0 10px rgba(0,0,0,0.3);
+                        min-height: 100vh;
+                    }}
+                    .nav {{ 
+                        margin: 20px 0; 
+                    }}
+                    .nav a {{ 
+                        display: inline-block; 
+                        margin-right: 15px; 
+                        background: #0066cc; 
+                        color: white !important; 
+                        padding: 10px 15px; 
+                        text-decoration: none; 
+                        border-radius: 4px; 
+                    }}
+                    .nav a:hover {{ 
+                        background: #004080; 
+                    }}
+                    .metadata {{
+                        background-color: #333;
+                        padding: 15px;
+                        margin-bottom: 20px;
+                        border-radius: 4px;
+                        border-left: 4px solid #4299e1;
+                    }}
+                    .metadata-item {{
+                        margin-bottom: 5px;
+                    }}
+                    .metadata-label {{
+                        font-weight: bold;
+                        color: #aaa;
+                        margin-right: 10px;
+                    }}
+                    .content {{
+                        padding: 20px;
+                        background-color: #262626;
+                        border-radius: 4px;
+                    }}
+                    .file-info {{
+                        background-color: #333;
+                        padding: 10px 15px;
+                        margin-bottom: 20px;
+                        border-radius: 4px;
+                        font-family: monospace;
+                        font-size: 0.9em;
+                    }}
+                    .revision-history {{
+                        margin-top: 20px;
+                        padding: 15px;
+                        background-color: #333;
+                        border-radius: 4px;
+                    }}
+                    .fragment {{
+                        margin-bottom: 20px;
+                        padding: 15px;
+                        background-color: #333;
+                        border-radius: 4px;
+                    }}
+                    .fragment-number {{
+                        font-weight: bold;
+                        margin-bottom: 10px;
+                        color: #ddd;
+                    }}
                     {READER_STYLESHEET}
                 </style>
             </head>
@@ -668,6 +827,13 @@ class CustomHTTPRequestHandler(http.server.SimpleHTTPRequestHandler):
                         <a href="/view?path={file_path}">View Source XML</a>
                     </div>
                     
+                    <div class="file-info">
+                        Path: {file_path}
+                    </div>
+                    
+                    <!-- Display metadata if available -->
+                    {self.format_metadata_html(metadata) if metadata else ''}
+                    
                     <div class="content">
                         {processed_content}
                     </div>
@@ -678,6 +844,19 @@ class CustomHTTPRequestHandler(http.server.SimpleHTTPRequestHandler):
             return add_shutdown_button(html)
         except Exception as e:
             return f"<h1>Error</h1><p>Error processing file for reading: {str(e)}</p>"
+            
+    def format_metadata_html(self, metadata):
+        """Format metadata as HTML"""
+        if not metadata:
+            return ""
+            
+        html = "<div class='metadata'>"
+        
+        for key, value in metadata.items():
+            html += f"<div class='metadata-item'><span class='metadata-label'>{key.title()}:</span> {value}</div>"
+            
+        html += "</div>"
+        return html
 
     def get_editors_page(self):
         """Generate the editors listing page with rich styling matching the original version"""
@@ -859,7 +1038,32 @@ class CustomHTTPRequestHandler(http.server.SimpleHTTPRequestHandler):
                         with open(file_path, 'r', encoding='utf-8') as f:
                             content = f.read()
                             
+                        # Various ways editor information might appear in XML files
+                        found_editor = False
+                        
+                        # Standard tags
                         if f'<editor>{editor_name}</editor>' in content or f'editor>{editor_name}</editor>' in content:
+                            found_editor = True
+                        
+                        # With attributes
+                        if not found_editor:
+                            editor_match = re.search(r'<editor[^>]*>(.*?)</editor>', content)
+                            if editor_match and editor_name in editor_match.group(1):
+                                found_editor = True
+                        
+                        # Inside persName tag
+                        if not found_editor:
+                            if f'<persName>{editor_name}</persName>' in content:
+                                found_editor = True
+                            
+                        # In titleStmt
+                        if not found_editor:
+                            if '<titleStmt>' in content and '</titleStmt>' in content:
+                                title_stmt = content.split('<titleStmt>')[1].split('</titleStmt>')[0]
+                                if editor_name in title_stmt:
+                                    found_editor = True
+                        
+                        if found_editor:
                             # Get author information
                             author_name = "Unknown"
                             author_matches = re.findall(r'<author.*?>(.*?)</author>', content)
@@ -1099,14 +1303,45 @@ class CustomHTTPRequestHandler(http.server.SimpleHTTPRequestHandler):
                         with open(file_path, 'r', encoding='utf-8') as f:
                             content = f.read()
                             
-                        # Extract editor information
-                        editor_matches = re.findall(r'<editor>(.*?)</editor>', content)
-                        if not editor_matches:
-                            editor_matches = re.findall(r'<editor[^>]*>(.*?)</editor>', content)
-                            
-                        for editor in editor_matches:
+                        # Extract editor information using multiple approaches
+                        editor_names = []
+                        
+                        # Standard editor tags
+                        editor_matches = re.findall(r'<editor[^>]*>(.*?)</editor>', content)
+                        editor_names.extend([m.strip() for m in editor_matches if m.strip()])
+                        
+                        # Check titleStmt for editor info
+                        if '<titleStmt>' in content and '</titleStmt>' in content:
+                            title_stmt = content.split('<titleStmt>')[1].split('</titleStmt>')[0]
+                            if '<editor>' in title_stmt and '</editor>' in title_stmt:
+                                editor_matches = re.findall(r'<editor[^>]*>(.*?)</editor>', title_stmt)
+                                editor_names.extend([m.strip() for m in editor_matches if m.strip()])
+                        
+                        # Check for persName with role=editor
+                        persname_matches = re.findall(r'<persName[^>]*role="editor"[^>]*>(.*?)</persName>', content)
+                        editor_names.extend([m.strip() for m in persname_matches if m.strip()])
+                        
+                        # Check for persName with contents matching known editors
+                        persname_matches = re.findall(r'<persName[^>]*>(.*?)</persName>', content)
+                        known_editors = [
+                            "Hans Friedrich August von Arnim",
+                            "von Arnim",
+                            "Arnim",
+                            "H. F. A. von Arnim"
+                        ]
+                        for match in persname_matches:
+                            for editor in known_editors:
+                                if editor in match:
+                                    editor_names.append("Hans Friedrich August von Arnim")
+                        
+                        # Clean and count editors
+                        for editor in editor_names:
                             editor = editor.strip()
                             if editor:
+                                # Normalize known variants of editor names
+                                if editor in ["von Arnim", "Arnim", "H. F. A. von Arnim"]:
+                                    editor = "Hans Friedrich August von Arnim"
+                                    
                                 if editor in editors:
                                     editors[editor] += 1
                                 else:
