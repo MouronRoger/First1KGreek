@@ -40,23 +40,23 @@ body {
     margin: 0; 
     padding: 0;
     line-height: 1.8; 
-    background-color: #f9f9f9; 
-    color: #000000; 
+    background-color: #2a2a2a; 
+    color: #f2f2f2; 
 }
 h1, h2, h3 { 
-    color: #333;
+    color: #fff;
     font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif;
     margin-top: 1.5em;
     margin-bottom: 0.5em;
 }
-a { color: #0066cc; text-decoration: none; }
+a { color: #4299e1; text-decoration: none; }
 a:hover { text-decoration: underline; }
 .container { 
     max-width: 800px; 
     margin: 0 auto; 
     padding: 20px;
-    background-color: #ffffff;
-    box-shadow: 0 0 10px rgba(0,0,0,0.1);
+    background-color: #333;
+    box-shadow: 0 0 10px rgba(0,0,0,0.3);
     min-height: 100vh;
 }
 """ 
@@ -218,28 +218,21 @@ class CustomHTTPRequestHandler(http.server.SimpleHTTPRequestHandler):
             if os.path.isdir(item_path) and (item.startswith('tlg') or item.startswith('heb')):
                 author_dirs.append(item)
         
-        # Sort the author directories numerically by ID number
-        def sort_key(author_id):
-            # Extract the numeric part from tlgXXXX
-            if author_id.startswith('tlg'):
-                try:
-                    # Return a tuple with a sort category and the numeric value
-                    return (0, int(author_id[3:]))
-                except ValueError:
-                    # For non-numeric parts, use a high number
-                    return (0, 999999)
-            # For non-tlg ids (like heb), use a different category
-            return (1, author_id)
-            
-        # Sort by the tuple - first by category, then by value
-        author_dirs.sort(key=sort_key)
-        
         # Get author names from catalog or XML files
         author_names = {}
         for author_id in author_dirs:
             # Try to find an author name from any XML file
             author_name = self.get_author_name_from_files(author_id)
             author_names[author_id] = author_name if author_name else author_id
+        
+        # Create a list of (author_id, author_name) tuples for sorting
+        author_items = [(author_id, author_names[author_id]) for author_id in author_dirs]
+        
+        # Sort alphabetically by author name, then by ID if names are the same
+        author_items.sort(key=lambda x: (x[1].lower(), x[0]))
+        
+        # Extract the sorted author_ids
+        author_dirs = [item[0] for item in author_items]
         
         # Build the HTML with grid layout
         html = """
@@ -325,7 +318,7 @@ class CustomHTTPRequestHandler(http.server.SimpleHTTPRequestHandler):
                 </div>
                 
                 <div class="description">
-                    Showing {len(author_dirs)} authors, sorted by ID number
+                    Showing {len(author_dirs)} authors, alphabetically ordered by name
                 </div>
                 
                 <div class="author-grid">
@@ -383,56 +376,164 @@ class CustomHTTPRequestHandler(http.server.SimpleHTTPRequestHandler):
         author_path = os.path.join('data', author_id)
         works = []
         
+        # Try to get the author name
+        author_name = self.get_author_name_from_files(author_id) or author_id
+        
         if os.path.exists(author_path):
             for item in os.listdir(author_path):
                 item_path = os.path.join(author_path, item)
                 if os.path.isdir(item_path):
-                    works.append(item)
+                    work_files = []
+                    work_title = item  # Default to directory name
+                    
+                    # Look for a descriptive title in the XML files
+                    for file in os.listdir(item_path):
+                        if file.endswith('.xml'):
+                            file_path = os.path.join('data', author_id, item, file)
+                            
+                            # If it's a __cts__.xml file, it likely has good metadata
+                            if file == '__cts__.xml':
+                                try:
+                                    with open(file_path, 'r', encoding='utf-8') as f:
+                                        content = f.read()
+                                    
+                                    # Look for a title
+                                    title_matches = re.findall(r'<ti:title[^>]*>(.*?)</ti:title>', content)
+                                    if title_matches and title_matches[0].strip():
+                                        work_title = title_matches[0].strip()
+                                except Exception as e:
+                                    print(f"Error reading {file_path}: {str(e)}")
+                            
+                            # Add the file to the list
+                            work_files.append({
+                                'file': file,
+                                'path': file_path
+                            })
+                    
+                    # Add the work to the list
+                    works.append({
+                        'id': item,
+                        'title': work_title,
+                        'files': work_files
+                    })
         
-        works.sort()
+        # Sort works by title
+        works.sort(key=lambda x: x['title'].lower())
         
         html = f"""
         <!DOCTYPE html>
         <html>
         <head>
-            <title>First1K Greek - Works for {author_id}</title>
+            <title>First 1K Greek - Works for {author_name}</title>
             <meta charset="UTF-8">
+            <meta name="viewport" content="width=device-width, initial-scale=1.0">
+            <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
+            <meta http-equiv="Pragma" content="no-cache">
+            <meta http-equiv="Expires" content="0">
             <style>
-                body {{ font-family: Arial, sans-serif; margin: 0; padding: 0; line-height: 1.6; }}
-                .container {{ max-width: 900px; margin: 0 auto; padding: 20px; }}
-                h1 {{ color: #333; }}
-                .nav {{ margin: 20px 0; }}
-                .nav a {{ display: inline-block; margin-right: 15px; background: #0066cc; color: white; 
-                        padding: 10px 15px; text-decoration: none; border-radius: 4px; }}
-                .nav a:hover {{ background: #004080; }}
-                .work-list {{ margin-top: 20px; }}
-                .work-item {{ padding: 15px; border-bottom: 1px solid #eee; }}
-                .work-item:hover {{ background: #f8f8f8; }}
+                body {{ 
+                    font-family: Arial, sans-serif; 
+                    margin: 0; 
+                    padding: 0; 
+                    line-height: 1.6; 
+                    background-color: #1a1a1a;
+                    color: #fff;
+                }}
+                .container {{ 
+                    max-width: 1200px; 
+                    margin: 0 auto; 
+                    padding: 20px; 
+                }}
+                h1, h2 {{ 
+                    color: #fff; 
+                    margin-bottom: 20px;
+                }}
+                .nav {{ 
+                    margin: 20px 0; 
+                }}
+                .nav a {{ 
+                    display: inline-block; 
+                    margin-right: 15px; 
+                    background: #0066cc; 
+                    color: white; 
+                    padding: 10px 15px; 
+                    text-decoration: none; 
+                    border-radius: 4px; 
+                }}
+                .nav a:hover {{ 
+                    background: #004080; 
+                }}
+                .work-list {{ 
+                    margin-top: 20px; 
+                }}
+                .work-item {{ 
+                    padding: 15px; 
+                    border-bottom: 1px solid #333; 
+                    background-color: #2d2d2d;
+                    margin-bottom: 15px;
+                    border-radius: 5px;
+                }}
+                .work-item:hover {{ 
+                    background-color: #333; 
+                }}
+                .work-title {{
+                    font-size: 1.2em;
+                    font-weight: bold;
+                    margin-bottom: 10px;
+                }}
+                .work-id {{
+                    color: #aaa;
+                    font-size: 0.9em;
+                    font-family: monospace;
+                    margin-bottom: 10px;
+                }}
+                .file-links {{
+                    margin-top: 10px;
+                }}
+                .file-links a {{
+                    display: inline-block;
+                    margin-right: 10px;
+                    margin-bottom: 5px;
+                    color: #4299e1;
+                }}
+                .description {{
+                    margin-bottom: 20px;
+                    font-style: italic;
+                    color: #ccc;
+                }}
             </style>
         </head>
         <body>
             <div class="container">
-                <h1>Works for Author: {author_id}</h1>
+                <h1>Works by {author_name}</h1>
                 
                 <div class="nav">
                     <a href="/">Home</a>
                     <a href="/authors">Back to Authors</a>
                 </div>
                 
+                <div class="description">
+                    Found {len(works)} works for author ID: {author_id}
+                </div>
+                
                 <div class="work-list">
         """
         
         for work in works:
-            html += f'<div class="work-item"><strong>{work}</strong><br/>'
+            html += f'<div class="work-item">'
+            html += f'<div class="work-title">{work["title"]}</div>'
+            html += f'<div class="work-id">Work ID: {work["id"]}</div>'
+            html += f'<div class="file-links">'
             
-            # List the XML files in this work directory
-            work_path = os.path.join(author_path, work)
-            for item in os.listdir(work_path):
-                if item.endswith('.xml') and not item == '__cts__.xml':
-                    file_path = os.path.join('data', author_id, work, item)
-                    html += f'<a href="/view?path={file_path}">{item}</a><br/>'
+            # List the XML files in this work
+            for file_info in work['files']:
+                if file_info['file'] != '__cts__.xml':
+                    file_name = file_info['file']
+                    file_path = file_info['path']
+                    html += f'<a href="/view?path={file_path}">{file_name}</a> '
+                    html += f'<a href="/reader?path={file_path}">[Reader]</a><br>'
             
-            html += '</div>\n'
+            html += '</div></div>\n'
         
         html += """
                 </div>
