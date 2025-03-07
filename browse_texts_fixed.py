@@ -312,10 +312,13 @@ class CustomHTTPRequestHandler(http.server.SimpleHTTPRequestHandler):
         time.sleep(1)
         global server_instance
         if server_instance:
-            print("Server stopped by user")
+            print("Server stopping...")
+            # Force the socket to close with a timeout
+            server_instance.socket.close()
+            server_instance.server_close()
             server_instance.shutdown()
-            print("Server closed")
             server_instance = None
+            print("Server closed successfully")
 
     def get_home_page(self):
         """Generate the home page HTML"""
@@ -941,6 +944,8 @@ def run_server():
     
     # Create and start the server
     handler = CustomHTTPRequestHandler
+    # Enable socket reuse to avoid "address already in use" errors
+    socketserver.TCPServer.allow_reuse_address = True
     server_instance = socketserver.TCPServer(("", PORT), handler)
     
     print(f"Server running at http://localhost:{PORT}/")
@@ -952,10 +957,20 @@ def run_server():
         # Run the server until interrupted
         server_instance.serve_forever()
     except KeyboardInterrupt:
-        print("Server stopped by user")
-        server_instance.shutdown()
+        print("Server stopped by user via keyboard interrupt")
+        if server_instance:
+            server_instance.socket.close()
+            server_instance.server_close()
+            server_instance.shutdown()
+            server_instance = None
         print("Server closed")
-        server_instance = None
+    except Exception as e:
+        print(f"Server error: {str(e)}")
+        if server_instance:
+            server_instance.socket.close()
+            server_instance.server_close()
+            server_instance.shutdown()
+            server_instance = None
 
 if __name__ == "__main__":
     run_server() 
