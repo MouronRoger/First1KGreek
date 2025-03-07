@@ -222,6 +222,17 @@ def find_available_port(start_port=8000, max_attempts=10):
 
 class CustomHTTPRequestHandler(http.server.SimpleHTTPRequestHandler):
     """Custom HTTP server handler for browsing and viewing texts"""
+    
+    def send_html_response(self, html_content):
+        """Helper method to send HTML response with correct headers"""
+        self.send_response(200)
+        self.send_header('Content-type', 'text/html; charset=utf-8')
+        self.send_header('Cache-Control', 'no-cache, no-store, must-revalidate')
+        self.send_header('Pragma', 'no-cache')
+        self.send_header('Expires', '0')
+        self.end_headers()
+        self.wfile.write(html_content.encode('utf-8'))
+    
     def do_GET(self):
         """Handle GET requests"""
         # Parse the URL and get query parameters
@@ -231,62 +242,35 @@ class CustomHTTPRequestHandler(http.server.SimpleHTTPRequestHandler):
         
         # Handle different routes
         if path == '/':
-            self.send_response(200)
-            self.send_header('Content-type', 'text/html')
-            self.end_headers()
-            self.wfile.write(self.get_home_page().encode())
+            self.send_html_response(self.get_home_page())
         elif path == '/authors':
-            self.send_response(200)
-            self.send_header('Content-type', 'text/html')
-            self.end_headers()
-            self.wfile.write(self.get_authors_page().encode())
+            self.send_html_response(self.get_authors_page())
         elif path == '/editors':
-            self.send_response(200)
-            self.send_header('Content-type', 'text/html')
-            self.end_headers()
-            self.wfile.write(self.get_editors_page().encode())
+            self.send_html_response(self.get_editors_page())
         elif path == '/works' and 'author' in query_params:
             author_id = query_params['author'][0]
-            self.send_response(200)
-            self.send_header('Content-type', 'text/html')
-            self.end_headers()
-            self.wfile.write(self.get_works_page(author_id).encode())
+            self.send_html_response(self.get_works_page(author_id))
         elif path == '/editor_works' and 'name' in query_params:
             editor_name = query_params['name'][0]
-            self.send_response(200)
-            self.send_header('Content-type', 'text/html')
-            self.end_headers()
-            self.wfile.write(self.get_editor_works_page(editor_name).encode())
+            self.send_html_response(self.get_editor_works_page(editor_name))
         elif path == '/view' and 'path' in query_params:
             file_path = query_params['path'][0]
-            self.send_response(200)
-            self.send_header('Content-type', 'text/html')
-            self.end_headers()
-            self.wfile.write(self.get_view_page(file_path).encode())
+            self.send_html_response(self.get_view_page(file_path))
         elif path == '/reader' and 'path' in query_params:
             file_path = query_params['path'][0]
-            self.send_response(200)
-            self.send_header('Content-type', 'text/html')
-            self.end_headers()
-            self.wfile.write(self.get_reader_page(file_path).encode())
+            self.send_html_response(self.get_reader_page(file_path))
         elif path == '/search':
             search_term = query_params.get('q', [''])[0]
-            self.send_response(200)
-            self.send_header('Content-type', 'text/html')
-            self.end_headers()
-            self.wfile.write(self.get_search_page(search_term).encode())
+            self.send_html_response(self.get_search_page(search_term))
         elif path == '/shutdown':
-            self.send_response(200)
-            self.send_header('Content-type', 'text/html')
-            self.end_headers()
-            html = """
+            shutdown_html = """
             <html>
             <head>
                 <title>Server Shutdown</title>
                 <style>
-                    body { font-family: Arial, sans-serif; margin: 40px; line-height: 1.6; }
-                    h1 { color: #333; }
-                    .message { padding: 20px; background-color: #f0f0f0; border-radius: 5px; }
+                    body { font-family: Arial, sans-serif; margin: 40px; line-height: 1.6; background-color: #1a1a1a; color: #fff; }
+                    h1 { color: #fff; }
+                    .message { padding: 20px; background-color: #2d2d2d; border-radius: 5px; }
                 </style>
             </head>
             <body>
@@ -297,7 +281,7 @@ class CustomHTTPRequestHandler(http.server.SimpleHTTPRequestHandler):
             </body>
             </html>
             """
-            self.wfile.write(html.encode())
+            self.send_html_response(shutdown_html)
             threading.Thread(target=self.delayed_shutdown).start()
         else:
             # Attempt to serve a static file
