@@ -19,6 +19,9 @@ import threading
 import time
 import socket
 import xml.etree.ElementTree as ET
+import urllib.request
+from urllib.error import URLError, HTTPError
+import traceback
 
 # Create a backup of the file if it doesn't exist already
 if not os.path.exists('browse_texts.py.bak'):
@@ -61,6 +64,33 @@ a:hover { text-decoration: underline; }
 }
 """ 
 
+# Check if MAIN_STYLESHEET exists
+MAIN_STYLESHEET = """
+body { 
+    font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif; 
+    margin: 0; 
+    padding: 0;
+    line-height: 1.6; 
+    background-color: #1a1a1a; 
+    color: #ffffff; 
+}
+h1, h2, h3 { 
+    color: #4299e1;
+    margin-top: 1.5em;
+    margin-bottom: 0.5em;
+}
+a { color: #4299e1; text-decoration: none; }
+a:hover { text-decoration: underline; }
+.container { 
+    max-width: 1000px; 
+    margin: 0 auto; 
+    padding: 20px;
+    background-color: #2d2d2d;
+    box-shadow: 0 0 10px rgba(0,0,0,0.5);
+    min-height: 100vh;
+}
+"""
+
 def is_port_in_use(port):
     """Check if a port is in use"""
     with socket.socket(socket.AF_INET, socket.SOCK_STREAM) as s:
@@ -100,6 +130,14 @@ class CustomHTTPRequestHandler(http.server.SimpleHTTPRequestHandler):
             self.send_html_response(self.get_authors_page())
         elif path == '/editors':
             self.send_html_response(self.get_editors_page())
+        elif path == '/import':
+            self.send_html_response(self.get_import_page())
+        elif path == '/import_success':
+            message = query_params.get('message', ['Import completed successfully'])[0]
+            self.send_html_response(self.get_import_success_page(message))
+        elif path == '/import_error':
+            error = query_params.get('error', ['An unknown error occurred'])[0]
+            self.send_html_response(self.get_import_error_page(error))
         elif path == '/works' and 'author' in query_params:
             author_id = query_params['author'][0]
             self.send_html_response(self.get_works_page(author_id))
@@ -159,24 +197,53 @@ class CustomHTTPRequestHandler(http.server.SimpleHTTPRequestHandler):
 
     def get_home_page(self):
         """Generate the home page HTML"""
-        html = """
+        html = f"""
         <!DOCTYPE html>
         <html>
         <head>
             <title>First1K Greek - Text Browser</title>
             <meta charset="UTF-8">
             <style>
-                body { font-family: Arial, sans-serif; margin: 0; padding: 0; line-height: 1.6; }
-                .container { max-width: 900px; margin: 0 auto; padding: 20px; }
-                h1 { color: #333; }
-                .nav { margin: 20px 0; }
-                .nav a { display: inline-block; margin-right: 15px; background: #0066cc; color: white; 
-                        padding: 10px 15px; text-decoration: none; border-radius: 4px; }
-                .nav a:hover { background: #004080; }
-                .search-box { margin: 30px 0; padding: 20px; background: #f8f8f8; border-radius: 5px; }
-                .search-box input[type="text"] { padding: 10px; width: 70%; border: 1px solid #ddd; }
-                .search-box button { padding: 10px 20px; background: #0066cc; color: white; border: none; cursor: pointer; }
-                .about { margin-top: 40px; padding: 20px; background: #f0f0f0; border-radius: 5px; }
+                {MAIN_STYLESHEET}
+                .nav {{ margin: 20px 0; }}
+                .nav a {{ 
+                    display: inline-block; 
+                    margin-right: 15px; 
+                    background: #3182ce; 
+                    color: white; 
+                    padding: 10px 15px; 
+                    text-decoration: none; 
+                    border-radius: 4px; 
+                }}
+                .nav a:hover {{ background: #2c5282; }}
+                .search-box {{ 
+                    margin: 30px 0; 
+                    padding: 20px; 
+                    background: #2a4365; 
+                    border-radius: 5px; 
+                }}
+                .search-box input[type="text"] {{ 
+                    padding: 10px; 
+                    width: 70%; 
+                    border: 1px solid #444; 
+                    background: #333;
+                    color: white;
+                }}
+                .search-box button {{ 
+                    padding: 10px 20px; 
+                    background: #3182ce; 
+                    color: white; 
+                    border: none; 
+                    cursor: pointer; 
+                    border-radius: 4px;
+                }}
+                .search-box button:hover {{ background: #2c5282; }}
+                .about {{ 
+                    margin-top: 40px; 
+                    padding: 20px; 
+                    background: #323232; 
+                    border-radius: 5px; 
+                }}
             </style>
         </head>
         <body>
@@ -187,6 +254,7 @@ class CustomHTTPRequestHandler(http.server.SimpleHTTPRequestHandler):
                     <a href="/authors">Browse Authors</a>
                     <a href="/editors">Browse Editors</a>
                     <a href="/search">Search</a>
+                    <a href="/import">Import from Scaife</a>
                 </div>
                 
                 <div class="search-box">
@@ -1482,7 +1550,7 @@ class CustomHTTPRequestHandler(http.server.SimpleHTTPRequestHandler):
                             # Extract title information
                             work_title = "Unknown"
                             title_matches = re.findall(r'<title.*?>(.*?)</title>', content)
-                            if title_matches and len(title_matches[0].strip()) > 0:
+                            if title_matches:
                                 work_title = title_matches[0]
                             else:
                                 # Try to find a title in TEI header
@@ -1693,6 +1761,432 @@ class CustomHTTPRequestHandler(http.server.SimpleHTTPRequestHandler):
         </div>
         '''
         return html
+
+    def do_POST(self):
+        """Handle POST requests"""
+        content_length = int(self.headers['Content-Length'])
+        post_data = self.rfile.read(content_length).decode('utf-8')
+        parsed_url = urlparse(self.path)
+        path = parsed_url.path
+        
+        if path == '/import_text':
+            form_data = parse_qs(post_data)
+            scaife_urls = form_data.get('scaife_urls', [''])[0].strip().split('\n')
+            
+            # Filter out empty lines
+            scaife_urls = [url.strip() for url in scaife_urls if url.strip()]
+            
+            if not scaife_urls:
+                self.send_response(302)
+                self.send_header('Location', '/import_error?error=' + quote('No valid URLs provided'))
+                self.end_headers()
+                return
+            
+            results = []
+            errors = []
+            
+            for url in scaife_urls:
+                try:
+                    result = self.import_text_from_scaife(url)
+                    results.append(result)
+                except Exception as e:
+                    error_msg = f"Error importing {url}: {str(e)}"
+                    errors.append(error_msg)
+                    print(error_msg)
+                    traceback.print_exc()
+            
+            if errors:
+                error_message = "<br>".join(errors)
+                self.send_response(302)
+                self.send_header('Location', '/import_error?error=' + quote(error_message))
+                self.end_headers()
+            else:
+                success_message = "Successfully imported:<br>" + "<br>".join(results)
+                self.send_response(302)
+                self.send_header('Location', '/import_success?message=' + quote(success_message))
+                self.end_headers()
+        else:
+            self.send_error(404, "Not Found")
+
+    def get_import_page(self):
+        """Return the import page HTML"""
+        html = f"""
+        <html>
+        <head>
+            <title>Import Texts from Scaife</title>
+            <style>
+                body {{ 
+                    font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif; 
+                    margin: 0; 
+                    padding: 0;
+                    line-height: 1.6; 
+                    background-color: #1a1a1a; 
+                    color: #ffffff; 
+                }}
+                h1, h2, h3 {{ 
+                    color: #4299e1;
+                    margin-top: 1.5em;
+                    margin-bottom: 0.5em;
+                }}
+                a {{ color: #4299e1; text-decoration: none; }}
+                a:hover {{ text-decoration: underline; }}
+                .container {{ 
+                    max-width: 1000px; 
+                    margin: 0 auto; 
+                    padding: 20px;
+                    background-color: #2d2d2d;
+                    box-shadow: 0 0 10px rgba(0,0,0,0.5);
+                    min-height: 100vh;
+                }}
+                .form-group {{
+                    margin-bottom: 20px;
+                }}
+                label {{
+                    display: block;
+                    margin-bottom: 5px;
+                    font-weight: bold;
+                }}
+                textarea, input[type="text"] {{
+                    width: 100%;
+                    padding: 10px;
+                    border: 1px solid #444;
+                    border-radius: 4px;
+                    background-color: #333;
+                    color: white;
+                    font-family: monospace;
+                }}
+                button {{
+                    padding: 10px 20px;
+                    background-color: #4299e1;
+                    color: white;
+                    border: none;
+                    border-radius: 4px;
+                    cursor: pointer;
+                }}
+                button:hover {{
+                    background-color: #3182ce;
+                }}
+                .info-box {{
+                    background-color: #2a4365;
+                    border-left: 5px solid #4299e1;
+                    padding: 15px;
+                    margin: 20px 0;
+                    border-radius: 4px;
+                }}
+                .nav-links {{
+                    margin-top: 20px;
+                    padding-top: 20px;
+                    border-top: 1px solid #444;
+                }}
+            </style>
+        </head>
+        <body>
+            <div class="container">
+                <h1>Import Texts from Scaife/Perseus</h1>
+                
+                <div class="info-box">
+                    <p><strong>Instructions:</strong> Enter one or more Scaife API XML URLs to import texts into the First1KGreek corpus.</p>
+                    <p>Use the format: <code>https://scaife.perseus.org/library/urn:cts:greekLit:tlg0007.tlg136.perseus-grc2:1-47/cts-api-xml/</code></p>
+                    <p>Enter one URL per line for batch importing.</p>
+                </div>
+                
+                <form action="/import_text" method="post">
+                    <div class="form-group">
+                        <label>Scaife URLs (one per line):</label>
+                        <textarea name="scaife_urls" rows="10" placeholder="https://scaife.perseus.org/library/urn:cts:greekLit:tlg0007.tlg136.perseus-grc2:1-47/cts-api-xml/
+https://scaife.perseus.org/library/urn:cts:greekLit:tlg0007.tlg137.perseus-grc2:1-6/cts-api-xml/
+https://scaife.perseus.org/library/urn:cts:greekLit:tlg0007.tlg138.perseus-grc2:1-50/cts-api-xml/"></textarea>
+                    </div>
+                    <button type="submit">Import Text(s)</button>
+                </form>
+                
+                <div class="nav-links">
+                    <p><a href="/">← Back to Home</a></p>
+                </div>
+            </div>
+        </body>
+        </html>
+        """
+        return add_shutdown_button(html)
+
+    def get_import_success_page(self, message):
+        """Return the import success page HTML"""
+        html = f"""
+        <html>
+        <head>
+            <title>Import Success</title>
+            <style>
+                body {{ 
+                    font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif; 
+                    margin: 0; 
+                    padding: 0;
+                    line-height: 1.6; 
+                    background-color: #1a1a1a; 
+                    color: #ffffff; 
+                }}
+                h1, h2, h3 {{ 
+                    color: #4299e1;
+                    margin-top: 1.5em;
+                    margin-bottom: 0.5em;
+                }}
+                a {{ color: #4299e1; text-decoration: none; }}
+                a:hover {{ text-decoration: underline; }}
+                .container {{ 
+                    max-width: 1000px; 
+                    margin: 0 auto; 
+                    padding: 20px;
+                    background-color: #2d2d2d;
+                    box-shadow: 0 0 10px rgba(0,0,0,0.5);
+                    min-height: 100vh;
+                }}
+                .success-box {{
+                    background-color: #2c4a2c;
+                    border-left: 5px solid #48bb78;
+                    padding: 15px;
+                    margin: 20px 0;
+                    border-radius: 4px;
+                }}
+                .nav-links {{
+                    margin-top: 20px;
+                    padding-top: 20px;
+                    border-top: 1px solid #444;
+                }}
+            </style>
+        </head>
+        <body>
+            <div class="container">
+                <h1>Import Successful</h1>
+                
+                <div class="success-box">
+                    <p>{message}</p>
+                </div>
+                
+                <div class="nav-links">
+                    <p><a href="/import">← Back to Import</a> | <a href="/">Home</a></p>
+                </div>
+            </div>
+        </body>
+        </html>
+        """
+        return add_shutdown_button(html)
+
+    def get_import_error_page(self, error):
+        """Return the import error page HTML"""
+        html = f"""
+        <html>
+        <head>
+            <title>Import Error</title>
+            <style>
+                body {{ 
+                    font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif; 
+                    margin: 0; 
+                    padding: 0;
+                    line-height: 1.6; 
+                    background-color: #1a1a1a; 
+                    color: #ffffff; 
+                }}
+                h1, h2, h3 {{ 
+                    color: #4299e1;
+                    margin-top: 1.5em;
+                    margin-bottom: 0.5em;
+                }}
+                a {{ color: #4299e1; text-decoration: none; }}
+                a:hover {{ text-decoration: underline; }}
+                .container {{ 
+                    max-width: 1000px; 
+                    margin: 0 auto; 
+                    padding: 20px;
+                    background-color: #2d2d2d;
+                    box-shadow: 0 0 10px rgba(0,0,0,0.5);
+                    min-height: 100vh;
+                }}
+                .error-box {{
+                    background-color: #4a2c2c;
+                    border-left: 5px solid #f56565;
+                    padding: 15px;
+                    margin: 20px 0;
+                    border-radius: 4px;
+                }}
+                .nav-links {{
+                    margin-top: 20px;
+                    padding-top: 20px;
+                    border-top: 1px solid #444;
+                }}
+            </style>
+        </head>
+        <body>
+            <div class="container">
+                <h1>Import Error</h1>
+                
+                <div class="error-box">
+                    <p>{error}</p>
+                </div>
+                
+                <div class="nav-links">
+                    <p><a href="/import">← Back to Import</a> | <a href="/">Home</a></p>
+                </div>
+            </div>
+        </body>
+        </html>
+        """
+        return add_shutdown_button(html)
+
+    def import_text_from_scaife(self, scaife_url):
+        """Import text from Scaife URL and save to the corpus"""
+        print(f"Importing from URL: {scaife_url}")
+        
+        # Extract URN from URL
+        urn_match = re.search(r'urn:cts:greekLit:([^:]+)\.([^:]+)\.([^:/]+)', scaife_url)
+        if not urn_match:
+            raise ValueError("Invalid Scaife URL format - could not extract URN")
+        
+        author_id = urn_match.group(1)  # e.g., tlg0007
+        work_id = urn_match.group(2)    # e.g., tlg136
+        edition_id = urn_match.group(3) # e.g., perseus-grc2
+        
+        # Create full id for file
+        full_id = f"{author_id}.{work_id}.{edition_id}"
+        
+        # Create directory structure
+        author_dir = os.path.join('data', author_id)
+        work_dir = os.path.join(author_dir, work_id)
+        
+        os.makedirs(work_dir, exist_ok=True)
+        
+        # Fetch XML content from Scaife
+        try:
+            response = urllib.request.urlopen(scaife_url)
+            xml_content = response.read().decode('utf-8')
+        except (URLError, HTTPError) as e:
+            raise Exception(f"Failed to fetch content: {str(e)}")
+        
+        # Get work title from XML content if possible
+        title = self.extract_title_from_xml(xml_content) or work_id
+        
+        # Create author metadata file if it doesn't exist
+        author_cts_path = os.path.join(author_dir, '__cts__.xml')
+        if not os.path.exists(author_cts_path):
+            author_name = self.get_author_name_from_id(author_id) or author_id
+            author_cts_content = f"""<ti:textgroup xmlns:ti="http://chs.harvard.edu/xmlns/cts" urn="urn:cts:greekLit:{author_id}">
+    <ti:groupname xml:lang="eng">{author_name}</ti:groupname>
+</ti:textgroup>"""
+            with open(author_cts_path, 'w', encoding='utf-8') as f:
+                f.write(author_cts_content)
+            print(f"Created author metadata: {author_cts_path}")
+        
+        # Create work metadata file if it doesn't exist
+        work_cts_path = os.path.join(work_dir, '__cts__.xml')
+        if not os.path.exists(work_cts_path):
+            language = self.detect_language_from_xml(xml_content) or "grc"
+            work_cts_content = f"""<ti:work xmlns:ti="http://chs.harvard.edu/xmlns/cts" groupUrn="urn:cts:greekLit:{author_id}" xml:lang="{language}" urn="urn:cts:greekLit:{author_id}.{work_id}">
+    <ti:title xml:lang="eng">{title}</ti:title>
+    <ti:edition urn="urn:cts:greekLit:{full_id}" workUrn="urn:cts:greekLit:{author_id}.{work_id}" xml:lang="{language}">
+        <ti:label xml:lang="eng">{title}</ti:label>
+        <ti:description xml:lang="eng">Imported from Scaife/Perseus</ti:description>
+    </ti:edition>
+</ti:work>"""
+            with open(work_cts_path, 'w', encoding='utf-8') as f:
+                f.write(work_cts_content)
+            print(f"Created work metadata: {work_cts_path}")
+        
+        # Save the XML content to file
+        text_file_path = os.path.join(work_dir, f"{full_id}.xml")
+        with open(text_file_path, 'w', encoding='utf-8') as f:
+            f.write(xml_content)
+        
+        print(f"Saved text file: {text_file_path}")
+        
+        # Update the catalog.json (if it exists)
+        try:
+            self.update_catalog(author_id, work_id, edition_id, title)
+        except Exception as e:
+            print(f"Warning: Could not update catalog.json: {str(e)}")
+        
+        return f"Imported {title} ({full_id})"
+
+    def extract_title_from_xml(self, xml_content):
+        """Extract the title from the XML content"""
+        try:
+            root = ET.fromstring(xml_content)
+            # Look for title elements
+            for title_tag in root.findall('.//{*}title'):
+                if title_tag.text and title_tag.text.strip():
+                    return title_tag.text.strip()
+            return None
+        except Exception as e:
+            print(f"Warning: Could not extract title from XML: {str(e)}")
+            return None
+
+    def detect_language_from_xml(self, xml_content):
+        """Detect the language from the XML content"""
+        try:
+            root = ET.fromstring(xml_content)
+            # Check for xml:lang attribute
+            for elem in root.findall('.//*[@xml:lang]', {'xml': 'http://www.w3.org/XML/1998/namespace'}):
+                lang = elem.get('{http://www.w3.org/XML/1998/namespace}lang')
+                if lang:
+                    return lang
+            # Default to Greek for most First1K texts
+            return "grc"
+        except Exception as e:
+            print(f"Warning: Could not detect language from XML: {str(e)}")
+            return "grc"
+
+    def get_author_name_from_id(self, author_id):
+        """Get author name from ID using various methods"""
+        # Try to get from existing files
+        try:
+            return self.get_author_name_from_files(author_id)
+        except:
+            # Map common author IDs to names
+            author_map = {
+                "tlg0001": "Thucydides",
+                "tlg0003": "Herodotus",
+                "tlg0004": "Diogenes Laertius",
+                "tlg0007": "Plutarch",
+                "tlg0012": "Homer",
+                "tlg0059": "Plato",
+                "tlg0086": "Aristotle",
+                # Add more as needed
+            }
+            return author_map.get(author_id)
+
+    def update_catalog(self, author_id, work_id, edition_id, title):
+        """Update the catalog.json file with the new text"""
+        catalog_path = 'catalog.json'
+        if not os.path.exists(catalog_path):
+            return  # Skip if catalog doesn't exist
+        
+        try:
+            with open(catalog_path, 'r', encoding='utf-8') as f:
+                catalog = json.load(f)
+            
+            # Check if entry already exists
+            full_id = f"{author_id}.{work_id}.{edition_id}"
+            for entry in catalog:
+                if entry.get('urn') == f"urn:cts:greekLit:{full_id}":
+                    return  # Already exists
+            
+            # Add new entry
+            author_name = self.get_author_name_from_id(author_id) or author_id
+            new_entry = {
+                "urn": f"urn:cts:greekLit:{full_id}",
+                "group_name": author_name,
+                "work_name": title,
+                "language": "grc",  # Default
+                "scaife": f"https://scaife.perseus.org/reader/urn:cts:greekLit:{full_id}:1"
+            }
+            
+            catalog.append(new_entry)
+            
+            # Save updated catalog
+            with open(catalog_path, 'w', encoding='utf-8') as f:
+                json.dump(catalog, f, indent=2)
+                
+            print(f"Updated catalog.json with {full_id}")
+        except Exception as e:
+            print(f"Error updating catalog: {str(e)}")
+            raise
 
 def add_shutdown_button(html):
     """Add a shutdown button to the HTML pages"""
