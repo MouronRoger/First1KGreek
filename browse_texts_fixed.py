@@ -1771,29 +1771,54 @@ class CustomHTTPRequestHandler(http.server.SimpleHTTPRequestHandler):
         
         if path == '/import_text':
             form_data = parse_qs(post_data)
-            scaife_urls = form_data.get('scaife_urls', [''])[0].strip().split('\n')
-            
-            # Filter out empty lines
-            scaife_urls = [url.strip() for url in scaife_urls if url.strip()]
-            
-            if not scaife_urls:
-                self.send_response(302)
-                self.send_header('Location', '/import_error?error=' + quote('No valid URLs provided'))
-                self.end_headers()
-                return
+            import_type = form_data.get('import_type', ['batch'])[0]
             
             results = []
             errors = []
             
-            for url in scaife_urls:
+            if import_type == 'single':
+                # Single URL import with metadata
+                scaife_url = form_data.get('scaife_url', [''])[0].strip()
+                author_name = form_data.get('author_name', [''])[0].strip()
+                work_title = form_data.get('work_title', [''])[0].strip()
+                
+                if not scaife_url:
+                    self.send_response(302)
+                    self.send_header('Location', '/import_error?error=' + quote('No valid URL provided'))
+                    self.end_headers()
+                    return
+                
                 try:
-                    result = self.import_text_from_scaife(url)
+                    result = self.import_text_from_scaife(scaife_url, author_name, work_title)
                     results.append(result)
                 except Exception as e:
-                    error_msg = f"Error importing {url}: {str(e)}"
+                    error_msg = f"Error importing {scaife_url}: {str(e)}"
                     errors.append(error_msg)
                     print(error_msg)
                     traceback.print_exc()
+            else:
+                # Batch import
+                scaife_urls = form_data.get('scaife_urls', [''])[0].strip().split('\n')
+                default_author_name = form_data.get('default_author_name', [''])[0].strip()
+                
+                # Filter out empty lines
+                scaife_urls = [url.strip() for url in scaife_urls if url.strip()]
+                
+                if not scaife_urls:
+                    self.send_response(302)
+                    self.send_header('Location', '/import_error?error=' + quote('No valid URLs provided'))
+                    self.end_headers()
+                    return
+                
+                for url in scaife_urls:
+                    try:
+                        result = self.import_text_from_scaife(url, default_author_name)
+                        results.append(result)
+                    except Exception as e:
+                        error_msg = f"Error importing {url}: {str(e)}"
+                        errors.append(error_msg)
+                        print(error_msg)
+                        traceback.print_exc()
             
             if errors:
                 error_message = "<br>".join(errors)
@@ -1807,6 +1832,151 @@ class CustomHTTPRequestHandler(http.server.SimpleHTTPRequestHandler):
                 self.end_headers()
         else:
             self.send_error(404, "Not Found")
+            
+    def import_text_from_scaife(self, scaife_url, provided_author_name='', provided_work_title=''):
+        """Import text from Scaife URL and save to the corpus"""
+        print(f"Importing from URL: {scaife_url}")
+        
+        # Extract URN from URL
+        urn_match = re.search(r'urn:cts:greekLit:([^:]+)\.([^:]+)\.([^:/]+)', scaife_url)
+        if not urn_match:
+            raise ValueError("Invalid Scaife URL format - could not extract URN")
+        
+        author_id = urn_match.group(1)  # e.g., tlg0007
+        work_id = urn_match.group(2)    # e.g., tlg136
+        edition_id = urn_match.group(3) # e.g., perseus-grc2
+        
+        # Create full id for file
+        full_id = f"{author_id}.{work_id}.{edition_id}"
+        
+        # Create directory structure
+        author_dir = os.path.join('data', author_id)
+        work_dir = os.path.join(author_dir, work_id)
+        
+        os.makedirs(work_dir, exist_ok=True)
+        
+        # Fetch XML content from Scaife
+        try:
+            response = urllib.request.urlopen(scaife_url)
+            xml_content = response.read().decode('utf-8')
+        except (URLError, HTTPError) as e:
+            raise Exception(f"Failed to fetch content: {str(e)}")
+        
+        # Determine author name and work title
+        author_name = provided_author_name
+        if not author_name:
+            # Try to get from existing files
+            try:
+                author_name = self.get_author_name_from_files(author_id)
+            except:
+                # Try author map
+                author_name = self.get_author_name_from_id(author_id)
+                
+        if not author_name:
+            author_name = f"Author {author_id}"
+            
+        # Get work title
+        work_title = provided_work_title
+        if not work_title:
+            # Try to extract from XML
+            extracted_title = self.extract_title_from_xml(xml_content)
+            if extracted_title:
+                work_title = extracted_title
+            else:
+                # Check if work already exists and has a title
+                try:
+                    existing_cts_path = os.path.join(work_dir, '__cts__.xml')
+                    if os.path.exists(existing_cts_path):
+                        tree = ET.parse(existing_cts_path)
+                        title_elem = tree.find('.//{*}title')
+                        if title_elem is not None and title_elem.text:
+                            work_title = title_elem.text
+                except:
+                    pass
+        
+        if not work_title:
+            work_title = f"Work {work_id}"
+        
+        # Create author metadata file if it doesn't exist
+        author_cts_path = os.path.join(author_dir, '__cts__.xml')
+        if not os.path.exists(author_cts_path):
+            author_cts_content = f"""<ti:textgroup xmlns:ti="http://chs.harvard.edu/xmlns/cts" urn="urn:cts:greekLit:{author_id}">
+    <ti:groupname xml:lang="eng">{author_name}</ti:groupname>
+</ti:textgroup>"""
+            with open(author_cts_path, 'w', encoding='utf-8') as f:
+                f.write(author_cts_content)
+            print(f"Created author metadata: {author_cts_path}")
+        
+        # Create work metadata file if it doesn't exist
+        work_cts_path = os.path.join(work_dir, '__cts__.xml')
+        if not os.path.exists(work_cts_path):
+            language = self.detect_language_from_xml(xml_content) or "grc"
+            work_cts_content = f"""<ti:work xmlns:ti="http://chs.harvard.edu/xmlns/cts" groupUrn="urn:cts:greekLit:{author_id}" xml:lang="{language}" urn="urn:cts:greekLit:{author_id}.{work_id}">
+    <ti:title xml:lang="eng">{work_title}</ti:title>
+    <ti:edition urn="urn:cts:greekLit:{full_id}" workUrn="urn:cts:greekLit:{author_id}.{work_id}" xml:lang="{language}">
+        <ti:label xml:lang="eng">{work_title}</ti:label>
+        <ti:description xml:lang="eng">Imported from Scaife/Perseus</ti:description>
+    </ti:edition>
+</ti:work>"""
+            with open(work_cts_path, 'w', encoding='utf-8') as f:
+                f.write(work_cts_content)
+            print(f"Created work metadata: {work_cts_path}")
+        
+        # Save the XML content to file
+        text_file_path = os.path.join(work_dir, f"{full_id}.xml")
+        with open(text_file_path, 'w', encoding='utf-8') as f:
+            f.write(xml_content)
+        
+        print(f"Saved text file: {text_file_path}")
+        
+        # Update the catalog.json (if it exists)
+        try:
+            self.update_catalog(author_id, work_id, edition_id, author_name, work_title)
+        except Exception as e:
+            print(f"Warning: Could not update catalog.json: {str(e)}")
+        
+        return f"Imported {work_title} by {author_name} ({full_id})"
+        
+    def update_catalog(self, author_id, work_id, edition_id, author_name, work_title):
+        """Update the catalog.json file with the new text"""
+        catalog_path = 'catalog.json'
+        if not os.path.exists(catalog_path):
+            return  # Skip if catalog doesn't exist
+        
+        try:
+            with open(catalog_path, 'r', encoding='utf-8') as f:
+                catalog_data = f.read()
+                catalog = json.loads(catalog_data)
+            
+            # Check if entry already exists
+            full_id = f"{author_id}.{work_id}.{edition_id}"
+            urn = f"urn:cts:greekLit:{full_id}"
+            
+            # Check if the entry already exists
+            for entry in catalog:
+                if isinstance(entry, dict) and entry.get('urn') == urn:
+                    return  # Already exists
+            
+            # Add new entry
+            new_entry = {
+                "urn": urn,
+                "group_name": author_name,
+                "work_name": work_title,
+                "language": "grc",  # Default
+                "scaife": f"https://scaife.perseus.org/reader/{urn}:1"
+            }
+            
+            catalog.append(new_entry)
+            
+            # Save updated catalog
+            with open(catalog_path, 'w', encoding='utf-8') as f:
+                json.dump(catalog, f, indent=2)
+                
+            print(f"Updated catalog.json with {full_id}")
+        except Exception as e:
+            print(f"Error updating catalog: {str(e)}")
+            traceback.print_exc()
+            raise
 
     def get_import_page(self):
         """Return the import page HTML"""
@@ -1815,29 +1985,18 @@ class CustomHTTPRequestHandler(http.server.SimpleHTTPRequestHandler):
         <head>
             <title>Import Texts from Scaife</title>
             <style>
-                body {{ 
-                    font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif; 
-                    margin: 0; 
-                    padding: 0;
-                    line-height: 1.6; 
-                    background-color: #1a1a1a; 
-                    color: #ffffff; 
+                {MAIN_STYLESHEET}
+                .nav {{ margin: 20px 0; }}
+                .nav a {{ 
+                    display: inline-block; 
+                    margin-right: 15px; 
+                    background: #3182ce; 
+                    color: white; 
+                    padding: 10px 15px; 
+                    text-decoration: none; 
+                    border-radius: 4px; 
                 }}
-                h1, h2, h3 {{ 
-                    color: #4299e1;
-                    margin-top: 1.5em;
-                    margin-bottom: 0.5em;
-                }}
-                a {{ color: #4299e1; text-decoration: none; }}
-                a:hover {{ text-decoration: underline; }}
-                .container {{ 
-                    max-width: 1000px; 
-                    margin: 0 auto; 
-                    padding: 20px;
-                    background-color: #2d2d2d;
-                    box-shadow: 0 0 10px rgba(0,0,0,0.5);
-                    min-height: 100vh;
-                }}
+                .nav a:hover {{ background: #2c5282; }}
                 .form-group {{
                     margin-bottom: 20px;
                 }}
@@ -1873,6 +2032,36 @@ class CustomHTTPRequestHandler(http.server.SimpleHTTPRequestHandler):
                     margin: 20px 0;
                     border-radius: 4px;
                 }}
+                .tabs {{
+                    display: flex;
+                    margin-bottom: 20px;
+                }}
+                .tab {{
+                    padding: 10px 20px;
+                    background: #2a4365;
+                    color: white;
+                    cursor: pointer;
+                    border-radius: 4px 4px 0 0;
+                    margin-right: 2px;
+                }}
+                .tab.active {{
+                    background: #3182ce;
+                }}
+                .tab-content {{
+                    display: none;
+                    padding: 20px;
+                    background: #2a4365;
+                    border-radius: 0 4px 4px 4px;
+                }}
+                .tab-content.active {{
+                    display: block;
+                }}
+                .metadata-fields {{
+                    background: #2d3748;
+                    padding: 15px;
+                    border-radius: 4px;
+                    margin-top: 15px;
+                }}
                 .nav-links {{
                     margin-top: 20px;
                     padding-top: 20px;
@@ -1887,23 +2076,89 @@ class CustomHTTPRequestHandler(http.server.SimpleHTTPRequestHandler):
                 <div class="info-box">
                     <p><strong>Instructions:</strong> Enter one or more Scaife API XML URLs to import texts into the First1KGreek corpus.</p>
                     <p>Use the format: <code>https://scaife.perseus.org/library/urn:cts:greekLit:tlg0007.tlg136.perseus-grc2:1-47/cts-api-xml/</code></p>
-                    <p>Enter one URL per line for batch importing.</p>
+                    <p>You can add metadata for each URL to improve import quality.</p>
                 </div>
                 
-                <form action="/import_text" method="post">
-                    <div class="form-group">
-                        <label>Scaife URLs (one per line):</label>
-                        <textarea name="scaife_urls" rows="10" placeholder="https://scaife.perseus.org/library/urn:cts:greekLit:tlg0007.tlg136.perseus-grc2:1-47/cts-api-xml/
+                <div class="tabs">
+                    <div class="tab active" onclick="showTab('single')">Single URL</div>
+                    <div class="tab" onclick="showTab('batch')">Batch Import</div>
+                </div>
+                
+                <div id="single-tab" class="tab-content active">
+                    <form action="/import_text" method="post">
+                        <div class="form-group">
+                            <label>Scaife URL:</label>
+                            <input type="text" name="scaife_url" placeholder="https://scaife.perseus.org/library/urn:cts:greekLit:tlg0007.tlg136.perseus-grc2:1-47/cts-api-xml/">
+                        </div>
+                        
+                        <div class="metadata-fields">
+                            <h3>Metadata (Optional)</h3>
+                            <div class="form-group">
+                                <label>Author Name:</label>
+                                <input type="text" name="author_name" placeholder="e.g., Plutarch">
+                            </div>
+                            <div class="form-group">
+                                <label>Work Title:</label>
+                                <input type="text" name="work_title" placeholder="e.g., De Stoicorum Repugnantiis">
+                            </div>
+                        </div>
+                        
+                        <input type="hidden" name="import_type" value="single">
+                        <button type="submit">Import Text</button>
+                    </form>
+                </div>
+                
+                <div id="batch-tab" class="tab-content">
+                    <form action="/import_text" method="post">
+                        <div class="form-group">
+                            <label>Scaife URLs (one per line):</label>
+                            <textarea name="scaife_urls" rows="10" placeholder="https://scaife.perseus.org/library/urn:cts:greekLit:tlg0007.tlg136.perseus-grc2:1-47/cts-api-xml/
 https://scaife.perseus.org/library/urn:cts:greekLit:tlg0007.tlg137.perseus-grc2:1-6/cts-api-xml/
 https://scaife.perseus.org/library/urn:cts:greekLit:tlg0007.tlg138.perseus-grc2:1-50/cts-api-xml/"></textarea>
-                    </div>
-                    <button type="submit">Import Text(s)</button>
-                </form>
+                        </div>
+                        
+                        <div class="metadata-fields">
+                            <h3>Default Metadata (Optional)</h3>
+                            <p>This metadata will be used for all imported texts if their data cannot be detected automatically.</p>
+                            <div class="form-group">
+                                <label>Default Author Name:</label>
+                                <input type="text" name="default_author_name" placeholder="e.g., Plutarch">
+                            </div>
+                        </div>
+                        
+                        <input type="hidden" name="import_type" value="batch">
+                        <button type="submit">Import Texts</button>
+                    </form>
+                </div>
                 
                 <div class="nav-links">
                     <p><a href="/">← Back to Home</a></p>
                 </div>
             </div>
+            
+            <script>
+                function showTab(tabId) {
+                    // Hide all tab contents
+                    const tabContents = document.querySelectorAll('.tab-content');
+                    tabContents.forEach(function(content) {
+                        content.classList.remove('active');
+                    });
+                    // Remove active class from all tabs
+                    document.querySelectorAll('.tab').forEach(tab => {
+                        tab.classList.remove('active');
+                    });
+                    
+                    // Show the selected tab content
+                    document.getElementById(tabId + '-tab').classList.add('active');
+                    
+                    // Add active class to the clicked tab
+                    document.querySelectorAll('.tab').forEach(tab => {
+                        if (tab.innerText.toLowerCase().includes(tabId)) {
+                            tab.classList.add('active');
+                        }
+                    });
+                }
+            </script>
         </body>
         </html>
         """
@@ -2031,79 +2286,6 @@ https://scaife.perseus.org/library/urn:cts:greekLit:tlg0007.tlg138.perseus-grc2:
         """
         return add_shutdown_button(html)
 
-    def import_text_from_scaife(self, scaife_url):
-        """Import text from Scaife URL and save to the corpus"""
-        print(f"Importing from URL: {scaife_url}")
-        
-        # Extract URN from URL
-        urn_match = re.search(r'urn:cts:greekLit:([^:]+)\.([^:]+)\.([^:/]+)', scaife_url)
-        if not urn_match:
-            raise ValueError("Invalid Scaife URL format - could not extract URN")
-        
-        author_id = urn_match.group(1)  # e.g., tlg0007
-        work_id = urn_match.group(2)    # e.g., tlg136
-        edition_id = urn_match.group(3) # e.g., perseus-grc2
-        
-        # Create full id for file
-        full_id = f"{author_id}.{work_id}.{edition_id}"
-        
-        # Create directory structure
-        author_dir = os.path.join('data', author_id)
-        work_dir = os.path.join(author_dir, work_id)
-        
-        os.makedirs(work_dir, exist_ok=True)
-        
-        # Fetch XML content from Scaife
-        try:
-            response = urllib.request.urlopen(scaife_url)
-            xml_content = response.read().decode('utf-8')
-        except (URLError, HTTPError) as e:
-            raise Exception(f"Failed to fetch content: {str(e)}")
-        
-        # Get work title from XML content if possible
-        title = self.extract_title_from_xml(xml_content) or work_id
-        
-        # Create author metadata file if it doesn't exist
-        author_cts_path = os.path.join(author_dir, '__cts__.xml')
-        if not os.path.exists(author_cts_path):
-            author_name = self.get_author_name_from_id(author_id) or author_id
-            author_cts_content = f"""<ti:textgroup xmlns:ti="http://chs.harvard.edu/xmlns/cts" urn="urn:cts:greekLit:{author_id}">
-    <ti:groupname xml:lang="eng">{author_name}</ti:groupname>
-</ti:textgroup>"""
-            with open(author_cts_path, 'w', encoding='utf-8') as f:
-                f.write(author_cts_content)
-            print(f"Created author metadata: {author_cts_path}")
-        
-        # Create work metadata file if it doesn't exist
-        work_cts_path = os.path.join(work_dir, '__cts__.xml')
-        if not os.path.exists(work_cts_path):
-            language = self.detect_language_from_xml(xml_content) or "grc"
-            work_cts_content = f"""<ti:work xmlns:ti="http://chs.harvard.edu/xmlns/cts" groupUrn="urn:cts:greekLit:{author_id}" xml:lang="{language}" urn="urn:cts:greekLit:{author_id}.{work_id}">
-    <ti:title xml:lang="eng">{title}</ti:title>
-    <ti:edition urn="urn:cts:greekLit:{full_id}" workUrn="urn:cts:greekLit:{author_id}.{work_id}" xml:lang="{language}">
-        <ti:label xml:lang="eng">{title}</ti:label>
-        <ti:description xml:lang="eng">Imported from Scaife/Perseus</ti:description>
-    </ti:edition>
-</ti:work>"""
-            with open(work_cts_path, 'w', encoding='utf-8') as f:
-                f.write(work_cts_content)
-            print(f"Created work metadata: {work_cts_path}")
-        
-        # Save the XML content to file
-        text_file_path = os.path.join(work_dir, f"{full_id}.xml")
-        with open(text_file_path, 'w', encoding='utf-8') as f:
-            f.write(xml_content)
-        
-        print(f"Saved text file: {text_file_path}")
-        
-        # Update the catalog.json (if it exists)
-        try:
-            self.update_catalog(author_id, work_id, edition_id, title)
-        except Exception as e:
-            print(f"Warning: Could not update catalog.json: {str(e)}")
-        
-        return f"Imported {title} ({full_id})"
-
     def extract_title_from_xml(self, xml_content):
         """Extract the title from the XML content"""
         try:
@@ -2150,43 +2332,6 @@ https://scaife.perseus.org/library/urn:cts:greekLit:tlg0007.tlg138.perseus-grc2:
                 # Add more as needed
             }
             return author_map.get(author_id)
-
-    def update_catalog(self, author_id, work_id, edition_id, title):
-        """Update the catalog.json file with the new text"""
-        catalog_path = 'catalog.json'
-        if not os.path.exists(catalog_path):
-            return  # Skip if catalog doesn't exist
-        
-        try:
-            with open(catalog_path, 'r', encoding='utf-8') as f:
-                catalog = json.load(f)
-            
-            # Check if entry already exists
-            full_id = f"{author_id}.{work_id}.{edition_id}"
-            for entry in catalog:
-                if entry.get('urn') == f"urn:cts:greekLit:{full_id}":
-                    return  # Already exists
-            
-            # Add new entry
-            author_name = self.get_author_name_from_id(author_id) or author_id
-            new_entry = {
-                "urn": f"urn:cts:greekLit:{full_id}",
-                "group_name": author_name,
-                "work_name": title,
-                "language": "grc",  # Default
-                "scaife": f"https://scaife.perseus.org/reader/urn:cts:greekLit:{full_id}:1"
-            }
-            
-            catalog.append(new_entry)
-            
-            # Save updated catalog
-            with open(catalog_path, 'w', encoding='utf-8') as f:
-                json.dump(catalog, f, indent=2)
-                
-            print(f"Updated catalog.json with {full_id}")
-        except Exception as e:
-            print(f"Error updating catalog: {str(e)}")
-            raise
 
 def add_shutdown_button(html):
     """Add a shutdown button to the HTML pages"""

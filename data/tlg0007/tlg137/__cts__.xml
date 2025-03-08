@@ -1,0 +1,7 @@
+<ti:work xmlns:ti="http://chs.harvard.edu/xmlns/cts" groupUrn="urn:cts:greekLit:tlg0007" xml:lang="grc" urn="urn:cts:greekLit:tlg0007.tlg137">
+    <ti:title xml:lang="eng">tlg137</ti:title>
+    <ti:edition urn="urn:cts:greekLit:tlg0007.tlg137.perseus-grc2" workUrn="urn:cts:greekLit:tlg0007.tlg137" xml:lang="grc">
+        <ti:label xml:lang="eng">tlg137</ti:label>
+        <ti:description xml:lang="eng">Imported from Scaife/Perseus</ti:description>
+    </ti:edition>
+</ti:work>
