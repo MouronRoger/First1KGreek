@@ -1980,6 +1980,9 @@ class CustomHTTPRequestHandler(http.server.SimpleHTTPRequestHandler):
 
     def get_import_page(self):
         """Return the import page HTML"""
+        # Define the JavaScript separately as a regular string
+        js_code = '<script>\nfunction showTab(tabId) {\n    var contents = document.querySelectorAll(".tab-content");\n    for (var i = 0; i < contents.length; i++) {\n        contents[i].classList.remove("active");\n    }\n    var tabs = document.querySelectorAll(".tab");\n    for (var i = 0; i < tabs.length; i++) {\n        tabs[i].classList.remove("active");\n    }\n    document.getElementById(tabId + "-tab").classList.add("active");\n    var tabs = document.querySelectorAll(".tab");\n    for (var i = 0; i < tabs.length; i++) {\n        if (tabs[i].innerText.toLowerCase().indexOf(tabId) !== -1) {\n            tabs[i].classList.add("active");\n        }\n    }\n}\n</script>'
+        
         html = f"""
         <html>
         <head>
@@ -2135,33 +2138,13 @@ https://scaife.perseus.org/library/urn:cts:greekLit:tlg0007.tlg138.perseus-grc2:
                     <p><a href="/">← Back to Home</a></p>
                 </div>
             </div>
-            
-            <script>
-                function showTab(tabId) {
-                    // Hide all tab contents
-                    const tabContents = document.querySelectorAll('.tab-content');
-                    tabContents.forEach(function(content) {
-                        content.classList.remove('active');
-                    });
-                    // Remove active class from all tabs
-                    document.querySelectorAll('.tab').forEach(tab => {
-                        tab.classList.remove('active');
-                    });
-                    
-                    // Show the selected tab content
-                    document.getElementById(tabId + '-tab').classList.add('active');
-                    
-                    // Add active class to the clicked tab
-                    document.querySelectorAll('.tab').forEach(tab => {
-                        if (tab.innerText.toLowerCase().includes(tabId)) {
-                            tab.classList.add('active');
-                        }
-                    });
-                }
-            </script>
         </body>
         </html>
         """
+        
+        # Add the script separately to avoid f-string issues
+        html = html.replace('</body>', f'{js_code}</body>')
+        
         return add_shutdown_button(html)
 
     def get_import_success_page(self, message):

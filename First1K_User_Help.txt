@@ -1,3 +1,440 @@
 python3 browse_texts.py
 
+python3 browse_texts_fixed.py
+
 kill -9 $(lsof -ti:8000)
+
+git checkout main
+
+# Run your application to test the current stable version.
+
+git checkout code-cleanup-2025
+
+# Run your application on this branch to test the new changes.
+
+lsof -i :8000 | grep Python | awk '{print $2}' | xargs kill -9
+lsof -i :8001 | grep Python | awk '{print $2}' | xargs kill -9
+
+cd greek-texts-index && npm run dev
+
+
+New Clean up von arnim 
+http://localhost:8000/view?path=data/tlg1269/tlg002/tlg1269.tlg002.1st1K-grc1.xml
+http://localhost:8000/view?path=data/tlg1193/tlg001/tlg1193.tlg001.1st1K-grc1.xml
+
+tlg1264 (Chrysippus - all fragments)
+tlg0612 (Dio Chrysostom - Orationes)
+tlg1269 (Cleanthes)
+tlg1193 (Ariston of Chios) 
+
+tlg1146 (Antipater Tarsensis)
+tlg1320 (Diogenes Babylonius)
+
+
+Old main branch 
+Path: data/tlg1264/tlg002/tlg1264.tlg002.1st1K-grc1.xml
+Switch to Reader Mode
+<?xml version="1.0" encoding="UTF-8"?>
+<?xml-model href="http://www.stoa.org/epidoc/schema/latest/tei-epidoc.rng" schematypens="http://relaxng.org/ns/structure/1.0"?>
+<TEI xmlns="http://www.tei-c.org/ns/1.0">
+  <teiHeader xml:lang="eng">
+  <fileDesc>
+    <titleStmt>
+      <title xml:lang="lat">Fragmenta Moralia</title>
+      <author>Chrysippus</author>
+      <editor>Hans Friedrich August von Arnim</editor>
+      <funder>Center for Hellenic Studies</funder>
+
+
+Path: data/tlg1264/tlg004/tlg1264.tlg004.1st1K-grc1.xml
+tlg1264.tlg004.1st1K-grc1.xml
+Path: data/tlg1264/tlg004/tlg1264.tlg004.1st1K-grc1.xml
+Switch to Reader Mode
+<?xml version="1.0" encoding="UTF-8"?>
+<?xml-model href="http://www.stoa.org/epidoc/schema/latest/tei-epidoc.rng" schematypens="http://relaxng.org/ns/structure/1.0"?>
+<TEI xmlns="http://www.tei-c.org/ns/1.0">
+  <teiHeader xml:lang="eng">
+  <fileDesc>
+    <titleStmt>
+      <title xml:lang="lat">Fragmenta ad singulos libros relata</title>
+      <author>Chrysippus</author>
+      <editor>Hans Friedrich August von Arnim</editor>
+
+
+tlg1264.tlg001.1st1K-grc1.xml
+Path: data/tlg1264/tlg001/tlg1264.tlg001.1st1K-grc1.xml
+Switch to Reader Mode
+<?xml version="1.0" encoding="UTF-8"?>
+<?xml-model href="http://www.stoa.org/epidoc/schema/latest/tei-epidoc.rng" schematypens="http://relaxng.org/ns/structure/1.0"?>
+<TEI xmlns="http://www.tei-c.org/ns/1.0">
+  <teiHeader xml:lang="eng">
+    <fileDesc>
+      <titleStmt>
+        <title xml:lang="lat">Fragmenta Logica et Physica</title>
+        <author>Chrysippus</author>
+         <editor>Hans Friedrich August von Arnim</editor>
+         
+         
+         tlg1264.tlg003.1st1K-grc1.xml
+Path: data/tlg1264/tlg003/tlg1264.tlg003.1st1K-grc1.xml
+Switch to Reader Mode
+<?xml version="1.0" encoding="UTF-8"?>
+<?xml-model href="http://www.stoa.org/epidoc/schema/latest/tei-epidoc.rng" schematypens="http://relaxng.org/ns/structure/1.0"?>
+<TEI xmlns="http://www.tei-c.org/ns/1.0">
+  <teiHeader xml:lang="eng">
+    <fileDesc>
+      <titleStmt>
+        <title xml:lang="lat">Fragmenta Chrysippi, quae ad explicationem carminum Homericorum pertinent.</title>
+        <author>Chrysippus</author>
+        <editor>Hans Friedrich August von Arnim</editor> 
+        
+        
+        tlg0612.tlg001.perseus-grc2.xml
+Path: data/tlg0612/tlg001/tlg0612.tlg001.perseus-grc2.xml
+Switch to Reader Mode
+<?xml version="1.0" encoding="UTF-8"?>
+<?xml-model href="http://www.stoa.org/epidoc/schema/latest/tei-epidoc.rng" type="application/xml" schematypens="http://relaxng.org/ns/structure/1.0"?>
+<TEI xmlns="http://www.tei-c.org/ns/1.0">
+ <teiHeader xml:lang="eng">
+<fileDesc>
+<titleStmt>
+<title xml:lang="lat">Orationes</title>
+<author>Dio Chrysostom</author>
+ <editor>Hans Friedrich August von Arnim</editor>
+ 
+ <sponsor>Perseus Project, Tufts University</sponsor>
+ <principal>Gregory Crane</principal>
+ <respStmt>
+  <resp>Prepared under the supervision of</resp>
+  <name>Bridget Almas</name>
+  <name>Lisa Cerrato</name>
+ </respStmt>
+ 
+ <funder n="org:Google">Google Digital Humanities Awards Program</funder>
+</titleStmt>
+ 
+ <publicationStmt>         
+  <publisher>Trustees of Tufts University</publisher>         
+  <pubPlace>Medford, MA</pubPlace>         
+  <authority>Perseus Project</authority>
+  <date type="release" when="2011-05-23">Perseus 4.0</date>
+  <idno type="filename">tlg0612.tlg001.perseus-grc2.xml</idno>
+  <availability>
+   <licence target="https://creativecommons.org/licenses/by-sa/4.0/">Available under a Creative Commons Attribution-ShareAlike 4.0 International License</licence> 
+  </availability>
+ </publicationStmt>   
+ 
+ <sourceDesc>
+  <biblStruct>
+   <monogr>
+    <title xml:lang="lat">Dionis Prusaensis quem vocant Chrysostomum quae exstant omnia</title>
+    <author>Dio Chrysostom</author>
+    <editor>Hans Friedrich August von Arnim</editor>
+    
+    tlg1146.tlg001.1st1K-grc1.xml
+Path: data/tlg1146/tlg001/tlg1146.tlg001.1st1K-grc1.xml
+Switch to Reader Mode
+<?xml version="1.0" encoding="UTF-8"?>
+<?xml-model href="http://www.stoa.org/epidoc/schema/latest/tei-epidoc.rng" schematypens="http://relaxng.org/ns/structure/1.0"?>
+<TEI xmlns="http://www.tei-c.org/ns/1.0">
+  <teiHeader xml:lang="eng">
+  <fileDesc>
+    <titleStmt>
+      <title xml:lang="lat">Testimonia et Fragmenta.</title>
+      <author xml:lang="lat">Antipater Tarsensis</author>
+      <editor>Hans Friedrich August von Arnim</editor>
+      <funder>Center for Hellenic Studies</funder>
+      <respStmt>
+        <resp>Published original versions of the electronic texts</resp>
+        <orgName ref="https://www.opengreekandlatin.org">Open Greek and Latin</orgName>
+        <persName role="principal">Gregory Crane</persName>
+        <persName role="principal">Leonard Muellner</persName>
+        <persName role="principal">Bruce Robertson</persName>
+      </respStmt>
+      <respStmt>
+        <persName>Karina Cooper</persName>
+        <orgName>Center for Hellenic Studies</orgName>
+        <resp>Digital conversion and editing</resp>
+      </respStmt>
+      <respStmt>
+        <persName>Niki Borghei</persName>
+        <orgName>Center for Hellenic Studies</orgName>
+        <resp>Digital conversion and editing</resp>
+      </respStmt>
+      <respStmt>
+        <persName>Yesenia Brambila</persName>
+        <orgName>Center for Hellenic Studies</orgName>
+        <resp>Digital conversion and editing</resp>
+      </respStmt>
+      <respStmt>
+        <persName>Natalie Francis</persName>
+        <orgName>Center for Hellenic Studies</orgName>
+        <resp>Digital conversion and editing</resp>
+      </respStmt>
+      <respStmt>
+        <persName>Ajax Fu</persName>
+        <orgName>Center for Hellenic Studies</orgName>
+        <resp>Digital conversion and editing</resp>
+      </respStmt>
+      <respStmt>
+        <persName>Elena Lee</persName>
+        <orgName>Center for Hellenic Studies</orgName>
+        <resp>Digital conversion and editing</resp>
+      </respStmt>
+      <respStmt>
+        <persName>Jake Oberg</persName>
+        <orgName>Center for Hellenic Studies</orgName>
+        <resp>Digital conversion and editing</resp>
+      </respStmt>
+      <respStmt>
+        <persName>Kit Pyne-Jaeger</persName>
+        <orgName>Center for Hellenic Studies</orgName>
+        <resp>Digital conversion and editing</resp>
+      </respStmt>
+      <respStmt>
+        <persName>Ashley Yang</persName>
+        <orgName>Center for Hellenic Studies</orgName>
+        <resp>Digital conversion and editing</resp>
+      </respStmt>
+      <respStmt>
+        <persName>Charlotte Houghton</persName>
+        <orgName>Center for Hellenic Studies</orgName>
+        <resp>Digial editor</resp>
+      </respStmt>
+    </titleStmt>
+    <publicationStmt>
+      <publisher>Open Greek and Latin</publisher>
+      <idno type="filename">tlg1146.tlg001.1st1K-grc1.xml</idno>
+      <pubPlace/>
+      <availability>
+       <licence target="https://creativecommons.org/licenses/by-sa/4.0/">Available under a Creative Commons Attribution-ShareAlike 4.0 International License</licence>
+      </availability>
+      <date when="2021-08-23"/>
+    </publicationStmt>
+    <sourceDesc>
+      <biblStruct>
+        <monogr>
+          <author>Antipater, Tarsensis</author>
+          <title xml:lang="lat">Stoicorum veterum fragmenta</title>
+          <editor>Hans Friedrich August von Arnim</editor>
+          
+          
+          tlg1320.tlg001.1st1K-grc1.xml
+Path: data/tlg1320/tlg001/tlg1320.tlg001.1st1K-grc1.xml
+Switch to Reader Mode
+<?xml version="1.0" encoding="UTF-8"?>
+<?xml-model href="http://www.stoa.org/epidoc/schema/latest/tei-epidoc.rng" schematypens="http://relaxng.org/ns/structure/1.0"?>
+<TEI xmlns="http://www.tei-c.org/ns/1.0">
+  <teiHeader xml:lang="eng">
+  <fileDesc>
+    <titleStmt>
+      <title xml:lang="lat">Testimonia et fragmenta</title>
+      <author xml:lang="lat">Diogenes Babylonius</author>
+      <editor>Hans Friedrich August von Arnim</editor>
+      <funder>Center for Hellenic Studies</funder>
+      <respStmt>
+        <resp>Published original versions of the electronic texts</resp>
+       <orgName ref="https://www.opengreekandlatin.org">Open Greek and Latin</orgName>
+        <persName role="principal">Gregory Crane</persName>
+        <persName role="principal">Leonard Muellner</persName>
+        <persName role="principal">Bruce Robertson</persName>
+      </respStmt>
+      <respStmt>
+        <persName>Karina Cooper</persName>
+        <orgName>Center for Hellenic Studies</orgName>
+        <resp>Digital conversion and editing</resp>
+      </respStmt>
+      <respStmt>
+        <persName>Derek Diamond</persName>
+        <orgName>Center for Hellenic Studies</orgName>
+        <resp>Digital conversion and editing</resp>
+      </respStmt>
+      <respStmt>
+        <persName>Ashleigh Fata</persName>
+        <orgName>Center for Hellenic Studies</orgName>
+        <resp>Digital conversion and editing</resp>
+      </respStmt>
+      <respStmt>
+        <persName>KElena Lee</persName>
+        <orgName>Center for Hellenic Studies</orgName>
+        <resp>Digital conversion and editing</resp>
+      </respStmt>
+      <respStmt>
+        <persName>Savannah Neibart</persName>
+        <orgName>Center for Hellenic Studies</orgName>
+        <resp>Digital conversion and editing</resp>
+      </respStmt>
+      <respStmt>
+        <persName>Niamh Tangney</persName>
+        <orgName>Center for Hellenic Studies</orgName>
+        <resp>Digital conversion and editing</resp>
+      </respStmt>
+      <respStmt>
+        <persName>Charlotte Houghton</persName>
+        <orgName>Center for Hellenic Studies</orgName>
+        <resp>Digital editor</resp>
+      </respStmt>
+    </titleStmt>
+    <publicationStmt>
+      <publisher>Open Greek and Latin</publisher>
+      <idno type="filename">tlg1320.tlg001.1st1K-grc1.xml</idno>
+      <pubPlace />
+      <availability>
+      <licence target="https://creativecommons.org/licenses/by-sa/4.0/">Available under a Creative Commons Attribution-ShareAlike 4.0 International License</licence>
+      </availability>
+      <date when="2021-08-23"/>
+    </publicationStmt>
+    <sourceDesc>
+      <biblStruct>
+        <monogr>
+          <author xml:lang="lat">Diogenes, Babylonius</author>
+          <title xml:lang="lat">Stoicorum veterum fragmenta</title>
+          <editor>Hans Friedrich August von Arnim</editor>
+          
+          
+          Path: data/tlg1269/tlg002/tlg1269.tlg002.1st1K-grc1.xml
+Switch to Reader Mode
+<?xml version="1.0" encoding="UTF-8"?>
+<?xml-model href="http://www.stoa.org/epidoc/schema/latest/tei-epidoc.rng" schematypens="http://relaxng.org/ns/structure/1.0"?>
+<TEI xmlns="http://www.tei-c.org/ns/1.0">
+     <teiHeader xml:lang="eng">
+          <fileDesc>
+               <titleStmt>
+                    <title xml:lang="lat">Testimonia et Fragmenta</title>
+                    <author>Cleanthes</author>
+                    <editor>Hans Friedrich August von Arnim</editor>
+                    <funder>Center for Hellenic Studies</funder>
+                    <respStmt>
+                         <resp>Published original versions of the electronic texts</resp>
+                         <orgName ref="https://www.opengreekandlatin.org">Open Greek and Latin</orgName>
+                         <persName role="principal">Gregory Crane</persName>
+                         <persName role="principal">Leonard Muellner</persName>
+                         <persName role="principal">Bruce Robertson</persName>
+                    </respStmt>
+                    <respStmt>
+                         <persName><forename>Pria</forename><surname>Jackson</surname>
+                              </persName>
+                         <orgName>Center for Hellenic Studies</orgName>
+                         <resp>Digital conversion and editing</resp>
+                    </respStmt>
+                    <respStmt>
+                         <persName>Tetianna Akchurina</persName>
+                         <orgName>Center for Hellenic Studies</orgName>
+                         <resp>Digital conversion and editing</resp>
+                    </respStmt>
+                    <respStmt>
+                         <persName>Zoe Blecher-Cohen</persName>
+                         <orgName>Center for Hellenic Studies</orgName>
+                         <resp>Digital conversion and editing</resp>
+                    </respStmt>
+                    <respStmt>
+                         <persName>Sebastián Eduardo Carrizo</persName>
+                         <orgName>Center for Hellenic Studies</orgName>
+                         <resp>Digital conversion and editing</resp>
+                    </respStmt>
+                    <respStmt>
+                         <persName>Anise D'Orange Ferreira</persName>
+                         <orgName>Center for Hellenic Studies</orgName>
+                         <resp>Digital conversion and editing</resp>
+                    </respStmt>
+                    <respStmt>
+                         <persName>Cinzia DuBois</persName>
+                         <orgName>Center for Hellenic Studies</orgName>
+                         <resp>Digital conversion and editing</resp>
+                    </respStmt>
+                    <respStmt>
+                         <persName>Maryanne Fargnoli</persName>
+                         <orgName>Center for Hellenic Studies</orgName>
+                         <resp>Digital conversion and editing</resp>
+                    </respStmt>
+                    <respStmt>
+                         <persName>Anita Galt</persName>
+                         <orgName>Center for Hellenic Studies</orgName>
+                         <resp>Digital conversion and editing</resp>
+                    </respStmt>
+                    <respStmt>
+                         <persName>Emily Graver</persName>
+                         <orgName>Center for Hellenic Studies</orgName>
+                         <resp>Digital conversion and editing</resp>
+                    </respStmt>
+                    <respStmt>
+                         <persName>Caroline Houser</persName>
+                         <orgName>Center for Hellenic Studies</orgName>
+                         <resp>Digital conversion and editing</resp>
+                    </respStmt>
+                    <respStmt>
+                         <persName>Serina Hu</persName>
+                         <orgName>Center for Hellenic Studies</orgName>
+                         <resp>Digital conversion and editing</resp>
+                    </respStmt>
+                    <respStmt>
+                         <persName>Peter Hulse</persName>
+                         <orgName>Center for Hellenic Studies</orgName>
+                         <resp>Digital conversion and editing</resp>
+                    </respStmt>
+                    <respStmt>
+                         <persName>Sana I_q_bal Ansari</persName>
+                         <orgName>Center for Hellenic Studies</orgName>
+                         <resp>Digital conversion and editing</resp>
+                    </respStmt>
+                    <respStmt>
+                         <persName>Mert İnan</persName>
+                         <orgName>Center for Hellenic Studies</orgName>
+                         <resp>Digital conversion and editing</resp>
+                    </respStmt>
+                    <respStmt>
+                         <persName>Daria Kondakova</persName>
+                         <orgName>Center for Hellenic Studies</orgName>
+                         <resp>Digital conversion and editing</resp>
+                    </respStmt>
+                    <respStmt>
+                         <persName>Felipe Antonio Pinilla Torres</persName>
+                         <orgName>Center for Hellenic Studies</orgName>
+                         <resp>Digital conversion and editing</resp>
+                    </respStmt>
+                    <respStmt>
+                         <persName>Alex Poulos</persName>
+                         <orgName>Center for Hellenic Studies</orgName>
+                         <resp>Digital conversion and editing</resp>
+                    </respStmt>
+                    <respStmt>
+                         <persName>Ruth Elizabeth Slater</persName>
+                         <orgName>Center for Hellenic Studies</orgName>
+                         <resp>Digital conversion and editing</resp>
+                    </respStmt>
+             
+                     <respStmt>
+                         <persName>Charlotte Houghton</persName>
+                          <orgName>Center for Hellenic Studies</orgName>
+                         <resp>Digital editor</resp>
+                     </respStmt>
+               </titleStmt>
+               <publicationStmt>
+                    <publisher>Open Greek and Latin</publisher>
+                    <idno type="filename">tlg1269.tlg002.1st1K-grc1.xml</idno>
+                    <pubPlace/>
+                    <availability>
+                         <licence target="https://creativecommons.org/licenses/by-sa/4.0/">Available under a Creative Commons Attribution-ShareAlike 4.0 International License</licence></availability>
+                    <date when="2021-03-24"/>
+               </publicationStmt>
+               <sourceDesc>
+                    <biblStruct>
+                         <monogr>
+                              <title xml:lang="lat">Stoicorum veterum fragmenta</title>
+                              <author>Cleanthes</author>
+                              <editor><persName>Hans Friedrich August von Arnim</persName></editor>
+        <editor>Hans Friedrich August von Arnim</editor> 
+        
+        tlg1193.tlg001.1st1K-grc1.xml
+Path: data/tlg1193/tlg001/tlg1193.tlg001.1st1K-grc1.xml
+Switch to Reader Mode
+<?xml version="1.0" encoding="UTF-8"?>
+<?xml-model href="http://www.stoa.org/epidoc/schema/latest/tei-epidoc.rng" schematypens="http://relaxng.org/ns/structure/1.0"?>
+<TEI xmlns="http://www.tei-c.org/ns/1.0">
+    <teiHeader xml:lang="eng">
+        <fileDesc>
+            <titleStmt>
+                <title xml:lang="lat">Testimonia et Fragmenta</title>
+                <author>Ariston of Chios</author>
+                <editor>Hans Friedrich August von Arnim</editor>
+        <funder>Tufts University</funder>
