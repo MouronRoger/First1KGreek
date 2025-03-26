@@ -1,6 +1,7 @@
 """Main entry point for First1KGreek Browser."""
 
 from .server.server import run_server
+from .config import PORT
 
 def main():
     """Main entry point."""
