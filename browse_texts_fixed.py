@@ -36,6 +36,21 @@ PORT = 8000
 # Global reference to the server
 server_instance = None
 
+# Load the author centuries data
+AUTHOR_CENTURIES_FILE = 'author_centuries.json'
+AUTHOR_CENTURIES = {}
+try:
+    with open(AUTHOR_CENTURIES_FILE, 'r', encoding='utf-8') as f:
+        AUTHOR_CENTURIES = json.load(f)
+    print(f"Loaded author data from {AUTHOR_CENTURIES_FILE}")
+except Exception as e:
+    print(f"Warning: Could not load {AUTHOR_CENTURIES_FILE}: {e}")
+    # Create a default file if it doesn't exist
+    if not os.path.exists(AUTHOR_CENTURIES_FILE):
+        default_centuries = {}
+        with open(AUTHOR_CENTURIES_FILE, 'w', encoding='utf-8') as f:
+            json.dump(default_centuries, f, indent=2)
+
 # Reader mode stylesheet
 READER_STYLESHEET = """
 body { 
@@ -91,6 +106,276 @@ a:hover { text-decoration: underline; }
 }
 """
 
+# Add stylesheet for the authors table
+AUTHORS_TABLE_STYLESHEET = """
+.authors-table {
+    width: 100%;
+    border-collapse: collapse;
+    margin: 20px 0;
+    background-color: #333;
+    border-radius: 5px;
+    overflow: hidden;
+}
+
+.authors-table th {
+    padding: 12px 15px;
+    text-align: left;
+    background-color: #1a365d;
+    color: white;
+    font-weight: bold;
+    cursor: pointer;
+}
+
+.authors-table th:hover {
+    background-color: #2a4365;
+}
+
+.authors-table td {
+    padding: 10px 15px;
+    border-bottom: 1px solid #444;
+}
+
+.authors-table tr:hover {
+    background-color: #3a3a3a;
+}
+
+.action-btn {
+    padding: 5px 10px;
+    margin-right: 5px;
+    border: none;
+    border-radius: 3px;
+    cursor: pointer;
+    color: white;
+}
+
+.favorite-btn {
+    background-color: #f6ad55;
+}
+
+.favorite-btn:hover {
+    background-color: #ed8936;
+}
+
+.favorite-btn.active {
+    background-color: #ed8936;
+}
+
+.archive-btn {
+    background-color: #68d391;
+}
+
+.archive-btn:hover {
+    background-color: #48bb78;
+}
+
+.archive-btn.active {
+    background-color: #48bb78;
+}
+
+.delete-btn {
+    background-color: #fc8181;
+}
+
+.delete-btn:hover {
+    background-color: #f56565;
+}
+
+.delete-btn.active {
+    background-color: #f56565;
+}
+
+.edit-btn {
+    background-color: #4299e1;
+}
+
+.edit-btn:hover {
+    background-color: #3182ce;
+}
+
+.status-filters, .century-filters {
+    margin: 10px 0;
+}
+
+.status-filters button, .century-filters button {
+    padding: 8px 15px;
+    margin-right: 10px;
+    background-color: #2d3748;
+    color: white;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+}
+
+.status-filters button:hover, .century-filters button:hover {
+    background-color: #4a5568;
+}
+
+.status-filters button.active, .century-filters button.active {
+    background-color: #3182ce;
+}
+
+.pagination {
+    margin: 20px 0;
+    text-align: center;
+}
+
+.pagination button {
+    padding: 8px 15px;
+    margin: 0 5px;
+    background-color: #2d3748;
+    color: white;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+}
+
+.pagination button:hover {
+    background-color: #4a5568;
+}
+
+.pagination button.active {
+    background-color: #3182ce;
+}
+
+.search-filter {
+    margin: 20px 0;
+    padding: 20px;
+    background-color: #2a4365;
+    border-radius: 5px;
+}
+
+.search-filter input[type="text"] {
+    padding: 10px;
+    width: 70%;
+    border: 1px solid #444;
+    background-color: #333;
+    color: white;
+    border-radius: 4px;
+}
+
+.search-filter button {
+    padding: 10px 20px;
+    background-color: #3182ce;
+    color: white;
+    border: none;
+    cursor: pointer;
+    border-radius: 4px;
+    margin-left: 10px;
+}
+
+.search-filter button:hover {
+    background-color: #2c5282;
+}
+
+.favorites-star {
+    color: #f6ad55;
+    font-size: 1.2em;
+    margin-right: 5px;
+}
+
+.archived-icon {
+    color: #68d391;
+    font-size: 1.2em;
+    margin-right: 5px;
+}
+
+/* Century edit modal */
+.modal {
+    display: none;
+    position: fixed;
+    z-index: 1000;
+    left: 0;
+    top: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.5);
+}
+
+.modal-content {
+    background-color: #2d2d2d;
+    margin: 15% auto;
+    padding: 20px;
+    border-radius: 5px;
+    width: 50%;
+    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
+}
+
+.modal-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    border-bottom: 1px solid #444;
+    padding-bottom: 10px;
+    margin-bottom: 20px;
+}
+
+.modal-header h2 {
+    margin: 0;
+    color: #4299e1;
+}
+
+.close-modal {
+    color: #aaa;
+    font-size: 28px;
+    font-weight: bold;
+    cursor: pointer;
+}
+
+.close-modal:hover {
+    color: #fff;
+}
+
+.modal-body {
+    margin-bottom: 20px;
+}
+
+.modal-body label {
+    display: block;
+    margin-bottom: 5px;
+    color: #eee;
+}
+
+.modal-body input {
+    width: 100%;
+    padding: 8px;
+    margin-bottom: 15px;
+    border: 1px solid #444;
+    background-color: #333;
+    color: white;
+    border-radius: 4px;
+}
+
+.modal-footer {
+    text-align: right;
+}
+
+.modal-footer button {
+    padding: 8px 16px;
+    margin-left: 10px;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+}
+
+.save-btn {
+    background-color: #4299e1;
+    color: white;
+}
+
+.save-btn:hover {
+    background-color: #3182ce;
+}
+
+.cancel-btn {
+    background-color: #718096;
+    color: white;
+}
+
+.cancel-btn:hover {
+    background-color: #4a5568;
+}
+"""
+
 def is_port_in_use(port):
     """Check if a port is in use"""
     with socket.socket(socket.AF_INET, socket.SOCK_STREAM) as s:
@@ -128,6 +413,8 @@ class CustomHTTPRequestHandler(http.server.SimpleHTTPRequestHandler):
             self.send_html_response(self.get_home_page())
         elif path == '/authors':
             self.send_html_response(self.get_authors_page())
+        elif path == '/authors_table':
+            self.send_html_response(self.get_authors_table_page())
         elif path == '/editors':
             self.send_html_response(self.get_editors_page())
         elif path == '/import':
@@ -252,6 +539,7 @@ class CustomHTTPRequestHandler(http.server.SimpleHTTPRequestHandler):
                 
                 <div class="nav">
                     <a href="/authors">Browse Authors</a>
+                    <a href="/authors_table">Authors Table</a>
                     <a href="/editors">Browse Editors</a>
                     <a href="/search">Search</a>
                     <a href="/import">Import from Scaife</a>
@@ -270,6 +558,7 @@ class CustomHTTPRequestHandler(http.server.SimpleHTTPRequestHandler):
                     <p>This browser allows you to explore Greek texts from the First Thousand Years of Greek Project.</p>
                     <p>The texts are encoded in TEI XML format and contain works from ancient Greek authors.</p>
                     <p>Use the navigation links above to browse by author, editor, or search for specific content.</p>
+                    <p>The <a href="/authors_table">Authors Table</a> provides a sortable and filterable view of all authors with their works and centuries.</p>
                 </div>
             </div>
         </body>
@@ -381,6 +670,7 @@ class CustomHTTPRequestHandler(http.server.SimpleHTTPRequestHandler):
                 
                 <div class="nav">
                     <a href="/">Home</a>
+                    <a href="/authors_table">Authors Table</a>
                     <a href="/editors">Browse Editors</a>
                     <a href="/search">Search</a>
                 </div>
@@ -1769,18 +2059,20 @@ class CustomHTTPRequestHandler(http.server.SimpleHTTPRequestHandler):
         parsed_url = urlparse(self.path)
         path = parsed_url.path
         
+        # Parse the post data once
+        params = parse_qs(post_data)
+        
         if path == '/import_text':
-            form_data = parse_qs(post_data)
-            import_type = form_data.get('import_type', ['batch'])[0]
+            import_type = params.get('import_type', ['batch'])[0]
             
             results = []
             errors = []
             
             if import_type == 'single':
                 # Single URL import with metadata
-                scaife_url = form_data.get('scaife_url', [''])[0].strip()
-                author_name = form_data.get('author_name', [''])[0].strip()
-                work_title = form_data.get('work_title', [''])[0].strip()
+                scaife_url = params.get('scaife_url', [''])[0].strip()
+                author_name = params.get('author_name', [''])[0].strip()
+                work_title = params.get('work_title', [''])[0].strip()
                 
                 if not scaife_url:
                     self.send_response(302)
@@ -1798,8 +2090,8 @@ class CustomHTTPRequestHandler(http.server.SimpleHTTPRequestHandler):
                     traceback.print_exc()
             else:
                 # Batch import
-                scaife_urls = form_data.get('scaife_urls', [''])[0].strip().split('\n')
-                default_author_name = form_data.get('default_author_name', [''])[0].strip()
+                scaife_urls = params.get('scaife_urls', [''])[0].strip().split('\n')
+                default_author_name = params.get('default_author_name', [''])[0].strip()
                 
                 # Filter out empty lines
                 scaife_urls = [url.strip() for url in scaife_urls if url.strip()]
@@ -1830,6 +2122,31 @@ class CustomHTTPRequestHandler(http.server.SimpleHTTPRequestHandler):
                 self.send_response(302)
                 self.send_header('Location', '/import_success?message=' + quote(success_message))
                 self.end_headers()
+        elif path == '/update_century':
+            author_id = params.get('author_id', [''])[0]
+            century = params.get('century', [''])[0]
+            
+            if author_id and century:
+                self.update_author_century(author_id, century)
+                self.send_response(200)
+                self.send_header('Content-type', 'application/json')
+                self.end_headers()
+                self.wfile.write(json.dumps({'status': 'success'}).encode('utf-8'))
+            else:
+                self.send_error(400, "Bad Request")
+        elif path == '/update_preference':
+            author_id = params.get('author_id', [''])[0]
+            pref_type = params.get('pref_type', [''])[0]
+            value = params.get('value', ['false'])[0].lower() == 'true'
+            
+            if author_id and pref_type:
+                self.update_user_preference(author_id, pref_type, value)
+                self.send_response(200)
+                self.send_header('Content-type', 'application/json')
+                self.end_headers()
+                self.wfile.write(json.dumps({'status': 'success'}).encode('utf-8'))
+            else:
+                self.send_error(400, "Bad Request")
         else:
             self.send_error(404, "Not Found")
             
@@ -2315,6 +2632,681 @@ https://scaife.perseus.org/library/urn:cts:greekLit:tlg0007.tlg138.perseus-grc2:
                 # Add more as needed
             }
             return author_map.get(author_id)
+
+    def update_author_century(self, author_id, century):
+        """Update the century information for an author"""
+        global AUTHOR_CENTURIES
+        
+        # Get current author data
+        author_data = AUTHOR_CENTURIES.get(author_id, {})
+        
+        # If it's a string (old format), convert to dict
+        if isinstance(author_data, str):
+            # Get author name from the data directory
+            author_name = author_id
+            try:
+                author_cts_path = os.path.join('data', author_id, '__cts__.xml')
+                if os.path.exists(author_cts_path):
+                    with open(author_cts_path, 'r', encoding='utf-8') as f:
+                        content = f.read()
+                        import re
+                        name_match = re.search(r'<ti:groupname[^>]*>(.*?)</ti:groupname>', content)
+                        if name_match:
+                            author_name = name_match.group(1).strip()
+            except Exception as e:
+                print(f"Error reading author info: {e}")
+            
+            author_data = {"name": author_name, "century": author_data}
+        
+        # Update the century
+        if isinstance(author_data, dict):
+            author_data["century"] = century
+        else:
+            # Handle unexpected format
+            author_name = self.get_author_name_from_files(author_id) or author_id
+            author_data = {"name": author_name, "century": century}
+        
+        AUTHOR_CENTURIES[author_id] = author_data
+        
+        try:
+            with open(AUTHOR_CENTURIES_FILE, 'w', encoding='utf-8') as f:
+                json.dump(AUTHOR_CENTURIES, f, indent=2, sort_keys=True)
+            print(f"Updated century for {author_id} to {century}")
+        except Exception as e:
+            print(f"Error saving author century: {e}")
+    
+    def update_user_preference(self, author_id, pref_type, value):
+        """Update user preference"""
+        prefs_file = 'user_preferences.json'
+        
+        try:
+            try:
+                with open(prefs_file, 'r', encoding='utf-8') as f:
+                    prefs = json.load(f)
+            except (FileNotFoundError, json.JSONDecodeError):
+                prefs = {'favorites': [], 'archived': [], 'deleted': []}
+            
+            if pref_type in ['favorites', 'archived', 'deleted']:
+                if value and author_id not in prefs[pref_type]:
+                    prefs[pref_type].append(author_id)
+                elif not value and author_id in prefs[pref_type]:
+                    prefs[pref_type].remove(author_id)
+                
+                with open(prefs_file, 'w', encoding='utf-8') as f:
+                    json.dump(prefs, f, indent=2)
+                
+                print(f"Updated preference {pref_type} for {author_id} to {value}")
+            
+        except Exception as e:
+            print(f"Error updating user preference: {e}")
+    
+    def get_authors_table_page(self):
+        """Generate the authors table page"""
+        # Load user preferences
+        prefs_file = 'user_preferences.json'
+        try:
+            with open(prefs_file, 'r', encoding='utf-8') as f:
+                user_prefs = json.load(f)
+        except (FileNotFoundError, json.JSONDecodeError):
+            user_prefs = {'favorites': [], 'archived': [], 'deleted': []}
+        
+        # Get author data
+        authors_data = self.get_authors_data()
+        
+        html = f"""
+        <!DOCTYPE html>
+        <html lang="en">
+        <head>
+            <title>First1K Greek - Authors Table</title>
+            <meta charset="UTF-8">
+            <meta name="viewport" content="width=device-width, initial-scale=1.0">
+            <style>
+                {MAIN_STYLESHEET}
+                {AUTHORS_TABLE_STYLESHEET}
+            </style>
+        </head>
+        <body>
+            <div class="container">
+                <h1>Authors Table</h1>
+                
+                <div class="nav">
+                    <a href="/">Home</a>
+                    <a href="/authors">Browse Authors</a>
+                    <a href="/editors">Browse Editors</a>
+                    <a href="/search">Search</a>
+                </div>
+                
+                <div class="search-filter">
+                    <input type="text" id="search-input" placeholder="Search authors...">
+                    <button id="search-btn">Search</button>
+                    
+                    <div class="status-filters">
+                        <b>Status:</b>
+                        <button data-filter="all" class="active">All</button>
+                        <button data-filter="favorites">Favorites</button>
+                        <button data-filter="archived">Archived</button>
+                        <button data-filter="normal">Normal</button>
+                    </div>
+                    
+                    <div class="century-filters">
+                        <b>Century:</b>
+                        <button data-filter="all" class="active">All</button>
+                        <button data-filter="BCE">BCE</button>
+                        <button data-filter="CE-1-3">1-3 CE</button>
+                        <button data-filter="CE-4-6">4-6 CE</button>
+                    </div>
+                </div>
+                
+                <table id="authors-table" class="authors-table">
+                    <thead>
+                        <tr>
+                            <th data-sort="author_name">Author</th>
+                            <th data-sort="century">Century</th>
+                            <th data-sort="works">Works</th>
+                            <th>Actions</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+        """
+        
+        # Add author rows
+        for author in authors_data:
+            author_id = author['id']
+            is_favorite = author_id in user_prefs.get('favorites', [])
+            is_archived = author_id in user_prefs.get('archived', [])
+            is_deleted = author_id in user_prefs.get('deleted', [])
+            
+            if is_deleted:
+                continue  # Skip deleted authors
+            
+            html += f"""
+                        <tr data-id="{author_id}">
+                            <td data-column="author_name">
+                                {"<span class='favorites-star'>★</span> " if is_favorite else ""}
+                                {"<span class='archived-icon'>📦</span> " if is_archived else ""}
+                                <a href="/works?author={author_id}">{author['name']}</a>
+                            </td>
+                            <td data-column="century">{author['century']}</td>
+                            <td data-column="works">{author['works']}</td>
+                            <td>
+                                <button class="action-btn favorite-btn{' active' if is_favorite else ''}">{
+                                    "Unfavorite" if is_favorite else "Favorite"}</button>
+                                <button class="action-btn archive-btn{' active' if is_archived else ''}">{
+                                    "Unarchive" if is_archived else "Archive"}</button>
+                                <button class="action-btn delete-btn">Delete</button>
+                                <button class="action-btn edit-btn" data-author-id="{author_id}" 
+                                        data-author-name="{author['name']}" data-century="{author['century']}">
+                                    Edit Century
+                                </button>
+                            </td>
+                        </tr>
+            """
+        
+        html += """
+                    </tbody>
+                </table>
+                
+                <div class="pagination">
+                    <!-- Pagination will be added by JavaScript -->
+                </div>
+                
+                <!-- Century Edit Modal -->
+                <div id="century-modal" class="modal">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <h2>Edit Century</h2>
+                            <span class="close-modal">&times;</span>
+                        </div>
+                        <div class="modal-body">
+                            <input type="hidden" id="edit-author-id">
+                            <p id="edit-author-name"></p>
+                            <label for="edit-century">Century (e.g., "5 BCE", "2 CE", "3-4 CE"):</label>
+                            <input type="text" id="edit-century" placeholder="Enter century...">
+                        </div>
+                        <div class="modal-footer">
+                            <button class="cancel-btn">Cancel</button>
+                            <button class="save-btn">Save</button>
+                        </div>
+                    </div>
+                </div>
+                
+                <script id="user-prefs" type="application/json">
+                """
+        html += json.dumps(user_prefs)
+        html += """
+                </script>
+                
+                <script>
+                document.addEventListener('DOMContentLoaded', function() {
+                    // Initial variables
+                    let authors = [];
+                    let filteredAuthors = [];
+                    let currentSort = {
+                        column: 'author_name',
+                        direction: 'asc'
+                    };
+                    let currentFilter = '';
+                    let currentPage = 1;
+                    const pageSize = 20;
+                    let activeStatusFilter = 'all'; // 'all', 'favorites', 'archived'
+                    let activeCenturyFilter = 'all'; // 'all', 'BCE', 'CE-1-3', 'CE-4-6'
+                    
+                    // Load user preferences
+                    const userPrefs = JSON.parse(document.getElementById('user-prefs').textContent);
+                    
+                    // Get all authors data from the table
+                    const table = document.getElementById('authors-table');
+                    const rows = Array.from(table.querySelectorAll('tbody tr'));
+                    
+                    // Modal elements
+                    const modal = document.getElementById('century-modal');
+                    const closeModal = document.querySelector('.close-modal');
+                    const cancelBtn = document.querySelector('.cancel-btn');
+                    const saveBtn = document.querySelector('.save-btn');
+                    const authorIdInput = document.getElementById('edit-author-id');
+                    const authorNameElement = document.getElementById('edit-author-name');
+                    const centuryInput = document.getElementById('edit-century');
+                    
+                    // Setup modal events
+                    closeModal.addEventListener('click', () => {
+                        modal.style.display = 'none';
+                    });
+                    
+                    cancelBtn.addEventListener('click', () => {
+                        modal.style.display = 'none';
+                    });
+                    
+                    saveBtn.addEventListener('click', () => {
+                        const authorId = authorIdInput.value;
+                        const century = centuryInput.value;
+                        
+                        if (authorId && century) {
+                            updateCentury(authorId, century);
+                            modal.style.display = 'none';
+                        }
+                    });
+                    
+                    // Handle edit buttons
+                    document.querySelectorAll('.edit-btn').forEach(btn => {
+                        btn.addEventListener('click', function() {
+                            const authorId = this.getAttribute('data-author-id');
+                            const authorName = this.getAttribute('data-author-name');
+                            const century = this.getAttribute('data-century');
+                            
+                            authorIdInput.value = authorId;
+                            authorNameElement.textContent = `Author: ${authorName}`;
+                            centuryInput.value = century;
+                            
+                            modal.style.display = 'block';
+                        });
+                    });
+                    
+                    // Function to update century
+                    function updateCentury(authorId, century) {
+                        const xhr = new XMLHttpRequest();
+                        xhr.open('POST', '/update_century', true);
+                        xhr.setRequestHeader('Content-Type', 'application/x-www-form-urlencoded');
+                        xhr.onreadystatechange = function() {
+                            if (xhr.readyState === 4 && xhr.status === 200) {
+                                // Update the displayed century
+                                const row = document.querySelector(`tr[data-id="${authorId}"]`);
+                                const centuryCell = row.querySelector('[data-column="century"]');
+                                centuryCell.textContent = century;
+                                
+                                // Update the author object
+                                const author = authors.find(a => a.id === authorId);
+                                if (author) {
+                                    author.century = century;
+                                    // Update the edit button data attribute
+                                    const editBtn = row.querySelector('.edit-btn');
+                                    editBtn.setAttribute('data-century', century);
+                                }
+                                
+                                // Re-filter to respect any active century filters
+                                filterAuthors();
+                            }
+                        };
+                        xhr.send(`author_id=${authorId}&century=${encodeURIComponent(century)}`);
+                    }
+                    
+                    rows.forEach(row => {
+                        const authorId = row.getAttribute('data-id');
+                        const authorName = row.querySelector('[data-column="author_name"]').textContent.trim();
+                        const century = row.querySelector('[data-column="century"]').textContent;
+                        const numWorks = parseInt(row.querySelector('[data-column="works"]').textContent);
+                        
+                        const author = {
+                            id: authorId,
+                            author_name: authorName,
+                            century: century,
+                            works: numWorks,
+                            favorite: userPrefs.favorites && userPrefs.favorites.includes(authorId),
+                            archived: userPrefs.archived && userPrefs.archived.includes(authorId),
+                            deleted: userPrefs.deleted && userPrefs.deleted.includes(authorId),
+                            element: row
+                        };
+                        
+                        authors.push(author);
+                    });
+                    
+                    // Initialize filtered authors
+                    filteredAuthors = [...authors].filter(author => !author.deleted);
+                    
+                    // Sort function
+                    function sortAuthors(column, direction) {
+                        filteredAuthors.sort((a, b) => {
+                            let valueA = a[column];
+                            let valueB = b[column];
+                            
+                            // Handle numeric values
+                            if (column === 'works') {
+                                valueA = parseInt(valueA);
+                                valueB = parseInt(valueB);
+                            }
+                            
+                            if (valueA < valueB) {
+                                return direction === 'asc' ? -1 : 1;
+                            }
+                            if (valueA > valueB) {
+                                return direction === 'asc' ? 1 : -1;
+                            }
+                            return 0;
+                        });
+                        
+                        renderTable();
+                    }
+                    
+                    // Filter function
+                    function filterAuthors() {
+                        const searchText = document.getElementById('search-input').value.toLowerCase();
+                        
+                        filteredAuthors = authors.filter(author => {
+                            // Status filter
+                            if (activeStatusFilter === 'favorites' && !author.favorite) return false;
+                            if (activeStatusFilter === 'archived' && !author.archived) return false;
+                            if (activeStatusFilter === 'normal' && (author.favorite || author.archived)) return false;
+                            
+                            // Century filter
+                            if (activeCenturyFilter === 'BCE' && !author.century.includes('BCE')) return false;
+                            if (activeCenturyFilter === 'CE-1-3' && 
+                                !(author.century.includes('1 CE') || 
+                                author.century.includes('2 CE') || 
+                                author.century.includes('3 CE'))) return false;
+                            if (activeCenturyFilter === 'CE-4-6' && 
+                                !(author.century.includes('4 CE') || 
+                                author.century.includes('5 CE') || 
+                                author.century.includes('6 CE'))) return false;
+                            
+                            // Exclude deleted
+                            if (author.deleted) return false;
+                            
+                            // Text search
+                            if (searchText) {
+                                return author.author_name.toLowerCase().includes(searchText) || 
+                                    author.century.toLowerCase().includes(searchText) ||
+                                    author.id.toLowerCase().includes(searchText);
+                            }
+                            
+                            return true;
+                        });
+                        
+                        // Reset to first page when filtering
+                        currentPage = 1;
+                        
+                        // Apply current sort
+                        sortAuthors(currentSort.column, currentSort.direction);
+                    }
+                    
+                    // Render table with current filters, sort, and pagination
+                    function renderTable() {
+                        const tbody = table.querySelector('tbody');
+                        tbody.innerHTML = '';
+                        
+                        // Calculate pagination
+                        const totalPages = Math.ceil(filteredAuthors.length / pageSize);
+                        const startIndex = (currentPage - 1) * pageSize;
+                        const endIndex = Math.min(startIndex + pageSize, filteredAuthors.length);
+                        
+                        // Update pagination UI
+                        updatePagination(totalPages);
+                        
+                        // Show visible authors for current page
+                        for (let i = startIndex; i < endIndex; i++) {
+                            const author = filteredAuthors[i];
+                            const row = author.element.cloneNode(true);
+                            
+                            // Update favorite and archive buttons to reflect current state
+                            const favoriteBtn = row.querySelector('.favorite-btn');
+                            const archiveBtn = row.querySelector('.archive-btn');
+                            
+                            if (author.favorite) {
+                                favoriteBtn.classList.add('active');
+                                favoriteBtn.textContent = 'Unfavorite';
+                                // Add star icon
+                                const nameCell = row.querySelector('[data-column="author_name"]');
+                                if (!nameCell.innerHTML.includes('★')) {
+                                    nameCell.innerHTML = '<span class="favorites-star">★</span> ' + nameCell.innerHTML;
+                                }
+                            } else {
+                                favoriteBtn.classList.remove('active');
+                                favoriteBtn.textContent = 'Favorite';
+                            }
+                            
+                            if (author.archived) {
+                                archiveBtn.classList.add('active');
+                                archiveBtn.textContent = 'Unarchive';
+                                // Add archive icon
+                                const nameCell = row.querySelector('[data-column="author_name"]');
+                                if (!nameCell.innerHTML.includes('📦')) {
+                                    nameCell.innerHTML = '<span class="archived-icon">📦</span> ' + nameCell.innerHTML;
+                                }
+                            } else {
+                                archiveBtn.classList.remove('active');
+                                archiveBtn.textContent = 'Archive';
+                            }
+                            
+                            // Add event listeners to the buttons
+                            setupButtonListeners(row, author);
+                            
+                            tbody.appendChild(row);
+                        }
+                    }
+                    
+                    function setupButtonListeners(row, author) {
+                        // Favorite button
+                        const favoriteBtn = row.querySelector('.favorite-btn');
+                        favoriteBtn.addEventListener('click', function() {
+                            author.favorite = !author.favorite;
+                            updateUserPreference(author.id, 'favorites', author.favorite);
+                            renderTable();
+                        });
+                        
+                        // Archive button
+                        const archiveBtn = row.querySelector('.archive-btn');
+                        archiveBtn.addEventListener('click', function() {
+                            author.archived = !author.archived;
+                            updateUserPreference(author.id, 'archived', author.archived);
+                            renderTable();
+                        });
+                        
+                        // Delete button
+                        const deleteBtn = row.querySelector('.delete-btn');
+                        deleteBtn.addEventListener('click', function() {
+                            if (confirm(`Are you sure you want to delete ${author.author_name}?`)) {
+                                author.deleted = true;
+                                updateUserPreference(author.id, 'deleted', true);
+                                filterAuthors(); // Re-filter to remove this author
+                            }
+                        });
+                        
+                        // Edit Century button
+                        const editBtn = row.querySelector('.edit-btn');
+                        editBtn.addEventListener('click', function() {
+                            const authorId = this.getAttribute('data-author-id');
+                            const authorName = this.getAttribute('data-author-name');
+                            const century = this.getAttribute('data-century');
+                            
+                            authorIdInput.value = authorId;
+                            authorNameElement.textContent = `Author: ${authorName}`;
+                            centuryInput.value = century;
+                            
+                            modal.style.display = 'block';
+                        });
+                    }
+                    
+                    function updateUserPreference(authorId, prefType, value) {
+                        const xhr = new XMLHttpRequest();
+                        xhr.open('POST', '/update_preference', true);
+                        xhr.setRequestHeader('Content-Type', 'application/x-www-form-urlencoded');
+                        xhr.onreadystatechange = function() {
+                            if (xhr.readyState === 4 && xhr.status === 200) {
+                                console.log('Preference updated successfully');
+                            }
+                        };
+                        xhr.send(`author_id=${authorId}&pref_type=${prefType}&value=${value}`);
+                    }
+                    
+                    function updatePagination(totalPages) {
+                        const pagination = document.querySelector('.pagination');
+                        pagination.innerHTML = '';
+                        
+                        // Previous button
+                        const prevBtn = document.createElement('button');
+                        prevBtn.textContent = '←';
+                        prevBtn.disabled = currentPage === 1;
+                        prevBtn.addEventListener('click', function() {
+                            if (currentPage > 1) {
+                                currentPage--;
+                                renderTable();
+                            }
+                        });
+                        pagination.appendChild(prevBtn);
+                        
+                        // Page numbers
+                        let startPage = Math.max(1, currentPage - 2);
+                        let endPage = Math.min(totalPages, startPage + 4);
+                        
+                        // Adjust start if we're near the end
+                        if (endPage - startPage < 4) {
+                            startPage = Math.max(1, endPage - 4);
+                        }
+                        
+                        for (let i = startPage; i <= endPage; i++) {
+                            const pageBtn = document.createElement('button');
+                            pageBtn.textContent = i;
+                            pageBtn.classList.toggle('active', i === currentPage);
+                            pageBtn.addEventListener('click', function() {
+                                currentPage = i;
+                                renderTable();
+                            });
+                            pagination.appendChild(pageBtn);
+                        }
+                        
+                        // Next button
+                        const nextBtn = document.createElement('button');
+                        nextBtn.textContent = '→';
+                        nextBtn.disabled = currentPage === totalPages;
+                        nextBtn.addEventListener('click', function() {
+                            if (currentPage < totalPages) {
+                                currentPage++;
+                                renderTable();
+                            }
+                        });
+                        pagination.appendChild(nextBtn);
+                    }
+                    
+                    // Setup event listeners for sorting
+                    document.querySelectorAll('th[data-sort]').forEach(th => {
+                        th.addEventListener('click', function() {
+                            const column = this.getAttribute('data-sort');
+                            let direction = 'asc';
+                            
+                            // If already sorted by this column, toggle direction
+                            if (currentSort.column === column) {
+                                direction = currentSort.direction === 'asc' ? 'desc' : 'asc';
+                            }
+                            
+                            // Remove sort indicators from all headers
+                            document.querySelectorAll('th[data-sort]').forEach(header => {
+                                header.textContent = header.textContent.replace(' ↑', '').replace(' ↓', '');
+                            });
+                            
+                            // Add indicator to current header
+                            this.textContent += direction === 'asc' ? ' ↑' : ' ↓';
+                            
+                            currentSort.column = column;
+                            currentSort.direction = direction;
+                            
+                            sortAuthors(column, direction);
+                        });
+                    });
+                    
+                    // Setup search input
+                    document.getElementById('search-btn').addEventListener('click', filterAuthors);
+                    document.getElementById('search-input').addEventListener('keyup', function(e) {
+                        if (e.key === 'Enter') {
+                            filterAuthors();
+                        }
+                    });
+                    
+                    // Setup status filter buttons
+                    document.querySelectorAll('.status-filters button').forEach(button => {
+                        button.addEventListener('click', function() {
+                            activeStatusFilter = this.getAttribute('data-filter');
+                            
+                            // Update active button
+                            document.querySelectorAll('.status-filters button').forEach(btn => {
+                                btn.classList.remove('active');
+                            });
+                            this.classList.add('active');
+                            
+                            filterAuthors();
+                        });
+                    });
+                    
+                    // Setup century filter buttons
+                    document.querySelectorAll('.century-filters button').forEach(button => {
+                        button.addEventListener('click', function() {
+                            activeCenturyFilter = this.getAttribute('data-filter');
+                            
+                            // Update active button
+                            document.querySelectorAll('.century-filters button').forEach(btn => {
+                                btn.classList.remove('active');
+                            });
+                            this.classList.add('active');
+                            
+                            filterAuthors();
+                        });
+                    });
+                    
+                    // Initial sort and render
+                    sortAuthors('author_name', 'asc');
+                });
+                </script>
+            </div>
+        </body>
+        </html>
+        """
+        return add_shutdown_button(html)
+    
+    def get_authors_data(self):
+        """Get data about authors and their works"""
+        authors = []
+        data_dir = 'data'
+        
+        if not os.path.exists(data_dir):
+            return []
+        
+        for item in os.listdir(data_dir):
+            author_path = os.path.join(data_dir, item)
+            if os.path.isdir(author_path) and (item.startswith('tlg') or item.startswith('heb')):
+                # Count works
+                work_count = 0
+                author_name = item
+                
+                # Get author name from the JSON if available, otherwise try to find it in __cts__.xml
+                if item in AUTHOR_CENTURIES and "name" in AUTHOR_CENTURIES[item]:
+                    author_name = AUTHOR_CENTURIES[item]["name"]
+                else:
+                    # Look for author name in __cts__.xml
+                    author_cts_path = os.path.join(author_path, '__cts__.xml')
+                    if os.path.exists(author_cts_path):
+                        try:
+                            with open(author_cts_path, 'r', encoding='utf-8') as f:
+                                content = f.read()
+                                import re
+                                name_match = re.search(r'<ti:groupname[^>]*>(.*?)</ti:groupname>', content)
+                                if name_match:
+                                    author_name = name_match.group(1).strip()
+                        except Exception as e:
+                            print(f"Error reading {author_cts_path}: {e}")
+                
+                # Count works (subdirectories)
+                for work_item in os.listdir(author_path):
+                    work_path = os.path.join(author_path, work_item)
+                    if os.path.isdir(work_path):
+                        work_count += 1
+                
+                # Get century from the JSON structure
+                century = "Unknown"
+                if item in AUTHOR_CENTURIES:
+                    if isinstance(AUTHOR_CENTURIES[item], dict) and "century" in AUTHOR_CENTURIES[item]:
+                        century = AUTHOR_CENTURIES[item]["century"]
+                    elif isinstance(AUTHOR_CENTURIES[item], str):
+                        # Support legacy format
+                        century = AUTHOR_CENTURIES[item]
+                
+                authors.append({
+                    'id': item,
+                    'name': author_name,
+                    'century': century,
+                    'works': work_count
+                })
+        
+        # Sort by name
+        authors.sort(key=lambda x: x['name'])
+        
+        return authors
 
 def add_shutdown_button(html):
     """Add a shutdown button to the HTML pages"""

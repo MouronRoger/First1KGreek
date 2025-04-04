@@ -1,0 +1,1473 @@
+l{
+  "heb0001": {
+    "century": "10-2 BCE",
+    "name": "Hebrew Bible"
+  },
+  "tlg0001": {
+    "century": "3 BCE",
+    "name": "Apollonius Rhodius"
+  },
+  "tlg0003": {
+    "century": "5 BCE",
+    "name": "Thucydides"
+  },
+  "tlg0004": {
+    "century": "3 CE",
+    "name": "Diogenes Laertius"
+  },
+  "tlg0005": {
+    "century": "3 BCE",
+    "name": "Theocritus"
+  },
+  "tlg0006": {
+    "century": "5 BCE",
+    "name": "Euripides"
+  },
+  "tlg0007": {
+    "century": "1-2 CE",
+    "name": "Plutarch"
+  },
+  "tlg0008": {
+    "century": "2-3 CE",
+    "name": "Athenaeus of Naucratis"
+  },
+  "tlg0010": {
+    "century": "4 BCE",
+    "name": "Isocrates"
+  },
+  "tlg0011": {
+    "century": "5 BCE",
+    "name": "Sophocles"
+  },
+  "tlg0012": {
+    "century": "8 BCE",
+    "name": "Homer"
+  },
+  "tlg0013": {
+    "century": "7-5 BCE",
+    "name": "Homeric Hymns"
+  },
+  "tlg0014": {
+    "century": "4 BCE",
+    "name": "Demosthenes"
+  },
+  "tlg0015": {
+    "century": "2-3 CE",
+    "name": "Herodian"
+  },
+  "tlg0016": {
+    "century": "5 BCE",
+    "name": "Herodotus"
+  },
+  "tlg0017": {
+    "century": "4 BCE",
+    "name": "Isaeus"
+  },
+  "tlg0018": {
+    "century": "1 CE",
+    "name": "Philo Judaeus"
+  },
+  "tlg0019": {
+    "century": "5-4 BCE",
+    "name": "Aristophanes"
+  },
+  "tlg0020": {
+    "century": "8-7 BCE",
+    "name": "Hesiod"
+  },
+  "tlg0022": {
+    "century": "2 BCE",
+    "name": "Nicander of Colophon"
+  },
+  "tlg0023": {
+    "century": "2 CE",
+    "name": "Oppian"
+  },
+  "tlg0024": {
+    "century": "3 CE",
+    "name": "Oppian of Apamea"
+  },
+  "tlg0026": {
+    "century": "4 BCE",
+    "name": "Aeschines"
+  },
+  "tlg0027": {
+    "century": "4 BCE",
+    "name": "Andocides"
+  },
+  "tlg0028": {
+    "century": "5 BCE",
+    "name": "Antiphon"
+  },
+  "tlg0029": {
+    "century": "4-3 BCE",
+    "name": "Dinarchus"
+  },
+  "tlg0030": {
+    "century": "4 BCE",
+    "name": "Hyperides"
+  },
+  "tlg0031": {
+    "century": "1 CE",
+    "name": "New Testament"
+  },
+  "tlg0032": {
+    "century": "5-4 BCE",
+    "name": "Xenophon"
+  },
+  "tlg0033": {
+    "century": "6-5 BCE",
+    "name": "Pindar"
+  },
+  "tlg0034": {
+    "century": "4 BCE",
+    "name": "Lycurgus"
+  },
+  "tlg0035": {
+    "century": "2 BCE",
+    "name": "Moschus"
+  },
+  "tlg0036": {
+    "century": "2-1 BCE",
+    "name": "Bion of Phlossa"
+  },
+  "tlg0037": {
+    "century": "6 BCE",
+    "name": "Anacharsis"
+  },
+  "tlg0039": {
+    "century": "1 BCE",
+    "name": "Mithridatis Epistula"
+  },
+  "tlg0041": {
+    "century": "3-2 BCE",
+    "name": "Chionis Epistulae"
+  },
+  "tlg0044": {
+    "century": "3-2 BCE",
+    "name": "Antiochus Epistolographus"
+  },
+  "tlg0045": {
+    "century": "5-4 BCE",
+    "name": "Artaxerxis Epistulae"
+  },
+  "tlg0046": {
+    "century": "5 BCE",
+    "name": "Niciae Epistula"
+  },
+  "tlg0048": {
+    "century": "4 BCE",
+    "name": "Philip II, King of Macedonia"
+  },
+  "tlg0053": {
+    "century": "4 BCE",
+    "name": "Phalaridis Epistulae"
+  },
+  "tlg0055": {
+    "century": "5 BCE",
+    "name": "Themistocles"
+  },
+  "tlg0057": {
+    "century": "2 CE",
+    "name": "Galen"
+  },
+  "tlg0058": {
+    "century": "4 BCE",
+    "name": "Aeneas Tacticus"
+  },
+  "tlg0059": {
+    "century": "4 BCE",
+    "name": "Plato"
+  },
+  "tlg0060": {
+    "century": "1 BCE",
+    "name": "Diodorus Siculus"
+  },
+  "tlg0061": {
+    "century": "2 CE",
+    "name": "Pseudo-Lucian"
+  },
+  "tlg0062": {
+    "century": "2 CE",
+    "name": "Lucian of Samosata"
+  },
+  "tlg0064": {
+    "century": "5 BCE",
+    "name": "Hanno"
+  },
+  "tlg0065": {
+    "century": "6-5 BCE",
+    "name": "Scylax of Caryanda"
+  },
+  "tlg0066": {
+    "century": "3 BCE",
+    "name": "Heraclides, Criticus"
+  },
+  "tlg0067": {
+    "century": "2 BCE",
+    "name": "Agatharchides"
+  },
+  "tlg0068": {
+    "century": "2 BCE",
+    "name": "Pseudo-Scymnus"
+  },
+  "tlg0069": {
+    "century": "1 BCE",
+    "name": "Dionysius, Calliphontis"
+  },
+  "tlg0070": {
+    "century": "1 CE",
+    "name": "Isidore, of Charax"
+  },
+  "tlg0071": {
+    "century": "2 CE",
+    "name": "Pseudo-Arrianus"
+  },
+  "tlg0074": {
+    "century": "2 CE",
+    "name": "Arrian"
+  },
+  "tlg0075": {
+    "century": "2 CE",
+    "name": "Pseudo-Arrianus"
+  },
+  "tlg0077": {
+    "century": "3-4 CE",
+    "name": "Stadiasmus Magni Maris"
+  },
+  "tlg0081": {
+    "century": "1 BCE",
+    "name": "Dionysius of Halicarnassus"
+  },
+  "tlg0082": {
+    "century": "2 CE",
+    "name": "Apollonius Dyscolus"
+  },
+  "tlg0083": {
+    "century": "2 CE",
+    "name": "Dionysius of Byzantium"
+  },
+  "tlg0084": {
+    "century": "2 CE",
+    "name": "Dionysius Periegetes"
+  },
+  "tlg0085": {
+    "century": "5 BCE",
+    "name": "Aeschylus"
+  },
+  "tlg0086": {
+    "century": "4 BCE",
+    "name": "Aristotle"
+  },
+  "tlg0087": {
+    "century": "2 CE",
+    "name": "Aelius Herodianus"
+  },
+  "tlg0088": {
+    "century": "4 BCE",
+    "name": "Aristoxenus"
+  },
+  "tlg0090": {
+    "century": "3 CE",
+    "name": "Agathemerus"
+  },
+  "tlg0092": {
+    "century": "3-4 CE",
+    "name": "Anonymi Geographiae Expositio Compendiaria"
+  },
+  "tlg0093": {
+    "century": "4-3 BCE",
+    "name": "Theophrastus"
+  },
+  "tlg0094": {
+    "century": "1-2 CE",
+    "name": "Pseudo-Plutarch"
+  },
+  "tlg0096": {
+    "century": "6-5 BCE",
+    "name": "Aesop"
+  },
+  "tlg0097": {
+    "century": "2 CE",
+    "name": "Diogenianus of Heraclea"
+  },
+  "tlg0098": {
+    "century": "2 CE",
+    "name": "Zenobius Sophista"
+  },
+  "tlg0099": {
+    "century": "1 BCE-1 CE",
+    "name": "Strabo"
+  },
+  "tlg0199": {
+    "century": "5 BCE",
+    "name": "Bacchylides"
+  },
+  "tlg0233": {
+    "century": "6 BCE",
+    "name": "Hipponax"
+  },
+  "tlg0284": {
+    "century": "2 CE",
+    "name": "Aristides, Aelius"
+  },
+  "tlg0317": {
+    "century": "2-3 CE",
+    "name": "Acta Joannis"
+  },
+  "tlg0319": {
+    "century": "5 BCE",
+    "name": "Critias"
+  },
+  "tlg0341": {
+    "century": "3 BCE",
+    "name": "Lycophron"
+  },
+  "tlg0357": {
+    "century": "4 CE",
+    "name": "Didymus Alexandrinus"
+  },
+  "tlg0358": {
+    "century": "2 CE",
+    "name": "Nicomachus of Gerasa"
+  },
+  "tlg0361": {
+    "century": "2 CE",
+    "name": "Cleonides"
+  },
+  "tlg0362": {
+    "century": "2 BCE",
+    "name": "Carmina Delphis Inventa"
+  },
+  "tlg0363": {
+    "century": "2 CE",
+    "name": "Claudius Ptolemaeus"
+  },
+  "tlg0385": {
+    "century": "2-3 CE",
+    "name": "Cassius Dio Cocceianus"
+  },
+  "tlg0509": {
+    "century": "6-5 BCE",
+    "name": "Myia"
+  },
+  "tlg0521": {
+    "century": "5 BCE",
+    "name": "Epicharmus"
+  },
+  "tlg0525": {
+    "century": "2 CE",
+    "name": "Pausanias"
+  },
+  "tlg0526": {
+    "century": "1 CE",
+    "name": "Flavius Josephus"
+  },
+  "tlg0527": {
+    "century": "10-2 BCE",
+    "name": "Old Testament"
+  },
+  "tlg0529": {
+    "century": "1 BCE",
+    "name": "Arius Didymus"
+  },
+  "tlg0530": {
+    "century": "2-3 CE",
+    "name": "Pseudo-Galen"
+  },
+  "tlg0532": {
+    "century": "2 CE",
+    "name": "Achilles Tatius"
+  },
+  "tlg0533": {
+    "century": "3 BCE",
+    "name": "Callimachus"
+  },
+  "tlg0535": {
+    "century": "4 BCE",
+    "name": "Demades"
+  },
+  "tlg0537": {
+    "century": "4-3 BCE",
+    "name": "Epicurus"
+  },
+  "tlg0540": {
+    "century": "5-4 BCE",
+    "name": "Lysias"
+  },
+  "tlg0541": {
+    "century": "4-3 BCE",
+    "name": "Menander"
+  },
+  "tlg0542": {
+    "century": "2 CE",
+    "name": "Julius Pollux"
+  },
+  "tlg0543": {
+    "century": "2 BCE",
+    "name": "Polybius"
+  },
+  "tlg0544": {
+    "century": "2-3 CE",
+    "name": "Sextus Empiricus"
+  },
+  "tlg0545": {
+    "century": "2-3 CE",
+    "name": "Aelian"
+  },
+  "tlg0548": {
+    "century": "1-2 CE",
+    "name": "Apollodorus"
+  },
+  "tlg0550": {
+    "century": "3 BCE",
+    "name": "Apollonius of Perga"
+  },
+  "tlg0551": {
+    "century": "2 CE",
+    "name": "Appianus of Alexandria"
+  },
+  "tlg0552": {
+    "century": "3 BCE",
+    "name": "Archimedes"
+  },
+  "tlg0553": {
+    "century": "2 CE",
+    "name": "Artemidorus"
+  },
+  "tlg0554": {
+    "century": "4 CE",
+    "name": "tlg0554"
+  },
+  "tlg0555": {
+    "century": "2-3 CE",
+    "name": "Clement of Alexandria"
+  },
+  "tlg0556": {
+    "century": "1 BCE",
+    "name": "Asclepiodotus"
+  },
+  "tlg0557": {
+    "century": "1-2 CE",
+    "name": "Epictetus"
+  },
+  "tlg0559": {
+    "century": "1 CE",
+    "name": "Hero of Alexandria"
+  },
+  "tlg0560": {
+    "century": "3 CE",
+    "name": "Longinus"
+  },
+  "tlg0561": {
+    "century": "2 CE",
+    "name": "Longus"
+  },
+  "tlg0562": {
+    "century": "2 CE",
+    "name": "Marcus Aurelius"
+  },
+  "tlg0563": {
+    "century": "2 CE",
+    "name": "Maximus of Tyre"
+  },
+  "tlg0564": {
+    "century": "1-2 CE",
+    "name": "Rufus of Ephesus"
+  },
+  "tlg0565": {
+    "century": "2 CE",
+    "name": "Soranus"
+  },
+  "tlg0572": {
+    "century": "2 CE",
+    "name": "Gaius Romanus"
+  },
+  "tlg0575": {
+    "century": "2 CE",
+    "name": "Moschion Gnomologus"
+  },
+  "tlg0579": {
+    "century": "6-4 BCE",
+    "name": "Orphica"
+  },
+  "tlg0580": {
+    "century": "2-3 CE",
+    "name": "Paradoxographus Florentinus"
+  },
+  "tlg0591": {
+    "century": "5-4 BCE",
+    "name": "Antisthenes"
+  },
+  "tlg0592": {
+    "century": "2-3 CE",
+    "name": "Hermogenes"
+  },
+  "tlg0593": {
+    "century": "5 BCE",
+    "name": "Gorgias of Leontini"
+  },
+  "tlg0594": {
+    "century": "2 CE",
+    "name": "Alexander Numenius"
+  },
+  "tlg0606": {
+    "century": "1 CE",
+    "name": "Rufus Soph."
+  },
+  "tlg0607": {
+    "century": "1-2 CE",
+    "name": "Aelius Theon"
+  },
+  "tlg0609": {
+    "century": "1 BCE",
+    "name": "Tryphon I Grammaticus"
+  },
+  "tlg0610": {
+    "century": "4 BCE",
+    "name": "Alcidamas"
+  },
+  "tlg0612": {
+    "century": "1-2 CE",
+    "name": "Dio Chrysostom"
+  },
+  "tlg0613": {
+    "century": "4-3 BCE",
+    "name": "Demetrius of Phaleron"
+  },
+  "tlg0614": {
+    "century": "1-2 CE",
+    "name": "Babrius"
+  },
+  "tlg0615": {
+    "century": "2 CE",
+    "name": "Aspasius"
+  },
+  "tlg0616": {
+    "century": "2 CE",
+    "name": "Polyaenus Macedo"
+  },
+  "tlg0618": {
+    "century": "3 BCE",
+    "name": "Antigoni Epistula"
+  },
+  "tlg0620": {
+    "century": "4 BCE",
+    "name": "Archytas of Tarentum"
+  },
+  "tlg0623": {
+    "century": "3 BCE",
+    "name": "Cratetis Epistulae"
+  },
+  "tlg0626": {
+    "century": "6-5 BCE",
+    "name": "Heraclitus of Ephesus"
+  },
+  "tlg0627": {
+    "century": "5 BCE",
+    "name": "Hippocrates"
+  },
+  "tlg0628": {
+    "century": "1 CE",
+    "name": "Musonius Rufus"
+  },
+  "tlg0629": {
+    "century": "6 BCE",
+    "name": "Periander"
+  },
+  "tlg0632": {
+    "century": "6 BCE",
+    "name": "Pythagoras"
+  },
+  "tlg0633": {
+    "century": "4 BCE",
+    "name": "Lysis"
+  },
+  "tlg0634": {
+    "century": "4-3 BCE",
+    "name": "Xenocrates of Chalcedon"
+  },
+  "tlg0636": {
+    "century": "4 BCE",
+    "name": "Socrates Epistulae"
+  },
+  "tlg0637": {
+    "century": "4-3 BCE",
+    "name": "Socraticorum Epistulae"
+  },
+  "tlg0638": {
+    "century": "3 CE",
+    "name": "Philostratus the Athenian"
+  },
+  "tlg0639": {
+    "century": "4 BCE",
+    "name": "Menecrates Medicus"
+  },
+  "tlg0640": {
+    "century": "2-3 CE",
+    "name": "Alciphron"
+  },
+  "tlg0641": {
+    "century": "2 CE",
+    "name": "Xenophon of Ephesus"
+  },
+  "tlg0643": {
+    "century": "1-2 CE",
+    "name": "Anonymus Londinensis"
+  },
+  "tlg0644": {
+    "century": "3-2 BCE",
+    "name": "Aristophanes of Byzantium"
+  },
+  "tlg0645": {
+    "century": "2 CE",
+    "name": "Justin Martyr"
+  },
+  "tlg0646": {
+    "century": "2-3 CE",
+    "name": "Pseudo-Justinus Martyr"
+  },
+  "tlg0647": {
+    "century": "5 CE",
+    "name": "Tryphiodorus"
+  },
+  "tlg0648": {
+    "century": "1 CE",
+    "name": "Onasander"
+  },
+  "tlg0649": {
+    "century": "1-2 CE",
+    "name": "Lesbonax (Rhetorician)"
+  },
+  "tlg0652": {
+    "century": "3 CE",
+    "name": "Philostratus Minor"
+  },
+  "tlg0653": {
+    "century": "3 BCE",
+    "name": "Aratus Solensis"
+  },
+  "tlg0655": {
+    "century": "1 BCE",
+    "name": "Parthenius of Nicaea"
+  },
+  "tlg0656": {
+    "century": "1 CE",
+    "name": "Dioscurides Pedianus"
+  },
+  "tlg0657": {
+    "century": "1 BCE",
+    "name": "Crateuas"
+  },
+  "tlg0658": {
+    "century": "3-4 CE",
+    "name": "Heliodorus of Emesa"
+  },
+  "tlg0666": {
+    "century": "2 CE",
+    "name": "Adrianus of Tyre"
+  },
+  "tlg0671": {
+    "century": "3-4 CE",
+    "name": "Philumenus"
+  },
+  "tlg0676": {
+    "century": "4 CE",
+    "name": "Aglaias, Byzantius"
+  },
+  "tlg0693": {
+    "century": "2 CE",
+    "name": "Albinus"
+  },
+  "tlg0708": {
+    "century": "4-5 CE",
+    "name": "Ammonius Grammaticus"
+  },
+  "tlg0719": {
+    "century": "2 CE",
+    "name": "Aretaeus of Cappadocia"
+  },
+  "tlg0731": {
+    "century": "4-5 CE",
+    "name": "Adamantius Judaeus"
+  },
+  "tlg0732": {
+    "century": "2-3 CE",
+    "name": "Alexander of Aphrodisias"
+  },
+  "tlg0733": {
+    "century": "3 CE",
+    "name": "Cassius Iatrosophista"
+  },
+  "tlg0751": {
+    "century": "5-4 BCE",
+    "name": "Pseudo-Hippocrates"
+  },
+  "tlg1118": {
+    "century": "1-2 CE",
+    "name": "Pseudo-Dioscorides"
+  },
+  "tlg1126": {
+    "century": "1 CE",
+    "name": "Anubion, Poeta Astrologus"
+  },
+  "tlg1129": {
+    "century": "2-3 CE",
+    "name": "Anonymi de Barbarismo et Soloecismo"
+  },
+  "tlg1131": {
+    "century": "2 CE",
+    "name": "Anonymus Ad Avircium Marcellum contra Cataphrygas"
+  },
+  "tlg1134": {
+    "century": "5-4 BCE",
+    "name": "Anonymous Iamblichi"
+  },
+  "tlg1146": {
+    "century": "2 BCE",
+    "name": "Antipater Tarsensis"
+  },
+  "tlg1147": {
+    "century": "5 BCE",
+    "name": "Antiphon of Athens"
+  },
+  "tlg1181": {
+    "century": "3 BCE",
+    "name": "Aristarchus of Samos"
+  },
+  "tlg1188": {
+    "century": "2 CE",
+    "name": "Aristocles of Messene"
+  },
+  "tlg1193": {
+    "century": "3 BCE",
+    "name": "Ariston of Chios"
+  },
+  "tlg1194": {
+    "century": "2-1 BCE",
+    "name": "Aristonicus of Alexandria"
+  },
+  "tlg1205": {
+    "century": "2 CE",
+    "name": "Athenagoras"
+  },
+  "tlg1210": {
+    "century": "4-3 BCE",
+    "name": "Autolycus"
+  },
+  "tlg1216": {
+    "century": "2 CE",
+    "name": "Barnabae Epistula"
+  },
+  "tlg1220": {
+    "century": "1 BCE",
+    "name": "Batrachomyomachia"
+  },
+  "tlg1247": {
+    "century": "4-3 BCE",
+    "name": "Cebes"
+  },
+  "tlg1252": {
+    "century": "2 CE",
+    "name": "Certamen Homeri et Hesiodi"
+  },
+  "tlg1264": {
+    "century": "3 BCE",
+    "name": "Chrysippus"
+  },
+  "tlg1269": {
+    "century": "3 BCE",
+    "name": "Cleanthes"
+  },
+  "tlg1271": {
+    "century": "1 CE",
+    "name": "Clemens Romanus (Clement of Rome)"
+  },
+  "tlg1272": {
+    "century": "1-2 CE",
+    "name": "Cleomedes"
+  },
+  "tlg1286": {
+    "century": "1-3 CE",
+    "name": "Hermetica"
+  },
+  "tlg1287": {
+    "century": "4-3 BCE",
+    "name": "Crantor"
+  },
+  "tlg1304": {
+    "century": "5 BCE",
+    "name": "Democritus"
+  },
+  "tlg1309": {
+    "century": "5-4 BCE",
+    "name": "Dialexeis"
+  },
+  "tlg1311": {
+    "century": "1-2 CE",
+    "name": "Didache"
+  },
+  "tlg1319": {
+    "century": "5 BCE",
+    "name": "Diogenes of Apollonia"
+  },
+  "tlg1320": {
+    "century": "2 BCE",
+    "name": "Diogenes Babylonius"
+  },
+  "tlg1325": {
+    "century": "1 CE",
+    "name": "Diogenes Sinopensis Epistulae"
+  },
+  "tlg1329": {
+    "century": "2 CE",
+    "name": "Dionysius Corinthius"
+  },
+  "tlg1337": {
+    "century": "1 CE",
+    "name": "Dorotheus of Sidon"
+  },
+  "tlg1347": {
+    "century": "6 BCE",
+    "name": "Epimenides"
+  },
+  "tlg1367": {
+    "century": "4-3 BCE",
+    "name": "Euripides Epistulae"
+  },
+  "tlg1383": {
+    "century": "1 CE",
+    "name": "Geminus"
+  },
+  "tlg1389": {
+    "century": "2 CE",
+    "name": "Harpocration"
+  },
+  "tlg1390": {
+    "century": "4-3 BCE",
+    "name": "Hecataeus of Abderita"
+  },
+  "tlg1402": {
+    "century": "2 CE",
+    "name": "Hephaestion"
+  },
+  "tlg1409": {
+    "century": "4 BCE",
+    "name": "Heraclides Ponticus"
+  },
+  "tlg1413": {
+    "century": "1-2 CE",
+    "name": "Heraclitus Paradoxographus"
+  },
+  "tlg1414": {
+    "century": "6-5 BCE",
+    "name": "Heraclitus"
+  },
+  "tlg1416": {
+    "century": "1-2 CE",
+    "name": "Philo of Byblos"
+  },
+  "tlg1419": {
+    "century": "2 CE",
+    "name": "Hermas, 2nd cent."
+  },
+  "tlg1431": {
+    "century": "2 BCE",
+    "name": "Hipparchus"
+  },
+  "tlg1434": {
+    "century": "5 BCE",
+    "name": "Hippias of Elis"
+  },
+  "tlg1441": {
+    "century": "2 CE",
+    "name": "Iamblichus (Scr. Erot.)"
+  },
+  "tlg1443": {
+    "century": "1-2 CE",
+    "name": "Ignatius of Antioch"
+  },
+  "tlg1447": {
+    "century": "2 CE",
+    "name": "Irenaeus, Saint, Bishop of Lyon"
+  },
+  "tlg1463": {
+    "century": "3-1 BCE",
+    "name": "Liber Enoch"
+  },
+  "tlg1482": {
+    "century": "4-5 CE",
+    "name": "Cyranides"
+  },
+  "tlg1484": {
+    "century": "2 CE",
+    "name": "Martyrium Polycarpi"
+  },
+  "tlg1486": {
+    "century": "3-4 CE",
+    "name": "Matron of Pitana"
+  },
+  "tlg1487": {
+    "century": "4 CE",
+    "name": "Maximus, Astrologus"
+  },
+  "tlg1542": {
+    "century": "2 CE",
+    "name": "Numenius of Apamea"
+  },
+  "tlg1548": {
+    "century": "2 CE",
+    "name": "Oenomaus of Gadara"
+  },
+  "tlg1551": {
+    "century": "2 BCE-4 CE",
+    "name": "Oracula Sibyllina"
+  },
+  "tlg1553": {
+    "century": "4-3 BCE",
+    "name": "Palaiphatos"
+  },
+  "tlg1562": {
+    "century": "5 BCE",
+    "name": "Parmenides"
+  },
+  "tlg1595": {
+    "century": "1 BCE",
+    "name": "Philodemus"
+  },
+  "tlg1596": {
+    "century": "5 BCE",
+    "name": "Philolaus of Croton"
+  },
+  "tlg1600": {
+    "century": "3 CE",
+    "name": "Philostratus Sophista"
+  },
+  "tlg1602": {
+    "century": "1 BCE",
+    "name": "Philoxenus of Alexandria"
+  },
+  "tlg1617": {
+    "century": "2 CE",
+    "name": "Marcus Antonius Polemon"
+  },
+  "tlg1622": {
+    "century": "2 CE",
+    "name": "Polycarp"
+  },
+  "tlg1626": {
+    "century": "2 CE",
+    "name": "Polycrates Ephesius"
+  },
+  "tlg1634": {
+    "century": "5 BCE",
+    "name": "Prodicus"
+  },
+  "tlg1664": {
+    "century": "1-2 CE",
+    "name": "Seniores Alexandrini"
+  },
+  "tlg1665": {
+    "century": "2 CE",
+    "name": "Seniores Apud Irenaeum"
+  },
+  "tlg1669": {
+    "century": "2 CE",
+    "name": "Serapion Astrologus"
+  },
+  "tlg1681": {
+    "century": "6 BCE",
+    "name": "Solonis Epistulae"
+  },
+  "tlg1692": {
+    "century": "4-3 BCE",
+    "name": "Speusippus"
+  },
+  "tlg1699": {
+    "century": "3 BCE",
+    "name": "Teles Megarenesis"
+  },
+  "tlg1701": {
+    "century": "1-2 CE",
+    "name": "Testamentum Abrahae"
+  },
+  "tlg1705": {
+    "century": "6 BCE",
+    "name": "Thales"
+  },
+  "tlg1719": {
+    "century": "2-1 BCE",
+    "name": "Theodosius of Bithynia"
+  },
+  "tlg1724": {
+    "century": "2 CE",
+    "name": "Theon Smyrnaeus"
+  },
+  "tlg1725": {
+    "century": "2 CE",
+    "name": "Theophilus"
+  },
+  "tlg1749": {
+    "century": "2 CE",
+    "name": "Vitae Hesiodi Particula"
+  },
+  "tlg1750": {
+    "century": "1 CE",
+    "name": "Vitae Prophetarum"
+  },
+  "tlg1763": {
+    "century": "1 CE",
+    "name": "Tryphon II Grammaticus"
+  },
+  "tlg1764": {
+    "century": "2 CE",
+    "name": "Vettius Valens"
+  },
+  "tlg1765": {
+    "century": "1-2 CE",
+    "name": "Vitae Aesopi"
+  },
+  "tlg1766": {
+    "century": "2 CE",
+    "name": "Tatianus"
+  },
+  "tlg1799": {
+    "century": "3 BCE",
+    "name": "Euclid"
+  },
+  "tlg1801": {
+    "century": "3-2 BCE",
+    "name": "Parodica Anonyma"
+  },
+  "tlg1802": {
+    "century": "2-3 CE",
+    "name": "Versus heroici"
+  },
+  "tlg1803": {
+    "century": "1 BCE",
+    "name": "Bruti Epistulae"
+  },
+  "tlg1805": {
+    "century": "2-3 CE",
+    "name": "Vitae Homeri"
+  },
+  "tlg2000": {
+    "century": "3 CE",
+    "name": "Plotinus"
+  },
+  "tlg2001": {
+    "century": "4 CE",
+    "name": "Themistius"
+  },
+  "tlg2003": {
+    "century": "4 CE",
+    "name": "Julian, Emperor of Rome"
+  },
+  "tlg2016": {
+    "century": "2-3 CE",
+    "name": "Martyrium Perpetuae et Felcitatis"
+  },
+  "tlg2018": {
+    "century": "4 CE",
+    "name": "Eusebius of Caesarea"
+  },
+  "tlg2021": {
+    "century": "4 CE",
+    "name": "Epiphanius"
+  },
+  "tlg2022": {
+    "century": "4 CE",
+    "name": "Gregory of Nazianzus"
+  },
+  "tlg2023": {
+    "century": "3-4 CE",
+    "name": "Iamblichus"
+  },
+  "tlg2027": {
+    "century": "3 CE",
+    "name": "Valerius Apsines"
+  },
+  "tlg2029": {
+    "century": "3-4 CE",
+    "name": "Anonymi summaria ratio geographiae in sphaera intelligendae"
+  },
+  "tlg2032": {
+    "century": "4 CE",
+    "name": "Pappus Alexandrinus"
+  },
+  "tlg2034": {
+    "century": "3-4 CE",
+    "name": "Porphyrius"
+  },
+  "tlg2035": {
+    "century": "4 CE",
+    "name": "Athanasius"
+  },
+  "tlg2036": {
+    "century": "3 CE",
+    "name": "Dexippus"
+  },
+  "tlg2038": {
+    "century": "3 CE",
+    "name": "Acta Thomae"
+  },
+  "tlg2039": {
+    "century": "3 CE",
+    "name": "Diophantus Alexandrinus"
+  },
+  "tlg2040": {
+    "century": "4 CE",
+    "name": "Basil, Saint, Bishop of Caesarea"
+  },
+  "tlg2041": {
+    "century": "4 CE",
+    "name": "Marcellus of Ankara"
+  },
+  "tlg2042": {
+    "century": "3 CE",
+    "name": "Origen"
+  },
+  "tlg2045": {
+    "century": "5 CE",
+    "name": "Nonnus of Panopolis"
+  },
+  "tlg2046": {
+    "century": "4 CE",
+    "name": "Quintus Smyrnaeus"
+  },
+  "tlg2048": {
+    "century": "5 CE",
+    "name": "Sozomenus"
+  },
+  "tlg2049": {
+    "century": "4 CE",
+    "name": "Sallustius"
+  },
+  "tlg2050": {
+    "century": "4-5 CE",
+    "name": "Eunapius"
+  },
+  "tlg2057": {
+    "century": "5 CE",
+    "name": "Socrates Scholasticus"
+  },
+  "tlg2058": {
+    "century": "5 CE",
+    "name": "Philostorgius"
+  },
+  "tlg2115": {
+    "century": "2-3 CE",
+    "name": "Hippolytus"
+  },
+  "tlg2135": {
+    "century": "4 CE",
+    "name": "Alypius"
+  },
+  "tlg2136": {
+    "century": "4 CE",
+    "name": "Bacchius Geron"
+  },
+  "tlg2137": {
+    "century": "4 CE",
+    "name": "Gaudentius"
+  },
+  "tlg2138": {
+    "century": "2 CE",
+    "name": "Canticum Euripidis"
+  },
+  "tlg2139": {
+    "century": "2 CE",
+    "name": "Epitaphium Sicili"
+  },
+  "tlg2140": {
+    "century": "3-4 CE",
+    "name": "Iamblichus Alchemista"
+  },
+  "tlg2178": {
+    "century": "3 CE",
+    "name": "Cassius Longinus"
+  },
+  "tlg2189": {
+    "century": "4 CE",
+    "name": "Callinicus"
+  },
+  "tlg2200": {
+    "century": "4 CE",
+    "name": "Libanius"
+  },
+  "tlg2233": {
+    "century": "4 CE",
+    "name": "Pseudo-Polemon"
+  },
+  "tlg2371": {
+    "century": "7 CE",
+    "name": "Chronicon Paschale"
+  },
+  "tlg2583": {
+    "century": "4 CE",
+    "name": "Manetho Astrologus"
+  },
+  "tlg2586": {
+    "century": "3-4 CE",
+    "name": "Menander Rhetor"
+  },
+  "tlg2601": {
+    "century": "3-4 CE",
+    "name": "Tiberius Rhetor"
+  },
+  "tlg2632": {
+    "century": "1-2 CE",
+    "name": "Comarius"
+  },
+  "tlg2640": {
+    "century": "4 CE",
+    "name": "Eusebius Myndius"
+  },
+  "tlg2655": {
+    "century": "4 CE",
+    "name": "Damigeron"
+  },
+  "tlg2691": {
+    "century": "5-6 CE",
+    "name": "Musaeus, Eleusinius"
+  },
+  "tlg2703": {
+    "century": "12 CE",
+    "name": "Anna Comnena"
+  },
+  "tlg2733": {
+    "century": "6 CE",
+    "name": "Evagrius, Scholasticus"
+  },
+  "tlg2768": {
+    "century": "5 CE",
+    "name": "Gelasius"
+  },
+  "tlg2806": {
+    "century": "5 CE",
+    "name": "Marcus Diaconus"
+  },
+  "tlg2934": {
+    "century": "8 CE",
+    "name": "John of Damascus, Saint"
+  },
+  "tlg2948": {
+    "century": "4-5 CE",
+    "name": "Acta Philippi"
+  },
+  "tlg2949": {
+    "century": "5 CE",
+    "name": "Acta Barnabae"
+  },
+  "tlg2959": {
+    "century": "3-4 CE",
+    "name": "Methodius"
+  },
+  "tlg2970": {
+    "century": "5 CE",
+    "name": "Severus Philosophus"
+  },
+  "tlg2972": {
+    "century": "6 CE",
+    "name": "Anonymi de Terrae Motibus"
+  },
+  "tlg3118": {
+    "century": "11 CE",
+    "name": "Syntipas"
+  },
+  "tlg3129": {
+    "century": "11-12 CE",
+    "name": "Theophylactus"
+  },
+  "tlg3135": {
+    "century": "12 CE",
+    "name": "Zonaras"
+  },
+  "tlg3156": {
+    "century": "12 CE",
+    "name": "Anonymi Exegesis in Hesiodi Theogoniam"
+  },
+  "tlg4003": {
+    "century": "5-6 CE",
+    "name": "Marcianus, of Heraclea"
+  },
+  "tlg4013": {
+    "century": "6 CE",
+    "name": "Simplicius"
+  },
+  "tlg4015": {
+    "century": "6 CE",
+    "name": "John Philoponus"
+  },
+  "tlg4016": {
+    "century": "5-6 CE",
+    "name": "Ammonius"
+  },
+  "tlg4017": {
+    "century": "5 CE",
+    "name": "Syrianus"
+  },
+  "tlg4018": {
+    "century": "6 CE",
+    "name": "Asclepius"
+  },
+  "tlg4019": {
+    "century": "6 CE",
+    "name": "Olympiodorus"
+  },
+  "tlg4020": {
+    "century": "6 CE",
+    "name": "Elias Neoplatonicus"
+  },
+  "tlg4021": {
+    "century": "6 CE",
+    "name": "David the Invincible"
+  },
+  "tlg4024": {
+    "century": "6 CE",
+    "name": "Agathias Scholasticus"
+  },
+  "tlg4026": {
+    "century": "5-6 CE",
+    "name": "Anonymi in Aristotelis Artem Rhetoricam"
+  },
+  "tlg4027": {
+    "century": "6 CE",
+    "name": "Anonymi In Aristotelis Categorias"
+  },
+  "tlg4029": {
+    "century": "6 CE",
+    "name": "Procopius"
+  },
+  "tlg4030": {
+    "century": "13-14 CE",
+    "name": "Sophonias"
+  },
+  "tlg4031": {
+    "century": "11-12 CE",
+    "name": "Eustratius"
+  },
+  "tlg4033": {
+    "century": "12 CE",
+    "name": "Anonymi In Aristotelis Ethica Nicomachea"
+  },
+  "tlg4034": {
+    "century": "11-12 CE",
+    "name": "Michael of Ephesus"
+  },
+  "tlg4036": {
+    "century": "5 CE",
+    "name": "Proclus"
+  },
+  "tlg4037": {
+    "century": "2-3 CE",
+    "name": "Anonymi Paradoxographi"
+  },
+  "tlg4072": {
+    "century": "6 CE",
+    "name": "Eutocius"
+  },
+  "tlg4075": {
+    "century": "5 CE",
+    "name": "Marinus, 5th century"
+  },
+  "tlg4081": {
+    "century": "5-6 CE",
+    "name": "Colluthus of Lycopolis"
+  },
+  "tlg4084": {
+    "century": "5-6 CE",
+    "name": "Zosimus"
+  },
+  "tlg4086": {
+    "century": "2-3 CE",
+    "name": "Agathodaemon"
+  },
+  "tlg4089": {
+    "century": "5 CE",
+    "name": "Theodoretus"
+  },
+  "tlg4090": {
+    "century": "5 CE",
+    "name": "Cyril of Alexandria"
+  },
+  "tlg4091": {
+    "century": "3-4 CE",
+    "name": "Callistratus"
+  },
+  "tlg4102": {
+    "century": "5-10 CE",
+    "name": "Catenae (Novum Testamentum)"
+  },
+  "tlg4170": {
+    "century": "2-3 CE",
+    "name": "Vitae Pindari et varia de Pindaro"
+  },
+  "tlg4174": {
+    "century": "4 CE",
+    "name": "Paraphrases in Dioynsium Periegetam"
+  },
+  "tlg4193": {
+    "century": "6 CE",
+    "name": "Anonymi In Aristotelis Sophisticos Elenchos"
+  },
+  "tlg5019": {
+    "century": "4-11 CE",
+    "name": "Scholia in Dionysium Periegetam"
+  },
+  "tlg5022": {
+    "century": "4-6 CE",
+    "name": "Scholia in Euclidem"
+  },
+  "tlg5023": {
+    "century": "2-10 CE",
+    "name": "Scholia in Euripidem"
+  },
+  "tlg5026": {
+    "century": "2-10 CE",
+    "name": "Scholia in Homerum"
+  },
+  "tlg5028": {
+    "century": "2-10 CE",
+    "name": "Scholia in Isocratem"
+  },
+  "tlg5029": {
+    "century": "9-10 CE",
+    "name": "Scholia in Lucianum"
+  },
+  "tlg5031": {
+    "century": "2-10 CE",
+    "name": "Scholia in Nicandrum"
+  },
+  "tlg5034": {
+    "century": "2-6 CE",
+    "name": "Scholia in Pindarum"
+  },
+  "tlg5037": {
+    "century": "1-10 CE",
+    "name": "Scholia in Sophoclem"
+  },
+  "tlg7000": {
+    "century": "Various",
+    "name": "Greek Anthology"
+  },
+  "tlg9004": {
+    "century": "6 CE",
+    "name": "Anonymi In Aristotelis Librum Alterum Analyticorum Posteriorum"
+  },
+  "tlg9006": {
+    "century": "13 CE",
+    "name": "Gregory II, of Cyprus, Patriarch of Constantinople"
+  },
+  "tlg9007": {
+    "century": "2-15 CE",
+    "name": "Appendix Proverbiorum"
+  },
+  "tlg9010": {
+    "century": "10 CE",
+    "name": "Suda"
+  },
+  "tlg9019": {
+    "century": "7 CE",
+    "name": "Stephanus of Alexandria"
+  }
