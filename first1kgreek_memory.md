@@ -3,7 +3,7 @@
 
 ## 4-4-25 
 
-Enhanced Author Data Structure
+### Enhanced Author Data Structure
 Created a more comprehensive author_centuries.json file that now includes both author names and their centuries
 The new structure looks like:
 Apply to 25_03_09_Fir...
@@ -37,3 +37,44 @@ Easily update century information through the web interface
 Maintain accurate historical data about when authors were writing
 Manage your author collection with favorites and archive features
 All of this is now integrated into the main application, accessible through your browser at http://localhost:8000, with no need for separate servers or tools.
+
+## 4-4-24
+
+###add author allegiances
+
+Fixed the linter errors in browse_texts_fixed.py
+Created a combined authors_data.json file that merges the century data from author_centuries_updated.json and allegiance data from author-allegiances.js
+Updated the server code to use the new integrated data source
+Added proper styling for fixed column widths and improved table display
+The table now shows:
+Author names with a fixed width of 20 characters
+Century information
+Works count
+Allegiance information
+Action buttons (favorite, archive, delete, edit)
+The table also includes:
+Pagination showing 50 authors per page
+Search functionality
+Status filters (All, Favorites, Archived, Normal)
+Century filters
+Sorting by any column 
+
+###tidy-up 
+
+Fixed the linter errors in browse_texts_fixed.py
+Created a combined authors_data.json file that merges the century data from author_centuries_updated.json and allegiance data from author-allegiances.js
+Updated the server code to use the new integrated data source
+Added proper styling for fixed column widths and improved table display
+The table now shows:
+Author names with a fixed width of 20 characters
+Century information
+Works count
+Allegiance information
+Action buttons (favorite, archive, delete, edit)
+The table also includes:
+Pagination showing 50 authors per page
+Search functionality
+Status filters (All, Favorites, Archived, Normal)
+Century filters
+Sorting by any column
+
