@@ -1,0 +1,365 @@
+/* General styles */
+body {
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+    line-height: 1.6;
+    margin: 0;
+    padding: 20px;
+    background-color: #f5f5f5;
+    color: #333;
+}
+
+.container {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 20px;
+    background-color: #fff;
+    border-radius: 8px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+h1 {
+    color: #2c5282;
+    margin-bottom: 30px;
+    text-align: center;
+}
+
+/* Filters */
+.filters {
+    margin-bottom: 20px;
+    display: flex;
+    flex-wrap: wrap;
+    gap: 20px;
+    align-items: center;
+}
+
+.search-box {
+    flex: 1;
+    min-width: 250px;
+    display: flex;
+    gap: 10px;
+}
+
+.search-box input {
+    flex: 1;
+    padding: 8px 12px;
+    border: 1px solid #cbd5e0;
+    border-radius: 4px;
+    font-size: 14px;
+}
+
+.search-box button,
+.status-filters button,
+.century-filters button {
+    padding: 8px 16px;
+    background-color: #4a5568;
+    color: white;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    transition: background-color 0.2s;
+}
+
+.search-box button:hover,
+.status-filters button:hover,
+.century-filters button:hover {
+    background-color: #2d3748;
+}
+
+.status-filters,
+.century-filters {
+    display: flex;
+    gap: 10px;
+}
+
+.status-filters button.active,
+.century-filters button.active {
+    background-color: #2c5282;
+}
+
+/* Table styles */
+.authors-table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-bottom: 20px;
+    table-layout: fixed;
+}
+
+.authors-table th,
+.authors-table td {
+    padding: 12px;
+    text-align: left;
+    border-bottom: 1px solid #e2e8f0;
+}
+
+.authors-table th {
+    background-color: #2a4365;
+    color: white;
+    font-weight: 600;
+    cursor: pointer;
+    transition: background-color 0.2s;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+.authors-table th:hover {
+    background-color: #1a365d;
+}
+
+/* Column widths */
+.authors-table th[data-sort="author_name"],
+.authors-table td[data-column="author_name"] {
+    width: 20ch;
+}
+
+.authors-table th[data-sort="century"],
+.authors-table td[data-column="century"] {
+    width: 12ch;
+}
+
+.authors-table th[data-sort="works"],
+.authors-table td[data-column="works"] {
+    width: 8ch;
+}
+
+.authors-table th[data-sort="allegiance"],
+.authors-table td[data-column="allegiance"] {
+    width: 15ch;
+}
+
+.authors-table td {
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+.authors-table tr:hover {
+    background-color: #f7fafc;
+}
+
+/* Action buttons */
+.actions {
+    display: flex;
+    gap: 8px;
+    flex-wrap: wrap;
+}
+
+.favorite-btn,
+.archive-btn,
+.delete-btn,
+.edit-btn {
+    padding: 6px 12px;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    font-size: 12px;
+    transition: background-color 0.2s;
+}
+
+.favorite-btn {
+    background-color: #4299e1;
+    color: white;
+}
+
+.favorite-btn:hover {
+    background-color: #3182ce;
+}
+
+.favorite-btn.active {
+    background-color: #2c5282;
+}
+
+.archive-btn {
+    background-color: #48bb78;
+    color: white;
+}
+
+.archive-btn:hover {
+    background-color: #38a169;
+}
+
+.archive-btn.active {
+    background-color: #2f855a;
+}
+
+.delete-btn {
+    background-color: #f56565;
+    color: white;
+}
+
+.delete-btn:hover {
+    background-color: #e53e3e;
+}
+
+.edit-btn {
+    background-color: #805ad5;
+    color: white;
+}
+
+.edit-btn:hover {
+    background-color: #6b46c1;
+}
+
+/* Icons */
+.favorites-star {
+    color: #ecc94b;
+    margin-right: 4px;
+}
+
+.archived-icon {
+    color: #48bb78;
+    margin-right: 4px;
+}
+
+/* Pagination */
+.pagination {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 8px;
+    margin-top: 20px;
+}
+
+.pagination button {
+    padding: 8px 12px;
+    border: 1px solid #e2e8f0;
+    background-color: white;
+    color: #4a5568;
+    border-radius: 4px;
+    cursor: pointer;
+    transition: all 0.2s;
+}
+
+.pagination button:hover:not(:disabled) {
+    background-color: #edf2f7;
+    border-color: #cbd5e0;
+}
+
+.pagination button.active {
+    background-color: #2c5282;
+    color: white;
+    border-color: #2c5282;
+}
+
+.pagination button:disabled {
+    background-color: #edf2f7;
+    color: #a0aec0;
+    cursor: not-allowed;
+}
+
+/* Modal */
+.modal {
+    display: none;
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.5);
+    z-index: 1000;
+}
+
+.modal-content {
+    position: relative;
+    background-color: white;
+    margin: 15% auto;
+    padding: 20px;
+    width: 90%;
+    max-width: 500px;
+    border-radius: 8px;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+}
+
+.close-modal {
+    position: absolute;
+    right: 20px;
+    top: 10px;
+    font-size: 24px;
+    cursor: pointer;
+    color: #718096;
+}
+
+.close-modal:hover {
+    color: #4a5568;
+}
+
+.modal h2 {
+    margin-top: 0;
+    color: #2d3748;
+}
+
+.modal input[type="text"] {
+    width: 100%;
+    padding: 8px 12px;
+    margin: 10px 0;
+    border: 1px solid #cbd5e0;
+    border-radius: 4px;
+    font-size: 14px;
+}
+
+.modal-buttons {
+    display: flex;
+    justify-content: flex-end;
+    gap: 10px;
+    margin-top: 20px;
+}
+
+.cancel-btn,
+.save-btn {
+    padding: 8px 16px;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    transition: background-color 0.2s;
+}
+
+.cancel-btn {
+    background-color: #e2e8f0;
+    color: #4a5568;
+}
+
+.cancel-btn:hover {
+    background-color: #cbd5e0;
+}
+
+.save-btn {
+    background-color: #4299e1;
+    color: white;
+}
+
+.save-btn:hover {
+    background-color: #3182ce;
+}
+
+/* Responsive design */
+@media (max-width: 768px) {
+    .filters {
+        flex-direction: column;
+        align-items: stretch;
+    }
+    
+    .search-box,
+    .status-filters,
+    .century-filters {
+        width: 100%;
+    }
+    
+    .actions {
+        flex-direction: column;
+    }
+    
+    .actions button {
+        width: 100%;
+    }
+    
+    .authors-table {
+        display: block;
+        overflow-x: auto;
+        white-space: nowrap;
+    }
+    
+    .modal-content {
+        margin: 10% auto;
+        width: 95%;
+    }
+} 

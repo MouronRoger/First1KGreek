@@ -22,6 +22,25 @@ import xml.etree.ElementTree as ET
 import urllib.request
 from urllib.error import URLError, HTTPError
 import traceback
+import requests
+import urllib.parse
+from urllib.parse import urlparse, parse_qs
+
+# Global variable to store server instance
+server_instance = None
+
+# Constants
+PORT = 8000
+HOST = "localhost"
+SHUTDOWN_PATH = "/shutdown"
+
+# Load author centuries data
+try:
+    with open('author_centuries_updated.json', 'r', encoding='utf-8') as f:
+        AUTHOR_CENTURIES = json.load(f)
+except (FileNotFoundError, json.JSONDecodeError) as e:
+    print(f"Error loading author centuries data: {e}")
+    AUTHOR_CENTURIES = {}
 
 # Create a backup of the file if it doesn't exist already
 if not os.path.exists('browse_texts.py.bak'):
@@ -30,11 +49,6 @@ if not os.path.exists('browse_texts.py.bak'):
 # Print version info when starting
 print("Starting First1KGreek Browser - Fixed Version 1.2.0")
 print("With dark theme and improved editor detection")
-
-PORT = 8000
-
-# Global reference to the server
-server_instance = None
 
 # Load the author centuries data
 AUTHOR_CENTURIES_FILE = 'author_centuries.json'
@@ -115,6 +129,7 @@ AUTHORS_TABLE_STYLESHEET = """
     background-color: #333;
     border-radius: 5px;
     overflow: hidden;
+    table-layout: fixed;  /* Added for fixed column widths */
 }
 
 .authors-table th {
@@ -133,6 +148,35 @@ AUTHORS_TABLE_STYLESHEET = """
 .authors-table td {
     padding: 10px 15px;
     border-bottom: 1px solid #444;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+/* Fixed column widths */
+.authors-table th:nth-child(1),
+.authors-table td:nth-child(1) {
+    width: 20ch;  /* Fixed width for author names */
+}
+
+.authors-table th:nth-child(2),
+.authors-table td:nth-child(2) {
+    width: 12ch;  /* Width for century */
+}
+
+.authors-table th:nth-child(3),
+.authors-table td:nth-child(3) {
+    width: 8ch;  /* Width for works count */
+}
+
+.authors-table th:nth-child(4),
+.authors-table td:nth-child(4) {
+    width: 15ch;  /* Width for allegiance */
+}
+
+.authors-table th:nth-child(5),
+.authors-table td:nth-child(5) {
+    width: auto;  /* Actions column takes remaining space */
 }
 
 .authors-table tr:hover {
@@ -391,96 +435,123 @@ def find_available_port(start_port=8000, max_attempts=10):
 class CustomHTTPRequestHandler(http.server.SimpleHTTPRequestHandler):
     """Custom HTTP server handler for browsing and viewing texts"""
     
-    def send_html_response(self, html_content):
-        """Helper method to send HTML response with correct headers"""
-        self.send_response(200)
-        self.send_header('Content-type', 'text/html; charset=utf-8')
-        self.send_header('Cache-Control', 'no-cache, no-store, must-revalidate')
-        self.send_header('Pragma', 'no-cache')
-        self.send_header('Expires', '0')
-        self.end_headers()
-        self.wfile.write(html_content.encode('utf-8'))
-    
     def do_GET(self):
         """Handle GET requests"""
-        # Parse the URL and get query parameters
-        parsed_url = urlparse(self.path)
-        path = parsed_url.path
-        query_params = parse_qs(parsed_url.query)
-        
-        # Handle different routes
+        parsed_path = urllib.parse.urlparse(self.path)
+        path = parsed_path.path
+
+        # Serve static files
+        if path.startswith('/static/'):
+            self.serve_static_file(path)
+            return
+
+        # Handle other routes
         if path == '/':
             self.send_html_response(self.get_home_page())
         elif path == '/authors':
-            self.send_html_response(self.get_authors_page())
-        elif path == '/authors_table':
             self.send_html_response(self.get_authors_table_page())
+        elif path == '/works':
+            self.send_html_response(self.get_works_page(parsed_path.query))
+        elif path == '/view':
+            self.send_html_response(self.get_view_page(parsed_path.query))
         elif path == '/editors':
             self.send_html_response(self.get_editors_page())
+        elif path == '/search':
+            self.send_html_response(self.get_search_page())
         elif path == '/import':
             self.send_html_response(self.get_import_page())
-        elif path == '/import_success':
-            message = query_params.get('message', ['Import completed successfully'])[0]
-            self.send_html_response(self.get_import_success_page(message))
-        elif path == '/import_error':
-            error = query_params.get('error', ['An unknown error occurred'])[0]
-            self.send_html_response(self.get_import_error_page(error))
-        elif path == '/works' and 'author' in query_params:
-            author_id = query_params['author'][0]
-            self.send_html_response(self.get_works_page(author_id))
-        elif path == '/editor_works' and 'name' in query_params:
-            editor_name = query_params['name'][0]
-            self.send_html_response(self.get_editor_works_page(editor_name))
-        elif path == '/view' and 'path' in query_params:
-            file_path = query_params['path'][0]
-            self.send_html_response(self.get_view_page(file_path))
-        elif path == '/reader' and 'path' in query_params:
-            file_path = query_params['path'][0]
-            self.send_html_response(self.get_reader_page(file_path))
-        elif path == '/search':
-            search_term = query_params.get('q', [''])[0]
-            self.send_html_response(self.get_search_page(search_term))
-        elif path == '/shutdown':
-            shutdown_html = """
-            <html>
-            <head>
-                <title>Server Shutdown</title>
-                <style>
-                    body { font-family: Arial, sans-serif; margin: 40px; line-height: 1.6; background-color: #1a1a1a; color: #fff; }
-                    h1 { color: #fff; }
-                    .message { padding: 20px; background-color: #2d2d2d; border-radius: 5px; }
-                </style>
-            </head>
-            <body>
-                <h1>Server Shutdown</h1>
-                <div class="message">
-                    <p>The server is shutting down...</p>
-                </div>
-            </body>
-            </html>
-            """
-            self.send_html_response(shutdown_html)
-            threading.Thread(target=self.delayed_shutdown).start()
         else:
-            # Attempt to serve a static file
-            try:
-                super().do_GET()
-            except Exception as e:
-                self.send_error(404, f"File not found: {self.path}")
-                print(f"Error serving {self.path}: {str(e)}")
+            self.send_error(404, "Not Found")
 
-    def delayed_shutdown(self):
-        """Delay the shutdown to allow the response to be sent"""
-        time.sleep(1)
-        global server_instance
-        if server_instance:
-            print("Server stopping...")
-            # Force the socket to close with a timeout
-            server_instance.socket.close()
-            server_instance.server_close()
-            server_instance.shutdown()
-            server_instance = None
-            print("Server closed successfully")
+    def do_POST(self):
+        """Handle POST requests"""
+        parsed_path = urllib.parse.urlparse(self.path)
+        path = parsed_path.path
+
+        # Parse form data
+        content_length = int(self.headers.get('Content-Length', 0))
+        post_data = urllib.parse.parse_qs(self.rfile.read(content_length).decode('utf-8'))
+
+        if path == '/update_preference':
+            self.handle_update_preference(post_data)
+        elif path == '/update_century':
+            self.handle_update_century(post_data)
+        else:
+            self.send_error(404, "Not Found")
+
+    def handle_update_preference(self, post_data):
+        """Handle updating user preferences"""
+        author_id = post_data.get('author_id', [''])[0]
+        pref_type = post_data.get('pref_type', [''])[0]
+        value = post_data.get('value', ['false'])[0].lower() == 'true'
+
+        if not author_id or not pref_type:
+            self.send_error(400, "Missing required parameters")
+            return
+
+        try:
+            # Load current preferences
+            try:
+                with open('user_preferences.json', 'r') as f:
+                    prefs = json.load(f)
+            except (FileNotFoundError, json.JSONDecodeError):
+                prefs = {'favorites': [], 'archived': [], 'deleted': []}
+
+            # Update preference
+            if pref_type not in prefs:
+                prefs[pref_type] = []
+
+            if value and author_id not in prefs[pref_type]:
+                prefs[pref_type].append(author_id)
+            elif not value and author_id in prefs[pref_type]:
+                prefs[pref_type].remove(author_id)
+
+            # Save updated preferences
+            with open('user_preferences.json', 'w') as f:
+                json.dump(prefs, f, indent=2)
+
+            self.send_response(200)
+            self.send_header('Content-type', 'application/json')
+            self.end_headers()
+            self.wfile.write(json.dumps({'success': True}).encode())
+
+        except Exception as e:
+            self.send_error(500, f"Error updating preferences: {str(e)}")
+
+    def handle_update_century(self, post_data):
+        """Handle updating author century"""
+        author_id = post_data.get('author_id', [''])[0]
+        century = post_data.get('century', [''])[0]
+
+        if not author_id or not century:
+            self.send_error(400, "Missing required parameters")
+            return
+
+        try:
+            # Load current author data
+            try:
+                with open('authors_data.json', 'r') as f:
+                    authors_data = json.load(f)
+            except (FileNotFoundError, json.JSONDecodeError):
+                authors_data = {}
+
+            # Update century
+            if author_id in authors_data:
+                authors_data[author_id]['century'] = century
+
+                # Save updated data
+                with open('authors_data.json', 'w') as f:
+                    json.dump(authors_data, f, indent=2)
+
+                self.send_response(200)
+                self.send_header('content-type', 'application/json')
+                self.end_headers()
+                self.wfile.write(json.dumps({'success': True}).encode())
+            else:
+                self.send_error(404, "Author not found")
+
+        except Exception as e:
+            self.send_error(500, f"Error updating century: {str(e)}")
 
     def get_home_page(self):
         """Generate the home page HTML"""
@@ -2054,1312 +2125,291 @@ class CustomHTTPRequestHandler(http.server.SimpleHTTPRequestHandler):
 
     def do_POST(self):
         """Handle POST requests"""
-        content_length = int(self.headers['Content-Length'])
-        post_data = self.rfile.read(content_length).decode('utf-8')
-        parsed_url = urlparse(self.path)
-        path = parsed_url.path
-        
-        # Parse the post data once
-        params = parse_qs(post_data)
-        
-        if path == '/import_text':
-            import_type = params.get('import_type', ['batch'])[0]
-            
-            results = []
-            errors = []
-            
-            if import_type == 'single':
-                # Single URL import with metadata
-                scaife_url = params.get('scaife_url', [''])[0].strip()
-                author_name = params.get('author_name', [''])[0].strip()
-                work_title = params.get('work_title', [''])[0].strip()
-                
-                if not scaife_url:
-                    self.send_response(302)
-                    self.send_header('Location', '/import_error?error=' + quote('No valid URL provided'))
-                    self.end_headers()
-                    return
-                
-                try:
-                    result = self.import_text_from_scaife(scaife_url, author_name, work_title)
-                    results.append(result)
-                except Exception as e:
-                    error_msg = f"Error importing {scaife_url}: {str(e)}"
-                    errors.append(error_msg)
-                    print(error_msg)
-                    traceback.print_exc()
-            else:
-                # Batch import
-                scaife_urls = params.get('scaife_urls', [''])[0].strip().split('\n')
-                default_author_name = params.get('default_author_name', [''])[0].strip()
-                
-                # Filter out empty lines
-                scaife_urls = [url.strip() for url in scaife_urls if url.strip()]
-                
-                if not scaife_urls:
-                    self.send_response(302)
-                    self.send_header('Location', '/import_error?error=' + quote('No valid URLs provided'))
-                    self.end_headers()
-                    return
-                
-                for url in scaife_urls:
-                    try:
-                        result = self.import_text_from_scaife(url, default_author_name)
-                        results.append(result)
-                    except Exception as e:
-                        error_msg = f"Error importing {url}: {str(e)}"
-                        errors.append(error_msg)
-                        print(error_msg)
-                        traceback.print_exc()
-            
-            if errors:
-                error_message = "<br>".join(errors)
-                self.send_response(302)
-                self.send_header('Location', '/import_error?error=' + quote(error_message))
-                self.end_headers()
-            else:
-                success_message = "Successfully imported:<br>" + "<br>".join(results)
-                self.send_response(302)
-                self.send_header('Location', '/import_success?message=' + quote(success_message))
-                self.end_headers()
+        parsed_path = urllib.parse.urlparse(self.path)
+        path = parsed_path.path
+
+        # Parse form data
+        content_length = int(self.headers.get('Content-Length', 0))
+        post_data = urllib.parse.parse_qs(self.rfile.read(content_length).decode('utf-8'))
+
+        if path == '/update_preference':
+            self.handle_update_preference(post_data)
         elif path == '/update_century':
-            author_id = params.get('author_id', [''])[0]
-            century = params.get('century', [''])[0]
-            
-            if author_id and century:
-                self.update_author_century(author_id, century)
-                self.send_response(200)
-                self.send_header('Content-type', 'application/json')
-                self.end_headers()
-                self.wfile.write(json.dumps({'status': 'success'}).encode('utf-8'))
-            else:
-                self.send_error(400, "Bad Request")
-        elif path == '/update_preference':
-            author_id = params.get('author_id', [''])[0]
-            pref_type = params.get('pref_type', [''])[0]
-            value = params.get('value', ['false'])[0].lower() == 'true'
-            
-            if author_id and pref_type:
-                self.update_user_preference(author_id, pref_type, value)
-                self.send_response(200)
-                self.send_header('Content-type', 'application/json')
-                self.end_headers()
-                self.wfile.write(json.dumps({'status': 'success'}).encode('utf-8'))
-            else:
-                self.send_error(400, "Bad Request")
+            self.handle_update_century(post_data)
         else:
             self.send_error(404, "Not Found")
-            
-    def import_text_from_scaife(self, scaife_url, provided_author_name='', provided_work_title=''):
-        """Import text from Scaife URL and save to the corpus"""
-        print(f"Importing from URL: {scaife_url}")
-        
-        # Extract URN from URL
-        urn_match = re.search(r'urn:cts:greekLit:([^:]+)\.([^:]+)\.([^:/]+)', scaife_url)
-        if not urn_match:
-            raise ValueError("Invalid Scaife URL format - could not extract URN")
-        
-        author_id = urn_match.group(1)  # e.g., tlg0007
-        work_id = urn_match.group(2)    # e.g., tlg136
-        edition_id = urn_match.group(3) # e.g., perseus-grc2
-        
-        # Create full id for file
-        full_id = f"{author_id}.{work_id}.{edition_id}"
-        
-        # Create directory structure
-        author_dir = os.path.join('data', author_id)
-        work_dir = os.path.join(author_dir, work_id)
-        
-        os.makedirs(work_dir, exist_ok=True)
-        
-        # Fetch XML content from Scaife
+
+    def handle_update_preference(self, post_data):
+        """Handle updating user preferences"""
+        author_id = post_data.get('author_id', [''])[0]
+        pref_type = post_data.get('pref_type', [''])[0]
+        value = post_data.get('value', ['false'])[0].lower() == 'true'
+
+        if not author_id or not pref_type:
+            self.send_error(400, "Missing required parameters")
+            return
+
         try:
-            response = urllib.request.urlopen(scaife_url)
-            xml_content = response.read().decode('utf-8')
-        except (URLError, HTTPError) as e:
-            raise Exception(f"Failed to fetch content: {str(e)}")
-        
-        # Determine author name and work title
-        author_name = provided_author_name
-        if not author_name:
-            # Try to get from existing files
+            # Load current preferences
             try:
-                author_name = self.get_author_name_from_files(author_id)
-            except:
-                # Try author map
-                author_name = self.get_author_name_from_id(author_id)
-                
-        if not author_name:
-            author_name = f"Author {author_id}"
-            
-        # Get work title
-        work_title = provided_work_title
-        if not work_title:
-            # Try to extract from XML
-            extracted_title = self.extract_title_from_xml(xml_content)
-            if extracted_title:
-                work_title = extracted_title
+                with open('user_preferences.json', 'r') as f:
+                    prefs = json.load(f)
+            except (FileNotFoundError, json.JSONDecodeError):
+                prefs = {'favorites': [], 'archived': [], 'deleted': []}
+
+            # Update preference
+            if pref_type not in prefs:
+                prefs[pref_type] = []
+
+            if value and author_id not in prefs[pref_type]:
+                prefs[pref_type].append(author_id)
+            elif not value and author_id in prefs[pref_type]:
+                prefs[pref_type].remove(author_id)
+
+            # Save updated preferences
+            with open('user_preferences.json', 'w') as f:
+                json.dump(prefs, f, indent=2)
+
+            self.send_response(200)
+            self.send_header('Content-type', 'application/json')
+            self.end_headers()
+            self.wfile.write(json.dumps({'success': True}).encode())
+
+        except Exception as e:
+            self.send_error(500, f"Error updating preferences: {str(e)}")
+
+    def handle_update_century(self, post_data):
+        """Handle updating author century"""
+        author_id = post_data.get('author_id', [''])[0]
+        century = post_data.get('century', [''])[0]
+
+        if not author_id or not century:
+            self.send_error(400, "Missing required parameters")
+            return
+
+        try:
+            # Load current author data
+            try:
+                with open('authors_data.json', 'r') as f:
+                    authors_data = json.load(f)
+            except (FileNotFoundError, json.JSONDecodeError):
+                authors_data = {}
+
+            # Update century
+            if author_id in authors_data:
+                authors_data[author_id]['century'] = century
+
+                # Save updated data
+                with open('authors_data.json', 'w') as f:
+                    json.dump(authors_data, f, indent=2)
+
+                self.send_response(200)
+                self.send_header('content-type', 'application/json')
+                self.end_headers()
+                self.wfile.write(json.dumps({'success': True}).encode())
             else:
-                # Check if work already exists and has a title
-                try:
-                    existing_cts_path = os.path.join(work_dir, '__cts__.xml')
-                    if os.path.exists(existing_cts_path):
-                        tree = ET.parse(existing_cts_path)
-                        title_elem = tree.find('.//{*}title')
-                        if title_elem is not None and title_elem.text:
-                            work_title = title_elem.text
-                except:
-                    pass
-        
-        if not work_title:
-            work_title = f"Work {work_id}"
-        
-        # Create author metadata file if it doesn't exist
-        author_cts_path = os.path.join(author_dir, '__cts__.xml')
-        if not os.path.exists(author_cts_path):
-            author_cts_content = f"""<ti:textgroup xmlns:ti="http://chs.harvard.edu/xmlns/cts" urn="urn:cts:greekLit:{author_id}">
-    <ti:groupname xml:lang="eng">{author_name}</ti:groupname>
-</ti:textgroup>"""
-            with open(author_cts_path, 'w', encoding='utf-8') as f:
-                f.write(author_cts_content)
-            print(f"Created author metadata: {author_cts_path}")
-        
-        # Create work metadata file if it doesn't exist
-        work_cts_path = os.path.join(work_dir, '__cts__.xml')
-        if not os.path.exists(work_cts_path):
-            language = self.detect_language_from_xml(xml_content) or "grc"
-            work_cts_content = f"""<ti:work xmlns:ti="http://chs.harvard.edu/xmlns/cts" groupUrn="urn:cts:greekLit:{author_id}" xml:lang="{language}" urn="urn:cts:greekLit:{author_id}.{work_id}">
-    <ti:title xml:lang="eng">{work_title}</ti:title>
-    <ti:edition urn="urn:cts:greekLit:{full_id}" workUrn="urn:cts:greekLit:{author_id}.{work_id}" xml:lang="{language}">
-        <ti:label xml:lang="eng">{work_title}</ti:label>
-        <ti:description xml:lang="eng">Imported from Scaife/Perseus</ti:description>
-    </ti:edition>
-</ti:work>"""
-            with open(work_cts_path, 'w', encoding='utf-8') as f:
-                f.write(work_cts_content)
-            print(f"Created work metadata: {work_cts_path}")
-        
-        # Save the XML content to file
-        text_file_path = os.path.join(work_dir, f"{full_id}.xml")
-        with open(text_file_path, 'w', encoding='utf-8') as f:
-            f.write(xml_content)
-        
-        print(f"Saved text file: {text_file_path}")
-        
-        # Update the catalog.json (if it exists)
-        try:
-            self.update_catalog(author_id, work_id, edition_id, author_name, work_title)
+                self.send_error(404, "Author not found")
+
         except Exception as e:
-            print(f"Warning: Could not update catalog.json: {str(e)}")
-        
-        return f"Imported {work_title} by {author_name} ({full_id})"
-        
-    def update_catalog(self, author_id, work_id, edition_id, author_name, work_title):
-        """Update the catalog.json file with the new text"""
-        catalog_path = 'catalog.json'
-        if not os.path.exists(catalog_path):
-            return  # Skip if catalog doesn't exist
-        
-        try:
-            with open(catalog_path, 'r', encoding='utf-8') as f:
-                catalog_data = f.read()
-                catalog = json.loads(catalog_data)
-            
-            # Check if entry already exists
-            full_id = f"{author_id}.{work_id}.{edition_id}"
-            urn = f"urn:cts:greekLit:{full_id}"
-            
-            # Check if the entry already exists
-            for entry in catalog:
-                if isinstance(entry, dict) and entry.get('urn') == urn:
-                    return  # Already exists
-            
-            # Add new entry
-            new_entry = {
-                "urn": urn,
-                "group_name": author_name,
-                "work_name": work_title,
-                "language": "grc",  # Default
-                "scaife": f"https://scaife.perseus.org/reader/{urn}:1"
-            }
-            
-            catalog.append(new_entry)
-            
-            # Save updated catalog
-            with open(catalog_path, 'w', encoding='utf-8') as f:
-                json.dump(catalog, f, indent=2)
-                
-            print(f"Updated catalog.json with {full_id}")
-        except Exception as e:
-            print(f"Error updating catalog: {str(e)}")
-            traceback.print_exc()
-            raise
+            self.send_error(500, f"Error updating century: {str(e)}")
 
     def get_import_page(self):
         """Return the import page HTML"""
         # Define the JavaScript separately as a regular string
-        js_code = '<script>\nfunction showTab(tabId) {\n    var contents = document.querySelectorAll(".tab-content");\n    for (var i = 0; i < contents.length; i++) {\n        contents[i].classList.remove("active");\n    }\n    var tabs = document.querySelectorAll(".tab");\n    for (var i = 0; i < tabs.length; i++) {\n        tabs[i].classList.remove("active");\n    }\n    document.getElementById(tabId + "-tab").classList.add("active");\n    var tabs = document.querySelectorAll(".tab");\n    for (var i = 0; i < tabs.length; i++) {\n        if (tabs[i].innerText.toLowerCase().indexOf(tabId) !== -1) {\n            tabs[i].classList.add("active");\n        }\n    }\n}\n</script>'
-        
-        html = f"""
-        <html>
-        <head>
-            <title>Import Texts from Scaife</title>
-            <style>
-                {MAIN_STYLESHEET}
-                .nav {{ margin: 20px 0; }}
-                .nav a {{ 
-                    display: inline-block; 
-                    margin-right: 15px; 
-                    background: #3182ce; 
-                    color: white; 
-                    padding: 10px 15px; 
-                    text-decoration: none; 
-                    border-radius: 4px; 
-                }}
-                .nav a:hover {{ background: #2c5282; }}
-                .form-group {{
-                    margin-bottom: 20px;
-                }}
-                label {{
-                    display: block;
-                    margin-bottom: 5px;
-                    font-weight: bold;
-                }}
-                textarea, input[type="text"] {{
-                    width: 100%;
-                    padding: 10px;
-                    border: 1px solid #444;
-                    border-radius: 4px;
-                    background-color: #333;
-                    color: white;
-                    font-family: monospace;
-                }}
-                button {{
-                    padding: 10px 20px;
-                    background-color: #4299e1;
-                    color: white;
-                    border: none;
-                    border-radius: 4px;
-                    cursor: pointer;
-                }}
-                button:hover {{
-                    background-color: #3182ce;
-                }}
-                .info-box {{
-                    background-color: #2a4365;
-                    border-left: 5px solid #4299e1;
-                    padding: 15px;
-                    margin: 20px 0;
-                    border-radius: 4px;
-                }}
-                .tabs {{
-                    display: flex;
-                    margin-bottom: 20px;
-                }}
-                .tab {{
-                    padding: 10px 20px;
-                    background: #2a4365;
-                    color: white;
-                    cursor: pointer;
-                    border-radius: 4px 4px 0 0;
-                    margin-right: 2px;
-                }}
-                .tab.active {{
-                    background: #3182ce;
-                }}
-                .tab-content {{
-                    display: none;
-                    padding: 20px;
-                    background: #2a4365;
-                    border-radius: 0 4px 4px 4px;
-                }}
-                .tab-content.active {{
-                    display: block;
-                }}
-                .metadata-fields {{
-                    background: #2d3748;
-                    padding: 15px;
-                    border-radius: 4px;
-                    margin-top: 15px;
-                }}
-                .nav-links {{
-                    margin-top: 20px;
-                    padding-top: 20px;
-                    border-top: 1px solid #444;
-                }}
-            </style>
-        </head>
-        <body>
-            <div class="container">
-                <h1>Import Texts from Scaife/Perseus</h1>
-                
-                <div class="info-box">
-                    <p><strong>Instructions:</strong> Enter one or more Scaife API XML URLs to import texts into the First1KGreek corpus.</p>
-                    <p>Use the format: <code>https://scaife.perseus.org/library/urn:cts:greekLit:tlg0007.tlg136.perseus-grc2:1-47/cts-api-xml/</code></p>
-                    <p>You can add metadata for each URL to improve import quality.</p>
-                </div>
-                
-                <div class="tabs">
-                    <div class="tab active" onclick="showTab('single')">Single URL</div>
-                    <div class="tab" onclick="showTab('batch')">Batch Import</div>
-                </div>
-                
-                <div id="single-tab" class="tab-content active">
-                    <form action="/import_text" method="post">
-                        <div class="form-group">
-                            <label>Scaife URL:</label>
-                            <input type="text" name="scaife_url" placeholder="https://scaife.perseus.org/library/urn:cts:greekLit:tlg0007.tlg136.perseus-grc2:1-47/cts-api-xml/">
-                        </div>
-                        
-                        <div class="metadata-fields">
-                            <h3>Metadata (Optional)</h3>
-                            <div class="form-group">
-                                <label>Author Name:</label>
-                                <input type="text" name="author_name" placeholder="e.g., Plutarch">
-                            </div>
-                            <div class="form-group">
-                                <label>Work Title:</label>
-                                <input type="text" name="work_title" placeholder="e.g., De Stoicorum Repugnantiis">
-                            </div>
-                        </div>
-                        
-                        <input type="hidden" name="import_type" value="single">
-                        <button type="submit">Import Text</button>
-                    </form>
-                </div>
-                
-                <div id="batch-tab" class="tab-content">
-                    <form action="/import_text" method="post">
-                        <div class="form-group">
-                            <label>Scaife URLs (one per line):</label>
-                            <textarea name="scaife_urls" rows="10" placeholder="https://scaife.perseus.org/library/urn:cts:greekLit:tlg0007.tlg136.perseus-grc2:1-47/cts-api-xml/
-https://scaife.perseus.org/library/urn:cts:greekLit:tlg0007.tlg137.perseus-grc2:1-6/cts-api-xml/
-https://scaife.perseus.org/library/urn:cts:greekLit:tlg0007.tlg138.perseus-grc2:1-50/cts-api-xml/"></textarea>
-                        </div>
-                        
-                        <div class="metadata-fields">
-                            <h3>Default Metadata (Optional)</h3>
-                            <p>This metadata will be used for all imported texts if their data cannot be detected automatically.</p>
-                            <div class="form-group">
-                                <label>Default Author Name:</label>
-                                <input type="text" name="default_author_name" placeholder="e.g., Plutarch">
-                            </div>
-                        </div>
-                        
-                        <input type="hidden" name="import_type" value="batch">
-                        <button type="submit">Import Texts</button>
-                    </form>
-                </div>
-                
-                <div class="nav-links">
-                    <p><a href="/">← Back to Home</a></p>
-                </div>
-            </div>
-        </body>
-        </html>
-        """
-        
-        # Add the script separately to avoid f-string issues
-        html = html.replace('</body>', f'{js_code}</body>')
-        
-        return add_shutdown_button(html)
-
-    def get_import_success_page(self, message):
-        """Return the import success page HTML"""
-        html = f"""
-        <html>
-        <head>
-            <title>Import Success</title>
-            <style>
-                body {{ 
-                    font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif; 
-                    margin: 0; 
-                    padding: 0;
-                    line-height: 1.6; 
-                    background-color: #1a1a1a; 
-                    color: #ffffff; 
-                }}
-                h1, h2, h3 {{ 
-                    color: #4299e1;
-                    margin-top: 1.5em;
-                    margin-bottom: 0.5em;
-                }}
-                a {{ color: #4299e1; text-decoration: none; }}
-                a:hover {{ text-decoration: underline; }}
-                .container {{ 
-                    max-width: 1000px; 
-                    margin: 0 auto; 
-                    padding: 20px;
-                    background-color: #2d2d2d;
-                    box-shadow: 0 0 10px rgba(0,0,0,0.5);
-                    min-height: 100vh;
-                }}
-                .success-box {{
-                    background-color: #2c4a2c;
-                    border-left: 5px solid #48bb78;
-                    padding: 15px;
-                    margin: 20px 0;
-                    border-radius: 4px;
-                }}
-                .nav-links {{
-                    margin-top: 20px;
-                    padding-top: 20px;
-                    border-top: 1px solid #444;
-                }}
-            </style>
-        </head>
-        <body>
-            <div class="container">
-                <h1>Import Successful</h1>
-                
-                <div class="success-box">
-                    <p>{message}</p>
-                </div>
-                
-                <div class="nav-links">
-                    <p><a href="/import">← Back to Import</a> | <a href="/">Home</a></p>
-                </div>
-            </div>
-        </body>
-        </html>
-        """
-        return add_shutdown_button(html)
-
-    def get_import_error_page(self, error):
-        """Return the import error page HTML"""
-        html = f"""
-        <html>
-        <head>
-            <title>Import Error</title>
-            <style>
-                body {{ 
-                    font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif; 
-                    margin: 0; 
-                    padding: 0;
-                    line-height: 1.6; 
-                    background-color: #1a1a1a; 
-                    color: #ffffff; 
-                }}
-                h1, h2, h3 {{ 
-                    color: #4299e1;
-                    margin-top: 1.5em;
-                    margin-bottom: 0.5em;
-                }}
-                a {{ color: #4299e1; text-decoration: none; }}
-                a:hover {{ text-decoration: underline; }}
-                .container {{ 
-                    max-width: 1000px; 
-                    margin: 0 auto; 
-                    padding: 20px;
-                    background-color: #2d2d2d;
-                    box-shadow: 0 0 10px rgba(0,0,0,0.5);
-                    min-height: 100vh;
-                }}
-                .error-box {{
-                    background-color: #4a2c2c;
-                    border-left: 5px solid #f56565;
-                    padding: 15px;
-                    margin: 20px 0;
-                    border-radius: 4px;
-                }}
-                .nav-links {{
-                    margin-top: 20px;
-                    padding-top: 20px;
-                    border-top: 1px solid #444;
-                }}
-            </style>
-        </head>
-        <body>
-            <div class="container">
-                <h1>Import Error</h1>
-                
-                <div class="error-box">
-                    <p>{error}</p>
-                </div>
-                
-                <div class="nav-links">
-                    <p><a href="/import">← Back to Import</a> | <a href="/">Home</a></p>
-                </div>
-            </div>
-        </body>
-        </html>
-        """
-        return add_shutdown_button(html)
-
-    def extract_title_from_xml(self, xml_content):
-        """Extract the title from the XML content"""
-        try:
-            root = ET.fromstring(xml_content)
-            # Look for title elements
-            for title_tag in root.findall('.//{*}title'):
-                if title_tag.text and title_tag.text.strip():
-                    return title_tag.text.strip()
-            return None
-        except Exception as e:
-            print(f"Warning: Could not extract title from XML: {str(e)}")
-            return None
-
-    def detect_language_from_xml(self, xml_content):
-        """Detect the language from the XML content"""
-        try:
-            root = ET.fromstring(xml_content)
-            # Check for xml:lang attribute
-            for elem in root.findall('.//*[@xml:lang]', {'xml': 'http://www.w3.org/XML/1998/namespace'}):
-                lang = elem.get('{http://www.w3.org/XML/1998/namespace}lang')
-                if lang:
-                    return lang
-            # Default to Greek for most First1K texts
-            return "grc"
-        except Exception as e:
-            print(f"Warning: Could not detect language from XML: {str(e)}")
-            return "grc"
-
-    def get_author_name_from_id(self, author_id):
-        """Get author name from ID using various methods"""
-        # Try to get from existing files
-        try:
-            return self.get_author_name_from_files(author_id)
-        except:
-            # Map common author IDs to names
-            author_map = {
-                "tlg0001": "Thucydides",
-                "tlg0003": "Herodotus",
-                "tlg0004": "Diogenes Laertius",
-                "tlg0007": "Plutarch",
-                "tlg0012": "Homer",
-                "tlg0059": "Plato",
-                "tlg0086": "Aristotle",
-                # Add more as needed
-            }
-            return author_map.get(author_id)
-
-    def update_author_century(self, author_id, century):
-        """Update the century information for an author"""
-        global AUTHOR_CENTURIES
-        
-        # Get current author data
-        author_data = AUTHOR_CENTURIES.get(author_id, {})
-        
-        # If it's a string (old format), convert to dict
-        if isinstance(author_data, str):
-            # Get author name from the data directory
-            author_name = author_id
-            try:
-                author_cts_path = os.path.join('data', author_id, '__cts__.xml')
-                if os.path.exists(author_cts_path):
-                    with open(author_cts_path, 'r', encoding='utf-8') as f:
-                        content = f.read()
-                        import re
-                        name_match = re.search(r'<ti:groupname[^>]*>(.*?)</ti:groupname>', content)
-                        if name_match:
-                            author_name = name_match.group(1).strip()
-            except Exception as e:
-                print(f"Error reading author info: {e}")
-            
-            author_data = {"name": author_name, "century": author_data}
-        
-        # Update the century
-        if isinstance(author_data, dict):
-            author_data["century"] = century
-        else:
-            # Handle unexpected format
-            author_name = self.get_author_name_from_files(author_id) or author_id
-            author_data = {"name": author_name, "century": century}
-        
-        AUTHOR_CENTURIES[author_id] = author_data
-        
-        try:
-            with open(AUTHOR_CENTURIES_FILE, 'w', encoding='utf-8') as f:
-                json.dump(AUTHOR_CENTURIES, f, indent=2, sort_keys=True)
-            print(f"Updated century for {author_id} to {century}")
-        except Exception as e:
-            print(f"Error saving author century: {e}")
-    
-    def update_user_preference(self, author_id, pref_type, value):
-        """Update user preference"""
-        prefs_file = 'user_preferences.json'
-        
-        try:
-            try:
-                with open(prefs_file, 'r', encoding='utf-8') as f:
-                    prefs = json.load(f)
-            except (FileNotFoundError, json.JSONDecodeError):
-                prefs = {'favorites': [], 'archived': [], 'deleted': []}
-            
-            if pref_type in ['favorites', 'archived', 'deleted']:
-                if value and author_id not in prefs[pref_type]:
-                    prefs[pref_type].append(author_id)
-                elif not value and author_id in prefs[pref_type]:
-                    prefs[pref_type].remove(author_id)
-                
-                with open(prefs_file, 'w', encoding='utf-8') as f:
-                    json.dump(prefs, f, indent=2)
-                
-                print(f"Updated preference {pref_type} for {author_id} to {value}")
-            
-        except Exception as e:
-            print(f"Error updating user preference: {e}")
-    
-    def get_authors_table_page(self):
-        """Generate the authors table page"""
-        # Load user preferences
-        prefs_file = 'user_preferences.json'
-        try:
-            with open(prefs_file, 'r', encoding='utf-8') as f:
-                user_prefs = json.load(f)
-        except (FileNotFoundError, json.JSONDecodeError):
-            user_prefs = {'favorites': [], 'archived': [], 'deleted': []}
-        
-        # Get author data
-        authors_data = self.get_authors_data()
-        
-        html = f"""
-        <!DOCTYPE html>
-        <html lang="en">
-        <head>
-            <title>First1K Greek - Authors Table</title>
-            <meta charset="UTF-8">
-            <meta name="viewport" content="width=device-width, initial-scale=1.0">
-            <style>
-                {MAIN_STYLESHEET}
-                {AUTHORS_TABLE_STYLESHEET}
-            </style>
-        </head>
-        <body>
-            <div class="container">
-                <h1>Authors Table</h1>
-                
-                <div class="nav">
-                    <a href="/">Home</a>
-                    <a href="/authors">Browse Authors</a>
-                    <a href="/editors">Browse Editors</a>
-                    <a href="/search">Search</a>
-                </div>
-                
-                <div class="search-filter">
-                    <input type="text" id="search-input" placeholder="Search authors...">
-                    <button id="search-btn">Search</button>
-                    
-                    <div class="status-filters">
-                        <b>Status:</b>
-                        <button data-filter="all" class="active">All</button>
-                        <button data-filter="favorites">Favorites</button>
-                        <button data-filter="archived">Archived</button>
-                        <button data-filter="normal">Normal</button>
-                    </div>
-                    
-                    <div class="century-filters">
-                        <b>Century:</b>
-                        <button data-filter="all" class="active">All</button>
-                        <button data-filter="BCE">BCE</button>
-                        <button data-filter="CE-1-3">1-3 CE</button>
-                        <button data-filter="CE-4-6">4-6 CE</button>
-                    </div>
-                </div>
-                
-                <table id="authors-table" class="authors-table">
-                    <thead>
-                        <tr>
-                            <th data-sort="author_name">Author</th>
-                            <th data-sort="century">Century</th>
-                            <th data-sort="works">Works</th>
-                            <th>Actions</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-        """
-        
-        # Add author rows
-        for author in authors_data:
-            author_id = author['id']
-            is_favorite = author_id in user_prefs.get('favorites', [])
-            is_archived = author_id in user_prefs.get('archived', [])
-            is_deleted = author_id in user_prefs.get('deleted', [])
-            
-            if is_deleted:
-                continue  # Skip deleted authors
-            
-            html += f"""
-                        <tr data-id="{author_id}">
-                            <td data-column="author_name">
-                                {"<span class='favorites-star'>★</span> " if is_favorite else ""}
-                                {"<span class='archived-icon'>📦</span> " if is_archived else ""}
-                                <a href="/works?author={author_id}">{author['name']}</a>
-                            </td>
-                            <td data-column="century">{author['century']}</td>
-                            <td data-column="works">{author['works']}</td>
-                            <td>
-                                <button class="action-btn favorite-btn{' active' if is_favorite else ''}">{
-                                    "Unfavorite" if is_favorite else "Favorite"}</button>
-                                <button class="action-btn archive-btn{' active' if is_archived else ''}">{
-                                    "Unarchive" if is_archived else "Archive"}</button>
-                                <button class="action-btn delete-btn">Delete</button>
-                                <button class="action-btn edit-btn" data-author-id="{author_id}" 
-                                        data-author-name="{author['name']}" data-century="{author['century']}">
-                                    Edit Century
-                                </button>
-                            </td>
-                        </tr>
-            """
-        
-        html += """
-                    </tbody>
-                </table>
-                
-                <div class="pagination">
-                    <!-- Pagination will be added by JavaScript -->
-                </div>
-                
-                <!-- Century Edit Modal -->
-                <div id="century-modal" class="modal">
-                    <div class="modal-content">
-                        <div class="modal-header">
-                            <h2>Edit Century</h2>
-                            <span class="close-modal">&times;</span>
-                        </div>
-                        <div class="modal-body">
-                            <input type="hidden" id="edit-author-id">
-                            <p id="edit-author-name"></p>
-                            <label for="edit-century">Century (e.g., "5 BCE", "2 CE", "3-4 CE"):</label>
-                            <input type="text" id="edit-century" placeholder="Enter century...">
-                        </div>
-                        <div class="modal-footer">
-                            <button class="cancel-btn">Cancel</button>
-                            <button class="save-btn">Save</button>
-                        </div>
-                    </div>
-                </div>
-                
-                <script id="user-prefs" type="application/json">
-                """
-        html += json.dumps(user_prefs)
-        html += """
-                </script>
-                
-                <script>
-                document.addEventListener('DOMContentLoaded', function() {
-                    // Initial variables
-                    let authors = [];
-                    let filteredAuthors = [];
-                    let currentSort = {
-                        column: 'author_name',
-                        direction: 'asc'
-                    };
-                    let currentFilter = '';
-                    let currentPage = 1;
-                    const pageSize = 20;
-                    let activeStatusFilter = 'all'; // 'all', 'favorites', 'archived'
-                    let activeCenturyFilter = 'all'; // 'all', 'BCE', 'CE-1-3', 'CE-4-6'
-                    
-                    // Load user preferences
-                    const userPrefs = JSON.parse(document.getElementById('user-prefs').textContent);
-                    
-                    // Get all authors data from the table
-                    const table = document.getElementById('authors-table');
-                    const rows = Array.from(table.querySelectorAll('tbody tr'));
-                    
-                    // Modal elements
-                    const modal = document.getElementById('century-modal');
-                    const closeModal = document.querySelector('.close-modal');
-                    const cancelBtn = document.querySelector('.cancel-btn');
-                    const saveBtn = document.querySelector('.save-btn');
-                    const authorIdInput = document.getElementById('edit-author-id');
-                    const authorNameElement = document.getElementById('edit-author-name');
-                    const centuryInput = document.getElementById('edit-century');
-                    
-                    // Setup modal events
-                    closeModal.addEventListener('click', () => {
-                        modal.style.display = 'none';
-                    });
-                    
-                    cancelBtn.addEventListener('click', () => {
-                        modal.style.display = 'none';
-                    });
-                    
-                    saveBtn.addEventListener('click', () => {
-                        const authorId = authorIdInput.value;
-                        const century = centuryInput.value;
-                        
-                        if (authorId && century) {
-                            updateCentury(authorId, century);
-                            modal.style.display = 'none';
-                        }
-                    });
-                    
-                    // Handle edit buttons
-                    document.querySelectorAll('.edit-btn').forEach(btn => {
-                        btn.addEventListener('click', function() {
-                            const authorId = this.getAttribute('data-author-id');
-                            const authorName = this.getAttribute('data-author-name');
-                            const century = this.getAttribute('data-century');
-                            
-                            authorIdInput.value = authorId;
-                            authorNameElement.textContent = `Author: ${authorName}`;
-                            centuryInput.value = century;
-                            
-                            modal.style.display = 'block';
-                        });
-                    });
-                    
-                    // Function to update century
-                    function updateCentury(authorId, century) {
-                        const xhr = new XMLHttpRequest();
-                        xhr.open('POST', '/update_century', true);
-                        xhr.setRequestHeader('Content-Type', 'application/x-www-form-urlencoded');
-                        xhr.onreadystatechange = function() {
-                            if (xhr.readyState === 4 && xhr.status === 200) {
-                                // Update the displayed century
-                                const row = document.querySelector(`tr[data-id="${authorId}"]`);
-                                const centuryCell = row.querySelector('[data-column="century"]');
-                                centuryCell.textContent = century;
-                                
-                                // Update the author object
-                                const author = authors.find(a => a.id === authorId);
-                                if (author) {
-                                    author.century = century;
-                                    // Update the edit button data attribute
-                                    const editBtn = row.querySelector('.edit-btn');
-                                    editBtn.setAttribute('data-century', century);
-                                }
-                                
-                                // Re-filter to respect any active century filters
-                                filterAuthors();
-                            }
-                        };
-                        xhr.send(`author_id=${authorId}&century=${encodeURIComponent(century)}`);
-                    }
-                    
-                    rows.forEach(row => {
-                        const authorId = row.getAttribute('data-id');
-                        const authorName = row.querySelector('[data-column="author_name"]').textContent.trim();
-                        const century = row.querySelector('[data-column="century"]').textContent;
-                        const numWorks = parseInt(row.querySelector('[data-column="works"]').textContent);
-                        
-                        const author = {
-                            id: authorId,
-                            author_name: authorName,
-                            century: century,
-                            works: numWorks,
-                            favorite: userPrefs.favorites && userPrefs.favorites.includes(authorId),
-                            archived: userPrefs.archived && userPrefs.archived.includes(authorId),
-                            deleted: userPrefs.deleted && userPrefs.deleted.includes(authorId),
-                            element: row
-                        };
-                        
-                        authors.push(author);
-                    });
-                    
-                    // Initialize filtered authors
-                    filteredAuthors = [...authors].filter(author => !author.deleted);
-                    
-                    // Sort function
-                    function sortAuthors(column, direction) {
-                        filteredAuthors.sort((a, b) => {
-                            let valueA = a[column];
-                            let valueB = b[column];
-                            
-                            // Handle numeric values
-                            if (column === 'works') {
-                                valueA = parseInt(valueA);
-                                valueB = parseInt(valueB);
-                            }
-                            
-                            if (valueA < valueB) {
-                                return direction === 'asc' ? -1 : 1;
-                            }
-                            if (valueA > valueB) {
-                                return direction === 'asc' ? 1 : -1;
-                            }
-                            return 0;
-                        });
-                        
-                        renderTable();
-                    }
-                    
-                    // Filter function
-                    function filterAuthors() {
-                        const searchText = document.getElementById('search-input').value.toLowerCase();
-                        
-                        filteredAuthors = authors.filter(author => {
-                            // Status filter
-                            if (activeStatusFilter === 'favorites' && !author.favorite) return false;
-                            if (activeStatusFilter === 'archived' && !author.archived) return false;
-                            if (activeStatusFilter === 'normal' && (author.favorite || author.archived)) return false;
-                            
-                            // Century filter
-                            if (activeCenturyFilter === 'BCE' && !author.century.includes('BCE')) return false;
-                            if (activeCenturyFilter === 'CE-1-3' && 
-                                !(author.century.includes('1 CE') || 
-                                author.century.includes('2 CE') || 
-                                author.century.includes('3 CE'))) return false;
-                            if (activeCenturyFilter === 'CE-4-6' && 
-                                !(author.century.includes('4 CE') || 
-                                author.century.includes('5 CE') || 
-                                author.century.includes('6 CE'))) return false;
-                            
-                            // Exclude deleted
-                            if (author.deleted) return false;
-                            
-                            // Text search
-                            if (searchText) {
-                                return author.author_name.toLowerCase().includes(searchText) || 
-                                    author.century.toLowerCase().includes(searchText) ||
-                                    author.id.toLowerCase().includes(searchText);
-                            }
-                            
-                            return true;
-                        });
-                        
-                        // Reset to first page when filtering
-                        currentPage = 1;
-                        
-                        // Apply current sort
-                        sortAuthors(currentSort.column, currentSort.direction);
-                    }
-                    
-                    // Render table with current filters, sort, and pagination
-                    function renderTable() {
-                        const tbody = table.querySelector('tbody');
-                        tbody.innerHTML = '';
-                        
-                        // Calculate pagination
-                        const totalPages = Math.ceil(filteredAuthors.length / pageSize);
-                        const startIndex = (currentPage - 1) * pageSize;
-                        const endIndex = Math.min(startIndex + pageSize, filteredAuthors.length);
-                        
-                        // Update pagination UI
-                        updatePagination(totalPages);
-                        
-                        // Show visible authors for current page
-                        for (let i = startIndex; i < endIndex; i++) {
-                            const author = filteredAuthors[i];
-                            const row = author.element.cloneNode(true);
-                            
-                            // Update favorite and archive buttons to reflect current state
-                            const favoriteBtn = row.querySelector('.favorite-btn');
-                            const archiveBtn = row.querySelector('.archive-btn');
-                            
-                            if (author.favorite) {
-                                favoriteBtn.classList.add('active');
-                                favoriteBtn.textContent = 'Unfavorite';
-                                // Add star icon
-                                const nameCell = row.querySelector('[data-column="author_name"]');
-                                if (!nameCell.innerHTML.includes('★')) {
-                                    nameCell.innerHTML = '<span class="favorites-star">★</span> ' + nameCell.innerHTML;
-                                }
-                            } else {
-                                favoriteBtn.classList.remove('active');
-                                favoriteBtn.textContent = 'Favorite';
-                            }
-                            
-                            if (author.archived) {
-                                archiveBtn.classList.add('active');
-                                archiveBtn.textContent = 'Unarchive';
-                                // Add archive icon
-                                const nameCell = row.querySelector('[data-column="author_name"]');
-                                if (!nameCell.innerHTML.includes('📦')) {
-                                    nameCell.innerHTML = '<span class="archived-icon">📦</span> ' + nameCell.innerHTML;
-                                }
-                            } else {
-                                archiveBtn.classList.remove('active');
-                                archiveBtn.textContent = 'Archive';
-                            }
-                            
-                            // Add event listeners to the buttons
-                            setupButtonListeners(row, author);
-                            
-                            tbody.appendChild(row);
-                        }
-                    }
-                    
-                    function setupButtonListeners(row, author) {
-                        // Favorite button
-                        const favoriteBtn = row.querySelector('.favorite-btn');
-                        favoriteBtn.addEventListener('click', function() {
-                            author.favorite = !author.favorite;
-                            updateUserPreference(author.id, 'favorites', author.favorite);
-                            renderTable();
-                        });
-                        
-                        // Archive button
-                        const archiveBtn = row.querySelector('.archive-btn');
-                        archiveBtn.addEventListener('click', function() {
-                            author.archived = !author.archived;
-                            updateUserPreference(author.id, 'archived', author.archived);
-                            renderTable();
-                        });
-                        
-                        // Delete button
-                        const deleteBtn = row.querySelector('.delete-btn');
-                        deleteBtn.addEventListener('click', function() {
-                            if (confirm(`Are you sure you want to delete ${author.author_name}?`)) {
-                                author.deleted = true;
-                                updateUserPreference(author.id, 'deleted', true);
-                                filterAuthors(); // Re-filter to remove this author
-                            }
-                        });
-                        
-                        // Edit Century button
-                        const editBtn = row.querySelector('.edit-btn');
-                        editBtn.addEventListener('click', function() {
-                            const authorId = this.getAttribute('data-author-id');
-                            const authorName = this.getAttribute('data-author-name');
-                            const century = this.getAttribute('data-century');
-                            
-                            authorIdInput.value = authorId;
-                            authorNameElement.textContent = `Author: ${authorName}`;
-                            centuryInput.value = century;
-                            
-                            modal.style.display = 'block';
-                        });
-                    }
-                    
-                    function updateUserPreference(authorId, prefType, value) {
-                        const xhr = new XMLHttpRequest();
-                        xhr.open('POST', '/update_preference', true);
-                        xhr.setRequestHeader('Content-Type', 'application/x-www-form-urlencoded');
-                        xhr.onreadystatechange = function() {
-                            if (xhr.readyState === 4 && xhr.status === 200) {
-                                console.log('Preference updated successfully');
-                            }
-                        };
-                        xhr.send(`author_id=${authorId}&pref_type=${prefType}&value=${value}`);
-                    }
-                    
-                    function updatePagination(totalPages) {
-                        const pagination = document.querySelector('.pagination');
-                        pagination.innerHTML = '';
-                        
-                        // Previous button
-                        const prevBtn = document.createElement('button');
-                        prevBtn.textContent = '←';
-                        prevBtn.disabled = currentPage === 1;
-                        prevBtn.addEventListener('click', function() {
-                            if (currentPage > 1) {
-                                currentPage--;
-                                renderTable();
-                            }
-                        });
-                        pagination.appendChild(prevBtn);
-                        
-                        // Page numbers
-                        let startPage = Math.max(1, currentPage - 2);
-                        let endPage = Math.min(totalPages, startPage + 4);
-                        
-                        // Adjust start if we're near the end
-                        if (endPage - startPage < 4) {
-                            startPage = Math.max(1, endPage - 4);
-                        }
-                        
-                        for (let i = startPage; i <= endPage; i++) {
-                            const pageBtn = document.createElement('button');
-                            pageBtn.textContent = i;
-                            pageBtn.classList.toggle('active', i === currentPage);
-                            pageBtn.addEventListener('click', function() {
-                                currentPage = i;
-                                renderTable();
-                            });
-                            pagination.appendChild(pageBtn);
-                        }
-                        
-                        // Next button
-                        const nextBtn = document.createElement('button');
-                        nextBtn.textContent = '→';
-                        nextBtn.disabled = currentPage === totalPages;
-                        nextBtn.addEventListener('click', function() {
-                            if (currentPage < totalPages) {
-                                currentPage++;
-                                renderTable();
-                            }
-                        });
-                        pagination.appendChild(nextBtn);
-                    }
-                    
-                    // Setup event listeners for sorting
-                    document.querySelectorAll('th[data-sort]').forEach(th => {
-                        th.addEventListener('click', function() {
-                            const column = this.getAttribute('data-sort');
-                            let direction = 'asc';
-                            
-                            // If already sorted by this column, toggle direction
-                            if (currentSort.column === column) {
-                                direction = currentSort.direction === 'asc' ? 'desc' : 'asc';
-                            }
-                            
-                            // Remove sort indicators from all headers
-                            document.querySelectorAll('th[data-sort]').forEach(header => {
-                                header.textContent = header.textContent.replace(' ↑', '').replace(' ↓', '');
-                            });
-                            
-                            // Add indicator to current header
-                            this.textContent += direction === 'asc' ? ' ↑' : ' ↓';
-                            
-                            currentSort.column = column;
-                            currentSort.direction = direction;
-                            
-                            sortAuthors(column, direction);
-                        });
-                    });
-                    
-                    // Setup search input
-                    document.getElementById('search-btn').addEventListener('click', filterAuthors);
-                    document.getElementById('search-input').addEventListener('keyup', function(e) {
-                        if (e.key === 'Enter') {
-                            filterAuthors();
-                        }
-                    });
-                    
-                    // Setup status filter buttons
-                    document.querySelectorAll('.status-filters button').forEach(button => {
-                        button.addEventListener('click', function() {
-                            activeStatusFilter = this.getAttribute('data-filter');
-                            
-                            // Update active button
-                            document.querySelectorAll('.status-filters button').forEach(btn => {
-                                btn.classList.remove('active');
-                            });
-                            this.classList.add('active');
-                            
-                            filterAuthors();
-                        });
-                    });
-                    
-                    // Setup century filter buttons
-                    document.querySelectorAll('.century-filters button').forEach(button => {
-                        button.addEventListener('click', function() {
-                            activeCenturyFilter = this.getAttribute('data-filter');
-                            
-                            // Update active button
-                            document.querySelectorAll('.century-filters button').forEach(btn => {
-                                btn.classList.remove('active');
-                            });
-                            this.classList.add('active');
-                            
-                            filterAuthors();
-                        });
-                    });
-                    
-                    // Initial sort and render
-                    sortAuthors('author_name', 'asc');
-                });
-                </script>
-            </div>
-        </body>
-        </html>
-        """
-        return add_shutdown_button(html)
-    
-    def get_authors_data(self):
-        """Get data about authors and their works"""
-        authors = []
-        data_dir = 'data'
-        
-        if not os.path.exists(data_dir):
-            return []
-        
-        for item in os.listdir(data_dir):
-            author_path = os.path.join(data_dir, item)
-            if os.path.isdir(author_path) and (item.startswith('tlg') or item.startswith('heb')):
-                # Count works
-                work_count = 0
-                author_name = item
-                
-                # Get author name from the JSON if available, otherwise try to find it in __cts__.xml
-                if item in AUTHOR_CENTURIES and "name" in AUTHOR_CENTURIES[item]:
-                    author_name = AUTHOR_CENTURIES[item]["name"]
-                else:
-                    # Look for author name in __cts__.xml
-                    author_cts_path = os.path.join(author_path, '__cts__.xml')
-                    if os.path.exists(author_cts_path):
-                        try:
-                            with open(author_cts_path, 'r', encoding='utf-8') as f:
-                                content = f.read()
-                                import re
-                                name_match = re.search(r'<ti:groupname[^>]*>(.*?)</ti:groupname>', content)
-                                if name_match:
-                                    author_name = name_match.group(1).strip()
-                        except Exception as e:
-                            print(f"Error reading {author_cts_path}: {e}")
-                
-                # Count works (subdirectories)
-                for work_item in os.listdir(author_path):
-                    work_path = os.path.join(author_path, work_item)
-                    if os.path.isdir(work_path):
-                        work_count += 1
-                
-                # Get century from the JSON structure
-                century = "Unknown"
-                if item in AUTHOR_CENTURIES:
-                    if isinstance(AUTHOR_CENTURIES[item], dict) and "century" in AUTHOR_CENTURIES[item]:
-                        century = AUTHOR_CENTURIES[item]["century"]
-                    elif isinstance(AUTHOR_CENTURIES[item], str):
-                        # Support legacy format
-                        century = AUTHOR_CENTURIES[item]
-                
-                authors.append({
-                    'id': item,
-                    'name': author_name,
-                    'century': century,
-                    'works': work_count
-                })
-        
-        # Sort by name
-        authors.sort(key=lambda x: x['name'])
-        
-        return authors
-
-def add_shutdown_button(html):
-    """Add a shutdown button to the HTML pages"""
-    shutdown_button = """
-    <div style="position: fixed; bottom: 20px; right: 20px; z-index: 1000;">
-        <a href="/shutdown" style="display: inline-block; padding: 10px 15px; background-color: #f44336; color: white; text-decoration: none; border-radius: 4px; font-family: Arial, sans-serif; font-size: 14px; box-shadow: 0 2px 5px rgba(0,0,0,0.2);">
-            Shutdown Server
-        </a>
-    </div>
-    """
-    # Insert before the closing body tag
-    if "</body>" in html:
-        return html.replace("</body>", f"{shutdown_button}</body>")
-    else:
-        return html + shutdown_button
-
-def run_server():
-    """Run the HTTP server"""
-    global server_instance, PORT
-    
-    # Find an available port
-    if is_port_in_use(PORT):
-        PORT = find_available_port(PORT)
-    
-    # Create and start the server
-    handler = CustomHTTPRequestHandler
-    # Enable socket reuse to avoid "address already in use" errors
-    socketserver.TCPServer.allow_reuse_address = True
-    server_instance = socketserver.TCPServer(("", PORT), handler)
-    
-    print(f"Server running at http://localhost:{PORT}/")
-    
-    # Open the browser
-    webbrowser.open(f"http://localhost:{PORT}/")
-    
-    try:
-        # Run the server until interrupted
-        server_instance.serve_forever()
-    except KeyboardInterrupt:
-        print("Server stopped by user via keyboard interrupt")
-        if server_instance:
-            server_instance.socket.close()
-            server_instance.server_close()
-            server_instance.shutdown()
-            server_instance = None
-        print("Server closed")
-    except Exception as e:
         print(f"Server error: {str(e)}")
         if server_instance:
             server_instance.socket.close()
             server_instance.server_close()
             server_instance.shutdown()
             server_instance = None
+
+    def serve_static_file(self, path):
+        """Serve static files"""
+        try:
+            file_path = path[1:]  # Remove leading slash
+            content_type = self.get_content_type(file_path)
+
+            with open(file_path, 'rb') as f:
+                content = f.read()
+
+            self.send_response(200)
+            self.send_header('Content-type', content_type)
+            self.send_header('Content-Length', len(content))
+            self.end_headers()
+            self.wfile.write(content)
+
+        except FileNotFoundError:
+            self.send_error(404, "File not found")
+        except Exception as e:
+            self.send_error(500, f"Error serving file: {str(e)}")
+
+    def get_content_type(self, file_path):
+        """Get content type based on file extension"""
+        ext = os.path.splitext(file_path)[1].lower()
+        content_types = {
+            '.css': 'text/css',
+            '.js': 'application/javascript',
+            '.png': 'image/png',
+            '.jpg': 'image/jpeg',
+            '.jpeg': 'image/jpeg',
+            '.gif': 'image/gif',
+            '.svg': 'image/svg+xml',
+        }
+        return content_types.get(ext, 'application/octet-stream')
+
+    def send_html_response(self, html):
+        """Send HTML response"""
+        self.send_response(200)
+        self.send_header('Content-type', 'text/html')
+        self.end_headers()
+        self.wfile.write(html.encode())
+
+    def get_authors_table_page(self):
+        """Generate the authors table page"""
+        # Load user preferences
+        try:
+            with open('user_preferences.json', 'r') as f:
+                user_prefs = json.load(f)
+        except (FileNotFoundError, json.JSONDecodeError):
+            user_prefs = {'favorites': [], 'archived': [], 'deleted': []}
+
+        # Load author data
+        try:
+            with open('authors_data.json', 'r') as f:
+                authors_data = json.load(f)
+        except (FileNotFoundError, json.JSONDecodeError):
+            authors_data = {}
+
+        # HTML template with JavaScript and CSS includes
+        html = f'''
+        <!DOCTYPE html>
+        <html>
+        <head>
+            <title>Authors Table</title>
+            <link rel="stylesheet" href="/static/css/styles.css">
+            <script id="user-prefs" type="application/json">
+                {json.dumps(user_prefs)}
+            </script>
+            <script src="/static/js/authors_table.js"></script>
+        </head>
+        <body>
+            <div class="container">
+                <h1>Authors Table</h1>
+                
+                <div class="filters">
+                    <div class="search-box">
+                        <input type="text" id="search-input" placeholder="Search authors...">
+                        <button id="search-btn">Search</button>
+                    </div>
+                    
+                    <div class="status-filters">
+                        <button class="active" data-filter="all">All</button>
+                        <button data-filter="favorites">Favorites</button>
+                        <button data-filter="archived">Archived</button>
+                        <button data-filter="normal">Normal</button>
+                    </div>
+                    
+                    <div class="century-filters">
+                        <button class="active" data-filter="all">All Centuries</button>
+                        <button data-filter="BCE">BCE</button>
+                        <button data-filter="CE-1-3">CE 1-3</button>
+                        <button data-filter="CE-4-6">CE 4-6</button>
+                    </div>
+                </div>
+
+                <table id="authors-table" class="authors-table">
+                    <thead>
+                        <tr>
+                            <th data-sort="author_name">Author Name</th>
+                            <th data-sort="century">Century</th>
+                            <th data-sort="works">Works</th>
+                            <th data-sort="allegiance">Allegiance</th>
+                            <th>Actions</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                '''
+
+        # Add table rows
+        for author_id, author_data in authors_data.items():
+            if author_id in (user_prefs.get('deleted', []) or []):
+                continue
+
+            author_name = author_data.get('name', '')
+            century = author_data.get('century', '')
+            allegiance = author_data.get('allegiance', '')
+            works_count = len(self.get_author_works(author_id))
+
+            # Add icons for favorite/archived status
+            name_prefix = ''
+            if author_id in (user_prefs.get('favorites', []) or []):
+                name_prefix += '<span class="favorites-star">★</span> '
+            if author_id in (user_prefs.get('archived', []) or []):
+                name_prefix += '<span class="archived-icon">📦</span> '
+
+            html += f'''
+                        <tr data-id="{author_id}">
+                            <td data-column="author_name">{name_prefix}{author_name}</td>
+                            <td data-column="century">{century}</td>
+                            <td data-column="works">{works_count}</td>
+                            <td data-column="allegiance">{allegiance}</td>
+                            <td class="actions">
+                                <button class="favorite-btn" data-author-id="{author_id}">
+                                    {'Unfavorite' if author_id in (user_prefs.get('favorites', []) or []) else 'Favorite'}
+                                </button>
+                                <button class="archive-btn" data-author-id="{author_id}">
+                                    {'Unarchive' if author_id in (user_prefs.get('archived', []) or []) else 'Archive'}
+                                </button>
+                                <button class="delete-btn" data-author-id="{author_id}">Delete</button>
+                                <button class="edit-btn" 
+                                        data-author-id="{author_id}"
+                                        data-author-name="{author_name}"
+                                        data-century="{century}">
+                                    Edit Century
+                                </button>
+                            </td>
+                        </tr>
+                    '''
+
+        # Close table and add modal
+        html += '''
+                    </tbody>
+                </table>
+                
+                <div class="pagination"></div>
+
+                <div id="century-modal" class="modal">
+                    <div class="modal-content">
+                        <span class="close-modal">&times;</span>
+                        <h2>Edit Century</h2>
+                        <p id="edit-author-name"></p>
+                        <input type="hidden" id="edit-author-id">
+                        <input type="text" id="edit-century" placeholder="Enter century (e.g., 2 BCE, 1 CE)">
+                        <div class="modal-buttons">
+                            <button class="cancel-btn">Cancel</button>
+                            <button class="save-btn">Save</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </body>
+        </html>
+        '''
+
+        return html
+
+    def get_author_works(self, author_id):
+        """Get list of works for an author"""
+        works = []
+        author_dir = os.path.join('data', author_id)
+        
+        if os.path.exists(author_dir):
+            for item in os.listdir(author_dir):
+                work_path = os.path.join(author_dir, item)
+                if os.path.isdir(work_path) and not item.startswith('__'):
+                    works.append(item)
+        
+        return works
 
 if __name__ == "__main__":
     try:
