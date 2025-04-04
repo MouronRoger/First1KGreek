@@ -1,93 +1,111 @@
 [![DOI](https://zenodo.org/badge/56595003.svg)](https://zenodo.org/badge/latestdoi/56595003)
-[![Hook Coverage](https://ci.perseids.org/api/hook/v2.0/badges/OpenGreekAndLatin/First1KGreek/coverage.svg)](https://ci.perseids.org/repo/OpenGreekAndLatin/First1KGreek)
-[![Hook Texts](https://ci.perseids.org/api/hook/v2.0/badges/OpenGreekAndLatin/First1KGreek/texts.svg)](https://ci.perseids.org/repo/OpenGreekAndLatin/First1KGreek)
-[![Hook Metadata](https://ci.perseids.org/api/hook/v2.0/badges/OpenGreekAndLatin/First1KGreek/metadata.svg)](https://ci.perseids.org/repo/OpenGreekAndLatin/First1KGreek)
-[![Total words](https://ci.perseids.org/api/hook/v2.0/badges/OpenGreekAndLatin/First1KGreek/words.svg)](https://ci.perseids.org/repo/OpenGreekAndLatin/First1KGreek)
-[![Greek Words](https://ci.perseids.org/api/hook/v2.0/badges/OpenGreekAndLatin/First1KGreek/words.svg?lang=grc)](https://ci.perseids.org/repo/OpenGreekAndLatin/First1KGreek)
-[![Latin Words](https://ci.perseids.org/api/hook/v2.0/badges/OpenGreekAndLatin/First1KGreek/words.svg?lang=lat)](https://ci.perseids.org/repo/OpenGreekAndLatin/First1KGreek)
-[![English Words](https://ci.perseids.org/api/hook/v2.0/badges/OpenGreekAndLatin/First1KGreek/words.svg?lang=eng)](https://ci.perseids.org/repo/OpenGreekAndLatin/First1KGreek)
-[![German Words](https://ci.perseids.org/api/hook/v2.0/badges/OpenGreekAndLatin/First1KGreek/words.svg?lang=deu)](https://ci.perseids.org/repo/OpenGreekAndLatin/First1KGreek)
 
 # First1KGreek Browser
 
-A tool for browsing Greek texts from the First Thousand Years Project.
+A specialized tool for browsing, searching, and analyzing ancient Greek texts combining data from both the First Thousand Years Project and Canonical-GreekLit repositories. This hybrid collection provides a comprehensive corpus of ancient Greek texts through a lightweight, standalone web interface, making classical texts accessible without requiring specialized software or cloud dependencies.
 
-## Features
+## Overview
 
-- Browse texts by author or editor
-- Search through the corpus
-- Import texts from Scaife/Perseus
-- Dark theme for comfortable reading
-- XML and reader views
-- Support for fragments and editions
+The First1KGreek Browser is designed for classical scholars, researchers, and students studying ancient Greek texts. This hybrid version combines:
+
+- Texts from the First Thousand Years Project (First1K)
+- Works from the Canonical-GreekLit repository
+- Integrated metadata and cross-references between collections
+
+The browser provides:
+- Local web-based access to a comprehensive corpus of ancient Greek texts
+- Simple, intuitive navigation through authors and works
+- XML and reader views with proper Greek text rendering
+- Dark theme for comfortable extended reading sessions
+- Import capabilities for texts from Scaife/Perseus
+- Unified metadata management for authors, editors, and works across both collections
+
+## Requirements
+
+- Python 3.6 or higher
+- No external dependencies (uses only Python standard library)
+- Sufficient disk space for text corpus (both First1K and Canonical-GreekLit collections)
 
 ## Installation
 
 1. Clone the repository:
 ```bash
-git clone https://github.com/yourusername/First1KGreek.git
+git clone https://github.com/OpenGreekAndLatin/First1KGreek.git
 cd First1KGreek
 ```
 
-2. Create and activate a virtual environment (optional but recommended):
-```bash
-python -m venv venv
-source venv/bin/activate  # On Unix/macOS
-# or
-venv\Scripts\activate  # On Windows
-```
-
-3. Install the package:
-```bash
-pip install -e .
-```
+2. No additional installation steps required - the application runs using Python's standard library.
 
 ## Usage
 
-Run the browser:
+1. Start the server from the project directory:
 ```bash
-first1k
+python browse_texts_fixed.py
 ```
 
-This will start the server and open your default web browser to the application.
+2. Open your web browser and navigate to:
+```
+http://localhost:8000
+```
+
+The interface provides:
+- Author/Editor browsing across both collections
+- Full-text search capabilities in the combined corpus
+- XML source viewing
+- Reader mode with customizable display
+- Text import functionality from Scaife/Perseus
+- Integrated navigation between First1K and Canonical-GreekLit texts
 
 ## Project Structure
 
 ```
-src/first1k/
-├── __init__.py
-├── __main__.py
-├── config.py
-├── server/
-│   ├── __init__.py
-│   └── server.py
-├── handlers/
-│   └── __init__.py
-├── xml_utils/
-│   ├── __init__.py
-│   └── processor.py
-├── import_export/
-│   ├── __init__.py
-│   └── scaife.py
-├── editor/
-│   ├── __init__.py
-│   └── manager.py
-├── search/
-│   ├── __init__.py
-│   └── searcher.py
-└── utils/
-    ├── __init__.py
-    └── network.py
+First1KGreek/
+├── browse_texts_fixed.py     # Main application server
+├── src/                      # Source code directory
+├── data/                     # Combined text corpus storage
+├── raw_files/               # Original source files from both collections
+├── greek-texts-index/       # Unified text indexing information
+└── requirements.txt         # (Empty - no external dependencies)
 ```
+
+## Features
+
+### Core Functionality
+- Browse texts by author or editor across both collections
+- Search through the entire combined corpus
+- View texts in XML format or reader mode
+- Import new texts from Scaife/Perseus
+- Dark theme for comfortable reading
+- Unified metadata management and display
+- Cross-references between First1K and Canonical-GreekLit texts
+
+### Text Processing
+- TEI XML parsing and rendering
+- Proper Greek text display
+- Metadata extraction and management
+- Import workflow with validation
+- Unified handling of both collections' XML formats
 
 ## Contributing
 
+This is an open-source project maintained by the Open Greek and Latin Project. Contributions are welcome:
+
 1. Fork the repository
-2. Create your feature branch (`git checkout -b feature/amazing-feature`)
-3. Commit your changes (`git commit -m 'Add some amazing feature'`)
-4. Push to the branch (`git push origin feature/amazing-feature`)
-5. Open a Pull Request
+2. Create your feature branch
+3. Commit your changes
+4. Push to your branch
+5. Create a Pull Request
 
 ## License
 
-This project is licensed under the MIT License - see the LICENSE file for details.
+This project is licensed under the MIT License - see the [license.md](license.md) file for details.
+
+## Credits
+
+See [CREDITS.md](CREDITS.md) for acknowledgments and contributors.
+
+## Documentation
+
+- For detailed usage instructions, see [USAGE.md](USAGE.md)
+- For project comparison information, see [COMPARISON.md](COMPARISON.md)
+- For user help documentation, see [First1K_User_Help.txt](First1K_User_Help.txt)
