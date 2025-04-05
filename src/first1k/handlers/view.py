@@ -1,35 +1,36 @@
 """View handlers for First1KGreek Browser."""
 
-import os
 import re
 from xml.sax.saxutils import escape
+
 from ..config import MAIN_STYLESHEET
+
 
 def render_xml_view_page(file_path):
     """Generate XML view page."""
     try:
-        with open(file_path, 'r', encoding='utf-8') as f:
+        with open(file_path, "r", encoding="utf-8") as f:
             xml_content = f.read()
-            
+
         # Extract metadata
         author_name = "Unknown"
-        author_matches = re.findall(r'<author.*?>(.*?)</author>', xml_content)
+        author_matches = re.findall(r"<author.*?>(.*?)</author>", xml_content)
         if author_matches and len(author_matches[0].strip()) > 0:
             author_name = author_matches[0]
-            
+
         work_title = "Unknown"
-        title_matches = re.findall(r'<title.*?>(.*?)</title>', xml_content)
+        title_matches = re.findall(r"<title.*?>(.*?)</title>", xml_content)
         if title_matches:
             work_title = title_matches[0]
-            
+
         # Escape XML for display
         xml_display = escape(xml_content)
-        
+
         # Add syntax highlighting
-        xml_display = re.sub(r'(&lt;[^&]*&gt;)', r'<span class="tag">\1</span>', xml_display)
-        xml_display = re.sub(r'(&lt;/[^&]*&gt;)', r'<span class="tag">\1</span>', xml_display)
+        xml_display = re.sub(r"(&lt;[^&]*&gt;)", r'<span class="tag">\1</span>', xml_display)
+        xml_display = re.sub(r"(&lt;/[^&]*&gt;)", r'<span class="tag">\1</span>', xml_display)
         xml_display = re.sub(r'("[^"]*")', r'<span class="string">\1</span>', xml_display)
-        
+
         html = f"""<!DOCTYPE html>
 <html>
 <head>
@@ -103,7 +104,7 @@ def render_xml_view_page(file_path):
 </body>
 </html>"""
         return html
-        
+
     except Exception as e:
         return f"""<!DOCTYPE html>
 <html>
@@ -122,29 +123,30 @@ def render_xml_view_page(file_path):
 </body>
 </html>"""
 
+
 def render_reader_view_page(file_path):
     """Generate reader view page."""
     try:
-        with open(file_path, 'r', encoding='utf-8') as f:
+        with open(file_path, "r", encoding="utf-8") as f:
             xml_content = f.read()
-            
+
         # Extract metadata
         author_name = "Unknown"
-        author_matches = re.findall(r'<author.*?>(.*?)</author>', xml_content)
+        author_matches = re.findall(r"<author.*?>(.*?)</author>", xml_content)
         if author_matches and len(author_matches[0].strip()) > 0:
             author_name = author_matches[0]
-            
+
         work_title = "Unknown"
-        title_matches = re.findall(r'<title.*?>(.*?)</title>', xml_content)
+        title_matches = re.findall(r"<title.*?>(.*?)</title>", xml_content)
         if title_matches:
             work_title = title_matches[0]
-            
+
         # Extract text content
         # Remove XML tags but preserve line breaks
-        text_content = re.sub(r'<[^>]+>', '', xml_content)
-        text_content = re.sub(r'\n\s*\n', '\n\n', text_content)
+        text_content = re.sub(r"<[^>]+>", "", xml_content)
+        text_content = re.sub(r"\n\s*\n", "\n\n", text_content)
         text_content = text_content.strip()
-        
+
         html = f"""<!DOCTYPE html>
 <html>
 <head>
@@ -259,7 +261,7 @@ def render_reader_view_page(file_path):
 </body>
 </html>"""
         return html
-        
+
     except Exception as e:
         return f"""<!DOCTYPE html>
 <html>
@@ -276,4 +278,4 @@ def render_reader_view_page(file_path):
         <a href="/" class="button">Back to Home</a>
     </div>
 </body>
-</html>""" 
+</html>"""

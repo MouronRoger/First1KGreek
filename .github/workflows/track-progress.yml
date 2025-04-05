@@ -1,0 +1,144 @@
+name: Track Linting Progress
+
+on:
+  schedule:
+    # Run every Sunday at 2:00 AM
+    - cron: '0 2 * * 0'
+  workflow_dispatch:
+    # Allow manual triggering
+
+jobs:
+  track-progress:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+      
+      - name: Set up Python
+        uses: actions/setup-python@v4
+        with:
+          python-version: '3.10'
+      
+      - name: Install dependencies
+        run: |
+          python -m pip install --upgrade pip
+          pip install -r tools/linting/requirements-lint.txt
+          pip install matplotlib pandas
+      
+      - name: Run progress tracking
+        run: |
+          python tools/linting/track_progress.py
+          
+      - name: Store historical metrics
+        run: |
+          # Create a Python script to update and store historical metrics
+          cat > tools/linting/update_metrics_history.py << 'EOF'
+          #!/usr/bin/env python3
+          """
+          Update and store historical linting metrics for the First1KGreek project.
+          
+          This script reads the current progress report, appends it to the historical data,
+          and generates visualizations to track progress over time.
+          """
+          
+          import os
+          import json
+          import datetime
+          import pandas as pd
+          import matplotlib.pyplot as plt
+          from pathlib import Path
+          
+          # Ensure directory exists
+          os.makedirs('lint_reports/history', exist_ok=True)
+          
+          # Load current progress data
+          with open('lint_reports/progress.json', 'r') as f:
+              current = json.load(f)
+          
+          # Format date as YYYY-MM-DD
+          today = datetime.datetime.now().strftime('%Y-%m-%d')
+          
+          # Create a historical record with date
+          historical_record = {
+              'date': today,
+              'black_percentage': current['black_percentage'],
+              'flake8_percentage': current['flake8_percentage'],
+              'isort_percentage': current['isort_percentage'],
+              'docstring_percentage': current['docstring_percentage'],
+              'full_percentage': current['full_percentage']
+          }
+          
+          # Check if history file exists
+          history_file = 'lint_reports/history/metrics_history.json'
+          if os.path.exists(history_file):
+              with open(history_file, 'r') as f:
+                  history = json.load(f)
+              
+              # Append new record if we don't already have one for today
+              dates = [record['date'] for record in history]
+              if today not in dates:
+                  history.append(historical_record)
+          else:
+              # Create new history with current record
+              history = [historical_record]
+          
+          # Save updated history
+          with open(history_file, 'w') as f:
+              json.dump(history, f, indent=2)
+          
+          print(f"Updated metrics history with data from {today}")
+          
+          # Generate visualization
+          df = pd.DataFrame(history)
+          df['date'] = pd.to_datetime(df['date'])
+          df = df.sort_values('date')
+          
+          plt.figure(figsize=(12, 8))
+          plt.plot(df['date'], df['black_percentage'], marker='o', label='Black')
+          plt.plot(df['date'], df['flake8_percentage'], marker='s', label='Flake8')
+          plt.plot(df['date'], df['isort_percentage'], marker='^', label='isort')
+          plt.plot(df['date'], df['docstring_percentage'], marker='d', label='Docstrings')
+          plt.plot(df['date'], df['full_percentage'], marker='*', linestyle='--', linewidth=2, label='Overall Compliance')
+          
+          plt.axhline(y=80, color='r', linestyle='--', alpha=0.7, label='Target (80%)')
+          
+          plt.title('First1KGreek Linting Compliance Over Time')
+          plt.xlabel('Date')
+          plt.ylabel('Compliance Percentage')
+          plt.ylim(0, 105)
+          plt.grid(True, alpha=0.3)
+          plt.legend()
+          
+          # Add annotations for current values
+          latest = df.iloc[-1]
+          plt.annotate(f"{latest['full_percentage']:.1f}%", 
+                      (latest['date'], latest['full_percentage']),
+                      textcoords="offset points", 
+                      xytext=(0,10), 
+                      ha='center')
+          
+          plt.tight_layout()
+          plt.savefig('lint_reports/history/compliance_trend.png')
+          print("Generated compliance trend visualization")
+          EOF
+          
+          # Make the script executable
+          chmod +x tools/linting/update_metrics_history.py
+          
+          # Run the script
+          python tools/linting/update_metrics_history.py
+      
+      - name: Commit updated reports
+        run: |
+          git config --local user.email "github-actions[bot]@users.noreply.github.com"
+          git config --local user.name "github-actions[bot]"
+          git add lint_reports/progress.json
+          git add lint_reports/history/
+          git add tools/linting/update_metrics_history.py
+          
+          # Only commit if there are changes
+          if git diff --staged --quiet; then
+            echo "No changes to commit"
+          else
+            git commit -m "Update linting progress metrics [skip ci]"
+            git push
+          fi 

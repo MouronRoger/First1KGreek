@@ -1,5 +1,12 @@
 [flake8]
 max-line-length = 120
-exclude = .git,__pycache__,venv,backup
-# Start with minimal rules, add more over time
-select = E9,F63,F7,F82 
+exclude = .git,__pycache__,venv,backup,*.bak
+# Expanded rules based on phased approach
+select = E1,E2,E3,E7,E9,F4,F63,F7,F82,W2,W3,W5
+# Specific errors to ignore during transition
+ignore = E203,W503
+# E203: Whitespace before ':' (conflicts with Black)
+# W503: Line break before binary operator (conflicts with Black)
+per-file-ignores =
+    # Allow unused imports in __init__.py files
+    */__init__.py:F401 

@@ -66,13 +66,20 @@ logger.info("With dark theme and improved editor detection")
 
 # Reader mode stylesheet
 READER_STYLESHEET = """
+:root {
+    --background: #2a2a2a;
+    --foreground: #f2f2f2;
+    --surface: #333;
+    --primary: #4299e1;
+}
+
 body { 
     font-family: 'New Athena Unicode', 'GFS Artemisia', 'Arial Unicode MS', 'Lucida Sans Unicode', 'Cardo', serif; 
     margin: 0; 
     padding: 0;
     line-height: 1.8; 
-    background-color: #2a2a2a; 
-    color: #f2f2f2; 
+    background-color: var(--background); 
+    color: var(--foreground); 
 }
 h1, h2, h3 { 
     color: #fff;
@@ -80,13 +87,13 @@ h1, h2, h3 {
     margin-top: 1.5em;
     margin-bottom: 0.5em;
 }
-a { color: #4299e1; text-decoration: none; }
+a { color: var(--primary); text-decoration: none; }
 a:hover { text-decoration: underline; }
 .container { 
     max-width: 800px; 
     margin: 0 auto; 
     padding: 20px;
-    background-color: #333;
+    background-color: var(--surface);
     box-shadow: 0 0 10px rgba(0,0,0,0.3);
     min-height: 100vh;
 }
@@ -94,26 +101,42 @@ a:hover { text-decoration: underline; }
 
 # Main stylesheet
 MAIN_STYLESHEET = """
+:root {
+    --background: #1a1a1a;
+    --foreground: #ffffff;
+    --primary: #4299e1;
+    --accent: #805ad5;
+    --success: #48bb78;
+    --warning: #ed8936;
+    --error: #f56565;
+    --surface: #2d2d2d;
+    --surface-light: #333;
+    --surface-dark: #222;
+    --text-light: #f2f2f2;
+    --text-dim: #a0aec0;
+    --border: #444;
+}
+
 body { 
     font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif; 
     margin: 0; 
     padding: 0;
     line-height: 1.6; 
-    background-color: #1a1a1a; 
-    color: #ffffff; 
+    background-color: var(--background); 
+    color: var(--foreground); 
 }
 h1, h2, h3 { 
-    color: #4299e1;
+    color: var(--primary);
     margin-top: 1.5em;
     margin-bottom: 0.5em;
 }
-a { color: #4299e1; text-decoration: none; }
+a { color: var(--primary); text-decoration: none; }
 a:hover { text-decoration: underline; }
 .container { 
     max-width: 1000px; 
     margin: 0 auto; 
     padding: 20px;
-    background-color: #2d2d2d;
+    background-color: var(--surface);
     box-shadow: 0 0 10px rgba(0,0,0,0.5);
     min-height: 100vh;
 }
@@ -125,7 +148,7 @@ AUTHORS_TABLE_STYLESHEET = """
     width: 100%;
     border-collapse: collapse;
     margin: 20px 0;
-    background-color: #333;
+    background-color: var(--surface-light);
     border-radius: 5px;
     overflow: hidden;
     table-layout: fixed;
@@ -146,7 +169,7 @@ AUTHORS_TABLE_STYLESHEET = """
 
 .authors-table td {
     padding: 10px 15px;
-    border-bottom: 1px solid #444;
+    border-bottom: 1px solid var(--border);
     white-space: nowrap;
     overflow: hidden;
     text-overflow: ellipsis;
@@ -179,7 +202,7 @@ AUTHORS_TABLE_STYLESHEET = """
 }
 
 .authors-table tr:hover {
-    background-color: #3a3a3a;
+    background-color: var(--surface-dark);
 }
 
 .action-btn {
@@ -192,47 +215,51 @@ AUTHORS_TABLE_STYLESHEET = """
 }
 
 .favorite-btn {
-    background-color: #f6ad55;
+    background-color: var(--warning);
 }
 
 .favorite-btn:hover {
-    background-color: #ed8936;
+    background-color: var(--warning);
+    opacity: 0.9;
 }
 
 .favorite-btn.active {
-    background-color: #ed8936;
+    background-color: var(--warning);
 }
 
 .archive-btn {
-    background-color: #68d391;
+    background-color: var(--success);
 }
 
 .archive-btn:hover {
-    background-color: #48bb78;
+    background-color: var(--success);
+    opacity: 0.9;
 }
 
 .archive-btn.active {
-    background-color: #48bb78;
+    background-color: var(--success);
 }
 
 .delete-btn {
-    background-color: #fc8181;
+    background-color: var(--error);
 }
 
 .delete-btn:hover {
-    background-color: #f56565;
+    background-color: var(--error);
+    opacity: 0.9;
 }
 
 .delete-btn.active {
-    background-color: #f56565;
+    background-color: var(--error);
 }
 
 .edit-btn {
-    background-color: #4299e1;
+    background-color: var(--primary);
 }
 
 .edit-btn:hover {
-    background-color: #3182ce;
+    background-color: var(--primary);
+    opacity: 0.9;
 }
 
 .status-filters, .century-filters {
@@ -242,7 +269,7 @@ AUTHORS_TABLE_STYLESHEET = """
 .status-filters button, .century-filters button {
     padding: 8px 15px;
     margin-right: 10px;
-    background-color: #2d3748;
+    background-color: var(--surface-dark);
     color: white;
     border: none;
     border-radius: 4px;
@@ -250,11 +277,11 @@ AUTHORS_TABLE_STYLESHEET = """
 }
 
 .status-filters button:hover, .century-filters button:hover {
-    background-color: #4a5568;
+    background-color: var(--surface);
 }
 
 .status-filters button.active, .century-filters button.active {
-    background-color: #3182ce;
+    background-color: var(--primary);
 }
 
 .pagination {
@@ -265,7 +292,7 @@ AUTHORS_TABLE_STYLESHEET = """
 .pagination button {
     padding: 8px 15px;
     margin: 0 5px;
-    background-color: #2d3748;
+    background-color: var(--surface-dark);
     color: white;
     border: none;
     border-radius: 4px;
@@ -273,32 +300,32 @@ AUTHORS_TABLE_STYLESHEET = """
 }
 
 .pagination button:hover {
-    background-color: #4a5568;
+    background-color: var(--surface);
 }
 
 .pagination button.active {
-    background-color: #3182ce;
+    background-color: var(--primary);
 }
 
 .search-filter {
     margin: 20px 0;
     padding: 20px;
-    background-color: #2a4365;
+    background-color: var(--surface-dark);
     border-radius: 5px;
 }
 
 .search-filter input[type="text"] {
     padding: 10px;
     width: 70%;
-    border: 1px solid #444;
-    background-color: #333;
+    border: 1px solid var(--border);
+    background-color: var(--surface-light);
     color: white;
     border-radius: 4px;
 }
 
 .search-filter button {
     padding: 10px 20px;
-    background-color: #3182ce;
+    background-color: var(--primary);
     color: white;
     border: none;
     cursor: pointer;
@@ -307,17 +334,18 @@ AUTHORS_TABLE_STYLESHEET = """
 }
 
 .search-filter button:hover {
-    background-color: #2c5282;
+    background-color: var(--primary);
+    opacity: 0.9;
 }
 
 .favorites-star {
-    color: #f6ad55;
+    color: var(--warning);
     font-size: 1.2em;
     margin-right: 5px;
 }
 
 .archived-icon {
-    color: #68d391;
+    color: var(--success);
     font-size: 1.2em;
     margin-right: 5px;
 }
@@ -335,7 +363,7 @@ AUTHORS_TABLE_STYLESHEET = """
 }
 
 .modal-content {
-    background-color: #2d2d2d;
+    background-color: var(--surface);
     margin: 15% auto;
     padding: 20px;
     border-radius: 5px;
@@ -347,14 +375,14 @@ AUTHORS_TABLE_STYLESHEET = """
     display: flex;
     justify-content: space-between;
     align-items: center;
-    border-bottom: 1px solid #444;
+    border-bottom: 1px solid var(--border);
     padding-bottom: 10px;
     margin-bottom: 20px;
 }
 
 .modal-header h2 {
     margin: 0;
-    color: #4299e1;
+    color: var(--primary);
 }
 
 .close-modal {
@@ -375,15 +403,15 @@ AUTHORS_TABLE_STYLESHEET = """
 .modal-body label {
     display: block;
     margin-bottom: 5px;
-    color: #eee;
+    color: var(--text-light);
 }
 
 .modal-body input {
     width: 100%;
     padding: 8px;
     margin-bottom: 15px;
-    border: 1px solid #444;
-    background-color: #333;
+    border: 1px solid var(--border);
+    background-color: var(--surface-light);
     color: white;
     border-radius: 4px;
 }
@@ -401,12 +429,13 @@ AUTHORS_TABLE_STYLESHEET = """
 }
 
 .save-btn {
-    background-color: #4299e1;
+    background-color: var(--primary);
     color: white;
 }
 
 .save-btn:hover {
-    background-color: #3182ce;
+    background-color: var(--primary);
+    opacity: 0.9;
 }
 
 .cancel-btn {
@@ -421,16 +450,16 @@ AUTHORS_TABLE_STYLESHEET = """
 /* Works tree styles */
 .works-container {
     padding: 0 !important;
-    background-color: #2a2a2a;
+    background-color: var(--surface-dark);
 }
 
 .works-tree {
     padding: 15px;
-    border-top: 1px solid #444;
+    border-top: 1px solid var(--border);
 }
 
 .loading-indicator {
-    color: #999;
+    color: var(--text-dim);
     font-style: italic;
     text-align: center;
     padding: 20px;
@@ -440,14 +469,14 @@ AUTHORS_TABLE_STYLESHEET = """
     padding: 10px;
     margin-bottom: 5px;
     border-radius: 4px;
-    background-color: #333;
+    background-color: var(--surface-light);
     display: flex;
     justify-content: space-between;
     align-items: center;
 }
 
 .work-item:hover {
-    background-color: #444;
+    background-color: var(--surface);
 }
 
 .work-info {
@@ -456,13 +485,13 @@ AUTHORS_TABLE_STYLESHEET = """
 
 .work-title {
     font-weight: bold;
-    color: #4299e1;
+    color: var(--primary);
     margin-bottom: 5px;
 }
 
 .work-meta {
     font-size: 0.9em;
-    color: #999;
+    color: var(--text-dim);
 }
 
 .work-actions {
@@ -471,22 +500,23 @@ AUTHORS_TABLE_STYLESHEET = """
 }
 
 .toggle-works-btn {
-    background-color: #805ad5;
+    background-color: var(--accent);
 }
 
 .toggle-works-btn:hover {
-    background-color: #6b46c1;
+    background-color: var(--accent);
+    opacity: 0.9;
 }
 
 .work-editor {
     font-size: 0.9em;
-    color: #a0aec0;
+    color: var(--text-dim);
     font-style: italic;
     margin-top: 3px;
 }
 
 .error {
-    color: #fc8181;
+    color: var(--error);
     background-color: rgba(252, 129, 129, 0.1);
     padding: 10px;
     border-radius: 4px;
@@ -495,7 +525,7 @@ AUTHORS_TABLE_STYLESHEET = """
 }
 
 .retry-btn {
-    background-color: #4299e1;
+    background-color: var(--primary);
     color: white;
     border: none;
     padding: 5px 10px;
@@ -505,7 +535,8 @@ AUTHORS_TABLE_STYLESHEET = """
 }
 
 .retry-btn:hover {
-    background-color: #3182ce;
+    background-color: var(--primary);
+    opacity: 0.9;
 }
 """
 

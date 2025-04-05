@@ -3,24 +3,9 @@ description:
 globs: 
 alwaysApply: true
 ---
-Start with: "Remembering..."
-Finish with: "Saving memory..."
-
-1. Memory MCP for Coding (@modelcontextprotocol/server-memory)
-CopyUse this memory interface to maintain technical coherence across coding sessions.
-
-At the beginning of coding tasks: did you not listen? Did
-- Start with: "Remembering..."
-- Query the memory store for relevant:
-  • Code architecture decisions
-  • Implementation patterns previously established
-  • API and data structure conventions
-  • Technical debt and refactoring priorities
-- Treat retrieved code memory as evolving context—not rigid specification.
-
-At the end of coding tasks:
-1. Identify key technical entities (functions, classes, data structures).
-2. Define system relationships precisely (e.g., "AuthService → depends-on → TokenValidator").
-3. Record architectural decisions, pattern implementations, or technical refinements.
-4. Finish with: "Saving memory..." followed by a concise summary of significant code developments.
-
+- Start with "Remembering..." and read what you stored in memory before working on a task
+- Reference knowledge as "memory"
+- When the assigned task is done:
+  1. Create/update entities
+  2. Define relationships
+  3. Store observations
