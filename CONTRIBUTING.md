@@ -61,6 +61,24 @@ We provide tools to help with formatting:
    python tools/linting/format_incremental.py your_file.py --dry-run
    ```
 
+3. Format an entire directory at once:
+   ```bash
+   python tools/linting/batch_format_directory.py path/to/directory --dry-run
+   ```
+
+### Pre-commit Hook
+
+We use a pre-commit hook to check for basic code quality issues before commits:
+
+1. Install the pre-commit hook:
+   ```bash
+   ./tools/linting/install_hooks.sh
+   ```
+
+2. The hook will automatically run on each commit and prevent commits with critical issues.
+
+3. If you encounter issues with the pre-commit hook, see the [Troubleshooting Guide](tools/linting/TROUBLESHOOTING.md).
+
 ## Docstring Conventions
 
 We follow the Google style for docstrings:
@@ -90,5 +108,9 @@ def example_function(param1, param2):
 2. Run the test suite to ensure no functionality is broken
 3. Update documentation as necessary
 4. Submit your pull request with a clear description of the changes
+
+## Troubleshooting
+
+If you encounter issues with the linting tools, see our [Troubleshooting Guide](tools/linting/TROUBLESHOOTING.md).
 
 Thank you for following these guidelines! 
