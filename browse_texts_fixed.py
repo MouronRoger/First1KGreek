@@ -737,10 +737,18 @@ class CustomHTTPRequestHandler(http.server.SimpleHTTPRequestHandler):
     def serve_static_file(self, path):
         """Serve static files"""
         try:
+            # Get the script directory to ensure we can locate static files
+            # regardless of where the script is run from
+            script_dir = os.path.dirname(os.path.abspath(__file__))
+            
+            # Remove leading slash and construct full path
             file_path = path[1:]  # Remove leading slash
+            full_path = os.path.join(script_dir, file_path)
+            
+            logger.debug(f"Serving static file from: {full_path}")
             content_type = self.get_content_type(file_path)
 
-            with open(file_path, 'rb') as f:
+            with open(full_path, 'rb') as f:
                 content = f.read()
 
             self.send_response(200)
@@ -750,8 +758,10 @@ class CustomHTTPRequestHandler(http.server.SimpleHTTPRequestHandler):
             self.wfile.write(content)
 
         except FileNotFoundError:
+            logger.error(f"Static file not found: {path}")
             self.send_error(404, "File not found")
         except Exception as e:
+            logger.error(f"Error serving static file ({path}): {str(e)}")
             self.send_error(500, f"Error serving file: {str(e)}")
 
     def get_content_type(self, file_path):

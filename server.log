@@ -1,33 +1,17 @@
-2025-04-05 21:32:48,250 - INFO - Loaded author data with 63 entries
-2025-04-05 21:32:48,250 - INFO - Starting First1KGreek Browser - Fixed Version 1.2.0
-2025-04-05 21:32:48,250 - INFO - With dark theme and improved editor detection
-2025-04-05 21:32:48,251 - INFO - Checking port 8000 availability...
-2025-04-05 21:32:48,252 - DEBUG - Port 8000 is available
-2025-04-05 21:32:48,252 - INFO - Starting server on port 8000...
-2025-04-05 21:32:48,252 - INFO - Server started at http://localhost:8000
-2025-04-05 21:32:55,057 - INFO - GET request for / from ('127.0.0.1', 50708)
-2025-04-05 21:32:55,058 - DEBUG - Serving home page
-2025-04-05 21:32:55,058 - DEBUG - Sending HTML response, length: 1358
-2025-04-05 21:32:55,058 - INFO - 127.0.0.1 - "GET / HTTP/1.1" 200 -
-2025-04-05 21:32:55,058 - DEBUG - Successfully sent 1358 bytes
-2025-04-05 21:32:58,404 - INFO - GET request for / from ('127.0.0.1', 50709)
-2025-04-05 21:32:58,404 - DEBUG - Serving home page
-2025-04-05 21:32:58,404 - DEBUG - Sending HTML response, length: 1358
-2025-04-05 21:32:58,404 - INFO - 127.0.0.1 - "GET / HTTP/1.1" 200 -
-2025-04-05 21:32:58,408 - DEBUG - Successfully sent 1358 bytes
-2025-04-05 21:33:02,175 - INFO - GET request for /authors from ('127.0.0.1', 50725)
-2025-04-05 21:33:02,175 - DEBUG - Serving authors table page
-2025-04-05 21:33:02,186 - DEBUG - Sending HTML response, length: 81369
-2025-04-05 21:33:02,187 - INFO - 127.0.0.1 - "GET /authors HTTP/1.1" 200 -
-2025-04-05 21:33:02,187 - DEBUG - Successfully sent 81369 bytes
-2025-04-05 21:33:02,200 - INFO - GET request for /static/css/styles.css from ('127.0.0.1', 50734)
-2025-04-05 21:33:02,201 - DEBUG - Serving static file: /static/css/styles.css
-2025-04-05 21:33:02,201 - INFO - 127.0.0.1 - "GET /static/css/styles.css HTTP/1.1" 200 -
-2025-04-05 21:33:02,202 - INFO - GET request for /static/js/authors_table.js from ('127.0.0.1', 50735)
-2025-04-05 21:33:02,202 - DEBUG - Serving static file: /static/js/authors_table.js
-2025-04-05 21:33:02,202 - INFO - 127.0.0.1 - "GET /static/js/authors_table.js HTTP/1.1" 200 -
-2025-04-05 21:35:33,213 - INFO - GET request for /editors from ('127.0.0.1', 50851)
-2025-04-05 21:35:33,214 - DEBUG - Serving editors page
-2025-04-05 21:35:33,214 - DEBUG - Sending HTML response, length: 1601
-2025-04-05 21:35:33,214 - INFO - 127.0.0.1 - "GET /editors HTTP/1.1" 200 -
-2025-04-05 21:35:33,215 - DEBUG - Successfully sent 1601 bytes
+2025-04-05 21:47:17,608 - INFO - Loaded author data with 63 entries
+2025-04-05 21:47:17,608 - INFO - Starting First1KGreek Browser - Fixed Version 1.2.0
+2025-04-05 21:47:17,608 - INFO - With dark theme and improved editor detection
+2025-04-05 21:47:17,608 - INFO - Checking port 8000 availability...
+2025-04-05 21:47:17,609 - DEBUG - Port 8000 is available
+2025-04-05 21:47:17,609 - INFO - Starting server on port 8000...
+2025-04-05 21:47:17,609 - INFO - Server started at http://localhost:8000
+2025-04-05 21:47:23,775 - INFO - GET request for / from ('127.0.0.1', 51279)
+2025-04-05 21:47:23,776 - DEBUG - Serving home page
+2025-04-05 21:47:23,776 - DEBUG - Sending HTML response, length: 1358
+2025-04-05 21:47:23,777 - INFO - 127.0.0.1 - "GET / HTTP/1.1" 200 -
+2025-04-05 21:47:23,777 - DEBUG - Successfully sent 1358 bytes
+2025-04-05 21:47:26,327 - INFO - GET request for / from ('127.0.0.1', 51280)
+2025-04-05 21:47:26,327 - DEBUG - Serving home page
+2025-04-05 21:47:26,327 - DEBUG - Sending HTML response, length: 1358
+2025-04-05 21:47:26,327 - INFO - 127.0.0.1 - "GET / HTTP/1.1" 200 -
+2025-04-05 21:47:26,327 - DEBUG - Successfully sent 1358 bytes
