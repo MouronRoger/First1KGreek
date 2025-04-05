@@ -17,7 +17,7 @@ document.addEventListener('DOMContentLoaded', function() {
     
     // Get all authors data from the table
     const table = document.getElementById('authors-table');
-    const rows = Array.from(table.querySelectorAll('tbody tr'));
+    const rows = Array.from(table.querySelectorAll('tbody tr:not(.works-row)'));
     
     // Modal elements
     const modal = document.getElementById('century-modal');
@@ -61,6 +61,207 @@ document.addEventListener('DOMContentLoaded', function() {
             modal.style.display = 'block';
         });
     });
+    
+    // Function to toggle works display
+    function toggleWorks(authorId, button) {
+        const worksRow = document.querySelector(`.works-row[data-author-id="${authorId}"]`);
+        const worksContainer = worksRow.querySelector('.works-tree');
+        
+        if (worksRow.style.display === 'none') {
+            // Show works
+            worksRow.style.display = 'table-row';
+            button.textContent = 'Hide Works';
+            
+            // Load works if not already loaded
+            if (worksContainer.innerHTML === '<div class="loading-indicator">Loading works...</div>') {
+                fetchAuthorWorks(authorId, worksContainer);
+            }
+        } else {
+            // Hide works
+            worksRow.style.display = 'none';
+            button.textContent = 'Show Works';
+        }
+    }
+    
+    // Function to fetch author works
+    function fetchAuthorWorks(authorId, container) {
+        // Show loading indicator with timeout
+        const loadingTimeout = setTimeout(() => {
+            container.innerHTML = '<div class="loading-indicator">Loading works... This may take a moment.</div>';
+        }, 500);
+        
+        fetch(`/api/author_works?author_id=${authorId}`)
+            .then(response => {
+                clearTimeout(loadingTimeout);
+                if (!response.ok) {
+                    throw new Error(`Server returned ${response.status}: ${response.statusText}`);
+                }
+                return response.json();
+            })
+            .then(works => {
+                renderWorks(works, authorId, container);
+            })
+            .catch(error => {
+                clearTimeout(loadingTimeout);
+                console.error('Error loading works:', error);
+                container.innerHTML = `
+                    <div class="error">
+                        Error loading works: ${error.message}
+                        <button class="retry-btn" onclick="fetchAuthorWorks('${authorId}', this.parentElement.parentElement)">
+                            Retry
+                        </button>
+                    </div>`;
+            });
+    }
+    
+    // Function to render works
+    function renderWorks(works, authorId, container) {
+        if (works.length === 0) {
+            container.innerHTML = '<div class="no-works">No works available for this author.</div>';
+            return;
+        }
+        
+        let html = '';
+        
+        works.forEach(work => {
+            // Prepare status icons
+            let statusIcons = '';
+            if (work.favorite) {
+                statusIcons += '<span class="favorites-star">★</span> ';
+            }
+            if (work.archived) {
+                statusIcons += '<span class="archived-icon">📦</span> ';
+            }
+            
+            // Editor information display
+            let editorInfo = '';
+            if (work.editor) {
+                editorInfo = `<div class="work-editor">Editor: ${work.editor}</div>`;
+            }
+            
+            html += `
+                <div class="work-item" data-work-id="${work.id}" data-author-id="${authorId}">
+                    <div class="work-info">
+                        <div class="work-title">
+                            ${statusIcons}
+                            <a href="/view?author_id=${authorId}&work_id=${work.id}">${work.title}</a>
+                        </div>
+                        <div class="work-meta">Files: ${work.file_count}</div>
+                        ${editorInfo}
+                    </div>
+                    <div class="work-actions">
+                        <button class="favorite-btn work-action-btn" data-work-id="${work.id}" data-author-id="${authorId}">
+                            ${work.favorite ? 'Unfavorite' : 'Favorite'}
+                        </button>
+                        <button class="archive-btn work-action-btn" data-work-id="${work.id}" data-author-id="${authorId}">
+                            ${work.archived ? 'Unarchive' : 'Archive'}
+                        </button>
+                        <button class="delete-btn work-action-btn" data-work-id="${work.id}" data-author-id="${authorId}">
+                            Delete
+                        </button>
+                    </div>
+                </div>
+            `;
+        });
+        
+        container.innerHTML = html;
+        
+        // Add event listeners to work buttons
+        setupWorkButtonListeners(container, authorId);
+    }
+    
+    // Setup work button listeners
+    function setupWorkButtonListeners(container, authorId) {
+        // Favorite buttons
+        container.querySelectorAll('.favorite-btn').forEach(btn => {
+            btn.addEventListener('click', function() {
+                const workId = this.getAttribute('data-work-id');
+                const workKey = `${authorId}:${workId}`;
+                const isFavorite = this.textContent.trim() === 'Unfavorite';
+                
+                updateWorkPreference(workKey, 'favorite_works', !isFavorite, () => {
+                    // Update button text
+                    this.textContent = isFavorite ? 'Favorite' : 'Unfavorite';
+                    
+                    // Update status icon
+                    const workItem = this.closest('.work-item');
+                    const workTitle = workItem.querySelector('.work-title');
+                    
+                    if (isFavorite) {
+                        // Remove star
+                        workTitle.innerHTML = workTitle.innerHTML.replace('<span class="favorites-star">★</span> ', '');
+                    } else {
+                        // Add star if not already present
+                        if (!workTitle.innerHTML.includes('★')) {
+                            workTitle.innerHTML = '<span class="favorites-star">★</span> ' + workTitle.innerHTML;
+                        }
+                    }
+                });
+            });
+        });
+        
+        // Archive buttons
+        container.querySelectorAll('.archive-btn').forEach(btn => {
+            btn.addEventListener('click', function() {
+                const workId = this.getAttribute('data-work-id');
+                const workKey = `${authorId}:${workId}`;
+                const isArchived = this.textContent.trim() === 'Unarchive';
+                
+                updateWorkPreference(workKey, 'archived_works', !isArchived, () => {
+                    // Update button text
+                    this.textContent = isArchived ? 'Archive' : 'Unarchive';
+                    
+                    // Update status icon
+                    const workItem = this.closest('.work-item');
+                    const workTitle = workItem.querySelector('.work-title');
+                    
+                    if (isArchived) {
+                        // Remove icon
+                        workTitle.innerHTML = workTitle.innerHTML.replace('<span class="archived-icon">📦</span> ', '');
+                    } else {
+                        // Add icon if not already present
+                        if (!workTitle.innerHTML.includes('📦')) {
+                            workTitle.innerHTML = '<span class="archived-icon">📦</span> ' + workTitle.innerHTML;
+                        }
+                    }
+                });
+            });
+        });
+        
+        // Delete buttons
+        container.querySelectorAll('.delete-btn').forEach(btn => {
+            btn.addEventListener('click', function() {
+                const workId = this.getAttribute('data-work-id');
+                const workKey = `${authorId}:${workId}`;
+                
+                if (confirm(`Are you sure you want to delete this work?`)) {
+                    updateWorkPreference(workKey, 'deleted_works', true, () => {
+                        // Remove work item from display
+                        const workItem = this.closest('.work-item');
+                        workItem.remove();
+                        
+                        // Update count if no more works
+                        if (container.querySelectorAll('.work-item').length === 0) {
+                            container.innerHTML = '<div class="no-works">No works available for this author.</div>';
+                        }
+                    });
+                }
+            });
+        });
+    }
+    
+    // Function to update work preference
+    function updateWorkPreference(workKey, prefType, value, callback) {
+        const xhr = new XMLHttpRequest();
+        xhr.open('POST', '/update_work_preference', true);
+        xhr.setRequestHeader('Content-Type', 'application/x-www-form-urlencoded');
+        xhr.onreadystatechange = function() {
+            if (xhr.readyState === 4 && xhr.status === 200) {
+                if (callback) callback();
+            }
+        };
+        xhr.send(`work_key=${workKey}&pref_type=${prefType}&value=${value}`);
+    }
     
     // Function to update century
     function updateCentury(authorId, century) {
@@ -202,6 +403,7 @@ document.addEventListener('DOMContentLoaded', function() {
             // Update favorite and archive buttons to reflect current state
             const favoriteBtn = row.querySelector('.favorite-btn');
             const archiveBtn = row.querySelector('.archive-btn');
+            const toggleWorksBtn = row.querySelector('.toggle-works-btn');
             
             if (author.favorite) {
                 favoriteBtn.classList.add('active');
@@ -232,7 +434,21 @@ document.addEventListener('DOMContentLoaded', function() {
             // Add event listeners to the buttons
             setupButtonListeners(row, author);
             
+            // Add the works row
+            const worksRow = document.createElement('tr');
+            worksRow.className = 'works-row';
+            worksRow.setAttribute('data-author-id', author.id);
+            worksRow.style.display = 'none';
+            worksRow.innerHTML = `
+                <td colspan="5" class="works-container">
+                    <div class="works-tree">
+                        <div class="loading-indicator">Loading works...</div>
+                    </div>
+                </td>
+            `;
+            
             tbody.appendChild(row);
+            tbody.appendChild(worksRow);
         }
     }
     
@@ -275,6 +491,13 @@ document.addEventListener('DOMContentLoaded', function() {
             centuryInput.value = century;
             
             modal.style.display = 'block';
+        });
+        
+        // Toggle Works button
+        const toggleWorksBtn = row.querySelector('.toggle-works-btn');
+        toggleWorksBtn.addEventListener('click', function() {
+            const authorId = this.getAttribute('data-author-id');
+            toggleWorks(authorId, this);
         });
     }
     

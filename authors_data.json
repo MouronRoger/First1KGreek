@@ -46,7 +46,7 @@
   },
   "tlg0011": {
     "century": "5 BCE",
-    "name": "Sophocles", 
+    "name": "Sophocles",
     "allegiance": "Poet/Playwright"
   },
   "tlg0012": {
@@ -271,7 +271,7 @@
   },
   "tlg4015": {
     "name": "Chrysippus",
-    "century": "3 BCE",
+    "century": "2 BCE",
     "allegiance": "Stoic"
   },
   "tlg4016": {
@@ -314,4 +314,4 @@
     "century": "2 CE",
     "allegiance": "Stoic"
   }
-} 
+}

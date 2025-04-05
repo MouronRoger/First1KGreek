@@ -417,6 +417,96 @@ AUTHORS_TABLE_STYLESHEET = """
 .cancel-btn:hover {
     background-color: #4a5568;
 }
+
+/* Works tree styles */
+.works-container {
+    padding: 0 !important;
+    background-color: #2a2a2a;
+}
+
+.works-tree {
+    padding: 15px;
+    border-top: 1px solid #444;
+}
+
+.loading-indicator {
+    color: #999;
+    font-style: italic;
+    text-align: center;
+    padding: 20px;
+}
+
+.work-item {
+    padding: 10px;
+    margin-bottom: 5px;
+    border-radius: 4px;
+    background-color: #333;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.work-item:hover {
+    background-color: #444;
+}
+
+.work-info {
+    flex-grow: 1;
+}
+
+.work-title {
+    font-weight: bold;
+    color: #4299e1;
+    margin-bottom: 5px;
+}
+
+.work-meta {
+    font-size: 0.9em;
+    color: #999;
+}
+
+.work-actions {
+    display: flex;
+    gap: 5px;
+}
+
+.toggle-works-btn {
+    background-color: #805ad5;
+}
+
+.toggle-works-btn:hover {
+    background-color: #6b46c1;
+}
+
+.work-editor {
+    font-size: 0.9em;
+    color: #a0aec0;
+    font-style: italic;
+    margin-top: 3px;
+}
+
+.error {
+    color: #fc8181;
+    background-color: rgba(252, 129, 129, 0.1);
+    padding: 10px;
+    border-radius: 4px;
+    margin: 10px 0;
+    text-align: center;
+}
+
+.retry-btn {
+    background-color: #4299e1;
+    color: white;
+    border: none;
+    padding: 5px 10px;
+    border-radius: 3px;
+    margin-top: 10px;
+    cursor: pointer;
+}
+
+.retry-btn:hover {
+    background-color: #3182ce;
+}
 """
 
 def is_port_in_use(port):
@@ -444,74 +534,87 @@ class CustomHTTPRequestHandler(http.server.SimpleHTTPRequestHandler):
         logger.info("%s - %s" % (self.address_string(), format % args))
     
     def do_GET(self):
-        """Handle GET requests"""
         try:
-            parsed_path = urllib.parse.urlparse(self.path)
-            path = parsed_path.path
-            logger.info(f"GET request for {self.path} from {self.client_address}")
+            logger.debug(f"GET request for {self.path}")
+            
+            if self.path == '/':
+                # Home page
+                html = self.get_home_page()
+                self.send_html_response(html)
+                
+            elif self.path == '/authors':
+                # Authors table page
+                html = self.get_authors_table_page()
+                self.send_html_response(html)
+                
+            elif self.path.startswith('/works?'):
+                # Works page
+                query = self.path.split('?', 1)[1]
+                html = self.get_works_page(query)
+                self.send_html_response(html)
+                
+            elif self.path.startswith('/view?'):
+                # View page
+                query = self.path.split('?', 1)[1]
+                html = self.get_view_page(query)
+                self.send_html_response(html)
+                
+            elif self.path == '/editors':
+                # Editors page
+                html = self.get_editors_page()
+                self.send_html_response(html)
+                
+            elif self.path == '/search':
+                # Search page
+                html = self.get_search_page()
+                self.send_html_response(html)
 
-            # Serve static files
-            if path.startswith('/static/'):
-                logger.debug(f"Serving static file: {path}")
-                self.serve_static_file(path)
-                return
-
-            # Handle other routes
-            if path == '/':
-                logger.debug("Serving home page")
-                self.send_html_response(self.get_home_page())
-            elif path == '/authors':
-                logger.debug("Serving authors table page")
-                self.send_html_response(self.get_authors_table_page())
-            elif path == '/works':
-                author_id = urllib.parse.parse_qs(parsed_path.query).get('author_id', [''])[0]
-                logger.debug(f"Serving works page for author_id: {author_id}")
-                self.send_html_response(self.get_works_page(parsed_path.query))
-            elif path == '/view':
-                params = urllib.parse.parse_qs(parsed_path.query)
-                author_id = params.get('author_id', [''])[0]
-                work_id = params.get('work_id', [''])[0]
-                logger.debug(f"Serving view page for author_id: {author_id}, work_id: {work_id}")
-                self.send_html_response(self.get_view_page(parsed_path.query))
-            elif path == '/editors':
-                logger.debug("Serving editors page")
-                self.send_html_response(self.get_editors_page())
-            elif path == '/search':
-                logger.debug("Serving search page")
-                self.send_html_response(self.get_search_page())
+            elif self.path.startswith('/api/author_works?'):
+                # API endpoint to get works for an author
+                query = self.path.split('?', 1)[1]
+                query_params = urllib.parse.parse_qs(query)
+                self.handle_get_author_works(query_params)
+                
+            elif self.path.startswith('/static/'):
+                # Static files
+                self.serve_static_file(self.path)
+                
+            elif self.path == SHUTDOWN_PATH:
+                # Shutdown server
+                self.send_response(200)
+                self.send_header('Content-type', 'text/html')
+                self.end_headers()
+                self.wfile.write(b'Server shutting down...')
+                threading.Thread(target=lambda: server_instance.shutdown()).start()
+                
             else:
-                logger.warning(f"404 Not Found: {path}")
-                self.send_error(404, "Not Found")
+                # 404 Not Found
+                self.send_error(404, "Page not found")
+                
         except Exception as e:
             logger.error(f"Error handling GET request: {str(e)}")
             logger.error(traceback.format_exc())
-            self.send_error(500, f"Internal Server Error: {str(e)}")
+            self.send_error(500, f"Internal server error: {str(e)}")
 
     def do_POST(self):
-        """Handle POST requests"""
         try:
-            parsed_path = urllib.parse.urlparse(self.path)
-            path = parsed_path.path
-            logger.info(f"POST request for {self.path} from {self.client_address}")
-
-            # Parse form data
-            content_length = int(self.headers.get('Content-Length', 0))
-            post_data = urllib.parse.parse_qs(self.rfile.read(content_length).decode('utf-8'))
-            logger.debug(f"POST data: {post_data}")
-
-            if path == '/update_preference':
-                logger.debug("Handling update_preference request")
-                self.handle_update_preference(post_data)
-            elif path == '/update_century':
-                logger.debug("Handling update_century request")
-                self.handle_update_century(post_data)
+            content_length = int(self.headers['Content-Length'])
+            post_data = self.rfile.read(content_length).decode('utf-8')
+            parsed_data = urllib.parse.parse_qs(post_data)
+            
+            if self.path == '/update_preference':
+                self.handle_update_preference(parsed_data)
+            elif self.path == '/update_century': 
+                self.handle_update_century(parsed_data)
+            elif self.path == '/update_work_preference':
+                self.handle_update_work_preference(parsed_data)
             else:
-                logger.warning(f"404 Not Found: {path}")
-                self.send_error(404, "Not Found")
+                self.send_error(404, "Endpoint not found")
+                
         except Exception as e:
             logger.error(f"Error handling POST request: {str(e)}")
             logger.error(traceback.format_exc())
-            self.send_error(500, f"Internal Server Error: {str(e)}")
+            self.send_error(500, f"Internal server error: {str(e)}")
 
     def handle_update_preference(self, post_data):
         """Handle updating user preferences"""
@@ -586,6 +689,58 @@ class CustomHTTPRequestHandler(http.server.SimpleHTTPRequestHandler):
 
         except Exception as e:
             self.send_error(500, f"Error updating century: {str(e)}")
+
+    def handle_update_work_preference(self, post_data):
+        """Handle updating work preferences (favorite, archive, delete)"""
+        work_key = post_data.get('work_key', [''])[0]
+        pref_type = post_data.get('pref_type', [''])[0]
+        value = post_data.get('value', ['false'])[0].lower() == 'true'
+        
+        if not work_key or not pref_type:
+            self.send_error(400, "Missing required parameters")
+            return
+            
+        # Load user preferences
+        try:
+            with open('user_preferences.json', 'r') as f:
+                user_prefs = json.load(f)
+        except (FileNotFoundError, json.JSONDecodeError):
+            user_prefs = {'favorites': [], 'archived': [], 'deleted': [], 'favorite_works': [], 'archived_works': [], 'deleted_works': []}
+            
+        # Update preference
+        if pref_type == 'favorite_works':
+            if value and work_key not in user_prefs.get('favorite_works', []):
+                if 'favorite_works' not in user_prefs:
+                    user_prefs['favorite_works'] = []
+                user_prefs['favorite_works'].append(work_key)
+            elif not value and work_key in user_prefs.get('favorite_works', []):
+                user_prefs['favorite_works'].remove(work_key)
+                
+        elif pref_type == 'archived_works':
+            if value and work_key not in user_prefs.get('archived_works', []):
+                if 'archived_works' not in user_prefs:
+                    user_prefs['archived_works'] = []
+                user_prefs['archived_works'].append(work_key)
+            elif not value and work_key in user_prefs.get('archived_works', []):
+                user_prefs['archived_works'].remove(work_key)
+                
+        elif pref_type == 'deleted_works':
+            if value and work_key not in user_prefs.get('deleted_works', []):
+                if 'deleted_works' not in user_prefs:
+                    user_prefs['deleted_works'] = []
+                user_prefs['deleted_works'].append(work_key)
+            elif not value and work_key in user_prefs.get('deleted_works', []):
+                user_prefs['deleted_works'].remove(work_key)
+                
+        # Save updated preferences
+        with open('user_preferences.json', 'w') as f:
+            json.dump(user_prefs, f, indent=4)
+            
+        # Send success response
+        self.send_response(200)
+        self.send_header('Content-type', 'application/json')
+        self.end_headers()
+        self.wfile.write(json.dumps({'success': True}).encode())
 
     def get_authors_table_page(self):
         """Generate the authors table page"""
@@ -690,6 +845,16 @@ class CustomHTTPRequestHandler(http.server.SimpleHTTPRequestHandler):
                                         data-century="{century}">
                                     Edit Century
                                 </button>
+                                <button class="toggle-works-btn" data-author-id="{author_id}">
+                                    Show Works
+                                </button>
+                            </td>
+                        </tr>
+                        <tr class="works-row" data-author-id="{author_id}" style="display: none;">
+                            <td colspan="5" class="works-container">
+                                <div class="works-tree">
+                                    <div class="loading-indicator">Loading works...</div>
+                                </div>
                             </td>
                         </tr>
                     '''
@@ -721,18 +886,120 @@ class CustomHTTPRequestHandler(http.server.SimpleHTTPRequestHandler):
 
         return html
 
+    def get_work_editor(self, author_id, work_id):
+        """Extract editor information from the __cts__.xml file if available"""
+        cts_file = os.path.join('data', author_id, work_id, '__cts__.xml')
+        editor = None
+        
+        try:
+            if os.path.exists(cts_file):
+                tree = ET.parse(cts_file)
+                root = tree.getroot()
+                
+                # Look for editor information in various locations within the XML
+                editor_elements = root.findall(".//*[@role='editor']") or root.findall(".//editor")
+                if editor_elements:
+                    editor = editor_elements[0].text
+                else:
+                    # Check for other common patterns
+                    for elem in root.findall(".//*[@n]"):
+                        if 'ed.' in elem.get('n', '').lower() or 'edit' in elem.get('n', '').lower():
+                            editor = elem.get('n')
+                            break
+                
+                logger.debug(f"Found editor '{editor}' for work {work_id}")
+                return editor
+        except Exception as e:
+            logger.error(f"Error extracting editor information from {cts_file}: {str(e)}")
+        
+        return None
+
     def get_author_works(self, author_id):
         """Get list of works for an author"""
         works = []
         author_dir = os.path.join('data', author_id)
         
-        if os.path.exists(author_dir):
-            for item in os.listdir(author_dir):
-                work_path = os.path.join(author_dir, item)
-                if os.path.isdir(work_path) and not item.startswith('__'):
-                    works.append(item)
+        logger.debug(f"Looking for works in directory: {author_dir}")
         
+        if os.path.exists(author_dir):
+            try:
+                for item in os.listdir(author_dir):
+                    work_path = os.path.join(author_dir, item)
+                    
+                    # Skip hidden files and special directories
+                    if item.startswith('.') or item.startswith('__'):
+                        logger.debug(f"Skipping special item: {item}")
+                        continue
+                        
+                    if os.path.isdir(work_path):
+                        logger.debug(f"Found work directory: {item}")
+                        
+                        # Count number of files in the work directory
+                        file_count = 0
+                        try:
+                            for root, dirs, files in os.walk(work_path):
+                                file_count += len(files)
+                            
+                            # Try to get editor information
+                            editor = self.get_work_editor(author_id, item)
+                            
+                            works.append({
+                                'id': item,
+                                'title': item,
+                                'file_count': file_count,
+                                'editor': editor
+                            })
+                            logger.debug(f"Added work: {item} with {file_count} files")
+                        except Exception as e:
+                            logger.error(f"Error processing work directory {item}: {str(e)}")
+            except Exception as e:
+                logger.error(f"Error listing author directory {author_id}: {str(e)}")
+        else:
+            logger.warning(f"Author directory does not exist: {author_dir}")
+        
+        logger.debug(f"Total works found for {author_id}: {len(works)}")
         return works
+
+    def handle_get_author_works(self, query_params):
+        """Handle API request to get works for an author"""
+        author_id = query_params.get('author_id', [''])[0]
+        
+        logger.debug(f"API request for author works: author_id={author_id}")
+        
+        if not author_id:
+            logger.error("Missing author_id parameter in API request")
+            self.send_error(400, "Missing author_id parameter")
+            return
+            
+        # Load user preferences
+        try:
+            with open('user_preferences.json', 'r') as f:
+                user_prefs = json.load(f)
+        except (FileNotFoundError, json.JSONDecodeError) as e:
+            logger.warning(f"User preferences not found or invalid JSON: {e}")
+            user_prefs = {'favorites': [], 'archived': [], 'deleted': [], 'favorite_works': [], 'archived_works': [], 'deleted_works': []}
+            
+        logger.debug(f"Getting works for author ID: {author_id}")
+        works = self.get_author_works(author_id)
+        logger.debug(f"Found {len(works)} works for author ID: {author_id}")
+        
+        # Add user preference flags to each work
+        for work in works:
+            work_key = f"{author_id}:{work['id']}"
+            work['favorite'] = work_key in user_prefs.get('favorite_works', [])
+            work['archived'] = work_key in user_prefs.get('archived_works', [])
+            work['deleted'] = work_key in user_prefs.get('deleted_works', [])
+        
+        # Filter out deleted works
+        works = [w for w in works if not w['deleted']]
+        
+        # Send response
+        self.send_response(200)
+        self.send_header('Content-type', 'application/json')
+        self.end_headers()
+        response_body = json.dumps(works)
+        logger.debug(f"Sending works response for author_id={author_id}: {response_body[:100]}...")
+        self.wfile.write(response_body.encode())
 
     def serve_static_file(self, path):
         """Serve static files"""
@@ -883,7 +1150,7 @@ class CustomHTTPRequestHandler(http.server.SimpleHTTPRequestHandler):
         if works:
             html += '<ul class="works-list">'
             for work in works:
-                html += f'<li><a href="/view?author_id={author_id}&work_id={work}">{work}</a></li>'
+                html += f'<li><a href="/view?author_id={author_id}&work_id={work["id"]}">{work["title"]}</a></li>'
             html += '</ul>'
         else:
             html += '<p>No works available for this author.</p>'
@@ -974,6 +1241,48 @@ class CustomHTTPRequestHandler(http.server.SimpleHTTPRequestHandler):
     
     def get_editors_page(self):
         """Generate the editors page"""
+        # Find all unique editors in the works
+        editors = {}
+        total_editors = 0
+        
+        try:
+            # Scan through all author directories
+            data_dir = os.path.join('data')
+            if os.path.exists(data_dir):
+                for author_id in os.listdir(data_dir):
+                    author_dir = os.path.join(data_dir, author_id)
+                    
+                    # Skip hidden directories and files
+                    if not os.path.isdir(author_dir) or author_id.startswith('.'):
+                        continue
+                        
+                    # Get author name
+                    author_name = AUTHORS_DATA.get(author_id, {}).get('name', author_id)
+                    
+                    # Scan works for this author
+                    for work_id in os.listdir(author_dir):
+                        work_path = os.path.join(author_dir, work_id)
+                        
+                        # Skip hidden and non-directory items
+                        if not os.path.isdir(work_path) or work_id.startswith('.') or work_id.startswith('__'):
+                            continue
+                            
+                        # Check for __cts__.xml to extract editor
+                        editor = self.get_work_editor(author_id, work_id)
+                        if editor:
+                            if editor not in editors:
+                                editors[editor] = []
+                            
+                            editors[editor].append({
+                                'author_id': author_id,
+                                'author_name': author_name,
+                                'work_id': work_id
+                            })
+                            total_editors += 1
+        except Exception as e:
+            logger.error(f"Error scanning for editors: {str(e)}")
+            
+        # Generate HTML
         html = f'''
         <!DOCTYPE html>
         <html>
@@ -981,12 +1290,52 @@ class CustomHTTPRequestHandler(http.server.SimpleHTTPRequestHandler):
             <title>About the Editors</title>
             <style>
                 {MAIN_STYLESHEET}
+                
+                .editors-list {
+                    margin-top: 20px;
+                }
+                
+                .editor-section {
+                    margin-bottom: 30px;
+                    padding: 15px;
+                    background-color: #333;
+                    border-radius: 5px;
+                }
+                
+                .editor-name {
+                    font-size: 1.2em;
+                    font-weight: bold;
+                    color: #4299e1;
+                    margin-bottom: 10px;
+                }
+                
+                .editor-works {
+                    list-style-type: none;
+                    padding-left: 0;
+                }
+                
+                .editor-works li {
+                    padding: 5px 0;
+                    border-bottom: 1px solid #444;
+                }
+                
+                .editor-works li:last-child {
+                    border-bottom: none;
+                }
+                
+                .no-editors {
+                    padding: 20px;
+                    color: #fc8181;
+                    text-align: center;
+                    background-color: #333;
+                    border-radius: 5px;
+                }
             </style>
         </head>
         <body>
             <div class="container">
                 <h1>About the Editors</h1>
-                <p><a href="/">&laquo; Home</a></p>
+                <p><a href="/">&laquo; Home</a> | <a href="/authors">Authors Table</a></p>
                 
                 <p>First1KGreek is a collection of ancient Greek texts maintained by a dedicated team of editors and scholars.</p>
                 
@@ -997,6 +1346,48 @@ class CustomHTTPRequestHandler(http.server.SimpleHTTPRequestHandler):
                     <li><strong>Contributors:</strong> The scholarly community</li>
                 </ul>
                 
+                <h2>Editors ({len(editors)} found)</h2>
+        '''
+        
+        if editors:
+            html += '''<div class="editors-list">'''
+            
+            # Sort editors by name
+            sorted_editors = sorted(editors.items(), key=lambda x: x[0].lower())
+            
+            for editor_name, works in sorted_editors:
+                html += f'''
+                <div class="editor-section">
+                    <div class="editor-name">{editor_name}</div>
+                    <ul class="editor-works">
+                '''
+                
+                # Sort works by author name
+                sorted_works = sorted(works, key=lambda x: x['author_name'].lower())
+                
+                for work in sorted_works:
+                    html += f'''
+                    <li>
+                        <a href="/view?author_id={work['author_id']}&work_id={work['work_id']}">
+                            {work['author_name']} - {work['work_id']}
+                        </a>
+                    </li>
+                    '''
+                
+                html += '''
+                    </ul>
+                </div>
+                '''
+            
+            html += '''</div>'''
+        else:
+            html += '''
+            <div class="no-editors">
+                <p>No editor information found in the works. This could be because the __cts__.xml files don't contain editor metadata.</p>
+            </div>
+            '''
+        
+        html += '''
                 <h2>Contributing</h2>
                 <p>If you would like to contribute to this project, please read the documentation in the repository.</p>
             </div>
