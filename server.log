@@ -15,3 +15,20 @@
 2025-04-05 21:47:26,327 - DEBUG - Sending HTML response, length: 1358
 2025-04-05 21:47:26,327 - INFO - 127.0.0.1 - "GET / HTTP/1.1" 200 -
 2025-04-05 21:47:26,327 - DEBUG - Successfully sent 1358 bytes
+2025-04-05 21:48:49,103 - INFO - GET request for /authors from ('127.0.0.1', 51364)
+2025-04-05 21:48:49,104 - DEBUG - Serving authors table page
+2025-04-05 21:48:49,117 - DEBUG - Sending HTML response, length: 81369
+2025-04-05 21:48:49,117 - INFO - 127.0.0.1 - "GET /authors HTTP/1.1" 200 -
+2025-04-05 21:48:49,118 - DEBUG - Successfully sent 81369 bytes
+2025-04-05 21:48:49,136 - INFO - GET request for /static/css/styles.css from ('127.0.0.1', 51365)
+2025-04-05 21:48:49,136 - DEBUG - Serving static file: /static/css/styles.css
+2025-04-05 21:48:49,137 - DEBUG - Serving static file from: /Users/james/Documents/GitHub/First1KGreek/static/css/styles.css
+2025-04-05 21:48:49,137 - INFO - 127.0.0.1 - "GET /static/css/styles.css HTTP/1.1" 200 -
+2025-04-05 21:48:49,138 - INFO - GET request for /static/js/authors_table.js from ('127.0.0.1', 51366)
+2025-04-05 21:48:49,138 - DEBUG - Serving static file: /static/js/authors_table.js
+2025-04-05 21:48:49,138 - DEBUG - Serving static file from: /Users/james/Documents/GitHub/First1KGreek/static/js/authors_table.js
+2025-04-05 21:48:49,138 - INFO - 127.0.0.1 - "GET /static/js/authors_table.js HTTP/1.1" 200 -
+2025-04-05 21:48:55,739 - INFO - POST request for /update_preference from ('127.0.0.1', 51382)
+2025-04-05 21:48:55,739 - DEBUG - POST data: {'author_id': ['tlg0004'], 'pref_type': ['favorites'], 'value': ['true']}
+2025-04-05 21:48:55,740 - DEBUG - Handling update_preference request
+2025-04-05 21:48:55,741 - INFO - 127.0.0.1 - "POST /update_preference HTTP/1.1" 200 -
