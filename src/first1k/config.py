@@ -64,13 +64,13 @@ a:hover { text-decoration: underline; }
 """
 
 # Data directories
-DATA_DIR = 'data'
-BACKUP_DIR = 'backup'
+DATA_DIR = "data"
+BACKUP_DIR = "backup"
 
 # File paths
-CATALOG_PATH = 'catalog.json'
-BACKUP_FILE = 'browse_texts.py.bak'
+CATALOG_PATH = "catalog.json"
+BACKUP_FILE = "browse_texts.py.bak"
 
 # Create necessary directories
 os.makedirs(DATA_DIR, exist_ok=True)
-os.makedirs(BACKUP_DIR, exist_ok=True) 
+os.makedirs(BACKUP_DIR, exist_ok=True)

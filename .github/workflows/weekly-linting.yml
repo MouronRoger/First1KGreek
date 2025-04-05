@@ -1,0 +1,62 @@
+name: Weekly Code Formatting
+
+on:
+  schedule:
+    # Run every Monday at 2:00 AM
+    - cron: '0 2 * * 1'
+  workflow_dispatch:  # Allow manual triggering
+
+jobs:
+  format-directory:
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        directory:
+          # Directories to format, in order of priority
+          - 'src/first1k/utils'
+          - 'src/first1k/xml_utils'
+          - 'src/first1k/handlers'
+          - 'src/first1k/editor'
+          - 'src/first1k/search'
+          - 'src/first1k/server'
+          - 'src/first1k/import_export'
+      # Don't cancel all jobs if one fails
+      fail-fast: false
+    
+    steps:
+    - uses: actions/checkout@v3
+      with:
+        fetch-depth: 0  # Full history for better commit messages
+    
+    - name: Set up Python
+      uses: actions/setup-python@v4
+      with:
+        python-version: '3.10'
+    
+    - name: Install dependencies
+      run: |
+        python -m pip install --upgrade pip
+        pip install -r requirements.txt
+        pip install -r test-requirements.txt
+        pip install -r tools/linting/requirements-lint.txt
+    
+    - name: Format directory
+      id: format
+      run: |
+        # Format the directory (only one per week, based on matrix position)
+        python tools/linting/batch_format_directory.py ${{ matrix.directory }} --verbose
+    
+    - name: Create Pull Request if changes were made
+      uses: peter-evans/create-pull-request@v5
+      with:
+        commit-message: "Auto-format ${{ matrix.directory }} [weekly]"
+        title: "Auto-format ${{ matrix.directory }} [weekly]"
+        body: |
+          This is an automated PR to format Python files in `${{ matrix.directory }}`.
+          
+          Changes were made using the Black code formatter and isort for import sorting.
+          
+          **Please review these changes carefully before merging.**
+        branch: auto-format-${{ matrix.directory }}
+        base: main
+        delete-branch: true 

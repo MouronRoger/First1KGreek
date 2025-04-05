@@ -1,0 +1,46 @@
+************* Module browse_texts_fixed
+browse_texts_fixed.py:1295:20: E0602: Undefined variable 'margin' (undefined-variable)
+browse_texts_fixed.py:1295:27: E0602: Undefined variable 'top' (undefined-variable)
+browse_texts_fixed.py:1299:20: E0602: Undefined variable 'margin' (undefined-variable)
+browse_texts_fixed.py:1299:27: E0602: Undefined variable 'bottom' (undefined-variable)
+browse_texts_fixed.py:1306:20: E0602: Undefined variable 'font' (undefined-variable)
+browse_texts_fixed.py:1306:25: E0602: Undefined variable 'size' (undefined-variable)
+browse_texts_fixed.py:1313:25: E0602: Undefined variable 'style' (undefined-variable)
+browse_texts_fixed.py:1318:20: E0602: Undefined variable 'padding' (undefined-variable)
+browse_texts_fixed.py:1323:20: E0602: Undefined variable 'border' (undefined-variable)
+browse_texts_fixed.py:1323:27: E0602: Undefined variable 'bottom' (undefined-variable)
+browse_texts_fixed.py:1327:20: E0602: Undefined variable 'padding' (undefined-variable)
+browse_texts_fixed.py:13:0: W0611: Unused import re (unused-import)
+browse_texts_fixed.py:15:0: W0611: Unused import time (unused-import)
+browse_texts_fixed.py:17:0: W0611: Unused import signal (unused-import)
+browse_texts_fixed.py:23:0: W0611: Unused URLError imported from urllib.error (unused-import)
+browse_texts_fixed.py:23:0: W0611: Unused HTTPError imported from urllib.error (unused-import)
+************* Module simple_performance_test
+simple_performance_test.py:6:0: W0611: Unused import sys (unused-import)
+************* Module simple_test
+simple_test.py:6:0: W0611: Unused import sys (unused-import)
+************* Module simple_integration_test
+simple_integration_test.py:5:0: W0611: Unused import os (unused-import)
+simple_integration_test.py:6:0: W0611: Unused import sys (unused-import)
+************* Module simple_xml_test
+simple_xml_test.py:6:0: W0611: Unused import sys (unused-import)
+************* Module tools.linting.analyze_code
+tools/linting/analyze_code.py:13:0: W0611: Unused Path imported from pathlib (unused-import)
+************* Module tools.linting.fix_critical
+tools/linting/fix_critical.py:14:0: W0611: Unused Path imported from pathlib (unused-import)
+************* Module tools.linting.format_incremental
+tools/linting/format_incremental.py:13:0: W0611: Unused import tempfile (unused-import)
+tools/linting/format_incremental.py:15:0: W0611: Unused Path imported from pathlib (unused-import)
+************* Module tools.linting.pre-commit-hook
+tools/linting/pre-commit-hook.py:12:0: W0611: Unused import tempfile (unused-import)
+tools/linting/pre-commit-hook.py:14:0: W0611: Unused Path imported from pathlib (unused-import)
+************* Module src.first1k.handlers.import_text
+src/first1k/handlers/import_text.py:8:0: W0611: Unused quote imported from urllib.parse (unused-import)
+************* Module src.first1k.handlers.view
+src/first1k/handlers/view.py:3:0: W0611: Unused import os (unused-import)
+************* Module src.first1k.editor.manager
+src/first1k/editor/manager.py:5:0: W0611: Unused quote imported from urllib.parse (unused-import)
+
+------------------------------------------------------------------
+Your code has been rated at 9.67/10 (previous run: 9.65/10, +0.02)
+

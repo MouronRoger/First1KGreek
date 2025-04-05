@@ -1,0 +1,18 @@
+[run]
+source = browse_texts_fixed.py
+omit = test_*.py
+       */__pycache__/*
+       */venv/*
+       */backup/*
+
+[report]
+exclude_lines =
+    pragma: no cover
+    def __repr__
+    raise NotImplementedError
+    if __name__ == .__main__.:
+    pass
+    raise ImportError
+
+[html]
+directory = htmlcov 

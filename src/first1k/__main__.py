@@ -1,7 +1,8 @@
 """Main entry point for First1KGreek Browser."""
 
-from .server.server import run_server
 from .config import PORT
+from .server.server import run_server
+
 
 def main():
     """Main entry point."""
@@ -17,5 +18,6 @@ def main():
     except Exception as e:
         print(f"Error starting server: {str(e)}")
 
+
 if __name__ == "__main__":
-    main() 
+    main()

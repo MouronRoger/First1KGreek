@@ -2,6 +2,7 @@
 
 from ..config import MAIN_STYLESHEET
 
+
 def render_main_page():
     """Render the main page HTML."""
     return f"""<!DOCTYPE html>
@@ -72,4 +73,4 @@ def render_main_page():
         </div>
     </div>
 </body>
-</html>""" 
+</html>"""

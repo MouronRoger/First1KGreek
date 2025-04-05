@@ -1,0 +1,349 @@
+--- /Users/james/Documents/GitHub/First1KGreek/run_first1k_tests.py:before	2025-04-05 22:28:56.303821
++++ /Users/james/Documents/GitHub/First1KGreek/run_first1k_tests.py:after	2025-04-05 22:50:29.993784
+@@ -5,19 +5,20 @@
+ This script runs all working test suites and provides a summary of results.
+ """
+ 
++import argparse
++import os
++import sys
++import time
+ import unittest
+-import sys
+-import os
+-import argparse
+-import time
+ 
+ # Add project root to path
+ sys.path.insert(0, os.path.abspath(os.path.dirname(__file__)))
+ 
++from simple_integration_test import SimpleIntegrationTest
++from simple_performance_test import SimplePerformanceTest
++
+ # Import test modules
+ from simple_xml_test import SimpleXMLTest
+-from simple_integration_test import SimpleIntegrationTest
+-from simple_performance_test import SimplePerformanceTest
+ 
+ 
+ def parse_args():
+--- /Users/james/Documents/GitHub/First1KGreek/browse_texts_fixed.py:before	2025-04-05 22:04:18.377223
++++ /Users/james/Documents/GitHub/First1KGreek/browse_texts_fixed.py:after	2025-04-05 22:50:30.002087
+@@ -5,23 +5,23 @@
+ Last updated: 2025-03-07
+ """
+ 
++import argparse
++import http.server
++import json
++import logging
+ import os
++import re
++import signal
++import socket
++import socketserver
+ import sys
+-import http.server
+-import socketserver
+-import json
+-import re
+ import threading
+ import time
+-import socket
+-import signal
++import traceback
++import urllib.parse
+ import xml.etree.ElementTree as ET
+-import urllib.parse
+-import argparse
+-import logging
+-import traceback
+-from urllib.error import URLError, HTTPError
+ from html import escape
++from urllib.error import HTTPError, URLError
+ 
+ # Configure logging
+ logging.basicConfig(
+--- /Users/james/Documents/GitHub/First1KGreek/copy_texts.py:before	2025-03-06 01:34:41.398084
++++ /Users/james/Documents/GitHub/First1KGreek/copy_texts.py:after	2025-04-05 22:50:30.006785
+@@ -2,6 +2,7 @@
+ import os
+ import shutil
+ import sys
++
+ 
+ def copy_directory_structure(source_dir, dest_dir):
+     """
+--- /Users/james/Documents/GitHub/First1KGreek/setup.py:before	2025-03-26 19:00:23.055497
++++ /Users/james/Documents/GitHub/First1KGreek/setup.py:after	2025-04-05 22:50:30.008378
+@@ -1,6 +1,6 @@
+ """Setup configuration for First1KGreek Browser."""
+ 
+-from setuptools import setup, find_packages
++from setuptools import find_packages, setup
+ 
+ setup(
+     name="first1k",
+--- /Users/james/Documents/GitHub/First1KGreek/simple_performance_test.py:before	2025-04-05 22:23:18.243326
++++ /Users/james/Documents/GitHub/First1KGreek/simple_performance_test.py:after	2025-04-05 22:50:30.010985
+@@ -1,11 +1,11 @@
+ #!/usr/bin/env python3
+ """Simple performance tests for First1KGreek Browser."""
+ 
+-import unittest
+ import os
+ import sys
++import tempfile
+ import time
+-import tempfile
++import unittest
+ import xml.etree.ElementTree as ET
+ 
+ 
+--- /Users/james/Documents/GitHub/First1KGreek/simple_test.py:before	2025-04-05 22:20:34.938756
++++ /Users/james/Documents/GitHub/First1KGreek/simple_test.py:after	2025-04-05 22:50:30.012463
+@@ -1,9 +1,9 @@
+ #!/usr/bin/env python3
+ """Simple test to verify unittest functionality."""
+ 
+-import unittest
+ import os
+ import sys
++import unittest
+ 
+ 
+ class SimpleTest(unittest.TestCase):
+--- /Users/james/Documents/GitHub/First1KGreek/simple_server.py:before	2025-04-05 21:10:15.424736
++++ /Users/james/Documents/GitHub/First1KGreek/simple_server.py:after	2025-04-05 22:50:30.013214
+@@ -3,9 +3,10 @@
+ Simple HTTP server for testing First1KGreek
+ """
+ 
++import argparse
+ import http.server
+ import socketserver
+-import argparse
++
+ 
+ def parse_args():
+     parser = argparse.ArgumentParser(description='Simple HTTP Server')
+--- /Users/james/Documents/GitHub/First1KGreek/simple_integration_test.py:before	2025-04-05 22:22:47.769964
++++ /Users/james/Documents/GitHub/First1KGreek/simple_integration_test.py:after	2025-04-05 22:50:30.014887
+@@ -1,14 +1,15 @@
+ #!/usr/bin/env python3
+ """Simple integration tests for First1KGreek Browser."""
+ 
+-import unittest
++import http.server
+ import os
++import socket
+ import sys
+-import time
+ import tempfile
+ import threading
+-import http.server
+-import socket
++import time
++import unittest
++
+ import requests
+ 
+ 
+--- /Users/james/Documents/GitHub/First1KGreek/simple_xml_test.py:before	2025-04-05 22:22:29.920839
++++ /Users/james/Documents/GitHub/First1KGreek/simple_xml_test.py:after	2025-04-05 22:50:30.016060
+@@ -1,10 +1,10 @@
+ #!/usr/bin/env python3
+ """Simple XML parsing tests for First1KGreek Browser."""
+ 
+-import unittest
+ import os
+ import sys
+ import tempfile
++import unittest
+ import xml.etree.ElementTree as ET
+ 
+ 
+--- /Users/james/Documents/GitHub/First1KGreek/tools/linting/analyze_code.py:before	2025-04-05 22:37:07.047976
++++ /Users/james/Documents/GitHub/First1KGreek/tools/linting/analyze_code.py:after	2025-04-05 22:50:30.018531
+@@ -6,13 +6,14 @@
+ It generates reports to help understand the current state of the code.
+ """
+ 
++import argparse
++import json
+ import os
++import subprocess
+ import sys
+-import subprocess
+-import argparse
++from datetime import datetime
+ from pathlib import Path
+-import json
+-from datetime import datetime
++
+ 
+ def print_section(title):
+     """Print a section title with decorative formatting."""
+--- /Users/james/Documents/GitHub/First1KGreek/tools/linting/fix_critical.py:before	2025-04-05 22:37:31.585115
++++ /Users/james/Documents/GitHub/First1KGreek/tools/linting/fix_critical.py:after	2025-04-05 22:50:30.020368
+@@ -6,12 +6,13 @@
+ It works on one file at a time to minimize risk of breaking functionality.
+ """
+ 
+-import os
+-import sys
+-import subprocess
+ import argparse
+ import json
++import os
++import subprocess
++import sys
+ from pathlib import Path
++
+ 
+ def print_section(title):
+     """Print a section title with decorative formatting."""
+--- /Users/james/Documents/GitHub/First1KGreek/tools/linting/format_incremental.py:before	2025-04-05 22:37:58.921485
++++ /Users/james/Documents/GitHub/First1KGreek/tools/linting/format_incremental.py:after	2025-04-05 22:50:30.023634
+@@ -6,13 +6,14 @@
+ running tests after each change to ensure functionality is preserved.
+ """
+ 
++import argparse
+ import os
++import shutil
++import subprocess
+ import sys
+-import subprocess
+-import argparse
+ import tempfile
+-import shutil
+ from pathlib import Path
++
+ 
+ def print_section(title):
+     """Print a section title with decorative formatting."""
+--- /Users/james/Documents/GitHub/First1KGreek/tools/linting/pre-commit-hook.py:before	2025-04-05 22:38:17.239862
++++ /Users/james/Documents/GitHub/First1KGreek/tools/linting/pre-commit-hook.py:after	2025-04-05 22:50:30.025213
+@@ -6,12 +6,13 @@
+ It will prevent commits if critical issues are found.
+ """
+ 
++import json
+ import os
++import subprocess
+ import sys
+-import subprocess
+ import tempfile
+-import json
+ from pathlib import Path
++
+ 
+ def print_section(title):
+     """Print a section title with decorative formatting."""
+--- /Users/james/Documents/GitHub/First1KGreek/src/first1k/search/searcher.py:before	2025-03-26 18:59:07.195810
++++ /Users/james/Documents/GitHub/First1KGreek/src/first1k/search/searcher.py:after	2025-04-05 22:50:30.035347
+@@ -3,6 +3,7 @@
+ import os
+ import re
+ from html import escape
++
+ 
+ def search_corpus(search_term):
+     """Search for the given term in all XML files."""
+--- /Users/james/Documents/GitHub/First1KGreek/src/first1k/xml_utils/processor.py:before	2025-03-26 18:58:09.139348
++++ /Users/james/Documents/GitHub/First1KGreek/src/first1k/xml_utils/processor.py:after	2025-04-05 22:50:30.039110
+@@ -3,6 +3,7 @@
+ import re
+ import xml.etree.ElementTree as ET
+ from html import escape
++
+ 
+ def process_xml_for_reading(xml_content):
+     """Process XML content for reader-friendly display using structured XML parsing."""
+--- /Users/james/Documents/GitHub/First1KGreek/src/first1k/handlers/browse.py:before	2025-03-26 19:12:24.372452
++++ /Users/james/Documents/GitHub/First1KGreek/src/first1k/handlers/browse.py:after	2025-04-05 22:50:30.042843
+@@ -2,7 +2,9 @@
+ 
+ import os
+ import re
++
+ from ..config import MAIN_STYLESHEET
++
+ 
+ def get_author_name_from_files(author_id):
+     """Attempt to find an author name from XML files."""
+--- /Users/james/Documents/GitHub/First1KGreek/src/first1k/handlers/ui.py:before	2025-03-26 19:11:17.525641
++++ /Users/james/Documents/GitHub/First1KGreek/src/first1k/handlers/ui.py:after	2025-04-05 22:50:30.045784
+@@ -1,6 +1,7 @@
+ """UI handlers for First1KGreek Browser."""
+ 
+ from ..config import MAIN_STYLESHEET
++
+ 
+ def render_main_page():
+     """Render the main page HTML."""
+--- /Users/james/Documents/GitHub/First1KGreek/src/first1k/handlers/works.py:before	2025-03-26 19:18:12.051834
++++ /Users/james/Documents/GitHub/First1KGreek/src/first1k/handlers/works.py:after	2025-04-05 22:50:30.048602
+@@ -2,7 +2,9 @@
+ 
+ import os
+ import re
++
+ from ..config import MAIN_STYLESHEET
++
+ 
+ def get_works_by_author(author_id):
+     """Get list of works for an author."""
+--- /Users/james/Documents/GitHub/First1KGreek/src/first1k/handlers/import_text.py:before	2025-03-26 19:16:16.230985
++++ /Users/james/Documents/GitHub/First1KGreek/src/first1k/handlers/import_text.py:after	2025-04-05 22:50:30.053565
+@@ -2,11 +2,13 @@
+ 
+ import os
+ import re
++import urllib.request
+ import xml.etree.ElementTree as ET
+-import urllib.request
+-from urllib.error import URLError, HTTPError
++from urllib.error import HTTPError, URLError
+ from urllib.parse import quote
++
+ from ..config import MAIN_STYLESHEET
++
+ 
+ def import_text_from_scaife(scaife_url, provided_author_name='', provided_work_title=''):
+     """Import text from Scaife URL and save to the corpus."""
+--- /Users/james/Documents/GitHub/First1KGreek/src/first1k/handlers/view.py:before	2025-03-26 19:17:28.370310
++++ /Users/james/Documents/GitHub/First1KGreek/src/first1k/handlers/view.py:after	2025-04-05 22:50:30.056953
+@@ -3,7 +3,9 @@
+ import os
+ import re
+ from xml.sax.saxutils import escape
++
+ from ..config import MAIN_STYLESHEET
++
+ 
+ def render_xml_view_page(file_path):
+     """Generate XML view page."""
+--- /Users/james/Documents/GitHub/First1KGreek/src/first1k/handlers/search.py:before	2025-03-26 19:15:04.551784
++++ /Users/james/Documents/GitHub/First1KGreek/src/first1k/handlers/search.py:after	2025-04-05 22:50:30.059924
+@@ -2,7 +2,9 @@
+ 
+ import os
+ import re
++
+ from ..config import MAIN_STYLESHEET
++
+ 
+ def search_corpus(search_term):
+     """Search for the given term in all XML files."""
+--- /Users/james/Documents/GitHub/First1KGreek/src/first1k/editor/manager.py:before	2025-03-26 18:58:46.446283
++++ /Users/james/Documents/GitHub/First1KGreek/src/first1k/editor/manager.py:after	2025-04-05 22:50:30.062803
+@@ -3,6 +3,7 @@
+ import os
+ import re
+ from urllib.parse import quote
++
+ 
+ def get_editors_data():
+     """Gather data about editors from the XML files."""

@@ -1,0 +1,1412 @@
+./browse_texts_fixed.py:13:1: F401 're' imported but unused
+./browse_texts_fixed.py:15:1: F401 'time' imported but unused
+./browse_texts_fixed.py:17:1: F401 'signal' imported but unused
+./browse_texts_fixed.py:23:1: F401 'urllib.error.URLError' imported but unused
+./browse_texts_fixed.py:23:1: F401 'urllib.error.HTTPError' imported but unused
+./browse_texts_fixed.py:38:1: E302 expected 2 blank lines, found 1
+./browse_texts_fixed.py:45:1: E305 expected 2 blank lines after class or function definition, found 1
+./browse_texts_fixed.py:69:7: W291 trailing whitespace
+./browse_texts_fixed.py:70:115: W291 trailing whitespace
+./browse_texts_fixed.py:71:15: W291 trailing whitespace
+./browse_texts_fixed.py:73:22: W291 trailing whitespace
+./browse_texts_fixed.py:74:31: W291 trailing whitespace
+./browse_texts_fixed.py:75:20: W291 trailing whitespace
+./browse_texts_fixed.py:77:13: W291 trailing whitespace
+./browse_texts_fixed.py:85:13: W291 trailing whitespace
+./browse_texts_fixed.py:86:22: W291 trailing whitespace
+./browse_texts_fixed.py:87:20: W291 trailing whitespace
+./browse_texts_fixed.py:93:4: W291 trailing whitespace
+./browse_texts_fixed.py:97:7: W291 trailing whitespace
+./browse_texts_fixed.py:98:65: W291 trailing whitespace
+./browse_texts_fixed.py:99:15: W291 trailing whitespace
+./browse_texts_fixed.py:101:22: W291 trailing whitespace
+./browse_texts_fixed.py:102:31: W291 trailing whitespace
+./browse_texts_fixed.py:103:20: W291 trailing whitespace
+./browse_texts_fixed.py:105:13: W291 trailing whitespace
+./browse_texts_fixed.py:112:13: W291 trailing whitespace
+./browse_texts_fixed.py:113:23: W291 trailing whitespace
+./browse_texts_fixed.py:114:20: W291 trailing whitespace
+./browse_texts_fixed.py:512:1: E302 expected 2 blank lines, found 1
+./browse_texts_fixed.py:519:1: E302 expected 2 blank lines, found 1
+./browse_texts_fixed.py:529:1: E302 expected 2 blank lines, found 1
+./browse_texts_fixed.py:531:1: W293 blank line contains whitespace
+./browse_texts_fixed.py:535:1: W293 blank line contains whitespace
+./browse_texts_fixed.py:539:1: W293 blank line contains whitespace
+./browse_texts_fixed.py:544:1: W293 blank line contains whitespace
+./browse_texts_fixed.py:549:1: W293 blank line contains whitespace
+./browse_texts_fixed.py:555:1: W293 blank line contains whitespace
+./browse_texts_fixed.py:561:1: W293 blank line contains whitespace
+./browse_texts_fixed.py:566:1: W293 blank line contains whitespace
+./browse_texts_fixed.py:577:1: W293 blank line contains whitespace
+./browse_texts_fixed.py:581:1: W293 blank line contains whitespace
+./browse_texts_fixed.py:589:1: W293 blank line contains whitespace
+./browse_texts_fixed.py:593:1: W293 blank line contains whitespace
+./browse_texts_fixed.py:604:1: W293 blank line contains whitespace
+./browse_texts_fixed.py:607:49: W291 trailing whitespace
+./browse_texts_fixed.py:613:1: W293 blank line contains whitespace
+./browse_texts_fixed.py:698:1: W293 blank line contains whitespace
+./browse_texts_fixed.py:702:1: W293 blank line contains whitespace
+./browse_texts_fixed.py:709:1: W293 blank line contains whitespace
+./browse_texts_fixed.py:718:1: W293 blank line contains whitespace
+./browse_texts_fixed.py:726:1: W293 blank line contains whitespace
+./browse_texts_fixed.py:734:1: W293 blank line contains whitespace
+./browse_texts_fixed.py:738:1: W293 blank line contains whitespace
+./browse_texts_fixed.py:776:1: W293 blank line contains whitespace
+./browse_texts_fixed.py:782:1: W293 blank line contains whitespace
+./browse_texts_fixed.py:789:1: W293 blank line contains whitespace
+./browse_texts_fixed.py:842:57: W291 trailing whitespace
+./browse_texts_fixed.py:866:1: W293 blank line contains whitespace
+./browse_texts_fixed.py:893:1: W293 blank line contains whitespace
+./browse_texts_fixed.py:898:1: W293 blank line contains whitespace
+./browse_texts_fixed.py:909:1: W293 blank line contains whitespace
+./browse_texts_fixed.py:914:1: W293 blank line contains whitespace
+./browse_texts_fixed.py:921:1: W293 blank line contains whitespace
+./browse_texts_fixed.py:923:1: W293 blank line contains whitespace
+./browse_texts_fixed.py:928:1: W293 blank line contains whitespace
+./browse_texts_fixed.py:933:1: W293 blank line contains whitespace
+./browse_texts_fixed.py:936:1: W293 blank line contains whitespace
+./browse_texts_fixed.py:942:1: W293 blank line contains whitespace
+./browse_texts_fixed.py:945:1: W293 blank line contains whitespace
+./browse_texts_fixed.py:959:1: W293 blank line contains whitespace
+./browse_texts_fixed.py:966:1: W293 blank line contains whitespace
+./browse_texts_fixed.py:968:1: W293 blank line contains whitespace
+./browse_texts_fixed.py:973:1: W293 blank line contains whitespace
+./browse_texts_fixed.py:981:1: W293 blank line contains whitespace
+./browse_texts_fixed.py:985:1: W293 blank line contains whitespace
+./browse_texts_fixed.py:992:1: W293 blank line contains whitespace
+./browse_texts_fixed.py:995:1: W293 blank line contains whitespace
+./browse_texts_fixed.py:1010:1: W293 blank line contains whitespace
+./browse_texts_fixed.py:1014:1: W293 blank line contains whitespace
+./browse_texts_fixed.py:1054:1: W293 blank line contains whitespace
+./browse_texts_fixed.py:1066:1: W293 blank line contains whitespace
+./browse_texts_fixed.py:1082:1: W293 blank line contains whitespace
+./browse_texts_fixed.py:1094:1: W293 blank line contains whitespace
+./browse_texts_fixed.py:1099:1: W293 blank line contains whitespace
+./browse_texts_fixed.py:1102:1: W293 blank line contains whitespace
+./browse_texts_fixed.py:1107:1: W293 blank line contains whitespace
+./browse_texts_fixed.py:1110:1: W293 blank line contains whitespace
+./browse_texts_fixed.py:1118:1: W293 blank line contains whitespace
+./browse_texts_fixed.py:1123:1: W293 blank line contains whitespace
+./browse_texts_fixed.py:1130:1: W293 blank line contains whitespace
+./browse_texts_fixed.py:1134:1: W293 blank line contains whitespace
+./browse_texts_fixed.py:1146:1: W293 blank line contains whitespace
+./browse_texts_fixed.py:1149:1: W293 blank line contains whitespace
+./browse_texts_fixed.py:1157:1: W293 blank line contains whitespace
+./browse_texts_fixed.py:1163:1: W293 blank line contains whitespace
+./browse_texts_fixed.py:1165:1: W293 blank line contains whitespace
+./browse_texts_fixed.py:1171:1: W293 blank line contains whitespace
+./browse_texts_fixed.py:1174:1: W293 blank line contains whitespace
+./browse_texts_fixed.py:1179:1: W293 blank line contains whitespace
+./browse_texts_fixed.py:1184:1: W293 blank line contains whitespace
+./browse_texts_fixed.py:1187:1: W293 blank line contains whitespace
+./browse_texts_fixed.py:1202:1: W293 blank line contains whitespace
+./browse_texts_fixed.py:1210:1: W293 blank line contains whitespace
+./browse_texts_fixed.py:1212:1: W293 blank line contains whitespace
+./browse_texts_fixed.py:1217:1: W293 blank line contains whitespace
+./browse_texts_fixed.py:1236:1: W293 blank line contains whitespace
+./browse_texts_fixed.py:1239:1: W293 blank line contains whitespace
+./browse_texts_fixed.py:1241:1: W293 blank line contains whitespace
+./browse_texts_fixed.py:1247:1: W293 blank line contains whitespace
+./browse_texts_fixed.py:1254:1: W293 blank line contains whitespace
+./browse_texts_fixed.py:1258:1: W293 blank line contains whitespace
+./browse_texts_fixed.py:1261:1: W293 blank line contains whitespace
+./browse_texts_fixed.py:1265:1: W293 blank line contains whitespace
+./browse_texts_fixed.py:1269:1: W293 blank line contains whitespace
+./browse_texts_fixed.py:1275:1: W293 blank line contains whitespace
+./browse_texts_fixed.py:1284:1: W293 blank line contains whitespace
+./browse_texts_fixed.py:1293:1: W293 blank line contains whitespace
+./browse_texts_fixed.py:1295:21: F821 undefined name 'margin'
+./browse_texts_fixed.py:1295:28: F821 undefined name 'top'
+./browse_texts_fixed.py:1297:1: W293 blank line contains whitespace
+./browse_texts_fixed.py:1299:21: F821 undefined name 'margin'
+./browse_texts_fixed.py:1299:28: F821 undefined name 'bottom'
+./browse_texts_fixed.py:1304:1: W293 blank line contains whitespace
+./browse_texts_fixed.py:1306:21: F821 undefined name 'font'
+./browse_texts_fixed.py:1306:26: F821 undefined name 'size'
+./browse_texts_fixed.py:1311:1: W293 blank line contains whitespace
+./browse_texts_fixed.py:1313:26: F821 undefined name 'style'
+./browse_texts_fixed.py:1316:1: W293 blank line contains whitespace
+./browse_texts_fixed.py:1318:21: F821 undefined name 'padding'
+./browse_texts_fixed.py:1321:1: W293 blank line contains whitespace
+./browse_texts_fixed.py:1323:21: F821 undefined name 'border'
+./browse_texts_fixed.py:1323:28: F821 undefined name 'bottom'
+./browse_texts_fixed.py:1325:1: W293 blank line contains whitespace
+./browse_texts_fixed.py:1327:21: F821 undefined name 'padding'
+./browse_texts_fixed.py:1339:1: W293 blank line contains whitespace
+./browse_texts_fixed.py:1341:1: W293 blank line contains whitespace
+./browse_texts_fixed.py:1348:1: W293 blank line contains whitespace
+./browse_texts_fixed.py:1351:1: W293 blank line contains whitespace
+./browse_texts_fixed.py:1354:1: W293 blank line contains whitespace
+./browse_texts_fixed.py:1357:1: W293 blank line contains whitespace
+./browse_texts_fixed.py:1364:1: W293 blank line contains whitespace
+./browse_texts_fixed.py:1367:1: W293 blank line contains whitespace
+./browse_texts_fixed.py:1376:1: W293 blank line contains whitespace
+./browse_texts_fixed.py:1381:1: W293 blank line contains whitespace
+./browse_texts_fixed.py:1389:1: W293 blank line contains whitespace
+./browse_texts_fixed.py:1397:1: W293 blank line contains whitespace
+./browse_texts_fixed.py:1399:1: W293 blank line contains whitespace
+./browse_texts_fixed.py:1409:1: W293 blank line contains whitespace
+./browse_texts_fixed.py:1416:1: W293 blank line contains whitespace
+./browse_texts_fixed.py:1425:1: W293 blank line contains whitespace
+./browse_texts_fixed.py:1435:1: W293 blank line contains whitespace
+./browse_texts_fixed.py:1445:1: W293 blank line contains whitespace
+./browse_texts_fixed.py:1452:1: W293 blank line contains whitespace
+./browse_texts_fixed.py:1458:1: W293 blank line contains whitespace
+./browse_texts_fixed.py:1460:1: W293 blank line contains whitespace
+./browse_texts_fixed.py:1470:1: W293 blank line contains whitespace
+./browse_texts_fixed.py:1485:1: W293 blank line contains whitespace
+./browse_texts_fixed.py:1493:1: W293 blank line contains whitespace
+./browse_texts_fixed.py:1496:1: E305 expected 2 blank lines after class or function definition, found 1
+./browse_texts_fixed.py:1500:1: W293 blank line contains whitespace
+./browse_texts_fixed.py:1504:1: W293 blank line contains whitespace
+./browse_texts_fixed.py:1516:1: W293 blank line contains whitespace
+./browse_texts_fixed.py:1520:1: W293 blank line contains whitespace
+./browse_texts_fixed.py:1522:23: F541 f-string is missing placeholders
+./browse_texts_fixed.py:1524:23: F541 f-string is missing placeholders
+./browse_texts_fixed.py:1525:23: F541 f-string is missing placeholders
+./browse_texts_fixed.py:1526:1: W293 blank line contains whitespace
+./browse_texts_fixed.py:1529:1: W293 blank line contains whitespace
+./browse_texts_fixed.py:1540:1: W293 blank line contains whitespace
+./browse_texts_fixed.py:1548:45: W291 trailing whitespace
+./browse_texts_fixed.py:1548:46: W292 no newline at end of file
+./copy_texts.py:6:1: E302 expected 2 blank lines, found 1
+./copy_texts.py:26:1: W293 blank line contains whitespace
+./copy_texts.py:32:1: W293 blank line contains whitespace
+./copy_texts.py:37:1: W293 blank line contains whitespace
+./copy_texts.py:39:1: W293 blank line contains whitespace
+./copy_texts.py:44:1: W293 blank line contains whitespace
+./copy_texts.py:53:1: W293 blank line contains whitespace
+./copy_texts.py:59:1: W293 blank line contains whitespace
+./copy_texts.py:70:1: W293 blank line contains whitespace
+./copy_texts.py:75:1: W293 blank line contains whitespace
+./copy_texts.py:79:1: W293 blank line contains whitespace
+./copy_texts.py:83:1: W293 blank line contains whitespace
+./copy_texts.py:87:76: W291 trailing whitespace
+./copy_texts.py:87:77: W292 no newline at end of file
+./run_first1k_tests.py:18:1: E402 module level import not at top of file
+./run_first1k_tests.py:19:1: E402 module level import not at top of file
+./run_first1k_tests.py:20:1: E402 module level import not at top of file
+./run_first1k_tests.py:27:62: W291 trailing whitespace
+./run_first1k_tests.py:29:62: W291 trailing whitespace
+./run_first1k_tests.py:40:1: W293 blank line contains whitespace
+./run_first1k_tests.py:43:1: W293 blank line contains whitespace
+./run_first1k_tests.py:49:1: W293 blank line contains whitespace
+./run_first1k_tests.py:55:1: W293 blank line contains whitespace
+./run_first1k_tests.py:61:1: W293 blank line contains whitespace
+./run_first1k_tests.py:65:1: W293 blank line contains whitespace
+./run_first1k_tests.py:70:1: W293 blank line contains whitespace
+./run_first1k_tests.py:77:1: W293 blank line contains whitespace
+./run_first1k_tests.py:84:34: W291 trailing whitespace
+./run_first1k_tests.py:84:35: W292 no newline at end of file
+./setup.py:19:2: W291 trailing whitespace
+./setup.py:19:3: W292 no newline at end of file
+./simple_integration_test.py:5:1: F401 'os' imported but unused
+./simple_integration_test.py:6:1: F401 'sys' imported but unused
+./simple_integration_test.py:24:1: W293 blank line contains whitespace
+./simple_integration_test.py:28:1: W293 blank line contains whitespace
+./simple_integration_test.py:42:1: W293 blank line contains whitespace
+./simple_integration_test.py:48:1: W293 blank line contains whitespace
+./simple_integration_test.py:51:1: W293 blank line contains whitespace
+./simple_integration_test.py:56:1: W293 blank line contains whitespace
+./simple_integration_test.py:59:1: W293 blank line contains whitespace
+./simple_integration_test.py:66:1: W293 blank line contains whitespace
+./simple_integration_test.py:73:1: W293 blank line contains whitespace
+./simple_integration_test.py:79:1: W293 blank line contains whitespace
+./simple_integration_test.py:87:31: W291 trailing whitespace
+./simple_integration_test.py:87:32: W292 no newline at end of file
+./simple_performance_test.py:6:1: F401 'sys' imported but unused
+./simple_performance_test.py:27:1: W293 blank line contains whitespace
+./simple_performance_test.py:34:25: F541 f-string is missing placeholders
+./simple_performance_test.py:41:1: W293 blank line contains whitespace
+./simple_performance_test.py:56:1: W293 blank line contains whitespace
+./simple_performance_test.py:59:1: W293 blank line contains whitespace
+./simple_performance_test.py:65:1: W293 blank line contains whitespace
+./simple_performance_test.py:71:1: W293 blank line contains whitespace
+./simple_performance_test.py:76:1: W293 blank line contains whitespace
+./simple_performance_test.py:80:1: W293 blank line contains whitespace
+./simple_performance_test.py:87:1: W293 blank line contains whitespace
+./simple_performance_test.py:92:9: F841 local variable 'root' is assigned to but never used
+./simple_performance_test.py:94:1: W293 blank line contains whitespace
+./simple_performance_test.py:97:1: W293 blank line contains whitespace
+./simple_performance_test.py:102:9: F841 local variable 'root' is assigned to but never used
+./simple_performance_test.py:104:1: W293 blank line contains whitespace
+./simple_performance_test.py:107:1: W293 blank line contains whitespace
+./simple_performance_test.py:112:9: F841 local variable 'root' is assigned to but never used
+./simple_performance_test.py:114:1: W293 blank line contains whitespace
+./simple_performance_test.py:117:1: W293 blank line contains whitespace
+./simple_performance_test.py:122:1: W293 blank line contains whitespace
+./simple_performance_test.py:126:1: W293 blank line contains whitespace
+./simple_performance_test.py:133:31: W291 trailing whitespace
+./simple_performance_test.py:133:32: W292 no newline at end of file
+./simple_server.py:10:1: E302 expected 2 blank lines, found 1
+./simple_server.py:16:1: E305 expected 2 blank lines after class or function definition, found 1
+./simple_server.py:21:1: W293 blank line contains whitespace
+./simple_server.py:23:1: W293 blank line contains whitespace
+./simple_server.py:26:30: W291 trailing whitespace
+./simple_server.py:26:31: W292 no newline at end of file
+./simple_test.py:6:1: F401 'sys' imported but unused
+./simple_test.py:11:1: W293 blank line contains whitespace
+./simple_test.py:17:1: W293 blank line contains whitespace
+./simple_test.py:24:20: W291 trailing whitespace
+./simple_test.py:24:21: W292 no newline at end of file
+./simple_xml_test.py:6:1: F401 'sys' imported but unused
+./simple_xml_test.py:13:1: W293 blank line contains whitespace
+./simple_xml_test.py:18:1: W293 blank line contains whitespace
+./simple_xml_test.py:40:1: W293 blank line contains whitespace
+./simple_xml_test.py:46:1: W293 blank line contains whitespace
+./simple_xml_test.py:51:1: W293 blank line contains whitespace
+./simple_xml_test.py:54:1: W293 blank line contains whitespace
+./simple_xml_test.py:57:1: W293 blank line contains whitespace
+./simple_xml_test.py:63:1: W293 blank line contains whitespace
+./simple_xml_test.py:68:1: W293 blank line contains whitespace
+./simple_xml_test.py:71:1: W293 blank line contains whitespace
+./simple_xml_test.py:76:1: W293 blank line contains whitespace
+./simple_xml_test.py:81:1: W293 blank line contains whitespace
+./simple_xml_test.py:89:31: W291 trailing whitespace
+./simple_xml_test.py:89:32: W292 no newline at end of file
+./src/first1k/config.py:14:7: W291 trailing whitespace
+./src/first1k/config.py:15:115: W291 trailing whitespace
+./src/first1k/config.py:16:15: W291 trailing whitespace
+./src/first1k/config.py:18:22: W291 trailing whitespace
+./src/first1k/config.py:19:31: W291 trailing whitespace
+./src/first1k/config.py:20:20: W291 trailing whitespace
+./src/first1k/config.py:22:13: W291 trailing whitespace
+./src/first1k/config.py:30:13: W291 trailing whitespace
+./src/first1k/config.py:31:22: W291 trailing whitespace
+./src/first1k/config.py:32:20: W291 trailing whitespace
+./src/first1k/config.py:41:7: W291 trailing whitespace
+./src/first1k/config.py:42:65: W291 trailing whitespace
+./src/first1k/config.py:43:15: W291 trailing whitespace
+./src/first1k/config.py:45:22: W291 trailing whitespace
+./src/first1k/config.py:46:31: W291 trailing whitespace
+./src/first1k/config.py:47:20: W291 trailing whitespace
+./src/first1k/config.py:49:13: W291 trailing whitespace
+./src/first1k/config.py:56:13: W291 trailing whitespace
+./src/first1k/config.py:57:23: W291 trailing whitespace
+./src/first1k/config.py:58:20: W291 trailing whitespace
+./src/first1k/editor/manager.py:5:1: F401 'urllib.parse.quote' imported but unused
+./src/first1k/editor/manager.py:7:1: E302 expected 2 blank lines, found 1
+./src/first1k/editor/manager.py:10:1: W293 blank line contains whitespace
+./src/first1k/editor/manager.py:12:1: W293 blank line contains whitespace
+./src/first1k/editor/manager.py:17:1: W293 blank line contains whitespace
+./src/first1k/editor/manager.py:21:1: W293 blank line contains whitespace
+./src/first1k/editor/manager.py:24:1: W293 blank line contains whitespace
+./src/first1k/editor/manager.py:31:1: W293 blank line contains whitespace
+./src/first1k/editor/manager.py:41:1: W293 blank line contains whitespace
+./src/first1k/editor/manager.py:45:1: W293 blank line contains whitespace
+./src/first1k/editor/manager.py:58:1: W293 blank line contains whitespace
+./src/first1k/editor/manager.py:62:1: W293 blank line contains whitespace
+./src/first1k/editor/manager.py:70:1: W293 blank line contains whitespace
+./src/first1k/editor/manager.py:77:1: W293 blank line contains whitespace
+./src/first1k/editor/manager.py:82:1: W293 blank line contains whitespace
+./src/first1k/editor/manager.py:84:1: W293 blank line contains whitespace
+./src/first1k/editor/manager.py:92:1: W293 blank line contains whitespace
+./src/first1k/editor/manager.py:96:1: W293 blank line contains whitespace
+./src/first1k/editor/manager.py:99:1: E302 expected 2 blank lines, found 1
+./src/first1k/editor/manager.py:108:1: W293 blank line contains whitespace
+./src/first1k/editor/manager.py:111:1: E302 expected 2 blank lines, found 1
+./src/first1k/editor/manager.py:115:1: W293 blank line contains whitespace
+./src/first1k/editor/manager.py:118:1: W293 blank line contains whitespace
+./src/first1k/editor/manager.py:133:1: W293 blank line contains whitespace
+./src/first1k/editor/manager.py:140:1: W293 blank line contains whitespace
+./src/first1k/editor/manager.py:154:1: W293 blank line contains whitespace
+./src/first1k/editor/manager.py:157:1: E302 expected 2 blank lines, found 1
+./src/first1k/editor/manager.py:163:1: W293 blank line contains whitespace
+./src/first1k/editor/manager.py:171:1: W293 blank line contains whitespace
+./src/first1k/editor/manager.py:179:1: W293 blank line contains whitespace
+./src/first1k/editor/manager.py:187:1: W293 blank line contains whitespace
+./src/first1k/editor/manager.py:196:1: W293 blank line contains whitespace
+./src/first1k/editor/manager.py:200:1: W293 blank line contains whitespace
+./src/first1k/editor/manager.py:201:17: W291 trailing whitespace
+./src/first1k/editor/manager.py:201:18: W292 no newline at end of file
+./src/first1k/handlers/browse.py:7:1: E302 expected 2 blank lines, found 1
+./src/first1k/handlers/browse.py:12:1: W293 blank line contains whitespace
+./src/first1k/handlers/browse.py:23:1: W293 blank line contains whitespace
+./src/first1k/handlers/browse.py:28:1: W293 blank line contains whitespace
+./src/first1k/handlers/browse.py:31:1: W293 blank line contains whitespace
+./src/first1k/handlers/browse.py:34:1: E302 expected 2 blank lines, found 1
+./src/first1k/handlers/browse.py:42:1: W293 blank line contains whitespace
+./src/first1k/handlers/browse.py:48:1: W293 blank line contains whitespace
+./src/first1k/handlers/browse.py:52:1: W293 blank line contains whitespace
+./src/first1k/handlers/browse.py:97:1: W293 blank line contains whitespace
+./src/first1k/handlers/browse.py:103:1: W293 blank line contains whitespace
+./src/first1k/handlers/browse.py:105:1: W293 blank line contains whitespace
+./src/first1k/handlers/browse.py:108:1: W293 blank line contains whitespace
+./src/first1k/handlers/browse.py:118:1: W293 blank line contains whitespace
+./src/first1k/handlers/browse.py:125:16: W291 trailing whitespace
+./src/first1k/handlers/browse.py:127:1: E302 expected 2 blank lines, found 1
+./src/first1k/handlers/browse.py:130:1: W293 blank line contains whitespace
+./src/first1k/handlers/browse.py:132:1: W293 blank line contains whitespace
+./src/first1k/handlers/browse.py:137:1: W293 blank line contains whitespace
+./src/first1k/handlers/browse.py:141:1: W293 blank line contains whitespace
+./src/first1k/handlers/browse.py:144:1: W293 blank line contains whitespace
+./src/first1k/handlers/browse.py:152:1: W293 blank line contains whitespace
+./src/first1k/handlers/browse.py:162:1: W293 blank line contains whitespace
+./src/first1k/handlers/browse.py:166:1: W293 blank line contains whitespace
+./src/first1k/handlers/browse.py:179:1: W293 blank line contains whitespace
+./src/first1k/handlers/browse.py:183:1: W293 blank line contains whitespace
+./src/first1k/handlers/browse.py:191:1: W293 blank line contains whitespace
+./src/first1k/handlers/browse.py:198:1: W293 blank line contains whitespace
+./src/first1k/handlers/browse.py:203:1: W293 blank line contains whitespace
+./src/first1k/handlers/browse.py:205:1: W293 blank line contains whitespace
+./src/first1k/handlers/browse.py:213:1: W293 blank line contains whitespace
+./src/first1k/handlers/browse.py:217:1: W293 blank line contains whitespace
+./src/first1k/handlers/browse.py:220:1: E302 expected 2 blank lines, found 1
+./src/first1k/handlers/browse.py:229:1: W293 blank line contains whitespace
+./src/first1k/handlers/browse.py:232:1: E302 expected 2 blank lines, found 1
+./src/first1k/handlers/browse.py:236:1: W293 blank line contains whitespace
+./src/first1k/handlers/browse.py:244:1: W293 blank line contains whitespace
+./src/first1k/handlers/browse.py:247:1: W293 blank line contains whitespace
+./src/first1k/handlers/browse.py:303:1: W293 blank line contains whitespace
+./src/first1k/handlers/browse.py:315:1: W293 blank line contains whitespace
+./src/first1k/handlers/browse.py:336:1: W293 blank line contains whitespace
+./src/first1k/handlers/browse.py:352:16: W291 trailing whitespace
+./src/first1k/handlers/browse.py:352:17: W292 no newline at end of file
+./src/first1k/handlers/import_text.py:8:1: F401 'urllib.parse.quote' imported but unused
+./src/first1k/handlers/import_text.py:11:1: E302 expected 2 blank lines, found 1
+./src/first1k/handlers/import_text.py:14:1: W293 blank line contains whitespace
+./src/first1k/handlers/import_text.py:19:1: W293 blank line contains whitespace
+./src/first1k/handlers/import_text.py:22:36: E261 at least two spaces before inline comment
+./src/first1k/handlers/import_text.py:23:1: W293 blank line contains whitespace
+./src/first1k/handlers/import_text.py:26:1: W293 blank line contains whitespace
+./src/first1k/handlers/import_text.py:30:1: W293 blank line contains whitespace
+./src/first1k/handlers/import_text.py:32:1: W293 blank line contains whitespace
+./src/first1k/handlers/import_text.py:39:1: W293 blank line contains whitespace
+./src/first1k/handlers/import_text.py:46:9: E722 do not use bare 'except'
+./src/first1k/handlers/import_text.py:49:1: W293 blank line contains whitespace
+./src/first1k/handlers/import_text.py:52:1: W293 blank line contains whitespace
+./src/first1k/handlers/import_text.py:69:13: E722 do not use bare 'except'
+./src/first1k/handlers/import_text.py:71:1: W293 blank line contains whitespace
+./src/first1k/handlers/import_text.py:74:1: W293 blank line contains whitespace
+./src/first1k/handlers/import_text.py:84:1: W293 blank line contains whitespace
+./src/first1k/handlers/import_text.py:99:1: W293 blank line contains whitespace
+./src/first1k/handlers/import_text.py:104:1: W293 blank line contains whitespace
+./src/first1k/handlers/import_text.py:106:1: W293 blank line contains whitespace
+./src/first1k/handlers/import_text.py:109:1: E302 expected 2 blank lines, found 1
+./src/first1k/handlers/import_text.py:114:1: W293 blank line contains whitespace
+./src/first1k/handlers/import_text.py:125:1: W293 blank line contains whitespace
+./src/first1k/handlers/import_text.py:130:1: W293 blank line contains whitespace
+./src/first1k/handlers/import_text.py:133:1: W293 blank line contains whitespace
+./src/first1k/handlers/import_text.py:136:1: E302 expected 2 blank lines, found 1
+./src/first1k/handlers/import_text.py:149:1: E302 expected 2 blank lines, found 1
+./src/first1k/handlers/import_text.py:162:1: E302 expected 2 blank lines, found 1
+./src/first1k/handlers/import_text.py:177:1: E302 expected 2 blank lines, found 1
+./src/first1k/handlers/import_text.py:274:1: W293 blank line contains whitespace
+./src/first1k/handlers/import_text.py:280:1: W293 blank line contains whitespace
+./src/first1k/handlers/import_text.py:285:1: W293 blank line contains whitespace
+./src/first1k/handlers/import_text.py:292:1: W293 blank line contains whitespace
+./src/first1k/handlers/import_text.py:304:1: W293 blank line contains whitespace
+./src/first1k/handlers/import_text.py:309:1: W293 blank line contains whitespace
+./src/first1k/handlers/import_text.py:318:1: W293 blank line contains whitespace
+./src/first1k/handlers/import_text.py:327:1: W293 blank line contains whitespace
+./src/first1k/handlers/import_text.py:337:1: E302 expected 2 blank lines, found 1
+./src/first1k/handlers/import_text.py:374:1: W293 blank line contains whitespace
+./src/first1k/handlers/import_text.py:378:1: W293 blank line contains whitespace
+./src/first1k/handlers/import_text.py:388:1: E302 expected 2 blank lines, found 1
+./src/first1k/handlers/import_text.py:425:1: W293 blank line contains whitespace
+./src/first1k/handlers/import_text.py:429:1: W293 blank line contains whitespace
+./src/first1k/handlers/import_text.py:437:16: W291 trailing whitespace
+./src/first1k/handlers/import_text.py:437:17: W292 no newline at end of file
+./src/first1k/handlers/search.py:7:1: E302 expected 2 blank lines, found 1
+./src/first1k/handlers/search.py:10:1: W293 blank line contains whitespace
+./src/first1k/handlers/search.py:15:1: W293 blank line contains whitespace
+./src/first1k/handlers/search.py:20:1: W293 blank line contains whitespace
+./src/first1k/handlers/search.py:24:1: W293 blank line contains whitespace
+./src/first1k/handlers/search.py:29:1: W293 blank line contains whitespace
+./src/first1k/handlers/search.py:33:1: W293 blank line contains whitespace
+./src/first1k/handlers/search.py:40:1: W293 blank line contains whitespace
+./src/first1k/handlers/search.py:54:1: W293 blank line contains whitespace
+./src/first1k/handlers/search.py:60:1: W293 blank line contains whitespace
+./src/first1k/handlers/search.py:66:1: W293 blank line contains whitespace
+./src/first1k/handlers/search.py:70:1: W293 blank line contains whitespace
+./src/first1k/handlers/search.py:76:1: W293 blank line contains whitespace
+./src/first1k/handlers/search.py:81:1: W293 blank line contains whitespace
+./src/first1k/handlers/search.py:93:1: W293 blank line contains whitespace
+./src/first1k/handlers/search.py:96:1: W293 blank line contains whitespace
+./src/first1k/handlers/search.py:99:1: E302 expected 2 blank lines, found 1
+./src/first1k/handlers/search.py:102:1: W293 blank line contains whitespace
+./src/first1k/handlers/search.py:105:1: W293 blank line contains whitespace
+./src/first1k/handlers/search.py:192:1: W293 blank line contains whitespace
+./src/first1k/handlers/search.py:198:1: W293 blank line contains whitespace
+./src/first1k/handlers/search.py:209:1: W293 blank line contains whitespace
+./src/first1k/handlers/search.py:217:66: W291 trailing whitespace
+./src/first1k/handlers/search.py:218:66: W291 trailing whitespace
+./src/first1k/handlers/search.py:235:16: W291 trailing whitespace
+./src/first1k/handlers/search.py:235:17: W292 no newline at end of file
+./src/first1k/handlers/ui.py:5:1: E302 expected 2 blank lines, found 1
+./src/first1k/handlers/ui.py:53:1: W293 blank line contains whitespace
+./src/first1k/handlers/ui.py:70:92: W291 trailing whitespace
+./src/first1k/handlers/ui.py:75:11: W291 trailing whitespace
+./src/first1k/handlers/ui.py:75:12: W292 no newline at end of file
+./src/first1k/handlers/view.py:3:1: F401 'os' imported but unused
+./src/first1k/handlers/view.py:8:1: E302 expected 2 blank lines, found 1
+./src/first1k/handlers/view.py:13:1: W293 blank line contains whitespace
+./src/first1k/handlers/view.py:19:1: W293 blank line contains whitespace
+./src/first1k/handlers/view.py:24:1: W293 blank line contains whitespace
+./src/first1k/handlers/view.py:27:1: W293 blank line contains whitespace
+./src/first1k/handlers/view.py:32:1: W293 blank line contains whitespace
+./src/first1k/handlers/view.py:85:1: W293 blank line contains whitespace
+./src/first1k/handlers/view.py:92:1: W293 blank line contains whitespace
+./src/first1k/handlers/view.py:98:1: W293 blank line contains whitespace
+./src/first1k/handlers/view.py:106:1: W293 blank line contains whitespace
+./src/first1k/handlers/view.py:125:1: E302 expected 2 blank lines, found 1
+./src/first1k/handlers/view.py:130:1: W293 blank line contains whitespace
+./src/first1k/handlers/view.py:136:1: W293 blank line contains whitespace
+./src/first1k/handlers/view.py:141:1: W293 blank line contains whitespace
+./src/first1k/handlers/view.py:147:1: W293 blank line contains whitespace
+./src/first1k/handlers/view.py:221:1: W293 blank line contains whitespace
+./src/first1k/handlers/view.py:235:1: W293 blank line contains whitespace
+./src/first1k/handlers/view.py:242:1: W293 blank line contains whitespace
+./src/first1k/handlers/view.py:247:1: W293 blank line contains whitespace
+./src/first1k/handlers/view.py:253:1: W293 blank line contains whitespace
+./src/first1k/handlers/view.py:262:1: W293 blank line contains whitespace
+./src/first1k/handlers/view.py:279:11: W291 trailing whitespace
+./src/first1k/handlers/view.py:279:12: W292 no newline at end of file
+./src/first1k/handlers/works.py:7:1: E302 expected 2 blank lines, found 1
+./src/first1k/handlers/works.py:11:1: W293 blank line contains whitespace
+./src/first1k/handlers/works.py:14:1: W293 blank line contains whitespace
+./src/first1k/handlers/works.py:27:1: W293 blank line contains whitespace
+./src/first1k/handlers/works.py:47:1: W293 blank line contains whitespace
+./src/first1k/handlers/works.py:50:1: W293 blank line contains whitespace
+./src/first1k/handlers/works.py:58:1: W293 blank line contains whitespace
+./src/first1k/handlers/works.py:73:1: W293 blank line contains whitespace
+./src/first1k/handlers/works.py:81:1: W293 blank line contains whitespace
+./src/first1k/handlers/works.py:87:1: W293 blank line contains whitespace
+./src/first1k/handlers/works.py:92:1: W293 blank line contains whitespace
+./src/first1k/handlers/works.py:102:1: W293 blank line contains whitespace
+./src/first1k/handlers/works.py:105:1: E302 expected 2 blank lines, found 1
+./src/first1k/handlers/works.py:108:1: W293 blank line contains whitespace
+./src/first1k/handlers/works.py:117:1: W293 blank line contains whitespace
+./src/first1k/handlers/works.py:128:1: W293 blank line contains whitespace
+./src/first1k/handlers/works.py:133:1: W293 blank line contains whitespace
+./src/first1k/handlers/works.py:142:1: W293 blank line contains whitespace
+./src/first1k/handlers/works.py:145:1: E302 expected 2 blank lines, found 1
+./src/first1k/handlers/works.py:148:1: W293 blank line contains whitespace
+./src/first1k/handlers/works.py:206:1: W293 blank line contains whitespace
+./src/first1k/handlers/works.py:212:1: W293 blank line contains whitespace
+./src/first1k/handlers/works.py:214:1: W293 blank line contains whitespace
+./src/first1k/handlers/works.py:240:1: E302 expected 2 blank lines, found 1
+./src/first1k/handlers/works.py:243:1: W293 blank line contains whitespace
+./src/first1k/handlers/works.py:301:1: W293 blank line contains whitespace
+./src/first1k/handlers/works.py:307:1: W293 blank line contains whitespace
+./src/first1k/handlers/works.py:309:1: W293 blank line contains whitespace
+./src/first1k/handlers/works.py:332:16: W291 trailing whitespace
+./src/first1k/handlers/works.py:332:17: W292 no newline at end of file
+./src/first1k/import_export/scaife.py:49:9: E722 do not use bare 'except'
+./src/first1k/import_export/scaife.py:72:13: E722 do not use bare 'except'
+./src/first1k/import_export/scaife.py:183:21: F841 local variable 'e' is assigned to but never used
+./src/first1k/import_export/scaife.py:194:5: E722 do not use bare 'except'
+./src/first1k/search/searcher.py:7:1: E302 expected 2 blank lines, found 1
+./src/first1k/search/searcher.py:10:1: W293 blank line contains whitespace
+./src/first1k/search/searcher.py:15:1: W293 blank line contains whitespace
+./src/first1k/search/searcher.py:20:1: W293 blank line contains whitespace
+./src/first1k/search/searcher.py:24:1: W293 blank line contains whitespace
+./src/first1k/search/searcher.py:29:1: W293 blank line contains whitespace
+./src/first1k/search/searcher.py:33:1: W293 blank line contains whitespace
+./src/first1k/search/searcher.py:40:1: W293 blank line contains whitespace
+./src/first1k/search/searcher.py:54:1: W293 blank line contains whitespace
+./src/first1k/search/searcher.py:60:1: W293 blank line contains whitespace
+./src/first1k/search/searcher.py:66:1: W293 blank line contains whitespace
+./src/first1k/search/searcher.py:70:1: W293 blank line contains whitespace
+./src/first1k/search/searcher.py:76:1: W293 blank line contains whitespace
+./src/first1k/search/searcher.py:81:1: W293 blank line contains whitespace
+./src/first1k/search/searcher.py:93:1: W293 blank line contains whitespace
+./src/first1k/search/searcher.py:96:1: W293 blank line contains whitespace
+./src/first1k/search/searcher.py:97:19: W291 trailing whitespace
+./src/first1k/search/searcher.py:97:20: W292 no newline at end of file
+./src/first1k/xml_utils/processor.py:7:1: E302 expected 2 blank lines, found 1
+./src/first1k/xml_utils/processor.py:13:1: W293 blank line contains whitespace
+./src/first1k/xml_utils/processor.py:16:1: W293 blank line contains whitespace
+./src/first1k/xml_utils/processor.py:19:1: W293 blank line contains whitespace
+./src/first1k/xml_utils/processor.py:23:1: W293 blank line contains whitespace
+./src/first1k/xml_utils/processor.py:29:1: W293 blank line contains whitespace
+./src/first1k/xml_utils/processor.py:32:1: W293 blank line contains whitespace
+./src/first1k/xml_utils/processor.py:44:1: W293 blank line contains whitespace
+./src/first1k/xml_utils/processor.py:52:1: W293 blank line contains whitespace
+./src/first1k/xml_utils/processor.py:55:20: E127 continuation line over-indented for visual indent
+./src/first1k/xml_utils/processor.py:56:1: W293 blank line contains whitespace
+./src/first1k/xml_utils/processor.py:61:36: F541 f-string is missing placeholders
+./src/first1k/xml_utils/processor.py:63:36: F541 f-string is missing placeholders
+./src/first1k/xml_utils/processor.py:64:1: W293 blank line contains whitespace
+./src/first1k/xml_utils/processor.py:67:1: W293 blank line contains whitespace
+./src/first1k/xml_utils/processor.py:73:1: W293 blank line contains whitespace
+./src/first1k/xml_utils/processor.py:85:1: W293 blank line contains whitespace
+./src/first1k/xml_utils/processor.py:88:1: W293 blank line contains whitespace
+./src/first1k/xml_utils/processor.py:92:1: W293 blank line contains whitespace
+./src/first1k/xml_utils/processor.py:94:1: W293 blank line contains whitespace
+./src/first1k/xml_utils/processor.py:97:1: W293 blank line contains whitespace
+./src/first1k/xml_utils/processor.py:100:1: W293 blank line contains whitespace
+./src/first1k/xml_utils/processor.py:105:1: W293 blank line contains whitespace
+./src/first1k/xml_utils/processor.py:111:1: W293 blank line contains whitespace
+./src/first1k/xml_utils/processor.py:121:1: W293 blank line contains whitespace
+./src/first1k/xml_utils/processor.py:123:1: W293 blank line contains whitespace
+./src/first1k/xml_utils/processor.py:125:1: W293 blank line contains whitespace
+./src/first1k/xml_utils/processor.py:132:1: E302 expected 2 blank lines, found 1
+./src/first1k/xml_utils/processor.py:142:1: E302 expected 2 blank lines, found 1
+./src/first1k/xml_utils/processor.py:154:1: E302 expected 2 blank lines, found 1
+./src/first1k/xml_utils/processor.py:165:21: W291 trailing whitespace
+./src/first1k/xml_utils/processor.py:165:22: W292 no newline at end of file
+./tools/linting/analyze_code.py:13:1: F401 'pathlib.Path' imported but unused
+./tools/linting/analyze_code.py:17:1: E302 expected 2 blank lines, found 1
+./tools/linting/analyze_code.py:23:1: E302 expected 2 blank lines, found 1
+./tools/linting/analyze_code.py:26:1: W293 blank line contains whitespace
+./tools/linting/analyze_code.py:34:1: E302 expected 2 blank lines, found 1
+./tools/linting/analyze_code.py:38:1: W293 blank line contains whitespace
+./tools/linting/analyze_code.py:45:1: W293 blank line contains whitespace
+./tools/linting/analyze_code.py:48:1: E302 expected 2 blank lines, found 1
+./tools/linting/analyze_code.py:51:1: W293 blank line contains whitespace
+./tools/linting/analyze_code.py:53:1: W293 blank line contains whitespace
+./tools/linting/analyze_code.py:62:1: W293 blank line contains whitespace
+./tools/linting/analyze_code.py:72:1: W293 blank line contains whitespace
+./tools/linting/analyze_code.py:74:1: W293 blank line contains whitespace
+./tools/linting/analyze_code.py:84:1: W293 blank line contains whitespace
+./tools/linting/analyze_code.py:88:1: E302 expected 2 blank lines, found 1
+./tools/linting/analyze_code.py:91:1: W293 blank line contains whitespace
+./tools/linting/analyze_code.py:94:1: W293 blank line contains whitespace
+./tools/linting/analyze_code.py:104:1: W293 blank line contains whitespace
+./tools/linting/analyze_code.py:107:94: W291 trailing whitespace
+./tools/linting/analyze_code.py:111:1: W293 blank line contains whitespace
+./tools/linting/analyze_code.py:113:1: W293 blank line contains whitespace
+./tools/linting/analyze_code.py:122:1: W293 blank line contains whitespace
+./tools/linting/analyze_code.py:126:1: E302 expected 2 blank lines, found 1
+./tools/linting/analyze_code.py:129:1: W293 blank line contains whitespace
+./tools/linting/analyze_code.py:131:1: W293 blank line contains whitespace
+./tools/linting/analyze_code.py:141:1: W293 blank line contains whitespace
+./tools/linting/analyze_code.py:143:1: W293 blank line contains whitespace
+./tools/linting/analyze_code.py:149:1: W293 blank line contains whitespace
+./tools/linting/analyze_code.py:153:1: E302 expected 2 blank lines, found 1
+./tools/linting/analyze_code.py:156:1: W293 blank line contains whitespace
+./tools/linting/analyze_code.py:158:1: W293 blank line contains whitespace
+./tools/linting/analyze_code.py:168:1: W293 blank line contains whitespace
+./tools/linting/analyze_code.py:170:1: W293 blank line contains whitespace
+./tools/linting/analyze_code.py:176:1: W293 blank line contains whitespace
+./tools/linting/analyze_code.py:180:1: E302 expected 2 blank lines, found 1
+./tools/linting/analyze_code.py:183:1: W293 blank line contains whitespace
+./tools/linting/analyze_code.py:188:1: W293 blank line contains whitespace
+./tools/linting/analyze_code.py:190:1: W293 blank line contains whitespace
+./tools/linting/analyze_code.py:196:1: W293 blank line contains whitespace
+./tools/linting/analyze_code.py:206:1: W293 blank line contains whitespace
+./tools/linting/analyze_code.py:209:1: E302 expected 2 blank lines, found 1
+./tools/linting/analyze_code.py:214:1: W293 blank line contains whitespace
+./tools/linting/analyze_code.py:218:1: W293 blank line contains whitespace
+./tools/linting/analyze_code.py:221:1: W293 blank line contains whitespace
+./tools/linting/analyze_code.py:226:1: W293 blank line contains whitespace
+./tools/linting/analyze_code.py:233:1: W293 blank line contains whitespace
+./tools/linting/analyze_code.py:236:1: W293 blank line contains whitespace
+./tools/linting/analyze_code.py:241:1: E305 expected 2 blank lines after class or function definition, found 1
+./tools/linting/analyze_code.py:242:11: W291 trailing whitespace
+./tools/linting/analyze_code.py:242:12: W292 no newline at end of file
+./tools/linting/fix_critical.py:14:1: F401 'pathlib.Path' imported but unused
+./tools/linting/fix_critical.py:16:1: E302 expected 2 blank lines, found 1
+./tools/linting/fix_critical.py:22:1: E302 expected 2 blank lines, found 1
+./tools/linting/fix_critical.py:25:94: W291 trailing whitespace
+./tools/linting/fix_critical.py:31:1: W293 blank line contains whitespace
+./tools/linting/fix_critical.py:41:1: E302 expected 2 blank lines, found 1
+./tools/linting/fix_critical.py:45:1: W293 blank line contains whitespace
+./tools/linting/fix_critical.py:52:1: E302 expected 2 blank lines, found 1
+./tools/linting/fix_critical.py:59:1: E302 expected 2 blank lines, found 1
+./tools/linting/fix_critical.py:62:1: W293 blank line contains whitespace
+./tools/linting/fix_critical.py:69:1: W293 blank line contains whitespace
+./tools/linting/fix_critical.py:73:1: W293 blank line contains whitespace
+./tools/linting/fix_critical.py:76:1: E302 expected 2 blank lines, found 1
+./tools/linting/fix_critical.py:79:1: W293 blank line contains whitespace
+./tools/linting/fix_critical.py:86:1: W293 blank line contains whitespace
+./tools/linting/fix_critical.py:89:1: W293 blank line contains whitespace
+./tools/linting/fix_critical.py:93:1: W293 blank line contains whitespace
+./tools/linting/fix_critical.py:97:1: W293 blank line contains whitespace
+./tools/linting/fix_critical.py:101:1: W293 blank line contains whitespace
+./tools/linting/fix_critical.py:105:1: W293 blank line contains whitespace
+./tools/linting/fix_critical.py:108:1: W293 blank line contains whitespace
+./tools/linting/fix_critical.py:113:1: W293 blank line contains whitespace
+./tools/linting/fix_critical.py:116:1: W293 blank line contains whitespace
+./tools/linting/fix_critical.py:125:1: W293 blank line contains whitespace
+./tools/linting/fix_critical.py:128:1: E302 expected 2 blank lines, found 1
+./tools/linting/fix_critical.py:134:1: W293 blank line contains whitespace
+./tools/linting/fix_critical.py:141:1: W293 blank line contains whitespace
+./tools/linting/fix_critical.py:149:1: W293 blank line contains whitespace
+./tools/linting/fix_critical.py:153:1: W293 blank line contains whitespace
+./tools/linting/fix_critical.py:156:1: W293 blank line contains whitespace
+./tools/linting/fix_critical.py:159:1: E305 expected 2 blank lines after class or function definition, found 1
+./tools/linting/fix_critical.py:160:11: W291 trailing whitespace
+./tools/linting/fix_critical.py:160:12: W292 no newline at end of file
+./tools/linting/format_incremental.py:13:1: F401 'tempfile' imported but unused
+./tools/linting/format_incremental.py:15:1: F401 'pathlib.Path' imported but unused
+./tools/linting/format_incremental.py:17:1: E302 expected 2 blank lines, found 1
+./tools/linting/format_incremental.py:23:1: E302 expected 2 blank lines, found 1
+./tools/linting/format_incremental.py:30:1: E302 expected 2 blank lines, found 1
+./tools/linting/format_incremental.py:33:1: W293 blank line contains whitespace
+./tools/linting/format_incremental.py:36:1: W293 blank line contains whitespace
+./tools/linting/format_incremental.py:43:1: W293 blank line contains whitespace
+./tools/linting/format_incremental.py:45:1: W293 blank line contains whitespace
+./tools/linting/format_incremental.py:52:1: W293 blank line contains whitespace
+./tools/linting/format_incremental.py:55:1: E302 expected 2 blank lines, found 1
+./tools/linting/format_incremental.py:59:1: W293 blank line contains whitespace
+./tools/linting/format_incremental.py:61:1: W293 blank line contains whitespace
+./tools/linting/format_incremental.py:69:1: W293 blank line contains whitespace
+./tools/linting/format_incremental.py:73:1: W293 blank line contains whitespace
+./tools/linting/format_incremental.py:76:1: E302 expected 2 blank lines, found 1
+./tools/linting/format_incremental.py:79:1: W293 blank line contains whitespace
+./tools/linting/format_incremental.py:82:1: W293 blank line contains whitespace
+./tools/linting/format_incremental.py:87:1: W293 blank line contains whitespace
+./tools/linting/format_incremental.py:93:1: W293 blank line contains whitespace
+./tools/linting/format_incremental.py:95:1: W293 blank line contains whitespace
+./tools/linting/format_incremental.py:100:1: W293 blank line contains whitespace
+./tools/linting/format_incremental.py:108:1: W293 blank line contains whitespace
+./tools/linting/format_incremental.py:113:1: W293 blank line contains whitespace
+./tools/linting/format_incremental.py:123:1: W293 blank line contains whitespace
+./tools/linting/format_incremental.py:128:1: W293 blank line contains whitespace
+./tools/linting/format_incremental.py:131:1: E302 expected 2 blank lines, found 1
+./tools/linting/format_incremental.py:141:1: W293 blank line contains whitespace
+./tools/linting/format_incremental.py:149:1: W293 blank line contains whitespace
+./tools/linting/format_incremental.py:157:1: W293 blank line contains whitespace
+./tools/linting/format_incremental.py:161:1: W293 blank line contains whitespace
+./tools/linting/format_incremental.py:163:23: W291 trailing whitespace
+./tools/linting/format_incremental.py:164:24: W291 trailing whitespace
+./tools/linting/format_incremental.py:170:1: W293 blank line contains whitespace
+./tools/linting/format_incremental.py:173:1: E305 expected 2 blank lines after class or function definition, found 1
+./tools/linting/format_incremental.py:174:11: W291 trailing whitespace
+./tools/linting/format_incremental.py:174:12: W292 no newline at end of file
+./tools/linting/pre-commit-hook.py:12:1: F401 'tempfile' imported but unused
+./tools/linting/pre-commit-hook.py:14:1: F401 'pathlib.Path' imported but unused
+./tools/linting/pre-commit-hook.py:16:1: E302 expected 2 blank lines, found 1
+./tools/linting/pre-commit-hook.py:22:1: E302 expected 2 blank lines, found 1
+./tools/linting/pre-commit-hook.py:30:1: W293 blank line contains whitespace
+./tools/linting/pre-commit-hook.py:34:1: E302 expected 2 blank lines, found 1
+./tools/linting/pre-commit-hook.py:38:1: W293 blank line contains whitespace
+./tools/linting/pre-commit-hook.py:46:1: E302 expected 2 blank lines, found 1
+./tools/linting/pre-commit-hook.py:49:80: W291 trailing whitespace
+./tools/linting/pre-commit-hook.py:55:1: W293 blank line contains whitespace
+./tools/linting/pre-commit-hook.py:69:1: E302 expected 2 blank lines, found 1
+./tools/linting/pre-commit-hook.py:72:1: W293 blank line contains whitespace
+./tools/linting/pre-commit-hook.py:75:1: W293 blank line contains whitespace
+./tools/linting/pre-commit-hook.py:79:1: W293 blank line contains whitespace
+./tools/linting/pre-commit-hook.py:81:1: W293 blank line contains whitespace
+./tools/linting/pre-commit-hook.py:86:1: W293 blank line contains whitespace
+./tools/linting/pre-commit-hook.py:91:1: W293 blank line contains whitespace
+./tools/linting/pre-commit-hook.py:96:1: W293 blank line contains whitespace
+./tools/linting/pre-commit-hook.py:98:1: W293 blank line contains whitespace
+./tools/linting/pre-commit-hook.py:103:1: W293 blank line contains whitespace
+./tools/linting/pre-commit-hook.py:107:1: E305 expected 2 blank lines after class or function definition, found 1
+./tools/linting/pre-commit-hook.py:108:21: W291 trailing whitespace
+./tools/linting/pre-commit-hook.py:108:22: W292 no newline at end of file
+1     E127 continuation line over-indented for visual indent
+1     E261 at least two spaces before inline comment
+64    E302 expected 2 blank lines, found 1
+7     E305 expected 2 blank lines after class or function definition, found 1
+3     E402 module level import not at top of file
+5     E722 do not use bare 'except'
+19    F401 're' imported but unused
+6     F541 f-string is missing placeholders
+11    F821 undefined name 'margin'
+4     F841 local variable 'root' is assigned to but never used
+76    W291 trailing whitespace
+22    W292 no newline at end of file
+472   W293 blank line contains whitespace
+691
+
+
+Error Categories:
+./browse_texts_fixed.py:13:1: F401 're' imported but unused
+./browse_texts_fixed.py:15:1: F401 'time' imported but unused
+./browse_texts_fixed.py:17:1: F401 'signal' imported but unused
+./browse_texts_fixed.py:23:1: F401 'urllib.error.URLError' imported but unused
+./browse_texts_fixed.py:23:1: F401 'urllib.error.HTTPError' imported but unused
+./browse_texts_fixed.py:38:1: E302 expected 2 blank lines, found 1
+./browse_texts_fixed.py:45:1: E305 expected 2 blank lines after class or function definition, found 1
+./browse_texts_fixed.py:69:7: W291 trailing whitespace
+./browse_texts_fixed.py:70:115: W291 trailing whitespace
+./browse_texts_fixed.py:71:15: W291 trailing whitespace
+./browse_texts_fixed.py:73:22: W291 trailing whitespace
+./browse_texts_fixed.py:74:31: W291 trailing whitespace
+./browse_texts_fixed.py:75:20: W291 trailing whitespace
+./browse_texts_fixed.py:77:13: W291 trailing whitespace
+./browse_texts_fixed.py:85:13: W291 trailing whitespace
+./browse_texts_fixed.py:86:22: W291 trailing whitespace
+./browse_texts_fixed.py:87:20: W291 trailing whitespace
+./browse_texts_fixed.py:93:4: W291 trailing whitespace
+./browse_texts_fixed.py:97:7: W291 trailing whitespace
+./browse_texts_fixed.py:98:65: W291 trailing whitespace
+./browse_texts_fixed.py:99:15: W291 trailing whitespace
+./browse_texts_fixed.py:101:22: W291 trailing whitespace
+./browse_texts_fixed.py:102:31: W291 trailing whitespace
+./browse_texts_fixed.py:103:20: W291 trailing whitespace
+./browse_texts_fixed.py:105:13: W291 trailing whitespace
+./browse_texts_fixed.py:112:13: W291 trailing whitespace
+./browse_texts_fixed.py:113:23: W291 trailing whitespace
+./browse_texts_fixed.py:114:20: W291 trailing whitespace
+./browse_texts_fixed.py:512:1: E302 expected 2 blank lines, found 1
+./browse_texts_fixed.py:519:1: E302 expected 2 blank lines, found 1
+./browse_texts_fixed.py:529:1: E302 expected 2 blank lines, found 1
+./browse_texts_fixed.py:531:1: W293 blank line contains whitespace
+./browse_texts_fixed.py:535:1: W293 blank line contains whitespace
+./browse_texts_fixed.py:539:1: W293 blank line contains whitespace
+./browse_texts_fixed.py:544:1: W293 blank line contains whitespace
+./browse_texts_fixed.py:549:1: W293 blank line contains whitespace
+./browse_texts_fixed.py:555:1: W293 blank line contains whitespace
+./browse_texts_fixed.py:561:1: W293 blank line contains whitespace
+./browse_texts_fixed.py:566:1: W293 blank line contains whitespace
+./browse_texts_fixed.py:577:1: W293 blank line contains whitespace
+./browse_texts_fixed.py:581:1: W293 blank line contains whitespace
+./browse_texts_fixed.py:589:1: W293 blank line contains whitespace
+./browse_texts_fixed.py:593:1: W293 blank line contains whitespace
+./browse_texts_fixed.py:604:1: W293 blank line contains whitespace
+./browse_texts_fixed.py:607:49: W291 trailing whitespace
+./browse_texts_fixed.py:613:1: W293 blank line contains whitespace
+./browse_texts_fixed.py:698:1: W293 blank line contains whitespace
+./browse_texts_fixed.py:702:1: W293 blank line contains whitespace
+./browse_texts_fixed.py:709:1: W293 blank line contains whitespace
+./browse_texts_fixed.py:718:1: W293 blank line contains whitespace
+./browse_texts_fixed.py:726:1: W293 blank line contains whitespace
+./browse_texts_fixed.py:734:1: W293 blank line contains whitespace
+./browse_texts_fixed.py:738:1: W293 blank line contains whitespace
+./browse_texts_fixed.py:776:1: W293 blank line contains whitespace
+./browse_texts_fixed.py:782:1: W293 blank line contains whitespace
+./browse_texts_fixed.py:789:1: W293 blank line contains whitespace
+./browse_texts_fixed.py:842:57: W291 trailing whitespace
+./browse_texts_fixed.py:866:1: W293 blank line contains whitespace
+./browse_texts_fixed.py:893:1: W293 blank line contains whitespace
+./browse_texts_fixed.py:898:1: W293 blank line contains whitespace
+./browse_texts_fixed.py:909:1: W293 blank line contains whitespace
+./browse_texts_fixed.py:914:1: W293 blank line contains whitespace
+./browse_texts_fixed.py:921:1: W293 blank line contains whitespace
+./browse_texts_fixed.py:923:1: W293 blank line contains whitespace
+./browse_texts_fixed.py:928:1: W293 blank line contains whitespace
+./browse_texts_fixed.py:933:1: W293 blank line contains whitespace
+./browse_texts_fixed.py:936:1: W293 blank line contains whitespace
+./browse_texts_fixed.py:942:1: W293 blank line contains whitespace
+./browse_texts_fixed.py:945:1: W293 blank line contains whitespace
+./browse_texts_fixed.py:959:1: W293 blank line contains whitespace
+./browse_texts_fixed.py:966:1: W293 blank line contains whitespace
+./browse_texts_fixed.py:968:1: W293 blank line contains whitespace
+./browse_texts_fixed.py:973:1: W293 blank line contains whitespace
+./browse_texts_fixed.py:981:1: W293 blank line contains whitespace
+./browse_texts_fixed.py:985:1: W293 blank line contains whitespace
+./browse_texts_fixed.py:992:1: W293 blank line contains whitespace
+./browse_texts_fixed.py:995:1: W293 blank line contains whitespace
+./browse_texts_fixed.py:1010:1: W293 blank line contains whitespace
+./browse_texts_fixed.py:1014:1: W293 blank line contains whitespace
+./browse_texts_fixed.py:1054:1: W293 blank line contains whitespace
+./browse_texts_fixed.py:1066:1: W293 blank line contains whitespace
+./browse_texts_fixed.py:1082:1: W293 blank line contains whitespace
+./browse_texts_fixed.py:1094:1: W293 blank line contains whitespace
+./browse_texts_fixed.py:1099:1: W293 blank line contains whitespace
+./browse_texts_fixed.py:1102:1: W293 blank line contains whitespace
+./browse_texts_fixed.py:1107:1: W293 blank line contains whitespace
+./browse_texts_fixed.py:1110:1: W293 blank line contains whitespace
+./browse_texts_fixed.py:1118:1: W293 blank line contains whitespace
+./browse_texts_fixed.py:1123:1: W293 blank line contains whitespace
+./browse_texts_fixed.py:1130:1: W293 blank line contains whitespace
+./browse_texts_fixed.py:1134:1: W293 blank line contains whitespace
+./browse_texts_fixed.py:1146:1: W293 blank line contains whitespace
+./browse_texts_fixed.py:1149:1: W293 blank line contains whitespace
+./browse_texts_fixed.py:1157:1: W293 blank line contains whitespace
+./browse_texts_fixed.py:1163:1: W293 blank line contains whitespace
+./browse_texts_fixed.py:1165:1: W293 blank line contains whitespace
+./browse_texts_fixed.py:1171:1: W293 blank line contains whitespace
+./browse_texts_fixed.py:1174:1: W293 blank line contains whitespace
+./browse_texts_fixed.py:1179:1: W293 blank line contains whitespace
+./browse_texts_fixed.py:1184:1: W293 blank line contains whitespace
+./browse_texts_fixed.py:1187:1: W293 blank line contains whitespace
+./browse_texts_fixed.py:1202:1: W293 blank line contains whitespace
+./browse_texts_fixed.py:1210:1: W293 blank line contains whitespace
+./browse_texts_fixed.py:1212:1: W293 blank line contains whitespace
+./browse_texts_fixed.py:1217:1: W293 blank line contains whitespace
+./browse_texts_fixed.py:1236:1: W293 blank line contains whitespace
+./browse_texts_fixed.py:1239:1: W293 blank line contains whitespace
+./browse_texts_fixed.py:1241:1: W293 blank line contains whitespace
+./browse_texts_fixed.py:1247:1: W293 blank line contains whitespace
+./browse_texts_fixed.py:1254:1: W293 blank line contains whitespace
+./browse_texts_fixed.py:1258:1: W293 blank line contains whitespace
+./browse_texts_fixed.py:1261:1: W293 blank line contains whitespace
+./browse_texts_fixed.py:1265:1: W293 blank line contains whitespace
+./browse_texts_fixed.py:1269:1: W293 blank line contains whitespace
+./browse_texts_fixed.py:1275:1: W293 blank line contains whitespace
+./browse_texts_fixed.py:1284:1: W293 blank line contains whitespace
+./browse_texts_fixed.py:1293:1: W293 blank line contains whitespace
+./browse_texts_fixed.py:1295:21: F821 undefined name 'margin'
+./browse_texts_fixed.py:1295:28: F821 undefined name 'top'
+./browse_texts_fixed.py:1297:1: W293 blank line contains whitespace
+./browse_texts_fixed.py:1299:21: F821 undefined name 'margin'
+./browse_texts_fixed.py:1299:28: F821 undefined name 'bottom'
+./browse_texts_fixed.py:1304:1: W293 blank line contains whitespace
+./browse_texts_fixed.py:1306:21: F821 undefined name 'font'
+./browse_texts_fixed.py:1306:26: F821 undefined name 'size'
+./browse_texts_fixed.py:1311:1: W293 blank line contains whitespace
+./browse_texts_fixed.py:1313:26: F821 undefined name 'style'
+./browse_texts_fixed.py:1316:1: W293 blank line contains whitespace
+./browse_texts_fixed.py:1318:21: F821 undefined name 'padding'
+./browse_texts_fixed.py:1321:1: W293 blank line contains whitespace
+./browse_texts_fixed.py:1323:21: F821 undefined name 'border'
+./browse_texts_fixed.py:1323:28: F821 undefined name 'bottom'
+./browse_texts_fixed.py:1325:1: W293 blank line contains whitespace
+./browse_texts_fixed.py:1327:21: F821 undefined name 'padding'
+./browse_texts_fixed.py:1339:1: W293 blank line contains whitespace
+./browse_texts_fixed.py:1341:1: W293 blank line contains whitespace
+./browse_texts_fixed.py:1348:1: W293 blank line contains whitespace
+./browse_texts_fixed.py:1351:1: W293 blank line contains whitespace
+./browse_texts_fixed.py:1354:1: W293 blank line contains whitespace
+./browse_texts_fixed.py:1357:1: W293 blank line contains whitespace
+./browse_texts_fixed.py:1364:1: W293 blank line contains whitespace
+./browse_texts_fixed.py:1367:1: W293 blank line contains whitespace
+./browse_texts_fixed.py:1376:1: W293 blank line contains whitespace
+./browse_texts_fixed.py:1381:1: W293 blank line contains whitespace
+./browse_texts_fixed.py:1389:1: W293 blank line contains whitespace
+./browse_texts_fixed.py:1397:1: W293 blank line contains whitespace
+./browse_texts_fixed.py:1399:1: W293 blank line contains whitespace
+./browse_texts_fixed.py:1409:1: W293 blank line contains whitespace
+./browse_texts_fixed.py:1416:1: W293 blank line contains whitespace
+./browse_texts_fixed.py:1425:1: W293 blank line contains whitespace
+./browse_texts_fixed.py:1435:1: W293 blank line contains whitespace
+./browse_texts_fixed.py:1445:1: W293 blank line contains whitespace
+./browse_texts_fixed.py:1452:1: W293 blank line contains whitespace
+./browse_texts_fixed.py:1458:1: W293 blank line contains whitespace
+./browse_texts_fixed.py:1460:1: W293 blank line contains whitespace
+./browse_texts_fixed.py:1470:1: W293 blank line contains whitespace
+./browse_texts_fixed.py:1485:1: W293 blank line contains whitespace
+./browse_texts_fixed.py:1493:1: W293 blank line contains whitespace
+./browse_texts_fixed.py:1496:1: E305 expected 2 blank lines after class or function definition, found 1
+./browse_texts_fixed.py:1500:1: W293 blank line contains whitespace
+./browse_texts_fixed.py:1504:1: W293 blank line contains whitespace
+./browse_texts_fixed.py:1516:1: W293 blank line contains whitespace
+./browse_texts_fixed.py:1520:1: W293 blank line contains whitespace
+./browse_texts_fixed.py:1522:23: F541 f-string is missing placeholders
+./browse_texts_fixed.py:1524:23: F541 f-string is missing placeholders
+./browse_texts_fixed.py:1525:23: F541 f-string is missing placeholders
+./browse_texts_fixed.py:1526:1: W293 blank line contains whitespace
+./browse_texts_fixed.py:1529:1: W293 blank line contains whitespace
+./browse_texts_fixed.py:1540:1: W293 blank line contains whitespace
+./browse_texts_fixed.py:1548:45: W291 trailing whitespace
+./browse_texts_fixed.py:1548:46: W292 no newline at end of file
+./copy_texts.py:6:1: E302 expected 2 blank lines, found 1
+./copy_texts.py:26:1: W293 blank line contains whitespace
+./copy_texts.py:32:1: W293 blank line contains whitespace
+./copy_texts.py:37:1: W293 blank line contains whitespace
+./copy_texts.py:39:1: W293 blank line contains whitespace
+./copy_texts.py:44:1: W293 blank line contains whitespace
+./copy_texts.py:53:1: W293 blank line contains whitespace
+./copy_texts.py:59:1: W293 blank line contains whitespace
+./copy_texts.py:70:1: W293 blank line contains whitespace
+./copy_texts.py:75:1: W293 blank line contains whitespace
+./copy_texts.py:79:1: W293 blank line contains whitespace
+./copy_texts.py:83:1: W293 blank line contains whitespace
+./copy_texts.py:87:76: W291 trailing whitespace
+./copy_texts.py:87:77: W292 no newline at end of file
+./run_first1k_tests.py:18:1: E402 module level import not at top of file
+./run_first1k_tests.py:19:1: E402 module level import not at top of file
+./run_first1k_tests.py:20:1: E402 module level import not at top of file
+./run_first1k_tests.py:27:62: W291 trailing whitespace
+./run_first1k_tests.py:29:62: W291 trailing whitespace
+./run_first1k_tests.py:40:1: W293 blank line contains whitespace
+./run_first1k_tests.py:43:1: W293 blank line contains whitespace
+./run_first1k_tests.py:49:1: W293 blank line contains whitespace
+./run_first1k_tests.py:55:1: W293 blank line contains whitespace
+./run_first1k_tests.py:61:1: W293 blank line contains whitespace
+./run_first1k_tests.py:65:1: W293 blank line contains whitespace
+./run_first1k_tests.py:70:1: W293 blank line contains whitespace
+./run_first1k_tests.py:77:1: W293 blank line contains whitespace
+./run_first1k_tests.py:84:34: W291 trailing whitespace
+./run_first1k_tests.py:84:35: W292 no newline at end of file
+./setup.py:19:2: W291 trailing whitespace
+./setup.py:19:3: W292 no newline at end of file
+./simple_integration_test.py:5:1: F401 'os' imported but unused
+./simple_integration_test.py:6:1: F401 'sys' imported but unused
+./simple_integration_test.py:24:1: W293 blank line contains whitespace
+./simple_integration_test.py:28:1: W293 blank line contains whitespace
+./simple_integration_test.py:42:1: W293 blank line contains whitespace
+./simple_integration_test.py:48:1: W293 blank line contains whitespace
+./simple_integration_test.py:51:1: W293 blank line contains whitespace
+./simple_integration_test.py:56:1: W293 blank line contains whitespace
+./simple_integration_test.py:59:1: W293 blank line contains whitespace
+./simple_integration_test.py:66:1: W293 blank line contains whitespace
+./simple_integration_test.py:73:1: W293 blank line contains whitespace
+./simple_integration_test.py:79:1: W293 blank line contains whitespace
+./simple_integration_test.py:87:31: W291 trailing whitespace
+./simple_integration_test.py:87:32: W292 no newline at end of file
+./simple_performance_test.py:6:1: F401 'sys' imported but unused
+./simple_performance_test.py:27:1: W293 blank line contains whitespace
+./simple_performance_test.py:34:25: F541 f-string is missing placeholders
+./simple_performance_test.py:41:1: W293 blank line contains whitespace
+./simple_performance_test.py:56:1: W293 blank line contains whitespace
+./simple_performance_test.py:59:1: W293 blank line contains whitespace
+./simple_performance_test.py:65:1: W293 blank line contains whitespace
+./simple_performance_test.py:71:1: W293 blank line contains whitespace
+./simple_performance_test.py:76:1: W293 blank line contains whitespace
+./simple_performance_test.py:80:1: W293 blank line contains whitespace
+./simple_performance_test.py:87:1: W293 blank line contains whitespace
+./simple_performance_test.py:92:9: F841 local variable 'root' is assigned to but never used
+./simple_performance_test.py:94:1: W293 blank line contains whitespace
+./simple_performance_test.py:97:1: W293 blank line contains whitespace
+./simple_performance_test.py:102:9: F841 local variable 'root' is assigned to but never used
+./simple_performance_test.py:104:1: W293 blank line contains whitespace
+./simple_performance_test.py:107:1: W293 blank line contains whitespace
+./simple_performance_test.py:112:9: F841 local variable 'root' is assigned to but never used
+./simple_performance_test.py:114:1: W293 blank line contains whitespace
+./simple_performance_test.py:117:1: W293 blank line contains whitespace
+./simple_performance_test.py:122:1: W293 blank line contains whitespace
+./simple_performance_test.py:126:1: W293 blank line contains whitespace
+./simple_performance_test.py:133:31: W291 trailing whitespace
+./simple_performance_test.py:133:32: W292 no newline at end of file
+./simple_server.py:10:1: E302 expected 2 blank lines, found 1
+./simple_server.py:16:1: E305 expected 2 blank lines after class or function definition, found 1
+./simple_server.py:21:1: W293 blank line contains whitespace
+./simple_server.py:23:1: W293 blank line contains whitespace
+./simple_server.py:26:30: W291 trailing whitespace
+./simple_server.py:26:31: W292 no newline at end of file
+./simple_test.py:6:1: F401 'sys' imported but unused
+./simple_test.py:11:1: W293 blank line contains whitespace
+./simple_test.py:17:1: W293 blank line contains whitespace
+./simple_test.py:24:20: W291 trailing whitespace
+./simple_test.py:24:21: W292 no newline at end of file
+./simple_xml_test.py:6:1: F401 'sys' imported but unused
+./simple_xml_test.py:13:1: W293 blank line contains whitespace
+./simple_xml_test.py:18:1: W293 blank line contains whitespace
+./simple_xml_test.py:40:1: W293 blank line contains whitespace
+./simple_xml_test.py:46:1: W293 blank line contains whitespace
+./simple_xml_test.py:51:1: W293 blank line contains whitespace
+./simple_xml_test.py:54:1: W293 blank line contains whitespace
+./simple_xml_test.py:57:1: W293 blank line contains whitespace
+./simple_xml_test.py:63:1: W293 blank line contains whitespace
+./simple_xml_test.py:68:1: W293 blank line contains whitespace
+./simple_xml_test.py:71:1: W293 blank line contains whitespace
+./simple_xml_test.py:76:1: W293 blank line contains whitespace
+./simple_xml_test.py:81:1: W293 blank line contains whitespace
+./simple_xml_test.py:89:31: W291 trailing whitespace
+./simple_xml_test.py:89:32: W292 no newline at end of file
+./src/first1k/config.py:14:7: W291 trailing whitespace
+./src/first1k/config.py:15:115: W291 trailing whitespace
+./src/first1k/config.py:16:15: W291 trailing whitespace
+./src/first1k/config.py:18:22: W291 trailing whitespace
+./src/first1k/config.py:19:31: W291 trailing whitespace
+./src/first1k/config.py:20:20: W291 trailing whitespace
+./src/first1k/config.py:22:13: W291 trailing whitespace
+./src/first1k/config.py:30:13: W291 trailing whitespace
+./src/first1k/config.py:31:22: W291 trailing whitespace
+./src/first1k/config.py:32:20: W291 trailing whitespace
+./src/first1k/config.py:41:7: W291 trailing whitespace
+./src/first1k/config.py:42:65: W291 trailing whitespace
+./src/first1k/config.py:43:15: W291 trailing whitespace
+./src/first1k/config.py:45:22: W291 trailing whitespace
+./src/first1k/config.py:46:31: W291 trailing whitespace
+./src/first1k/config.py:47:20: W291 trailing whitespace
+./src/first1k/config.py:49:13: W291 trailing whitespace
+./src/first1k/config.py:56:13: W291 trailing whitespace
+./src/first1k/config.py:57:23: W291 trailing whitespace
+./src/first1k/config.py:58:20: W291 trailing whitespace
+./src/first1k/editor/manager.py:5:1: F401 'urllib.parse.quote' imported but unused
+./src/first1k/editor/manager.py:7:1: E302 expected 2 blank lines, found 1
+./src/first1k/editor/manager.py:10:1: W293 blank line contains whitespace
+./src/first1k/editor/manager.py:12:1: W293 blank line contains whitespace
+./src/first1k/editor/manager.py:17:1: W293 blank line contains whitespace
+./src/first1k/editor/manager.py:21:1: W293 blank line contains whitespace
+./src/first1k/editor/manager.py:24:1: W293 blank line contains whitespace
+./src/first1k/editor/manager.py:31:1: W293 blank line contains whitespace
+./src/first1k/editor/manager.py:41:1: W293 blank line contains whitespace
+./src/first1k/editor/manager.py:45:1: W293 blank line contains whitespace
+./src/first1k/editor/manager.py:58:1: W293 blank line contains whitespace
+./src/first1k/editor/manager.py:62:1: W293 blank line contains whitespace
+./src/first1k/editor/manager.py:70:1: W293 blank line contains whitespace
+./src/first1k/editor/manager.py:77:1: W293 blank line contains whitespace
+./src/first1k/editor/manager.py:82:1: W293 blank line contains whitespace
+./src/first1k/editor/manager.py:84:1: W293 blank line contains whitespace
+./src/first1k/editor/manager.py:92:1: W293 blank line contains whitespace
+./src/first1k/editor/manager.py:96:1: W293 blank line contains whitespace
+./src/first1k/editor/manager.py:99:1: E302 expected 2 blank lines, found 1
+./src/first1k/editor/manager.py:108:1: W293 blank line contains whitespace
+./src/first1k/editor/manager.py:111:1: E302 expected 2 blank lines, found 1
+./src/first1k/editor/manager.py:115:1: W293 blank line contains whitespace
+./src/first1k/editor/manager.py:118:1: W293 blank line contains whitespace
+./src/first1k/editor/manager.py:133:1: W293 blank line contains whitespace
+./src/first1k/editor/manager.py:140:1: W293 blank line contains whitespace
+./src/first1k/editor/manager.py:154:1: W293 blank line contains whitespace
+./src/first1k/editor/manager.py:157:1: E302 expected 2 blank lines, found 1
+./src/first1k/editor/manager.py:163:1: W293 blank line contains whitespace
+./src/first1k/editor/manager.py:171:1: W293 blank line contains whitespace
+./src/first1k/editor/manager.py:179:1: W293 blank line contains whitespace
+./src/first1k/editor/manager.py:187:1: W293 blank line contains whitespace
+./src/first1k/editor/manager.py:196:1: W293 blank line contains whitespace
+./src/first1k/editor/manager.py:200:1: W293 blank line contains whitespace
+./src/first1k/editor/manager.py:201:17: W291 trailing whitespace
+./src/first1k/editor/manager.py:201:18: W292 no newline at end of file
+./src/first1k/handlers/browse.py:7:1: E302 expected 2 blank lines, found 1
+./src/first1k/handlers/browse.py:12:1: W293 blank line contains whitespace
+./src/first1k/handlers/browse.py:23:1: W293 blank line contains whitespace
+./src/first1k/handlers/browse.py:28:1: W293 blank line contains whitespace
+./src/first1k/handlers/browse.py:31:1: W293 blank line contains whitespace
+./src/first1k/handlers/browse.py:34:1: E302 expected 2 blank lines, found 1
+./src/first1k/handlers/browse.py:42:1: W293 blank line contains whitespace
+./src/first1k/handlers/browse.py:48:1: W293 blank line contains whitespace
+./src/first1k/handlers/browse.py:52:1: W293 blank line contains whitespace
+./src/first1k/handlers/browse.py:97:1: W293 blank line contains whitespace
+./src/first1k/handlers/browse.py:103:1: W293 blank line contains whitespace
+./src/first1k/handlers/browse.py:105:1: W293 blank line contains whitespace
+./src/first1k/handlers/browse.py:108:1: W293 blank line contains whitespace
+./src/first1k/handlers/browse.py:118:1: W293 blank line contains whitespace
+./src/first1k/handlers/browse.py:125:16: W291 trailing whitespace
+./src/first1k/handlers/browse.py:127:1: E302 expected 2 blank lines, found 1
+./src/first1k/handlers/browse.py:130:1: W293 blank line contains whitespace
+./src/first1k/handlers/browse.py:132:1: W293 blank line contains whitespace
+./src/first1k/handlers/browse.py:137:1: W293 blank line contains whitespace
+./src/first1k/handlers/browse.py:141:1: W293 blank line contains whitespace
+./src/first1k/handlers/browse.py:144:1: W293 blank line contains whitespace
+./src/first1k/handlers/browse.py:152:1: W293 blank line contains whitespace
+./src/first1k/handlers/browse.py:162:1: W293 blank line contains whitespace
+./src/first1k/handlers/browse.py:166:1: W293 blank line contains whitespace
+./src/first1k/handlers/browse.py:179:1: W293 blank line contains whitespace
+./src/first1k/handlers/browse.py:183:1: W293 blank line contains whitespace
+./src/first1k/handlers/browse.py:191:1: W293 blank line contains whitespace
+./src/first1k/handlers/browse.py:198:1: W293 blank line contains whitespace
+./src/first1k/handlers/browse.py:203:1: W293 blank line contains whitespace
+./src/first1k/handlers/browse.py:205:1: W293 blank line contains whitespace
+./src/first1k/handlers/browse.py:213:1: W293 blank line contains whitespace
+./src/first1k/handlers/browse.py:217:1: W293 blank line contains whitespace
+./src/first1k/handlers/browse.py:220:1: E302 expected 2 blank lines, found 1
+./src/first1k/handlers/browse.py:229:1: W293 blank line contains whitespace
+./src/first1k/handlers/browse.py:232:1: E302 expected 2 blank lines, found 1
+./src/first1k/handlers/browse.py:236:1: W293 blank line contains whitespace
+./src/first1k/handlers/browse.py:244:1: W293 blank line contains whitespace
+./src/first1k/handlers/browse.py:247:1: W293 blank line contains whitespace
+./src/first1k/handlers/browse.py:303:1: W293 blank line contains whitespace
+./src/first1k/handlers/browse.py:315:1: W293 blank line contains whitespace
+./src/first1k/handlers/browse.py:336:1: W293 blank line contains whitespace
+./src/first1k/handlers/browse.py:352:16: W291 trailing whitespace
+./src/first1k/handlers/browse.py:352:17: W292 no newline at end of file
+./src/first1k/handlers/import_text.py:8:1: F401 'urllib.parse.quote' imported but unused
+./src/first1k/handlers/import_text.py:11:1: E302 expected 2 blank lines, found 1
+./src/first1k/handlers/import_text.py:14:1: W293 blank line contains whitespace
+./src/first1k/handlers/import_text.py:19:1: W293 blank line contains whitespace
+./src/first1k/handlers/import_text.py:22:36: E261 at least two spaces before inline comment
+./src/first1k/handlers/import_text.py:23:1: W293 blank line contains whitespace
+./src/first1k/handlers/import_text.py:26:1: W293 blank line contains whitespace
+./src/first1k/handlers/import_text.py:30:1: W293 blank line contains whitespace
+./src/first1k/handlers/import_text.py:32:1: W293 blank line contains whitespace
+./src/first1k/handlers/import_text.py:39:1: W293 blank line contains whitespace
+./src/first1k/handlers/import_text.py:46:9: E722 do not use bare 'except'
+./src/first1k/handlers/import_text.py:49:1: W293 blank line contains whitespace
+./src/first1k/handlers/import_text.py:52:1: W293 blank line contains whitespace
+./src/first1k/handlers/import_text.py:69:13: E722 do not use bare 'except'
+./src/first1k/handlers/import_text.py:71:1: W293 blank line contains whitespace
+./src/first1k/handlers/import_text.py:74:1: W293 blank line contains whitespace
+./src/first1k/handlers/import_text.py:84:1: W293 blank line contains whitespace
+./src/first1k/handlers/import_text.py:99:1: W293 blank line contains whitespace
+./src/first1k/handlers/import_text.py:104:1: W293 blank line contains whitespace
+./src/first1k/handlers/import_text.py:106:1: W293 blank line contains whitespace
+./src/first1k/handlers/import_text.py:109:1: E302 expected 2 blank lines, found 1
+./src/first1k/handlers/import_text.py:114:1: W293 blank line contains whitespace
+./src/first1k/handlers/import_text.py:125:1: W293 blank line contains whitespace
+./src/first1k/handlers/import_text.py:130:1: W293 blank line contains whitespace
+./src/first1k/handlers/import_text.py:133:1: W293 blank line contains whitespace
+./src/first1k/handlers/import_text.py:136:1: E302 expected 2 blank lines, found 1
+./src/first1k/handlers/import_text.py:149:1: E302 expected 2 blank lines, found 1
+./src/first1k/handlers/import_text.py:162:1: E302 expected 2 blank lines, found 1
+./src/first1k/handlers/import_text.py:177:1: E302 expected 2 blank lines, found 1
+./src/first1k/handlers/import_text.py:274:1: W293 blank line contains whitespace
+./src/first1k/handlers/import_text.py:280:1: W293 blank line contains whitespace
+./src/first1k/handlers/import_text.py:285:1: W293 blank line contains whitespace
+./src/first1k/handlers/import_text.py:292:1: W293 blank line contains whitespace
+./src/first1k/handlers/import_text.py:304:1: W293 blank line contains whitespace
+./src/first1k/handlers/import_text.py:309:1: W293 blank line contains whitespace
+./src/first1k/handlers/import_text.py:318:1: W293 blank line contains whitespace
+./src/first1k/handlers/import_text.py:327:1: W293 blank line contains whitespace
+./src/first1k/handlers/import_text.py:337:1: E302 expected 2 blank lines, found 1
+./src/first1k/handlers/import_text.py:374:1: W293 blank line contains whitespace
+./src/first1k/handlers/import_text.py:378:1: W293 blank line contains whitespace
+./src/first1k/handlers/import_text.py:388:1: E302 expected 2 blank lines, found 1
+./src/first1k/handlers/import_text.py:425:1: W293 blank line contains whitespace
+./src/first1k/handlers/import_text.py:429:1: W293 blank line contains whitespace
+./src/first1k/handlers/import_text.py:437:16: W291 trailing whitespace
+./src/first1k/handlers/import_text.py:437:17: W292 no newline at end of file
+./src/first1k/handlers/search.py:7:1: E302 expected 2 blank lines, found 1
+./src/first1k/handlers/search.py:10:1: W293 blank line contains whitespace
+./src/first1k/handlers/search.py:15:1: W293 blank line contains whitespace
+./src/first1k/handlers/search.py:20:1: W293 blank line contains whitespace
+./src/first1k/handlers/search.py:24:1: W293 blank line contains whitespace
+./src/first1k/handlers/search.py:29:1: W293 blank line contains whitespace
+./src/first1k/handlers/search.py:33:1: W293 blank line contains whitespace
+./src/first1k/handlers/search.py:40:1: W293 blank line contains whitespace
+./src/first1k/handlers/search.py:54:1: W293 blank line contains whitespace
+./src/first1k/handlers/search.py:60:1: W293 blank line contains whitespace
+./src/first1k/handlers/search.py:66:1: W293 blank line contains whitespace
+./src/first1k/handlers/search.py:70:1: W293 blank line contains whitespace
+./src/first1k/handlers/search.py:76:1: W293 blank line contains whitespace
+./src/first1k/handlers/search.py:81:1: W293 blank line contains whitespace
+./src/first1k/handlers/search.py:93:1: W293 blank line contains whitespace
+./src/first1k/handlers/search.py:96:1: W293 blank line contains whitespace
+./src/first1k/handlers/search.py:99:1: E302 expected 2 blank lines, found 1
+./src/first1k/handlers/search.py:102:1: W293 blank line contains whitespace
+./src/first1k/handlers/search.py:105:1: W293 blank line contains whitespace
+./src/first1k/handlers/search.py:192:1: W293 blank line contains whitespace
+./src/first1k/handlers/search.py:198:1: W293 blank line contains whitespace
+./src/first1k/handlers/search.py:209:1: W293 blank line contains whitespace
+./src/first1k/handlers/search.py:217:66: W291 trailing whitespace
+./src/first1k/handlers/search.py:218:66: W291 trailing whitespace
+./src/first1k/handlers/search.py:235:16: W291 trailing whitespace
+./src/first1k/handlers/search.py:235:17: W292 no newline at end of file
+./src/first1k/handlers/ui.py:5:1: E302 expected 2 blank lines, found 1
+./src/first1k/handlers/ui.py:53:1: W293 blank line contains whitespace
+./src/first1k/handlers/ui.py:70:92: W291 trailing whitespace
+./src/first1k/handlers/ui.py:75:11: W291 trailing whitespace
+./src/first1k/handlers/ui.py:75:12: W292 no newline at end of file
+./src/first1k/handlers/view.py:3:1: F401 'os' imported but unused
+./src/first1k/handlers/view.py:8:1: E302 expected 2 blank lines, found 1
+./src/first1k/handlers/view.py:13:1: W293 blank line contains whitespace
+./src/first1k/handlers/view.py:19:1: W293 blank line contains whitespace
+./src/first1k/handlers/view.py:24:1: W293 blank line contains whitespace
+./src/first1k/handlers/view.py:27:1: W293 blank line contains whitespace
+./src/first1k/handlers/view.py:32:1: W293 blank line contains whitespace
+./src/first1k/handlers/view.py:85:1: W293 blank line contains whitespace
+./src/first1k/handlers/view.py:92:1: W293 blank line contains whitespace
+./src/first1k/handlers/view.py:98:1: W293 blank line contains whitespace
+./src/first1k/handlers/view.py:106:1: W293 blank line contains whitespace
+./src/first1k/handlers/view.py:125:1: E302 expected 2 blank lines, found 1
+./src/first1k/handlers/view.py:130:1: W293 blank line contains whitespace
+./src/first1k/handlers/view.py:136:1: W293 blank line contains whitespace
+./src/first1k/handlers/view.py:141:1: W293 blank line contains whitespace
+./src/first1k/handlers/view.py:147:1: W293 blank line contains whitespace
+./src/first1k/handlers/view.py:221:1: W293 blank line contains whitespace
+./src/first1k/handlers/view.py:235:1: W293 blank line contains whitespace
+./src/first1k/handlers/view.py:242:1: W293 blank line contains whitespace
+./src/first1k/handlers/view.py:247:1: W293 blank line contains whitespace
+./src/first1k/handlers/view.py:253:1: W293 blank line contains whitespace
+./src/first1k/handlers/view.py:262:1: W293 blank line contains whitespace
+./src/first1k/handlers/view.py:279:11: W291 trailing whitespace
+./src/first1k/handlers/view.py:279:12: W292 no newline at end of file
+./src/first1k/handlers/works.py:7:1: E302 expected 2 blank lines, found 1
+./src/first1k/handlers/works.py:11:1: W293 blank line contains whitespace
+./src/first1k/handlers/works.py:14:1: W293 blank line contains whitespace
+./src/first1k/handlers/works.py:27:1: W293 blank line contains whitespace
+./src/first1k/handlers/works.py:47:1: W293 blank line contains whitespace
+./src/first1k/handlers/works.py:50:1: W293 blank line contains whitespace
+./src/first1k/handlers/works.py:58:1: W293 blank line contains whitespace
+./src/first1k/handlers/works.py:73:1: W293 blank line contains whitespace
+./src/first1k/handlers/works.py:81:1: W293 blank line contains whitespace
+./src/first1k/handlers/works.py:87:1: W293 blank line contains whitespace
+./src/first1k/handlers/works.py:92:1: W293 blank line contains whitespace
+./src/first1k/handlers/works.py:102:1: W293 blank line contains whitespace
+./src/first1k/handlers/works.py:105:1: E302 expected 2 blank lines, found 1
+./src/first1k/handlers/works.py:108:1: W293 blank line contains whitespace
+./src/first1k/handlers/works.py:117:1: W293 blank line contains whitespace
+./src/first1k/handlers/works.py:128:1: W293 blank line contains whitespace
+./src/first1k/handlers/works.py:133:1: W293 blank line contains whitespace
+./src/first1k/handlers/works.py:142:1: W293 blank line contains whitespace
+./src/first1k/handlers/works.py:145:1: E302 expected 2 blank lines, found 1
+./src/first1k/handlers/works.py:148:1: W293 blank line contains whitespace
+./src/first1k/handlers/works.py:206:1: W293 blank line contains whitespace
+./src/first1k/handlers/works.py:212:1: W293 blank line contains whitespace
+./src/first1k/handlers/works.py:214:1: W293 blank line contains whitespace
+./src/first1k/handlers/works.py:240:1: E302 expected 2 blank lines, found 1
+./src/first1k/handlers/works.py:243:1: W293 blank line contains whitespace
+./src/first1k/handlers/works.py:301:1: W293 blank line contains whitespace
+./src/first1k/handlers/works.py:307:1: W293 blank line contains whitespace
+./src/first1k/handlers/works.py:309:1: W293 blank line contains whitespace
+./src/first1k/handlers/works.py:332:16: W291 trailing whitespace
+./src/first1k/handlers/works.py:332:17: W292 no newline at end of file
+./src/first1k/import_export/scaife.py:49:9: E722 do not use bare 'except'
+./src/first1k/import_export/scaife.py:72:13: E722 do not use bare 'except'
+./src/first1k/import_export/scaife.py:183:21: F841 local variable 'e' is assigned to but never used
+./src/first1k/import_export/scaife.py:194:5: E722 do not use bare 'except'
+./src/first1k/search/searcher.py:7:1: E302 expected 2 blank lines, found 1
+./src/first1k/search/searcher.py:10:1: W293 blank line contains whitespace
+./src/first1k/search/searcher.py:15:1: W293 blank line contains whitespace
+./src/first1k/search/searcher.py:20:1: W293 blank line contains whitespace
+./src/first1k/search/searcher.py:24:1: W293 blank line contains whitespace
+./src/first1k/search/searcher.py:29:1: W293 blank line contains whitespace
+./src/first1k/search/searcher.py:33:1: W293 blank line contains whitespace
+./src/first1k/search/searcher.py:40:1: W293 blank line contains whitespace
+./src/first1k/search/searcher.py:54:1: W293 blank line contains whitespace
+./src/first1k/search/searcher.py:60:1: W293 blank line contains whitespace
+./src/first1k/search/searcher.py:66:1: W293 blank line contains whitespace
+./src/first1k/search/searcher.py:70:1: W293 blank line contains whitespace
+./src/first1k/search/searcher.py:76:1: W293 blank line contains whitespace
+./src/first1k/search/searcher.py:81:1: W293 blank line contains whitespace
+./src/first1k/search/searcher.py:93:1: W293 blank line contains whitespace
+./src/first1k/search/searcher.py:96:1: W293 blank line contains whitespace
+./src/first1k/search/searcher.py:97:19: W291 trailing whitespace
+./src/first1k/search/searcher.py:97:20: W292 no newline at end of file
+./src/first1k/xml_utils/processor.py:7:1: E302 expected 2 blank lines, found 1
+./src/first1k/xml_utils/processor.py:13:1: W293 blank line contains whitespace
+./src/first1k/xml_utils/processor.py:16:1: W293 blank line contains whitespace
+./src/first1k/xml_utils/processor.py:19:1: W293 blank line contains whitespace
+./src/first1k/xml_utils/processor.py:23:1: W293 blank line contains whitespace
+./src/first1k/xml_utils/processor.py:29:1: W293 blank line contains whitespace
+./src/first1k/xml_utils/processor.py:32:1: W293 blank line contains whitespace
+./src/first1k/xml_utils/processor.py:44:1: W293 blank line contains whitespace
+./src/first1k/xml_utils/processor.py:52:1: W293 blank line contains whitespace
+./src/first1k/xml_utils/processor.py:55:20: E127 continuation line over-indented for visual indent
+./src/first1k/xml_utils/processor.py:56:1: W293 blank line contains whitespace
+./src/first1k/xml_utils/processor.py:61:36: F541 f-string is missing placeholders
+./src/first1k/xml_utils/processor.py:63:36: F541 f-string is missing placeholders
+./src/first1k/xml_utils/processor.py:64:1: W293 blank line contains whitespace
+./src/first1k/xml_utils/processor.py:67:1: W293 blank line contains whitespace
+./src/first1k/xml_utils/processor.py:73:1: W293 blank line contains whitespace
+./src/first1k/xml_utils/processor.py:85:1: W293 blank line contains whitespace
+./src/first1k/xml_utils/processor.py:88:1: W293 blank line contains whitespace
+./src/first1k/xml_utils/processor.py:92:1: W293 blank line contains whitespace
+./src/first1k/xml_utils/processor.py:94:1: W293 blank line contains whitespace
+./src/first1k/xml_utils/processor.py:97:1: W293 blank line contains whitespace
+./src/first1k/xml_utils/processor.py:100:1: W293 blank line contains whitespace
+./src/first1k/xml_utils/processor.py:105:1: W293 blank line contains whitespace
+./src/first1k/xml_utils/processor.py:111:1: W293 blank line contains whitespace
+./src/first1k/xml_utils/processor.py:121:1: W293 blank line contains whitespace
+./src/first1k/xml_utils/processor.py:123:1: W293 blank line contains whitespace
+./src/first1k/xml_utils/processor.py:125:1: W293 blank line contains whitespace
+./src/first1k/xml_utils/processor.py:132:1: E302 expected 2 blank lines, found 1
+./src/first1k/xml_utils/processor.py:142:1: E302 expected 2 blank lines, found 1
+./src/first1k/xml_utils/processor.py:154:1: E302 expected 2 blank lines, found 1
+./src/first1k/xml_utils/processor.py:165:21: W291 trailing whitespace
+./src/first1k/xml_utils/processor.py:165:22: W292 no newline at end of file
+./tools/linting/analyze_code.py:13:1: F401 'pathlib.Path' imported but unused
+./tools/linting/analyze_code.py:17:1: E302 expected 2 blank lines, found 1
+./tools/linting/analyze_code.py:23:1: E302 expected 2 blank lines, found 1
+./tools/linting/analyze_code.py:26:1: W293 blank line contains whitespace
+./tools/linting/analyze_code.py:34:1: E302 expected 2 blank lines, found 1
+./tools/linting/analyze_code.py:38:1: W293 blank line contains whitespace
+./tools/linting/analyze_code.py:45:1: W293 blank line contains whitespace
+./tools/linting/analyze_code.py:48:1: E302 expected 2 blank lines, found 1
+./tools/linting/analyze_code.py:51:1: W293 blank line contains whitespace
+./tools/linting/analyze_code.py:53:1: W293 blank line contains whitespace
+./tools/linting/analyze_code.py:62:1: W293 blank line contains whitespace
+./tools/linting/analyze_code.py:72:1: W293 blank line contains whitespace
+./tools/linting/analyze_code.py:74:1: W293 blank line contains whitespace
+./tools/linting/analyze_code.py:84:1: W293 blank line contains whitespace
+./tools/linting/analyze_code.py:88:1: E302 expected 2 blank lines, found 1
+./tools/linting/analyze_code.py:91:1: W293 blank line contains whitespace
+./tools/linting/analyze_code.py:94:1: W293 blank line contains whitespace
+./tools/linting/analyze_code.py:104:1: W293 blank line contains whitespace
+./tools/linting/analyze_code.py:107:94: W291 trailing whitespace
+./tools/linting/analyze_code.py:111:1: W293 blank line contains whitespace
+./tools/linting/analyze_code.py:113:1: W293 blank line contains whitespace
+./tools/linting/analyze_code.py:122:1: W293 blank line contains whitespace
+./tools/linting/analyze_code.py:126:1: E302 expected 2 blank lines, found 1
+./tools/linting/analyze_code.py:129:1: W293 blank line contains whitespace
+./tools/linting/analyze_code.py:131:1: W293 blank line contains whitespace
+./tools/linting/analyze_code.py:141:1: W293 blank line contains whitespace
+./tools/linting/analyze_code.py:143:1: W293 blank line contains whitespace
+./tools/linting/analyze_code.py:149:1: W293 blank line contains whitespace
+./tools/linting/analyze_code.py:153:1: E302 expected 2 blank lines, found 1
+./tools/linting/analyze_code.py:156:1: W293 blank line contains whitespace
+./tools/linting/analyze_code.py:158:1: W293 blank line contains whitespace
+./tools/linting/analyze_code.py:168:1: W293 blank line contains whitespace
+./tools/linting/analyze_code.py:170:1: W293 blank line contains whitespace
+./tools/linting/analyze_code.py:176:1: W293 blank line contains whitespace
+./tools/linting/analyze_code.py:180:1: E302 expected 2 blank lines, found 1
+./tools/linting/analyze_code.py:183:1: W293 blank line contains whitespace
+./tools/linting/analyze_code.py:188:1: W293 blank line contains whitespace
+./tools/linting/analyze_code.py:190:1: W293 blank line contains whitespace
+./tools/linting/analyze_code.py:196:1: W293 blank line contains whitespace
+./tools/linting/analyze_code.py:206:1: W293 blank line contains whitespace
+./tools/linting/analyze_code.py:209:1: E302 expected 2 blank lines, found 1
+./tools/linting/analyze_code.py:214:1: W293 blank line contains whitespace
+./tools/linting/analyze_code.py:218:1: W293 blank line contains whitespace
+./tools/linting/analyze_code.py:221:1: W293 blank line contains whitespace
+./tools/linting/analyze_code.py:226:1: W293 blank line contains whitespace
+./tools/linting/analyze_code.py:233:1: W293 blank line contains whitespace
+./tools/linting/analyze_code.py:236:1: W293 blank line contains whitespace
+./tools/linting/analyze_code.py:241:1: E305 expected 2 blank lines after class or function definition, found 1
+./tools/linting/analyze_code.py:242:11: W291 trailing whitespace
+./tools/linting/analyze_code.py:242:12: W292 no newline at end of file
+./tools/linting/fix_critical.py:14:1: F401 'pathlib.Path' imported but unused
+./tools/linting/fix_critical.py:16:1: E302 expected 2 blank lines, found 1
+./tools/linting/fix_critical.py:22:1: E302 expected 2 blank lines, found 1
+./tools/linting/fix_critical.py:25:94: W291 trailing whitespace
+./tools/linting/fix_critical.py:31:1: W293 blank line contains whitespace
+./tools/linting/fix_critical.py:41:1: E302 expected 2 blank lines, found 1
+./tools/linting/fix_critical.py:45:1: W293 blank line contains whitespace
+./tools/linting/fix_critical.py:52:1: E302 expected 2 blank lines, found 1
+./tools/linting/fix_critical.py:59:1: E302 expected 2 blank lines, found 1
+./tools/linting/fix_critical.py:62:1: W293 blank line contains whitespace
+./tools/linting/fix_critical.py:69:1: W293 blank line contains whitespace
+./tools/linting/fix_critical.py:73:1: W293 blank line contains whitespace
+./tools/linting/fix_critical.py:76:1: E302 expected 2 blank lines, found 1
+./tools/linting/fix_critical.py:79:1: W293 blank line contains whitespace
+./tools/linting/fix_critical.py:86:1: W293 blank line contains whitespace
+./tools/linting/fix_critical.py:89:1: W293 blank line contains whitespace
+./tools/linting/fix_critical.py:93:1: W293 blank line contains whitespace
+./tools/linting/fix_critical.py:97:1: W293 blank line contains whitespace
+./tools/linting/fix_critical.py:101:1: W293 blank line contains whitespace
+./tools/linting/fix_critical.py:105:1: W293 blank line contains whitespace
+./tools/linting/fix_critical.py:108:1: W293 blank line contains whitespace
+./tools/linting/fix_critical.py:113:1: W293 blank line contains whitespace
+./tools/linting/fix_critical.py:116:1: W293 blank line contains whitespace
+./tools/linting/fix_critical.py:125:1: W293 blank line contains whitespace
+./tools/linting/fix_critical.py:128:1: E302 expected 2 blank lines, found 1
+./tools/linting/fix_critical.py:134:1: W293 blank line contains whitespace
+./tools/linting/fix_critical.py:141:1: W293 blank line contains whitespace
+./tools/linting/fix_critical.py:149:1: W293 blank line contains whitespace
+./tools/linting/fix_critical.py:153:1: W293 blank line contains whitespace
+./tools/linting/fix_critical.py:156:1: W293 blank line contains whitespace
+./tools/linting/fix_critical.py:159:1: E305 expected 2 blank lines after class or function definition, found 1
+./tools/linting/fix_critical.py:160:11: W291 trailing whitespace
+./tools/linting/fix_critical.py:160:12: W292 no newline at end of file
+./tools/linting/format_incremental.py:13:1: F401 'tempfile' imported but unused
+./tools/linting/format_incremental.py:15:1: F401 'pathlib.Path' imported but unused
+./tools/linting/format_incremental.py:17:1: E302 expected 2 blank lines, found 1
+./tools/linting/format_incremental.py:23:1: E302 expected 2 blank lines, found 1
+./tools/linting/format_incremental.py:30:1: E302 expected 2 blank lines, found 1
+./tools/linting/format_incremental.py:33:1: W293 blank line contains whitespace
+./tools/linting/format_incremental.py:36:1: W293 blank line contains whitespace
+./tools/linting/format_incremental.py:43:1: W293 blank line contains whitespace
+./tools/linting/format_incremental.py:45:1: W293 blank line contains whitespace
+./tools/linting/format_incremental.py:52:1: W293 blank line contains whitespace
+./tools/linting/format_incremental.py:55:1: E302 expected 2 blank lines, found 1
+./tools/linting/format_incremental.py:59:1: W293 blank line contains whitespace
+./tools/linting/format_incremental.py:61:1: W293 blank line contains whitespace
+./tools/linting/format_incremental.py:69:1: W293 blank line contains whitespace
+./tools/linting/format_incremental.py:73:1: W293 blank line contains whitespace
+./tools/linting/format_incremental.py:76:1: E302 expected 2 blank lines, found 1
+./tools/linting/format_incremental.py:79:1: W293 blank line contains whitespace
+./tools/linting/format_incremental.py:82:1: W293 blank line contains whitespace
+./tools/linting/format_incremental.py:87:1: W293 blank line contains whitespace
+./tools/linting/format_incremental.py:93:1: W293 blank line contains whitespace
+./tools/linting/format_incremental.py:95:1: W293 blank line contains whitespace
+./tools/linting/format_incremental.py:100:1: W293 blank line contains whitespace
+./tools/linting/format_incremental.py:108:1: W293 blank line contains whitespace
+./tools/linting/format_incremental.py:113:1: W293 blank line contains whitespace
+./tools/linting/format_incremental.py:123:1: W293 blank line contains whitespace
+./tools/linting/format_incremental.py:128:1: W293 blank line contains whitespace
+./tools/linting/format_incremental.py:131:1: E302 expected 2 blank lines, found 1
+./tools/linting/format_incremental.py:141:1: W293 blank line contains whitespace
+./tools/linting/format_incremental.py:149:1: W293 blank line contains whitespace
+./tools/linting/format_incremental.py:157:1: W293 blank line contains whitespace
+./tools/linting/format_incremental.py:161:1: W293 blank line contains whitespace
+./tools/linting/format_incremental.py:163:23: W291 trailing whitespace
+./tools/linting/format_incremental.py:164:24: W291 trailing whitespace
+./tools/linting/format_incremental.py:170:1: W293 blank line contains whitespace
+./tools/linting/format_incremental.py:173:1: E305 expected 2 blank lines after class or function definition, found 1
+./tools/linting/format_incremental.py:174:11: W291 trailing whitespace
+./tools/linting/format_incremental.py:174:12: W292 no newline at end of file
+./tools/linting/pre-commit-hook.py:12:1: F401 'tempfile' imported but unused
+./tools/linting/pre-commit-hook.py:14:1: F401 'pathlib.Path' imported but unused
+./tools/linting/pre-commit-hook.py:16:1: E302 expected 2 blank lines, found 1
+./tools/linting/pre-commit-hook.py:22:1: E302 expected 2 blank lines, found 1
+./tools/linting/pre-commit-hook.py:30:1: W293 blank line contains whitespace
+./tools/linting/pre-commit-hook.py:34:1: E302 expected 2 blank lines, found 1
+./tools/linting/pre-commit-hook.py:38:1: W293 blank line contains whitespace
+./tools/linting/pre-commit-hook.py:46:1: E302 expected 2 blank lines, found 1
+./tools/linting/pre-commit-hook.py:49:80: W291 trailing whitespace
+./tools/linting/pre-commit-hook.py:55:1: W293 blank line contains whitespace
+./tools/linting/pre-commit-hook.py:69:1: E302 expected 2 blank lines, found 1
+./tools/linting/pre-commit-hook.py:72:1: W293 blank line contains whitespace
+./tools/linting/pre-commit-hook.py:75:1: W293 blank line contains whitespace
+./tools/linting/pre-commit-hook.py:79:1: W293 blank line contains whitespace
+./tools/linting/pre-commit-hook.py:81:1: W293 blank line contains whitespace
+./tools/linting/pre-commit-hook.py:86:1: W293 blank line contains whitespace
+./tools/linting/pre-commit-hook.py:91:1: W293 blank line contains whitespace
+./tools/linting/pre-commit-hook.py:96:1: W293 blank line contains whitespace
+./tools/linting/pre-commit-hook.py:98:1: W293 blank line contains whitespace
+./tools/linting/pre-commit-hook.py:103:1: W293 blank line contains whitespace
+./tools/linting/pre-commit-hook.py:107:1: E305 expected 2 blank lines after class or function definition, found 1
+./tools/linting/pre-commit-hook.py:108:21: W291 trailing whitespace
+./tools/linting/pre-commit-hook.py:108:22: W292 no newline at end of file
+1     E127 continuation line over-indented for visual indent
+1     E261 at least two spaces before inline comment
+64    E302 expected 2 blank lines, found 1
+7     E305 expected 2 blank lines after class or function definition, found 1
+3     E402 module level import not at top of file
+5     E722 do not use bare 'except'
+19    F401 're' imported but unused
+6     F541 f-string is missing placeholders
+11    F821 undefined name 'margin'
+4     F841 local variable 'root' is assigned to but never used
+76    W291 trailing whitespace
+22    W292 no newline at end of file
+472   W293 blank line contains whitespace

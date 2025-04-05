@@ -2,10 +2,12 @@
 
 import socket
 
+
 def is_port_in_use(port):
     """Check if a port is in use."""
     with socket.socket(socket.AF_INET, socket.SOCK_STREAM) as s:
-        return s.connect_ex(('localhost', port)) == 0
+        return s.connect_ex(("localhost", port)) == 0
+
 
 def find_available_port(start_port=8000, max_attempts=10):
     """Find an available port starting from start_port."""
@@ -13,6 +15,7 @@ def find_available_port(start_port=8000, max_attempts=10):
         if not is_port_in_use(port):
             return port
     return start_port  # Fallback to the original port if none found
+
 
 def add_shutdown_button(html):
     """Add a shutdown button to the HTML pages."""
@@ -27,4 +30,4 @@ def add_shutdown_button(html):
     if "</body>" in html:
         return html.replace("</body>", f"{shutdown_button}</body>")
     else:
-        return html + shutdown_button 
+        return html + shutdown_button
