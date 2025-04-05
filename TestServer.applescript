@@ -1,10 +1,9 @@
--- First1KGreek Browser Launcher
--- This AppleScript launches the First1KGreek browser application
+-- TestServer.applescript
+-- Simple AppleScript to launch a test HTTP server for First1KGreek
 
 on run
-    -- Use the absolute path to the project directory
     set projectPath to "/Users/james/Documents/GitHub/First1KGreek"
-    set launcherPath to projectPath & "/First1KGreek_Launcher.sh"
+    set launcherPath to projectPath & "/test_server_launcher.sh"
     
     -- Make the launcher script executable
     do shell script "chmod +x " & quoted form of launcherPath
@@ -14,4 +13,8 @@ on run
         activate
         do script "cd " & quoted form of projectPath & " && " & quoted form of launcherPath
     end tell
+    
+    -- Open the browser after a short delay
+    delay 2
+    do shell script "open http://localhost:8080/static/test.html"
 end run 

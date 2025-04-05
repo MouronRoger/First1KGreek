@@ -14,30 +14,55 @@ import re
 import threading
 import time
 import socket
+import signal
 import xml.etree.ElementTree as ET
 import urllib.parse
+import argparse
+import logging
+import traceback
 from urllib.error import URLError, HTTPError
 from html import escape
+
+# Configure logging
+logging.basicConfig(
+    level=logging.DEBUG,
+    format='%(asctime)s - %(levelname)s - %(message)s',
+    handlers=[
+        logging.StreamHandler(),
+        logging.FileHandler('server.log', mode='w')
+    ]
+)
+logger = logging.getLogger(__name__)
+
+# Parse command line arguments
+def parse_args():
+    parser = argparse.ArgumentParser(description='First1KGreek Browser')
+    parser.add_argument('--port', type=int, default=8000, help='Port to run the server on')
+    parser.add_argument('--debug', action='store_true', help='Enable debug mode')
+    return parser.parse_args()
 
 # Global variable to store server instance
 server_instance = None
 
 # Constants
-PORT = 8000
+args = parse_args()
+PORT = args.port
 HOST = "localhost"
 SHUTDOWN_PATH = "/shutdown"
+DEBUG = args.debug
 
 # Load author data
 try:
     with open('authors_data.json', 'r', encoding='utf-8') as f:
         AUTHORS_DATA = json.load(f)
+    logger.info(f"Loaded author data with {len(AUTHORS_DATA)} entries")
 except (FileNotFoundError, json.JSONDecodeError) as e:
-    print(f"Error loading author data: {e}")
+    logger.error(f"Error loading author data: {e}")
     AUTHORS_DATA = {}
 
 # Print version info when starting
-print("Starting First1KGreek Browser - Fixed Version 1.2.0")
-print("With dark theme and improved editor detection")
+logger.info("Starting First1KGreek Browser - Fixed Version 1.2.0")
+logger.info("With dark theme and improved editor detection")
 
 # Reader mode stylesheet
 READER_STYLESHEET = """
@@ -397,59 +422,96 @@ AUTHORS_TABLE_STYLESHEET = """
 def is_port_in_use(port):
     """Check if a port is in use"""
     with socket.socket(socket.AF_INET, socket.SOCK_STREAM) as s:
-        return s.connect_ex(('localhost', port)) == 0
+        result = s.connect_ex(('localhost', port)) == 0
+        logger.debug(f"Port {port} is {'in use' if result else 'available'}")
+        return result
 
 def find_available_port(start_port=8000, max_attempts=10):
     """Find an available port starting from start_port"""
+    logger.debug(f"Searching for available port starting from {start_port}")
     for port in range(start_port, start_port + max_attempts):
         if not is_port_in_use(port):
+            logger.debug(f"Found available port: {port}")
             return port
+    logger.warning(f"No available ports found in range {start_port}-{start_port+max_attempts-1}")
     return start_port
 
 class CustomHTTPRequestHandler(http.server.SimpleHTTPRequestHandler):
     """Custom HTTP server handler for browsing and viewing texts"""
     
+    def log_message(self, format, *args):
+        """Override to use our logger"""
+        logger.info("%s - %s" % (self.address_string(), format % args))
+    
     def do_GET(self):
         """Handle GET requests"""
-        parsed_path = urllib.parse.urlparse(self.path)
-        path = parsed_path.path
+        try:
+            parsed_path = urllib.parse.urlparse(self.path)
+            path = parsed_path.path
+            logger.info(f"GET request for {self.path} from {self.client_address}")
 
-        # Serve static files
-        if path.startswith('/static/'):
-            self.serve_static_file(path)
-            return
+            # Serve static files
+            if path.startswith('/static/'):
+                logger.debug(f"Serving static file: {path}")
+                self.serve_static_file(path)
+                return
 
-        # Handle other routes
-        if path == '/':
-            self.send_html_response(self.get_home_page())
-        elif path == '/authors':
-            self.send_html_response(self.get_authors_table_page())
-        elif path == '/works':
-            self.send_html_response(self.get_works_page(parsed_path.query))
-        elif path == '/view':
-            self.send_html_response(self.get_view_page(parsed_path.query))
-        elif path == '/editors':
-            self.send_html_response(self.get_editors_page())
-        elif path == '/search':
-            self.send_html_response(self.get_search_page())
-        else:
-            self.send_error(404, "Not Found")
+            # Handle other routes
+            if path == '/':
+                logger.debug("Serving home page")
+                self.send_html_response(self.get_home_page())
+            elif path == '/authors':
+                logger.debug("Serving authors table page")
+                self.send_html_response(self.get_authors_table_page())
+            elif path == '/works':
+                author_id = urllib.parse.parse_qs(parsed_path.query).get('author_id', [''])[0]
+                logger.debug(f"Serving works page for author_id: {author_id}")
+                self.send_html_response(self.get_works_page(parsed_path.query))
+            elif path == '/view':
+                params = urllib.parse.parse_qs(parsed_path.query)
+                author_id = params.get('author_id', [''])[0]
+                work_id = params.get('work_id', [''])[0]
+                logger.debug(f"Serving view page for author_id: {author_id}, work_id: {work_id}")
+                self.send_html_response(self.get_view_page(parsed_path.query))
+            elif path == '/editors':
+                logger.debug("Serving editors page")
+                self.send_html_response(self.get_editors_page())
+            elif path == '/search':
+                logger.debug("Serving search page")
+                self.send_html_response(self.get_search_page())
+            else:
+                logger.warning(f"404 Not Found: {path}")
+                self.send_error(404, "Not Found")
+        except Exception as e:
+            logger.error(f"Error handling GET request: {str(e)}")
+            logger.error(traceback.format_exc())
+            self.send_error(500, f"Internal Server Error: {str(e)}")
 
     def do_POST(self):
         """Handle POST requests"""
-        parsed_path = urllib.parse.urlparse(self.path)
-        path = parsed_path.path
+        try:
+            parsed_path = urllib.parse.urlparse(self.path)
+            path = parsed_path.path
+            logger.info(f"POST request for {self.path} from {self.client_address}")
 
-        # Parse form data
-        content_length = int(self.headers.get('Content-Length', 0))
-        post_data = urllib.parse.parse_qs(self.rfile.read(content_length).decode('utf-8'))
+            # Parse form data
+            content_length = int(self.headers.get('Content-Length', 0))
+            post_data = urllib.parse.parse_qs(self.rfile.read(content_length).decode('utf-8'))
+            logger.debug(f"POST data: {post_data}")
 
-        if path == '/update_preference':
-            self.handle_update_preference(post_data)
-        elif path == '/update_century':
-            self.handle_update_century(post_data)
-        else:
-            self.send_error(404, "Not Found")
+            if path == '/update_preference':
+                logger.debug("Handling update_preference request")
+                self.handle_update_preference(post_data)
+            elif path == '/update_century':
+                logger.debug("Handling update_century request")
+                self.handle_update_century(post_data)
+            else:
+                logger.warning(f"404 Not Found: {path}")
+                self.send_error(404, "Not Found")
+        except Exception as e:
+            logger.error(f"Error handling POST request: {str(e)}")
+            logger.error(traceback.format_exc())
+            self.send_error(500, f"Internal Server Error: {str(e)}")
 
     def handle_update_preference(self, post_data):
         """Handle updating user preferences"""
@@ -708,23 +770,378 @@ class CustomHTTPRequestHandler(http.server.SimpleHTTPRequestHandler):
 
     def send_html_response(self, html):
         """Send HTML response"""
+        logger.debug(f"Sending HTML response, length: {len(html) if html else 0}")
         self.send_response(200)
         self.send_header('Content-type', 'text/html')
         self.end_headers()
-        self.wfile.write(html.encode())
+        
+        try:
+            if html:
+                encoded_html = html.encode('utf-8')
+                self.wfile.write(encoded_html)
+                logger.debug(f"Successfully sent {len(encoded_html)} bytes")
+            else:
+                logger.warning("Empty HTML response")
+        except Exception as e:
+            logger.error(f"Error while sending HTML response: {str(e)}")
+            logger.error(traceback.format_exc())
+            raise
+    
+    def get_home_page(self):
+        """Generate the home page"""
+        html = f'''
+        <!DOCTYPE html>
+        <html>
+        <head>
+            <title>First1KGreek Browser</title>
+            <style>
+                {MAIN_STYLESHEET}
+            </style>
+        </head>
+        <body>
+            <div class="container">
+                <h1>First1KGreek Browser</h1>
+                <p>Welcome to the First1KGreek Browser. This tool allows you to browse and search ancient Greek texts.</p>
+                
+                <h2>Navigation</h2>
+                <ul>
+                    <li><a href="/authors">Authors Table</a> - Browse all authors</li>
+                    <li><a href="/search">Search</a> - Search for specific texts</li>
+                    <li><a href="/editors">About the Editors</a> - Information about the editors</li>
+                </ul>
+            </div>
+        </body>
+        </html>
+        '''
+        return html
+    
+    def get_works_page(self, query):
+        """Generate the works page for an author"""
+        query_params = urllib.parse.parse_qs(query)
+        author_id = query_params.get('author_id', [''])[0]
+        
+        if not author_id:
+            return self.get_error_page("Missing author_id parameter")
+            
+        # Get author info
+        author_name = "Unknown Author"
+        if author_id in AUTHORS_DATA:
+            author_name = AUTHORS_DATA[author_id].get('name', 'Unknown Author')
+            
+        # Get works for this author
+        works = self.get_author_works(author_id)
+            
+        html = f'''
+        <!DOCTYPE html>
+        <html>
+        <head>
+            <title>Works by {author_name}</title>
+            <style>
+                {MAIN_STYLESHEET}
+                
+                .works-list {{
+                    list-style-type: none;
+                    padding: 0;
+                }}
+                
+                .works-list li {{
+                    margin-bottom: 10px;
+                    padding: 10px;
+                    background-color: #333;
+                    border-radius: 5px;
+                }}
+                
+                .works-list li:hover {{
+                    background-color: #444;
+                }}
+                
+                .works-list a {{
+                    display: block;
+                    text-decoration: none;
+                    color: #4299e1;
+                }}
+            </style>
+        </head>
+        <body>
+            <div class="container">
+                <h1>Works by {author_name}</h1>
+                <p><a href="/">&laquo; Home</a> | <a href="/authors">Authors Table</a></p>
+                
+                <h2>Available Works</h2>
+                '''
+                
+        if works:
+            html += '<ul class="works-list">'
+            for work in works:
+                html += f'<li><a href="/view?author_id={author_id}&work_id={work}">{work}</a></li>'
+            html += '</ul>'
+        else:
+            html += '<p>No works available for this author.</p>'
+                
+        html += '''
+            </div>
+        </body>
+        </html>
+        '''
+        
+        return html
+    
+    def get_view_page(self, query):
+        """Generate the view page for a specific work"""
+        query_params = urllib.parse.parse_qs(query)
+        author_id = query_params.get('author_id', [''])[0]
+        work_id = query_params.get('work_id', [''])[0]
+        
+        if not author_id or not work_id:
+            return self.get_error_page("Missing author_id or work_id parameter")
+            
+        # Get author info
+        author_name = "Unknown Author"
+        if author_id in AUTHORS_DATA:
+            author_name = AUTHORS_DATA[author_id].get('name', 'Unknown Author')
+            
+        # Check if work exists
+        work_path = os.path.join('data', author_id, work_id)
+        if not os.path.exists(work_path):
+            return self.get_error_page(f"Work {work_id} by {author_name} not found")
+            
+        # Get work content
+        content = self.get_work_content(author_id, work_id)
+            
+        html = f'''
+        <!DOCTYPE html>
+        <html>
+        <head>
+            <title>{work_id} by {author_name}</title>
+            <style>
+                {READER_STYLESHEET}
+            </style>
+        </head>
+        <body>
+            <div class="container">
+                <h1>{work_id}</h1>
+                <h2>by {author_name}</h2>
+                <p><a href="/">&laquo; Home</a> | <a href="/works?author_id={author_id}">Back to Works</a></p>
+                
+                <div class="work-content">
+                    {content}
+                </div>
+            </div>
+        </body>
+        </html>
+        '''
+        
+        return html
+    
+    def get_work_content(self, author_id, work_id):
+        """Get the content of a work"""
+        work_path = os.path.join('data', author_id, work_id)
+        content = "<p>This work contains multiple files. Please select from the list below:</p><ul>"
+        
+        try:
+            # List all files in the work directory
+            files = os.listdir(work_path)
+            if files:
+                for file in files:
+                    if file.endswith('.xml') or file.endswith('.txt'):
+                        file_path = os.path.join(work_path, file)
+                        try:
+                            with open(file_path, 'r', encoding='utf-8') as f:
+                                file_content = f.read()
+                                if file.endswith('.xml'):
+                                    # Basic XML handling - just escape and display for now
+                                    file_content = escape(file_content)
+                                content += f"<li><h3>{file}</h3><pre>{file_content}</pre></li>"
+                        except Exception as e:
+                            content += f"<li>Error reading {file}: {str(e)}</li>"
+            else:
+                content = "<p>No content files found for this work.</p>"
+                
+        except Exception as e:
+            content = f"<p>Error accessing work content: {str(e)}</p>"
+            
+        return content
+    
+    def get_editors_page(self):
+        """Generate the editors page"""
+        html = f'''
+        <!DOCTYPE html>
+        <html>
+        <head>
+            <title>About the Editors</title>
+            <style>
+                {MAIN_STYLESHEET}
+            </style>
+        </head>
+        <body>
+            <div class="container">
+                <h1>About the Editors</h1>
+                <p><a href="/">&laquo; Home</a></p>
+                
+                <p>First1KGreek is a collection of ancient Greek texts maintained by a dedicated team of editors and scholars.</p>
+                
+                <h2>Editorial Team</h2>
+                <ul>
+                    <li><strong>Project Director:</strong> Digital Classicist Collaborative</li>
+                    <li><strong>Technical Lead:</strong> Perseus Digital Library</li>
+                    <li><strong>Contributors:</strong> The scholarly community</li>
+                </ul>
+                
+                <h2>Contributing</h2>
+                <p>If you would like to contribute to this project, please read the documentation in the repository.</p>
+            </div>
+        </body>
+        </html>
+        '''
+        
+        return html
+    
+    def get_search_page(self):
+        """Generate the search page"""
+        html = f'''
+        <!DOCTYPE html>
+        <html>
+        <head>
+            <title>Search Texts</title>
+            <style>
+                {MAIN_STYLESHEET}
+                
+                .search-form {{
+                    margin: 20px 0;
+                    padding: 20px;
+                    background-color: #333;
+                    border-radius: 5px;
+                }}
+                
+                .search-form input[type="text"] {{
+                    padding: 10px;
+                    width: 70%;
+                    background-color: #444;
+                    color: white;
+                    border: 1px solid #555;
+                    border-radius: 4px;
+                }}
+                
+                .search-form button {{
+                    padding: 10px 20px;
+                    background-color: #3182ce;
+                    color: white;
+                    border: none;
+                    border-radius: 4px;
+                    cursor: pointer;
+                    margin-left: 10px;
+                }}
+                
+                .search-form button:hover {{
+                    background-color: #2c5282;
+                }}
+            </style>
+        </head>
+        <body>
+            <div class="container">
+                <h1>Search Texts</h1>
+                <p><a href="/">&laquo; Home</a></p>
+                
+                <div class="search-form">
+                    <form action="/search" method="get">
+                        <input type="text" name="q" placeholder="Search for authors, works, or content...">
+                        <button type="submit">Search</button>
+                    </form>
+                </div>
+                
+                <p>Note: Full text search will be implemented in a future update.</p>
+            </div>
+        </body>
+        </html>
+        '''
+        
+        return html
+    
+    def get_error_page(self, error_message):
+        """Generate an error page"""
+        html = f'''
+        <!DOCTYPE html>
+        <html>
+        <head>
+            <title>Error</title>
+            <style>
+                {MAIN_STYLESHEET}
+                
+                .error-message {{
+                    color: #fc8181;
+                    font-weight: bold;
+                    padding: 20px;
+                    background-color: #3a3a3a;
+                    border-radius: 5px;
+                    margin: 20px 0;
+                }}
+            </style>
+        </head>
+        <body>
+            <div class="container">
+                <h1>Error</h1>
+                <p><a href="/">&laquo; Home</a></p>
+                
+                <div class="error-message">
+                    {error_message}
+                </div>
+            </div>
+        </body>
+        </html>
+        '''
+        
+        return html
 
 if __name__ == "__main__":
     try:
-        print(f"Starting server on port {PORT}...")
-        httpd = socketserver.TCPServer((HOST, PORT), CustomHTTPRequestHandler)
-        print(f"Server started at http://{HOST}:{PORT}")
-        httpd.serve_forever()
-    except OSError as e:
-        if e.errno == 48:  # Address already in use
-            print(f"Error: Port {PORT} is already in use.")
-            print("Try closing any running instances or use the following command to force close:")
-            print(f"lsof -i :{PORT} | grep Python | awk '{{print $2}}' | xargs kill -9")
-        else:
-            print(f"Error starting server: {str(e)}")
+        # Make sure socket is properly released after previous runs
+        socketserver.TCPServer.allow_reuse_address = True
+        
+        logger.info(f"Checking port {PORT} availability...")
+        max_retries = 5
+        current_port = PORT
+        
+        for attempt in range(max_retries):
+            try:
+                if is_port_in_use(current_port):
+                    logger.warning(f"Port {current_port} is already in use.")
+                    new_port = find_available_port(current_port + 1)
+                    if new_port != current_port:
+                        logger.info(f"Using alternative port {new_port}")
+                        current_port = new_port
+                    else:
+                        logger.error("Failed to find an available port. Terminating.")
+                        sys.exit(1)
+                
+                logger.info(f"Starting server on port {current_port}...")
+                server_instance = socketserver.TCPServer((HOST, current_port), CustomHTTPRequestHandler)
+                logger.info(f"Server started at http://{HOST}:{current_port}")
+                
+                # Print directly to console for visibility
+                print(f"\n======================================")
+                print(f"Server is running at http://{HOST}:{current_port}")
+                print(f"Press Ctrl+C to shutdown")
+                print(f"======================================\n")
+                
+                server_instance.serve_forever()
+                break  # Exit the retry loop if server starts successfully
+                
+            except OSError as e:
+                if e.errno == 48 or e.errno == 98:  # Address already in use
+                    logger.warning(f"Port {current_port} is blocked, trying another port...")
+                    current_port = current_port + 1
+                    if attempt == max_retries - 1:
+                        logger.error("Maximum retry attempts reached. Terminating.")
+                        sys.exit(1)
+                else:
+                    logger.error(f"OS Error: {str(e)}")
+                    raise
+                    
+    except KeyboardInterrupt:
+        logger.info("\nServer shutdown requested.")
+        if server_instance:
+            server_instance.shutdown()
+        logger.info("Server has been shut down.")
     except Exception as e:
-        print(f"Error starting server: {str(e)}") 
+        logger.error(f"Error starting server: {str(e)}")
+        logger.error(traceback.format_exc()) 
