@@ -26,3 +26,8 @@
 2025-04-05 21:33:02,202 - INFO - GET request for /static/js/authors_table.js from ('127.0.0.1', 50735)
 2025-04-05 21:33:02,202 - DEBUG - Serving static file: /static/js/authors_table.js
 2025-04-05 21:33:02,202 - INFO - 127.0.0.1 - "GET /static/js/authors_table.js HTTP/1.1" 200 -
+2025-04-05 21:35:33,213 - INFO - GET request for /editors from ('127.0.0.1', 50851)
+2025-04-05 21:35:33,214 - DEBUG - Serving editors page
+2025-04-05 21:35:33,214 - DEBUG - Sending HTML response, length: 1601
+2025-04-05 21:35:33,214 - INFO - 127.0.0.1 - "GET /editors HTTP/1.1" 200 -
+2025-04-05 21:35:33,215 - DEBUG - Successfully sent 1601 bytes
