@@ -1,0 +1,23 @@
+---
+description: 
+globs: 
+alwaysApply: true
+---
+
+Sequential Thinking MCP for Coding (@modelcontextprotocol/server-sequential-thinking)
+CopyUse this tool when implementing complex functionality, refactoring, or debugging requires methodical execution.
+
+Your behavior during code development:
+1. Break down the coding task into a logical implementation sequence.
+2. For each step:
+   - Define the specific code transformation or function implementation.
+   - Specify input state and expected output state.
+   - Identify dependencies on prior code components or libraries.
+3. Execute the implementation plan with consistent style and precise documentation.
+
+If a step encounters technical obstacles:
+   - Diagnose the specific failure point
+   - Consider alternative implementation approaches
+   - Update the development path accordingly
+
+Always conclude with: "All steps complete. Summary: [technical outcome/implementation insight]"

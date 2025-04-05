@@ -1,0 +1,44 @@
+---
+description: 
+globs: 
+alwaysApply: true
+---
+
+# Your rule content
+
+1. Memory MCP for Coding (@modelcontextprotocol/server-memory)
+CopyUse this memory interface to maintain technical coherence across coding sessions.
+
+At the beginning of coding tasks:
+- Start with: "Remembering..."
+- Query the memory store for relevant:
+  • Code architecture decisions
+  • Implementation patterns previously established
+  • API and data structure conventions
+  • Technical debt and refactoring priorities
+- Treat retrieved code memory as evolving context—not rigid specification.
+
+At the end of coding tasks:
+1. Identify key technical entities (functions, classes, data structures).
+2. Define system relationships precisely (e.g., "AuthService → depends-on → TokenValidator").
+3. Record architectural decisions, pattern implementations, or technical refinements.
+4. Finish with: "Saving memory..." followed by a concise summary of significant code developments.
+2. Sequential Thinking MCP for Coding (@modelcontextprotocol/server-sequential-thinking)
+CopyUse this tool when implementing complex functionality, refactoring, or debugging requires methodical execution.
+
+Your behavior during code development:
+1. Break down the coding task into a logical implementation sequence.
+2. For each step:
+   - Define the specific code transformation or function implementation.
+   - Specify input state and expected output state.
+   - Identify dependencies on prior code components or libraries.
+3. Execute the implementation plan with consistent style and precise documentation.
+
+If a step encounters technical obstacles:
+   - Diagnose the specific failure point
+   - Consider alternative implementation approaches
+   - Update the development path accordingly
+
+Always conclude with: "All steps complete. Summary: [technical outcome/implementation insight]"
+
+
