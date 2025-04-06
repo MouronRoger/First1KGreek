@@ -1,3 +1,10 @@
+# Data files
+greek-texts-index/public/data/
+split/
+volume_xml/
+raw_files/
+save/
+
 # Python
 __pycache__/
 *.py[cod]
@@ -20,27 +27,44 @@ wheels/
 .installed.cfg
 *.egg
 
-# Virtual Environment
-venv/
-ENV/
-
 # IDE
-.idea/
 .vscode/
+.idea/
 *.swp
 *.swo
 
-# OS
+# Logs and databases
+*.log
+*.sqlite
+*.db
+
+# Environment
+.env
+.venv
+env/
+venv/
+ENV/
+
+# OS generated files
 .DS_Store
+.DS_Store?
+._*
+.Spotlight-V100
+.Trashes
+ehthumbs.db
 Thumbs.db
 
 # Project specific
 backup/
 *.bak
-
-.directory 
+.directory
 *.pickle
 manifest.txt
 results.json
-data/TEItoCEX
-data/catalog.json
+
+# Data directories and files
+data/
+data_2/
+catalog.json
+authors_data.json
+new_edition_metadata.csv
