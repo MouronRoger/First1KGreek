@@ -1,0 +1,8 @@
+---
+description:
+globs:
+alwaysApply: true
+---
+
+
+Follow Black formatting + flake8 + pydocstyle D100s. Use consistent indentation and don’t leave functions undocumented.”
