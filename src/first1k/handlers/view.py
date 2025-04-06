@@ -83,20 +83,20 @@ def render_xml_view_page(file_path):
 <body>
     <div class="container">
         <h1>XML View</h1>
-        
+
         <div class="nav-links">
             <a href="/" class="button">Home</a>
             <a href="/browse/authors" class="button">Browse Authors</a>
             <a href="/browse/editors" class="button">Browse Editors</a>
             <a href="/reader?path={file_path}" class="button">Open in Reader</a>
         </div>
-        
+
         <div class="metadata">
             <p><strong>Author:</strong> {author_name}</p>
             <p><strong>Work:</strong> {work_title}</p>
             <p><strong>File:</strong> {file_path}</p>
         </div>
-        
+
         <div class="xml-container">
 {xml_display}
         </div>
@@ -220,7 +220,7 @@ def render_reader_view_page(file_path):
             var currentSize = parseFloat(style);
             text.style.fontSize = (currentSize + 2) + 'px';
         }}
-        
+
         function decreaseFontSize() {{
             var text = document.querySelector('.reader-text');
             var style = window.getComputedStyle(text, null).getPropertyValue('font-size');
@@ -234,25 +234,25 @@ def render_reader_view_page(file_path):
 <body>
     <div class="container">
         <h1>Reader View</h1>
-        
+
         <div class="nav-links">
             <a href="/" class="button">Home</a>
             <a href="/browse/authors" class="button">Browse Authors</a>
             <a href="/browse/editors" class="button">Browse Editors</a>
             <a href="/view?path={file_path}" class="button">View XML</a>
         </div>
-        
+
         <div class="metadata">
             <p><strong>Author:</strong> {author_name}</p>
             <p><strong>Work:</strong> {work_title}</p>
         </div>
-        
+
         <div class="reader-container">
             <div class="reader-text">
 {text_content}
             </div>
         </div>
-        
+
         <div class="controls">
             <button onclick="increaseFontSize()">A+</button>
             <button onclick="decreaseFontSize()">A-</button>

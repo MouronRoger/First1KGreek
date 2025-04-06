@@ -205,15 +205,15 @@ def render_works_page(author_id):
 <body>
     <div class="container">
         <h1>Works by {author_name}</h1>
-        
+
         <div class="nav-links">
             <a href="/" class="button">Home</a>
             <a href="/browse/authors" class="button">Browse Authors</a>
             <a href="/browse/editors" class="button">Browse Editors</a>
         </div>
-        
+
         <p>Showing {len(works)} works</p>
-        
+
         <div class="works-grid">
 """
 
@@ -301,15 +301,15 @@ def render_editor_works_page(editor_name):
 <body>
     <div class="container">
         <h1>Works edited by {editor_name}</h1>
-        
+
         <div class="nav-links">
             <a href="/" class="button">Home</a>
             <a href="/browse/authors" class="button">Browse Authors</a>
             <a href="/browse/editors" class="button">Browse Editors</a>
         </div>
-        
+
         <p>Showing {len(works)} works</p>
-        
+
         <div class="works-grid">
 """
 

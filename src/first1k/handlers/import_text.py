@@ -277,25 +277,25 @@ def render_import_page():
 <body>
     <div class="container">
         <h1>Import Texts from Scaife/Perseus</h1>
-        
+
         <div class="info-box">
             <p><strong>Instructions:</strong> Enter one or more Scaife API XML URLs to import texts into the First1KGreek corpus.</p>
             <p>Use the format: <code>https://scaife.perseus.org/library/urn:cts:greekLit:tlg0007.tlg136.perseus-grc2:1-47/cts-api-xml/</code></p>
             <p>You can add metadata for each URL to improve import quality.</p>
         </div>
-        
+
         <div class="tabs">
             <div class="tab active" onclick="showTab('single')">Single URL</div>
             <div class="tab" onclick="showTab('batch')">Batch Import</div>
         </div>
-        
+
         <div id="single-tab" class="tab-content active">
             <form action="/import_text" method="post">
                 <div class="form-group">
                     <label>Scaife URL:</label>
                     <input type="text" name="scaife_url" placeholder="https://scaife.perseus.org/library/urn:cts:greekLit:tlg0007.tlg136.perseus-grc2:1-47/cts-api-xml/">
                 </div>
-                
+
                 <div class="metadata-fields">
                     <h3>Metadata (Optional)</h3>
                     <div class="form-group">
@@ -307,12 +307,12 @@ def render_import_page():
                         <input type="text" name="work_title" placeholder="e.g., De Stoicorum Repugnantiis">
                     </div>
                 </div>
-                
+
                 <input type="hidden" name="import_type" value="single">
                 <button type="submit">Import Text</button>
             </form>
         </div>
-        
+
         <div id="batch-tab" class="tab-content">
             <form action="/import_text" method="post">
                 <div class="form-group">
@@ -321,7 +321,7 @@ def render_import_page():
 https://scaife.perseus.org/library/urn:cts:greekLit:tlg0007.tlg137.perseus-grc2:1-6/cts-api-xml/
 https://scaife.perseus.org/library/urn:cts:greekLit:tlg0007.tlg138.perseus-grc2:1-50/cts-api-xml/"></textarea>
                 </div>
-                
+
                 <div class="metadata-fields">
                     <h3>Default Metadata (Optional)</h3>
                     <p>This metadata will be used for all imported texts if their data cannot be detected automatically.</p>
@@ -330,7 +330,7 @@ https://scaife.perseus.org/library/urn:cts:greekLit:tlg0007.tlg138.perseus-grc2:
                         <input type="text" name="default_author_name" placeholder="e.g., Plutarch">
                     </div>
                 </div>
-                
+
                 <input type="hidden" name="import_type" value="batch">
                 <button type="submit">Import Texts</button>
             </form>
@@ -378,11 +378,11 @@ def render_import_success_page(message):
 <body>
     <div class="container">
         <h1>Import Successful</h1>
-        
+
         <div class="success-box">
             <p>{message}</p>
         </div>
-        
+
         <div class="nav-links">
             <a href="/import" class="button">Back to Import</a>
             <a href="/" class="button">Home</a>
@@ -430,11 +430,11 @@ def render_import_error_page(error):
 <body>
     <div class="container">
         <h1>Import Error</h1>
-        
+
         <div class="error-box">
             <p>{error}</p>
         </div>
-        
+
         <div class="nav-links">
             <a href="/import" class="button">Back to Import</a>
             <a href="/" class="button">Home</a>

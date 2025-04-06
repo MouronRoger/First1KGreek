@@ -194,13 +194,13 @@ def render_search_page(search_term=None):
 <body>
     <div class="container">
         <h1>Search</h1>
-        
+
         <div class="nav-links">
             <a href="/" class="button">Home</a>
             <a href="/browse/authors" class="button">Browse Authors</a>
             <a href="/browse/editors" class="button">Browse Editors</a>
         </div>
-        
+
         <div class="search-box">
             <form action="/search" method="get">
                 <input type="text" name="q" value="{search_term or ''}" placeholder="Enter search term...">
@@ -219,8 +219,8 @@ def render_search_page(search_term=None):
                 <div class="result-item">
                     <div class="result-title">{result["title"] or "Untitled"}</div>
                     <div class="result-info">
-                        Author: {result["author"] or "Unknown"} | 
-                        Editor: {result["editor"] or "Unknown"} | 
+                        Author: {result["author"] or "Unknown"} |
+                        Editor: {result["editor"] or "Unknown"} |
                         Occurrences: {result["occurrence_count"]}
                     </div>
                     <a href="/view?path={result["file_path"]}" class="button">View XML</a>

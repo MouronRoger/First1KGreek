@@ -1,19 +1,20 @@
 {
-  "timestamp": "2025-04-06T00:05:21.327541",
+  "timestamp": "2025-04-06T00:23:11.784429",
   "total_files": 22,
   "black_compliant": 11,
   "black_percentage": 50.0,
-  "flake8_compliant": 12,
-  "flake8_percentage": 54.54545454545454,
+  "flake8_compliant": 17,
+  "flake8_percentage": 77.27272727272727,
   "isort_compliant": 22,
   "isort_percentage": 100.0,
   "critical_free": 22,
   "critical_percentage": 100.0,
   "docstring_compliant": 22,
   "docstring_percentage": 100.0,
-  "full_compliant": 9,
-  "full_percentage": 40.909090909090914,
+  "full_compliant": 11,
+  "full_percentage": 50.0,
   "fully_compliant_files": [
+    "src/first1k/config.py",
     "src/first1k/__init__.py",
     "src/first1k/import_export/__init__.py",
     "src/first1k/server/__init__.py",
@@ -21,17 +22,11 @@
     "src/first1k/utils/network.py",
     "src/first1k/search/__init__.py",
     "src/first1k/xml_utils/__init__.py",
+    "src/first1k/handlers/ui.py",
     "src/first1k/handlers/__init__.py",
     "src/first1k/editor/__init__.py"
   ],
   "non_compliant_files": {
-    "src/first1k/config.py": {
-      "black": false,
-      "flake8": true,
-      "isort": false,
-      "critical": false,
-      "docstring": false
-    },
     "src/first1k/__main__.py": {
       "black": true,
       "flake8": false,
@@ -69,21 +64,14 @@
     },
     "src/first1k/handlers/browse.py": {
       "black": true,
-      "flake8": true,
-      "isort": false,
-      "critical": false,
-      "docstring": false
-    },
-    "src/first1k/handlers/ui.py": {
-      "black": false,
-      "flake8": true,
+      "flake8": false,
       "isort": false,
       "critical": false,
       "docstring": false
     },
     "src/first1k/handlers/works.py": {
       "black": true,
-      "flake8": true,
+      "flake8": false,
       "isort": false,
       "critical": false,
       "docstring": false
@@ -97,7 +85,7 @@
     },
     "src/first1k/handlers/view.py": {
       "black": true,
-      "flake8": true,
+      "flake8": false,
       "isort": false,
       "critical": false,
       "docstring": false

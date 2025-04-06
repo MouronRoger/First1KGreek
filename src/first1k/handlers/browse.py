@@ -97,15 +97,15 @@ def render_authors_page():
 <body>
     <div class="container">
         <h1>Authors</h1>
-        
+
         <div class="nav-links">
             <a href="/" class="button">Home</a>
             <a href="/browse/editors" class="button">Browse Editors</a>
             <a href="/search" class="button">Search</a>
         </div>
-        
+
         <p>Showing {len(author_items)} authors, alphabetically ordered by name</p>
-        
+
         <div class="author-grid">
 """
 
@@ -301,7 +301,7 @@ def render_editors_page():
 <body>
     <div class="container">
         <h1>Editors</h1>
-        
+
         <div class="nav-links">
             <a href="/" class="button">Home</a>
             <a href="/browse/authors" class="button">Browse Authors</a>

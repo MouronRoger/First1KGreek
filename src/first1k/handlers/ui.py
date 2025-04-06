@@ -51,7 +51,7 @@ def render_main_page():
 <body>
     <div class="container">
         <h1>First1KGreek Browser</h1>
-        
+
         <div class="nav-links">
             <a href="/browse/authors" class="button">Browse by Author</a>
             <a href="/browse/editors" class="button">Browse by Editor</a>
@@ -68,7 +68,7 @@ def render_main_page():
 
         <div class="card">
             <h2>About</h2>
-            <p>Browse and search through Greek texts from the First Thousand Years Project. 
+            <p>Browse and search through Greek texts from the First Thousand Years Project.
             Features include browsing by author or editor, full-text search, and importing texts from Scaife/Perseus.</p>
         </div>
     </div>
