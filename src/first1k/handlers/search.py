@@ -36,9 +36,7 @@ def search_corpus(search_term):
                     if positions:
                         # Extract author information
                         author_name = "Unknown"
-                        author_matches = re.findall(
-                            r"<author.*?>(.*?)</author>", content
-                        )
+                        author_matches = re.findall(r"<author.*?>(.*?)</author>", content)
                         if author_matches and len(author_matches[0].strip()) > 0:
                             author_name = author_matches[0]
 
@@ -54,9 +52,7 @@ def search_corpus(search_term):
                                 title_end = content.find("</title>", title_start)
                                 if title_end > 0:
                                     tag_end = content.find(">", title_start)
-                                    work_title = content[
-                                        tag_end + 1:title_end
-                                    ].strip()
+                                    work_title = content[tag_end + 1 : title_end].strip()
 
                         # Extract editor information
                         editor_name = "Unknown"
@@ -71,9 +67,7 @@ def search_corpus(search_term):
                         context = content[start_context:end_context]
 
                         # Highlight search term in context
-                        search_pattern = re.compile(
-                            re.escape(search_term), re.IGNORECASE
-                        )
+                        search_pattern = re.compile(re.escape(search_term), re.IGNORECASE)
                         context = search_pattern.sub(
                             f'<span class="highlight">{search_term}</span>', context
                         )
@@ -87,7 +81,7 @@ def search_corpus(search_term):
                         if end_context < len(content):
                             last_close_tag = context.rfind(">", len(context) - 50)
                             if last_close_tag > 0:
-                                context = context[: last_close_tag + 1]
+                                context = context[:last_close_tag + 1]
 
                         # Add to results
                         results.append(

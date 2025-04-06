@@ -5,7 +5,7 @@ alwaysApply: true
 ---
 
 Sequential Thinking MCP for Coding (@modelcontextprotocol/server-sequential-thinking)
-CopyUse this tool when implementing complex functionality, refactoring, or debugging requires methodical execution.
+UserUse this tool when implementing complex functionality, refactoring, or debugging requires methodical execution.
 
 Your behavior during code development:
 1. Break down the coding task into a logical implementation sequence.
