@@ -1,6 +1,7 @@
 #!/usr/bin/env python3
-"""
-First1KGreek Browser - Fixed Version
+"""First1KGreek Browser - Fixed Version.
+
+A Python-based browser for viewing and managing ancient Greek texts.
 Version: 1.2.0 (with cache-busting and dark theme)
 Last updated: 2025-03-07
 """
@@ -32,8 +33,12 @@ logging.basicConfig(
 logger = logging.getLogger(__name__)
 
 
-# Parse command line arguments
 def parse_args():
+    """Parse command line arguments.
+    
+    Returns:
+        argparse.Namespace: Parsed command line arguments
+    """
     parser = argparse.ArgumentParser(description="First1KGreek Browser")
     parser.add_argument("--port", type=int, default=8000, help="Port to run the server on")
     parser.add_argument("--debug", action="store_true", help="Enable debug mode")
@@ -541,7 +546,14 @@ AUTHORS_TABLE_STYLESHEET = """
 
 
 def is_port_in_use(port):
-    """Check if a port is in use"""
+    """Check if a port is in use.
+    
+    Args:
+        port (int): Port number to check
+        
+    Returns:
+        bool: True if port is in use, False otherwise
+    """
     with socket.socket(socket.AF_INET, socket.SOCK_STREAM) as s:
         result = s.connect_ex(("localhost", port)) == 0
         logger.debug(f"Port {port} is {'in use' if result else 'available'}")
@@ -549,7 +561,15 @@ def is_port_in_use(port):
 
 
 def find_available_port(start_port=8000, max_attempts=10):
-    """Find an available port starting from start_port"""
+    """Find an available port starting from start_port.
+    
+    Args:
+        start_port (int): Starting port number to check
+        max_attempts (int): Maximum number of ports to check
+        
+    Returns:
+        int: Available port number
+    """
     logger.debug(f"Searching for available port starting from {start_port}")
     for port in range(start_port, start_port + max_attempts):
         if not is_port_in_use(port):
@@ -560,13 +580,23 @@ def find_available_port(start_port=8000, max_attempts=10):
 
 
 class CustomHTTPRequestHandler(http.server.SimpleHTTPRequestHandler):
-    """Custom HTTP server handler for browsing and viewing texts"""
+    """Custom HTTP server handler for browsing and viewing texts."""
 
     def log_message(self, format, *args):
-        """Override to use our logger"""
+        """Override to use our logger.
+        
+        Args:
+            format (str): Format string for the log message
+            *args: Variable arguments to format the message
+        """
         logger.info("%s - %s" % (self.address_string(), format % args))
 
     def do_GET(self):
+        """Handle GET requests.
+        
+        Handles various endpoints including home page, authors table, works page,
+        view page, editors page, search page, and API endpoints.
+        """
         try:
             logger.debug(f"GET request for {self.path}")
 
@@ -1107,8 +1137,8 @@ class CustomHTTPRequestHandler(http.server.SimpleHTTPRequestHandler):
             raise
 
     def get_home_page(self):
-        """Generate the home page"""
-        html = f"""
+        """Generate the home page."""
+        html = """
         <!DOCTYPE html>
         <html>
         <head>
@@ -1283,6 +1313,72 @@ class CustomHTTPRequestHandler(http.server.SimpleHTTPRequestHandler):
 
     def get_editors_page(self):
         """Generate the editors page"""
+        html = f'''
+        <!DOCTYPE html>
+        <html>
+        <head>
+            <title>About the Editors</title>
+            <style>
+                {MAIN_STYLESHEET}
+
+                .editors-list {{
+                    margin-top: 20px;
+                }}
+
+                .editor-section {{
+                    margin-bottom: 30px;
+                    padding: 15px;
+                    background-color: #333;
+                    border-radius: 5px;
+                }}
+
+                .editor-name {{
+                    font-size: 1.2em;
+                    font-weight: bold;
+                    color: #4299e1;
+                    margin-bottom: 10px;
+                }}
+
+                .editor-works {{
+                    list-style-type: none;
+                    padding-left: 0;
+                }}
+
+                .editor-works li {{
+                    padding: 5px 0;
+                    border-bottom: 1px solid #444;
+                }}
+
+                .editor-works li:last-child {{
+                    border-bottom: none;
+                }}
+
+                .no-editors {{
+                    padding: 20px;
+                    color: #fc8181;
+                    text-align: center;
+                    background-color: #333;
+                    border-radius: 5px;
+                }}
+            </style>
+        </head>
+        <body>
+            <div class="container">
+                <h1>About the Editors</h1>
+                <p><a href="/">&laquo; Home</a> | <a href="/authors">Authors Table</a></p>
+
+                <p>First1KGreek is a collection of ancient Greek texts maintained by a dedicated team of editors and scholars.</p>
+
+                <h2>Editorial Team</h2>
+                <ul>
+                    <li><strong>Project Director:</strong> Digital Classicist Collaborative</li>
+                    <li><strong>Technical Lead:</strong> Perseus Digital Library</li>
+                    <li><strong>Contributors:</strong> The scholarly community</li>
+                </ul>
+
+                <h2>Editors ({len(editors)} found)</h2>
+        '''
+
         # Find all unique editors in the works
         editors = {}
         total_editors = 0
@@ -1323,72 +1419,6 @@ class CustomHTTPRequestHandler(http.server.SimpleHTTPRequestHandler):
             logger.error(f"Error scanning for editors: {str(e)}")
 
         # Generate HTML
-        html = f"""
-        <!DOCTYPE html>
-        <html>
-        <head>
-            <title>About the Editors</title>
-            <style>
-                {MAIN_STYLESHEET}
-
-                .editors-list {
-                    margin-top: 20px;
-                }
-
-                .editor-section {
-                    margin-bottom: 30px;
-                    padding: 15px;
-                    background-color: #333;
-                    border-radius: 5px;
-                }
-
-                .editor-name {
-                    font-size: 1.2em;
-                    font-weight: bold;
-                    color: #4299e1;
-                    margin-bottom: 10px;
-                }
-
-                .editor-works {
-                    list-style-type: none;
-                    padding-left: 0;
-                }
-
-                .editor-works li {
-                    padding: 5px 0;
-                    border-bottom: 1px solid #444;
-                }
-
-                .editor-works li:last-child {
-                    border-bottom: none;
-                }
-
-                .no-editors {
-                    padding: 20px;
-                    color: #fc8181;
-                    text-align: center;
-                    background-color: #333;
-                    border-radius: 5px;
-                }
-            </style>
-        </head>
-        <body>
-            <div class="container">
-                <h1>About the Editors</h1>
-                <p><a href="/">&laquo; Home</a> | <a href="/authors">Authors Table</a></p>
-
-                <p>First1KGreek is a collection of ancient Greek texts maintained by a dedicated team of editors and scholars.</p>
-
-                <h2>Editorial Team</h2>
-                <ul>
-                    <li><strong>Project Director:</strong> Digital Classicist Collaborative</li>
-                    <li><strong>Technical Lead:</strong> Perseus Digital Library</li>
-                    <li><strong>Contributors:</strong> The scholarly community</li>
-                </ul>
-
-                <h2>Editors ({len(editors)} found)</h2>
-        """
-
         if editors:
             html += """<div class="editors-list">"""
 
