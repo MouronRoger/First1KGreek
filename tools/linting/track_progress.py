@@ -211,13 +211,14 @@ def track_progress(files):
     }
 
 
-def generate_report(progress, output_file=None):
+def generate_report(progress, output_file=None, detailed=False):
     """
     Generate a report of linting progress.
     
     Args:
         progress: Progress statistics dictionary
         output_file: Path to save JSON report (if None, won't save)
+        detailed: Whether to show detailed information about non-compliant files
     """
     print_section("Linting Progress Report")
     print(f"Total Python files: {progress['total_files']}")
@@ -229,6 +230,21 @@ def generate_report(progress, output_file=None):
     print(f"- isort compliance:  {progress['isort_compliant']} ({progress['isort_percentage']:.2f}%)")
     print(f"- No critical issues: {progress['critical_free']} ({progress['critical_percentage']:.2f}%)")
     print(f"- Docstring standards: {progress['docstring_compliant']} ({progress['docstring_percentage']:.2f}%)")
+    
+    if detailed:
+        print_section("Non-Compliant Files Details")
+        for file_path, issues in progress['non_compliant_files'].items():
+            print(f"\n{file_path}:")
+            if issues['black']:
+                print("  - Needs Black formatting")
+            if issues['flake8']:
+                print("  - Has Flake8 issues")
+            if issues['isort']:
+                print("  - Needs import sorting")
+            if issues['critical']:
+                print("  - Has critical issues")
+            if issues['docstring']:
+                print("  - Missing or invalid docstrings")
     
     # Save the report if requested
     if output_file:
@@ -247,6 +263,8 @@ def main():
                         help="Glob patterns to exclude")
     parser.add_argument("--output", default="lint_reports/progress.json",
                         help="Output file for detailed report")
+    parser.add_argument("--detailed", action="store_true",
+                        help="Show detailed information about non-compliant files")
     args = parser.parse_args()
     
     print_section("Tracking Linting Progress")
@@ -266,7 +284,7 @@ def main():
         progress = track_progress(files)
         
         # Generate report
-        generate_report(progress, args.output)
+        generate_report(progress, args.output, args.detailed)
         
         # Exit with status based on progress
         if progress["full_percentage"] >= 80:

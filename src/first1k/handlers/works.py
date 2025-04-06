@@ -21,7 +21,9 @@ def get_works_by_author(author_id):
         try:
             with open(author_cts_path, "r", encoding="utf-8") as f:
                 content = f.read()
-                name_match = re.search(r"<ti:groupname[^>]*>(.*?)</ti:groupname>", content)
+                name_match = re.search(
+                    r"<ti:groupname[^>]*>(.*?)</ti:groupname>", content
+                )
                 if name_match:
                     author_name = name_match.group(1).strip()
         except Exception as e:
@@ -38,8 +40,13 @@ def get_works_by_author(author_id):
                         try:
                             with open(file_path, "r", encoding="utf-8") as f:
                                 content = f.read(10000)
-                                author_matches = re.findall(r"<author[^>]*>(.*?)</author>", content)
-                                if author_matches and len(author_matches[0].strip()) > 0:
+                                author_matches = re.findall(
+                                    r"<author[^>]*>(.*?)</author>", content
+                                )
+                                if (
+                                    author_matches
+                                    and len(author_matches[0].strip()) > 0
+                                ):
                                     author_name = author_matches[0].strip()
                                     break
                         except Exception as e:
@@ -64,7 +71,9 @@ def get_works_by_author(author_id):
                 try:
                     with open(work_cts_path, "r", encoding="utf-8") as f:
                         content = f.read()
-                        title_match = re.search(r"<ti:title[^>]*>(.*?)</ti:title>", content)
+                        title_match = re.search(
+                            r"<ti:title[^>]*>(.*?)</ti:title>", content
+                        )
                         if title_match:
                             work_title = title_match.group(1).strip()
                         lang_match = re.search(r'xml:lang="([^"]+)"', content)
@@ -83,12 +92,16 @@ def get_works_by_author(author_id):
 
                         # Get title if not found in metadata
                         if not work_title:
-                            title_matches = re.findall(r"<title[^>]*>(.*?)</title>", content)
+                            title_matches = re.findall(
+                                r"<title[^>]*>(.*?)</title>", content
+                            )
                             if title_matches:
                                 work_title = title_matches[0].strip()
 
                         # Get editor
-                        editor_matches = re.findall(r"<editor[^>]*>(.*?)</editor>", content)
+                        editor_matches = re.findall(
+                            r"<editor[^>]*>(.*?)</editor>", content
+                        )
                         if editor_matches and len(editor_matches[0].strip()) > 0:
                             work_editor = editor_matches[0].strip()
 
@@ -127,16 +140,29 @@ def get_works_by_editor(editor_name):
                             if editor_name.lower() in match.lower():
                                 # Get work details
                                 author_name = "Unknown"
-                                author_matches = re.findall(r"<author[^>]*>(.*?)</author>", content)
-                                if author_matches and len(author_matches[0].strip()) > 0:
+                                author_matches = re.findall(
+                                    r"<author[^>]*>(.*?)</author>", content
+                                )
+                                if (
+                                    author_matches
+                                    and len(author_matches[0].strip()) > 0
+                                ):
                                     author_name = author_matches[0].strip()
 
                                 work_title = "Unknown"
-                                title_matches = re.findall(r"<title[^>]*>(.*?)</title>", content)
+                                title_matches = re.findall(
+                                    r"<title[^>]*>(.*?)</title>", content
+                                )
                                 if title_matches:
                                     work_title = title_matches[0].strip()
 
-                                works.append({"author": author_name, "title": work_title, "file_path": file_path})
+                                works.append(
+                                    {
+                                        "author": author_name,
+                                        "title": work_title,
+                                        "file_path": file_path,
+                                    }
+                                )
                                 break
                 except Exception as e:
                     print(f"Error reading {file_path}: {str(e)}")

@@ -21,10 +21,14 @@ def get_author_name_from_files(author_id):
                     file_path = os.path.join(work_path, file)
                     try:
                         with open(file_path, "r", encoding="utf-8") as f:
-                            content = f.read(10000)  # Read beginning where metadata usually is
+                            content = f.read(
+                                10000
+                            )  # Read beginning where metadata usually is
 
                         # Look for author tag with reasonable content
-                        author_matches = re.findall(r"<author[^>]*>(.*?)</author>", content)
+                        author_matches = re.findall(
+                            r"<author[^>]*>(.*?)</author>", content
+                        )
                         if author_matches and len(author_matches[0].strip()) > 0:
                             return author_matches[0].strip()
 
@@ -40,7 +44,9 @@ def render_authors_page():
     author_dirs = []
     for item in os.listdir("data"):
         item_path = os.path.join("data", item)
-        if os.path.isdir(item_path) and (item.startswith("tlg") or item.startswith("heb")):
+        if os.path.isdir(item_path) and (
+            item.startswith("tlg") or item.startswith("heb")
+        ):
             author_dirs.append(item)
 
     # Get author names from files
@@ -110,7 +116,9 @@ def render_authors_page():
 """
 
     for author_id, author_name in author_items:
-        display_name = f"{author_name} ({author_id})" if author_name != author_id else author_id
+        display_name = (
+            f"{author_name} ({author_id})" if author_name != author_id else author_id
+        )
         html += f"""
             <a href="/works?author={author_id}" style="text-decoration: none; color: inherit;">
                 <div class="author-card">
@@ -156,21 +164,36 @@ def get_editors_data():
 
                     # Check titleStmt for editor info
                     if "<titleStmt>" in content and "</titleStmt>" in content:
-                        title_stmt = content.split("<titleStmt>")[1].split("</titleStmt>")[0]
+                        title_stmt = content.split("<titleStmt>")[1].split(
+                            "</titleStmt>"
+                        )[0]
                         if "<editor>" in title_stmt and "</editor>" in title_stmt:
-                            editor_matches = re.findall(r"<editor[^>]*>(.*?)</editor>", title_stmt)
+                            editor_matches = re.findall(
+                                r"<editor[^>]*>(.*?)</editor>", title_stmt
+                            )
                             for match in editor_matches:
                                 clean_match = re.sub(r"<[^>]*>", "", match)
                                 if clean_match.strip():
                                     editor_names.append(clean_match.strip())
 
                     # Check for persName with role=editor
-                    persname_matches = re.findall(r'<persName[^>]*role="editor"[^>]*>(.*?)</persName>', content)
-                    editor_names.extend([m.strip() for m in persname_matches if m.strip()])
+                    persname_matches = re.findall(
+                        r'<persName[^>]*role="editor"[^>]*>(.*?)</persName>', content
+                    )
+                    editor_names.extend(
+                        [m.strip() for m in persname_matches if m.strip()]
+                    )
 
                     # Check for persName with contents matching known editors
-                    persname_matches = re.findall(r"<persName[^>]*>(.*?)</persName>", content)
-                    known_editors = ["Hans Friedrich August von Arnim", "von Arnim", "Arnim", "H. F. A. von Arnim"]
+                    persname_matches = re.findall(
+                        r"<persName[^>]*>(.*?)</persName>", content
+                    )
+                    known_editors = [
+                        "Hans Friedrich August von Arnim",
+                        "von Arnim",
+                        "Arnim",
+                        "H. F. A. von Arnim",
+                    ]
                     for match in persname_matches:
                         for editor in known_editors:
                             if editor in match:

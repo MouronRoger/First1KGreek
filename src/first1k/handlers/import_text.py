@@ -9,7 +9,9 @@ from urllib.error import HTTPError, URLError
 from ..config import MAIN_STYLESHEET
 
 
-def import_text_from_scaife(scaife_url, provided_author_name="", provided_work_title=""):
+def import_text_from_scaife(
+    scaife_url, provided_author_name="", provided_work_title=""
+):
     """Import text from Scaife URL and save to the corpus."""
     print(f"Importing from URL: {scaife_url}")
 
@@ -44,7 +46,7 @@ def import_text_from_scaife(scaife_url, provided_author_name="", provided_work_t
         # Try to get from existing files
         try:
             author_name = get_author_name_from_files(author_id)
-        except:
+        except Exception:
             # Try author map
             author_name = get_author_name_from_id(author_id)
 
@@ -67,7 +69,7 @@ def import_text_from_scaife(scaife_url, provided_author_name="", provided_work_t
                     title_elem = tree.find(".//{*}title")
                     if title_elem is not None and title_elem.text:
                         work_title = title_elem.text
-            except:
+            except Exception:
                 pass
 
     if not work_title:
@@ -123,10 +125,14 @@ def get_author_name_from_files(author_id):
                     file_path = os.path.join(work_path, file)
                     try:
                         with open(file_path, "r", encoding="utf-8") as f:
-                            content = f.read(10000)  # Read beginning where metadata usually is
+                            content = f.read(
+                                10000
+                            )  # Read beginning where metadata usually is
 
                         # Look for author tag with reasonable content
-                        author_matches = re.findall(r"<author[^>]*>(.*?)</author>", content)
+                        author_matches = re.findall(
+                            r"<author[^>]*>(.*?)</author>", content
+                        )
                         if author_matches and len(author_matches[0].strip()) > 0:
                             return author_matches[0].strip()
 
@@ -169,7 +175,9 @@ def detect_language_from_xml(xml_content):
     try:
         root = ET.fromstring(xml_content)
         # Check for xml:lang attribute
-        for elem in root.findall(".//*[@xml:lang]", {"xml": "http://www.w3.org/XML/1998/namespace"}):
+        for elem in root.findall(
+            ".//*[@xml:lang]", {"xml": "http://www.w3.org/XML/1998/namespace"}
+        ):
             lang = elem.get("{http://www.w3.org/XML/1998/namespace}lang")
             if lang:
                 return lang

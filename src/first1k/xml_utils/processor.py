@@ -34,35 +34,49 @@ def process_xml_for_reading(xml_content):
         # Process revision description
         revision_desc = root.find(".//revisionDesc") or root.find(".//tei_revisionDesc")
         if revision_desc is not None:
-            html_output.append('<div class="revision-history"><h3>Revision History</h3><ul>')
-            changes = revision_desc.findall(".//change") or revision_desc.findall(".//tei_change")
+            html_output.append(
+                '<div class="revision-history"><h3>Revision History</h3><ul>'
+            )
+            changes = revision_desc.findall(".//change") or revision_desc.findall(
+                ".//tei_change"
+            )
             for change in changes:
                 date = change.get("when", "")
                 person = change.get("who", "")
                 desc = "".join(change.itertext()).strip()
-                html_output.append(f"<li><strong>{date}</strong> by <em>{person}</em>: {desc}</li>")
+                html_output.append(
+                    f"<li><strong>{date}</strong> by <em>{person}</em>: {desc}</li>"
+                )
             html_output.append("</ul></div>")
 
         # Process edition information
-        edition_div = root.find('.//div[@type="edition"]') or root.find('.//tei_div[@type="edition"]')
+        edition_div = root.find('.//div[@type="edition"]') or root.find(
+            './/tei_div[@type="edition"]'
+        )
         if edition_div is not None:
             edition_id = edition_div.get("n", "")
-            edition_lang = edition_div.get("xml:lang", "") or edition_div.get("lang", "")
+            edition_lang = edition_div.get("xml:lang", "") or edition_div.get(
+                "lang", ""
+            )
             if edition_id:
-                html_output.append(f'<div class="edition-info">Edition: {edition_id} (Language: {edition_lang})</div>')
+                html_output.append(
+                    f'<div class="edition-info">Edition: {edition_id} (Language: {edition_lang})</div>'
+                )
 
         # Process fragments
-        fragments = root.findall('.//div[@type="textpart"][@subtype="fragment"]') or root.findall(
-            './/tei_div[@type="textpart"][@subtype="fragment"]'
-        )
+        fragments = root.findall(
+            './/div[@type="textpart"][@subtype="fragment"]'
+        ) or root.findall('.//tei_div[@type="textpart"][@subtype="fragment"]')
 
         if fragments:
             html_output.append('<div class="fragments-container">')
             for fragment in fragments:
                 fragment_num = fragment.get("n", "Unknown")
-                html_output.append(f'<div class="fragment">')
-                html_output.append(f'<div class="fragment-number">Fragment {fragment_num}</div>')
-                html_output.append(f'<div class="greek-text">')
+                html_output.append('<div class="fragment">')
+                html_output.append(
+                    f'<div class="fragment-number">Fragment {fragment_num}</div>'
+                )
+                html_output.append('<div class="greek-text">')
 
                 # Process paragraphs within the fragment
                 paragraphs = fragment.findall(".//p") or fragment.findall(".//tei_p")
@@ -74,13 +88,19 @@ def process_xml_for_reading(xml_content):
                         paragraph_parts.append(p.text)
 
                     for child in p:
-                        if child.tag.endswith("name") or child.tag.endswith("placeName"):
+                        if child.tag.endswith("name") or child.tag.endswith(
+                            "placeName"
+                        ):
                             if child.text:
-                                paragraph_parts.append(f'<span class="name">{child.text}</span>')
+                                paragraph_parts.append(
+                                    f'<span class="name">{child.text}</span>'
+                                )
                         elif child.tag.endswith("foreign"):
                             lang = child.get("xml:lang", "")
                             if child.text:
-                                paragraph_parts.append(f'<span class="foreign" lang="{lang}">{child.text}</span>')
+                                paragraph_parts.append(
+                                    f'<span class="foreign" lang="{lang}">{child.text}</span>'
+                                )
                         else:
                             if child.text:
                                 paragraph_parts.append(child.text)
@@ -116,10 +136,14 @@ def process_xml_for_reading(xml_content):
                 elif tag.endswith("head") or tag.endswith("tei_head"):
                     html_output.append(f'<h2 class="section-head">{elem_text}</h2>')
                 elif tag.endswith("quote") or tag.endswith("tei_quote"):
-                    html_output.append(f'<blockquote class="quote">{elem_text}</blockquote>')
+                    html_output.append(
+                        f'<blockquote class="quote">{elem_text}</blockquote>'
+                    )
                 elif tag.endswith("foreign") or tag.endswith("tei_foreign"):
                     lang = elem.get("xml:lang", "")
-                    html_output.append(f'<span class="foreign" lang="{lang}">{elem_text}</span>')
+                    html_output.append(
+                        f'<span class="foreign" lang="{lang}">{elem_text}</span>'
+                    )
 
             html_output.append("</div>")  # Close main-content
 
@@ -161,7 +185,9 @@ def detect_language_from_xml(xml_content):
     """Detect the language from the XML content."""
     try:
         root = ET.fromstring(xml_content)
-        for elem in root.findall(".//*[@xml:lang]", {"xml": "http://www.w3.org/XML/1998/namespace"}):
+        for elem in root.findall(
+            ".//*[@xml:lang]", {"xml": "http://www.w3.org/XML/1998/namespace"}
+        ):
             lang = elem.get("{http://www.w3.org/XML/1998/namespace}lang")
             if lang:
                 return lang

@@ -1,89 +1,42 @@
 {
-  "timestamp": "2025-04-06T00:23:11.784429",
+  "timestamp": "2025-04-06T21:51:24.117090",
   "total_files": 22,
-  "black_compliant": 11,
-  "black_percentage": 50.0,
-  "flake8_compliant": 17,
-  "flake8_percentage": 77.27272727272727,
+  "black_compliant": 20,
+  "black_percentage": 90.9090909090909,
+  "flake8_compliant": 22,
+  "flake8_percentage": 100.0,
   "isort_compliant": 22,
   "isort_percentage": 100.0,
   "critical_free": 22,
   "critical_percentage": 100.0,
   "docstring_compliant": 22,
   "docstring_percentage": 100.0,
-  "full_compliant": 11,
-  "full_percentage": 50.0,
+  "full_compliant": 20,
+  "full_percentage": 90.9090909090909,
   "fully_compliant_files": [
     "src/first1k/config.py",
     "src/first1k/__init__.py",
+    "src/first1k/__main__.py",
     "src/first1k/import_export/__init__.py",
+    "src/first1k/import_export/scaife.py",
+    "src/first1k/server/server.py",
     "src/first1k/server/__init__.py",
     "src/first1k/utils/__init__.py",
     "src/first1k/utils/network.py",
     "src/first1k/search/__init__.py",
     "src/first1k/xml_utils/__init__.py",
+    "src/first1k/xml_utils/processor.py",
+    "src/first1k/handlers/browse.py",
     "src/first1k/handlers/ui.py",
+    "src/first1k/handlers/works.py",
     "src/first1k/handlers/__init__.py",
-    "src/first1k/editor/__init__.py"
+    "src/first1k/handlers/import_text.py",
+    "src/first1k/handlers/view.py",
+    "src/first1k/editor/__init__.py",
+    "src/first1k/editor/manager.py"
   ],
   "non_compliant_files": {
-    "src/first1k/__main__.py": {
-      "black": true,
-      "flake8": false,
-      "isort": false,
-      "critical": false,
-      "docstring": false
-    },
-    "src/first1k/import_export/scaife.py": {
-      "black": true,
-      "flake8": true,
-      "isort": false,
-      "critical": false,
-      "docstring": false
-    },
-    "src/first1k/server/server.py": {
-      "black": true,
-      "flake8": false,
-      "isort": false,
-      "critical": false,
-      "docstring": false
-    },
     "src/first1k/search/searcher.py": {
-      "black": true,
-      "flake8": true,
-      "isort": false,
-      "critical": false,
-      "docstring": false
-    },
-    "src/first1k/xml_utils/processor.py": {
-      "black": true,
-      "flake8": true,
-      "isort": false,
-      "critical": false,
-      "docstring": false
-    },
-    "src/first1k/handlers/browse.py": {
-      "black": true,
-      "flake8": false,
-      "isort": false,
-      "critical": false,
-      "docstring": false
-    },
-    "src/first1k/handlers/works.py": {
-      "black": true,
-      "flake8": false,
-      "isort": false,
-      "critical": false,
-      "docstring": false
-    },
-    "src/first1k/handlers/import_text.py": {
-      "black": true,
-      "flake8": true,
-      "isort": false,
-      "critical": false,
-      "docstring": false
-    },
-    "src/first1k/handlers/view.py": {
       "black": true,
       "flake8": false,
       "isort": false,
@@ -91,13 +44,6 @@
       "docstring": false
     },
     "src/first1k/handlers/search.py": {
-      "black": true,
-      "flake8": true,
-      "isort": false,
-      "critical": false,
-      "docstring": false
-    },
-    "src/first1k/editor/manager.py": {
       "black": true,
       "flake8": false,
       "isort": false,

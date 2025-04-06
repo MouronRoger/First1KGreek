@@ -27,9 +27,15 @@ def render_xml_view_page(file_path):
         xml_display = escape(xml_content)
 
         # Add syntax highlighting
-        xml_display = re.sub(r"(&lt;[^&]*&gt;)", r'<span class="tag">\1</span>', xml_display)
-        xml_display = re.sub(r"(&lt;/[^&]*&gt;)", r'<span class="tag">\1</span>', xml_display)
-        xml_display = re.sub(r'("[^"]*")', r'<span class="string">\1</span>', xml_display)
+        xml_display = re.sub(
+            r"(&lt;[^&]*&gt;)", r'<span class="tag">\1</span>', xml_display
+        )
+        xml_display = re.sub(
+            r"(&lt;/[^&]*&gt;)", r'<span class="tag">\1</span>', xml_display
+        )
+        xml_display = re.sub(
+            r'("[^"]*")', r'<span class="string">\1</span>', xml_display
+        )
 
         html = f"""<!DOCTYPE html>
 <html>

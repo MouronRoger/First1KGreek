@@ -31,21 +31,36 @@ def get_editors_data():
 
                     # Check titleStmt for editor info
                     if "<titleStmt>" in content and "</titleStmt>" in content:
-                        title_stmt = content.split("<titleStmt>")[1].split("</titleStmt>")[0]
+                        title_stmt = content.split("<titleStmt>")[1].split(
+                            "</titleStmt>"
+                        )[0]
                         if "<editor>" in title_stmt and "</editor>" in title_stmt:
-                            editor_matches = re.findall(r"<editor[^>]*>(.*?)</editor>", title_stmt)
+                            editor_matches = re.findall(
+                                r"<editor[^>]*>(.*?)</editor>", title_stmt
+                            )
                             for match in editor_matches:
                                 clean_match = re.sub(r"<[^>]*>", "", match)
                                 if clean_match.strip():
                                     editor_names.append(clean_match.strip())
 
                     # Check for persName with role=editor
-                    persname_matches = re.findall(r'<persName[^>]*role="editor"[^>]*>(.*?)</persName>', content)
-                    editor_names.extend([m.strip() for m in persname_matches if m.strip()])
+                    persname_matches = re.findall(
+                        r'<persName[^>]*role="editor"[^>]*>(.*?)</persName>', content
+                    )
+                    editor_names.extend(
+                        [m.strip() for m in persname_matches if m.strip()]
+                    )
 
                     # Check for persName with contents matching known editors
-                    persname_matches = re.findall(r"<persName[^>]*>(.*?)</persName>", content)
-                    known_editors = ["Hans Friedrich August von Arnim", "von Arnim", "Arnim", "H. F. A. von Arnim"]
+                    persname_matches = re.findall(
+                        r"<persName[^>]*>(.*?)</persName>", content
+                    )
+                    known_editors = [
+                        "Hans Friedrich August von Arnim",
+                        "von Arnim",
+                        "Arnim",
+                        "H. F. A. von Arnim",
+                    ]
                     for match in persname_matches:
                         for editor in known_editors:
                             if editor in match:
