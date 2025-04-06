@@ -128,9 +128,7 @@ class CustomHTTPRequestHandler(http.server.SimpleHTTPRequestHandler):
                     if not scaife_url:
                         raise ValueError("Missing Scaife URL")
 
-                    result = import_text_from_scaife(
-                        scaife_url, author_name, work_title
-                    )
+                    result = import_text_from_scaife(scaife_url, author_name, work_title)
                     self.send_html_response(render_import_success_page(result))
 
                 else:  # batch import

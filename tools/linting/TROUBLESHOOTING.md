@@ -25,7 +25,7 @@ FileNotFoundError: [Errno 2] No such file or directory: 'pylint'
    ```bash
    git commit --no-verify -m "Your commit message"
    ```
-   
+
    However, please fix the linting issues properly before pushing your changes.
 
 ### Black or isort Not Found
@@ -60,7 +60,7 @@ FileNotFoundError: [Errno 2] No such file or directory: 'pylint'
    # fmt: off
    problematic_code_here
    # fmt: on
-   
+
    # For Flake8
    # noqa: <error-code>
    ```
@@ -103,4 +103,4 @@ python -m flake8 your_file.py
 
 # Check docstrings
 python -m pydocstyle --select=D100,D101,D102,D103 your_file.py
-``` 
+```

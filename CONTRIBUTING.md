@@ -86,16 +86,16 @@ We follow the Google style for docstrings:
 ```python
 def example_function(param1, param2):
     """Summary of function purpose.
-    
+
     More detailed description if needed.
-    
+
     Args:
         param1: Description of first parameter
         param2: Description of second parameter
-        
+
     Returns:
         Description of the return value
-        
+
     Raises:
         ValueError: If an invalid value is provided
     """
@@ -113,4 +113,4 @@ def example_function(param1, param2):
 
 If you encounter issues with the linting tools, see our [Troubleshooting Guide](tools/linting/TROUBLESHOOTING.md).
 
-Thank you for following these guidelines! 
+Thank you for following these guidelines!

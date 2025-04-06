@@ -8,13 +8,13 @@ print "totals\t$totintrowords\t$totintrochars\t$totappcritwords\t$totappcritchar
 
 sub dostats {
 	$curfile = @_[0];
- 
+
 $introwords = $introchars = $appcritwords = $appcritchars = $indexwords = $indexchars = $textwords = $textchars = 0;
 
 
 open INF, "< $curfile";
 while(<INF>) {
-	
+
 
 s#^\s+##g;
 s#\s*$##g;
@@ -44,7 +44,7 @@ s#\s*$##g;
 		$indexchars += length;
 		next;
 	}
-	
+
 	if( $curpage =~ /[IXVLC]+/i ) {
 		$introwords += s#(\s+)#$1#g;
 		$introchars += length;
@@ -62,7 +62,7 @@ s#\s*$##g;
 
 	if( /(<note type="foot.+)/ ) {
 		my $curnote = $1;
-		
+
 		@w = split(/\s+/, $curnote);
 		if( $#w > 0) {
 		$appcritchars += length $curnote;
@@ -72,15 +72,15 @@ s#\s*$##g;
 
 
 		@w = split;
-		
+
 		if( $#w > 0) {
 			$textwords += $#w;
 			$textchars += length ($_);
 		}
-		
+
 		next;
 	}
-	
+
 	$textwords += s#(\s+)#$1#g;
 	$textchars += length;
 

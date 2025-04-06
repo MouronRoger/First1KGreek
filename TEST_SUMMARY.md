@@ -80,4 +80,4 @@ To further enhance the test suite:
 
 This test suite provides a solid foundation for ensuring the stability and performance of the First1KGreek Browser as the codebase evolves. It follows best practices for test isolation, uses appropriate assertions, and includes performance benchmarking to detect potential slowdowns during development.
 
-As the application undergoes refactoring and new features are added, this test suite will help ensure that core functionality remains intact and that performance does not degrade. 
+As the application undergoes refactoring and new features are added, this test suite will help ensure that core functionality remains intact and that performance does not degrade.

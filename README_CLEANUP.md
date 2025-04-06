@@ -72,4 +72,4 @@ Potential areas for further improvement:
 
 ## Original Project
 
-This is a fork of the [OpenGreekAndLatin/First1KGreek](https://github.com/OpenGreekAndLatin/First1KGreek) project, which contains XML files for works in the First Thousand Years of Greek Project. 
+This is a fork of the [OpenGreekAndLatin/First1KGreek](https://github.com/OpenGreekAndLatin/First1KGreek) project, which contains XML files for works in the First Thousand Years of Greek Project.

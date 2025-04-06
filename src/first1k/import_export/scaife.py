@@ -11,9 +11,7 @@ from urllib.error import HTTPError, URLError
 from ..xml_utils.processor import detect_language_from_xml, extract_title_from_xml
 
 
-def import_text_from_scaife(
-    scaife_url, provided_author_name="", provided_work_title=""
-):
+def import_text_from_scaife(scaife_url, provided_author_name="", provided_work_title=""):
     """Import text from Scaife URL and save to the corpus."""
     print(f"Importing from URL: {scaife_url}")
 
@@ -175,14 +173,10 @@ def get_author_name_from_files(author_id):
                     file_path = os.path.join(work_path, file)
                     try:
                         with open(file_path, "r", encoding="utf-8") as f:
-                            content = f.read(
-                                10000
-                            )  # Just read the beginning where metadata usually is
+                            content = f.read(10000)  # Just read the beginning where metadata usually is
 
                         # Look for author tag with reasonable content
-                        author_matches = re.findall(
-                            r"<author[^>]*>(.*?)</author>", content
-                        )
+                        author_matches = re.findall(r"<author[^>]*>(.*?)</author>", content)
                         if author_matches and len(author_matches[0].strip()) > 0:
                             return author_matches[0].strip()
 

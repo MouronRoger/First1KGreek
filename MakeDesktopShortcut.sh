@@ -58,4 +58,4 @@ cat > "$APP_PATH/Contents/Info.plist" << 'EOF'
 EOF
 
 echo "Desktop shortcut created at $APP_PATH"
-echo "Double-click to run the First1KGreek test server." 
+echo "Double-click to run the First1KGreek test server."

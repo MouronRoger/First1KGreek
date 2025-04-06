@@ -77,7 +77,7 @@ fi
 # Function to open the browser
 open_browser() {
     sleep 2  # Give the server a moment to start up
-    
+
     # Open browser based on platform
     if [[ "$OSTYPE" == "darwin"* ]]; then
         # macOS
@@ -119,4 +119,4 @@ if [ $PORT -ne 8000 ]; then
 fi
 
 # Keep terminal window open in case of errors
-read -p "Press enter to close this window..." 
+read -p "Press enter to close this window..."

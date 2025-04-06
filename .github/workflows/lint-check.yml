@@ -7,14 +7,14 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v3
-      
+
       - name: Set up Python
         uses: actions/setup-python@v4
         with:
           python-version: '3.10'
-          
+
       - name: Install dependencies
         run: pip install -r tools/linting/requirements-lint.txt
-        
+
       - name: Run linting checks
-        run: python tools/linting/analyze_code.py --report-only 
+        run: python tools/linting/analyze_code.py --report-only

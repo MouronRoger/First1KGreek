@@ -15,4 +15,4 @@ export interface WorkMetadata {
   lang: string;
   title: string;
   description: string;
-} 
+}

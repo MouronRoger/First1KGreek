@@ -45,4 +45,4 @@ If you prefer a simpler approach, you can use the shell script directly:
 
 - The browser will open at http://localhost:8000
 - To stop the server, simply close the Terminal window or press Ctrl+C in the Terminal window
-- If you move your First1KGreek folder, you'll need to recreate the desktop shortcut 
+- If you move your First1KGreek folder, you'll need to recreate the desktop shortcut

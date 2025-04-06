@@ -70,4 +70,4 @@ The hook will automatically run on `git commit` operations and prevent commits i
 3. Apply formatting (Phase 3) incrementally, starting with non-critical files
 4. Once the codebase is stabilized, implement the pre-commit hook (Phase 4)
 
-This phased approach minimizes the risk of breaking functionality while gradually improving code quality. 
+This phased approach minimizes the risk of breaking functionality while gradually improving code quality.

@@ -7,7 +7,7 @@ This guide helps you set up your development environment to automatically apply 
 The First1KGreek project uses the following code quality tools:
 
 - **Black**: Code formatter that enforces a consistent style
-- **isort**: Sorts imports according to PEP8 standards  
+- **isort**: Sorts imports according to PEP8 standards
 - **Flake8**: Linter to identify code quality issues
 - **pydocstyle**: Checks docstring formatting and completeness
 
@@ -20,12 +20,12 @@ The First1KGreek project uses the following code quality tools:
 
 2. The project includes a `.vscode/settings.json` file with the recommended settings:
    - Auto-formatting on save with Black
-   - Auto-organizing imports on save 
+   - Auto-organizing imports on save
    - Flake8 linting with project-specific rules
    - Docstring checking
 
 3. To activate these settings:
-   - Open VS Code in the project directory 
+   - Open VS Code in the project directory
    - When prompted "Do you want to allow the workspace settings?", click "Allow"
 
 ## PyCharm Setup
@@ -68,7 +68,7 @@ For automatic formatting before each commit:
 
 3. The project's `.pre-commit-config.yaml` file configures:
    - Black formatting
-   - isort import sorting  
+   - isort import sorting
    - Flake8 checks
    - Trailing whitespace and end-of-file fixes
 
@@ -92,4 +92,4 @@ To check if your code meets all standards:
 python tools/linting/track_progress.py
 ```
 
-This will generate a detailed report of compliance levels across different formatting aspects. 
+This will generate a detailed report of compliance levels across different formatting aspects.

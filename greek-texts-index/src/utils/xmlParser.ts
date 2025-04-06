@@ -20,16 +20,16 @@ interface ParsedXML {
 
 export async function parseWorkMetadata(dirPath: string): Promise<GreekWork[]> {
   const works: GreekWork[] = [];
-  
+
   try {
     const entries = await fs.readdir(dirPath, { withFileTypes: true });
-    
+
     for (const entry of entries) {
       if (entry.isDirectory() && entry.name.startsWith('tlg')) {
         const authorId = entry.name;
         const authorPath = path.join(dirPath, authorId);
         const authorWorks = await fs.readdir(authorPath, { withFileTypes: true });
-        
+
         for (const work of authorWorks) {
           if (work.isDirectory()) {
             const metadataPath = path.join(authorPath, work.name, '__cts__.xml');
@@ -41,13 +41,13 @@ export async function parseWorkMetadata(dirPath: string): Promise<GreekWork[]> {
                   else resolve(result as ParsedXML);
                 });
               });
-              
+
               if (parsedWork && parsedWork['ti:work']) {
                 const workData = parsedWork['ti:work'];
                 const title = workData['ti:title']?.[0]?._ || 'Unknown Title';
                 const edition = workData['ti:edition']?.[0];
                 const description = edition?.['ti:description']?.[0]?._ || '';
-                
+
                 works.push({
                   id: `${authorId}-${work.name}`,
                   title,
@@ -68,6 +68,6 @@ export async function parseWorkMetadata(dirPath: string): Promise<GreekWork[]> {
   } catch (error) {
     console.error('Error reading directory:', error);
   }
-  
+
   return works;
-} 
+}

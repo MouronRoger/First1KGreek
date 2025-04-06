@@ -23,4 +23,4 @@ echo "Starting First1KGreek Browser test on port $PORT..."
 python3 browse_texts_fixed.py --port $PORT
 
 # Keep terminal window open in case of errors
-read -p "Press enter to close this window..." 
+read -p "Press enter to close this window..."

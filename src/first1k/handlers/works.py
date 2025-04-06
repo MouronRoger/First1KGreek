@@ -1,13 +1,21 @@
-"""Works listing handlers for First1KGreek Browser."""
+"""Works listing handlers for the First1KGreek Browser."""
 
 import os
 import re
+from typing import Dict, List, Optional
 
-from ..config import MAIN_STYLESHEET
+from ..xml_utils.processor import get_author_metadata, get_editor_metadata
 
 
-def get_works_by_author(author_id):
-    """Get list of works for an author."""
+def get_works_by_author(author_id: str) -> List[Dict[str, str]]:
+    """Get list of works by a specific author.
+
+    Args:
+        author_id: ID of the author to get works for
+
+    Returns:
+        List of works, each containing title, language, and editor info
+    """
     works = []
     author_dir = os.path.join("data", author_id)
 
@@ -21,9 +29,7 @@ def get_works_by_author(author_id):
         try:
             with open(author_cts_path, "r", encoding="utf-8") as f:
                 content = f.read()
-                name_match = re.search(
-                    r"<ti:groupname[^>]*>(.*?)</ti:groupname>", content
-                )
+                name_match = re.search(r"<ti:groupname[^>]*>(.*?)</ti:groupname>", content)
                 if name_match:
                     author_name = name_match.group(1).strip()
         except Exception as e:
@@ -40,13 +46,8 @@ def get_works_by_author(author_id):
                         try:
                             with open(file_path, "r", encoding="utf-8") as f:
                                 content = f.read(10000)
-                                author_matches = re.findall(
-                                    r"<author[^>]*>(.*?)</author>", content
-                                )
-                                if (
-                                    author_matches
-                                    and len(author_matches[0].strip()) > 0
-                                ):
+                                author_matches = re.findall(r"<author[^>]*>(.*?)</author>", content)
+                                if author_matches and len(author_matches[0].strip()) > 0:
                                     author_name = author_matches[0].strip()
                                     break
                         except Exception as e:
@@ -71,9 +72,7 @@ def get_works_by_author(author_id):
                 try:
                     with open(work_cts_path, "r", encoding="utf-8") as f:
                         content = f.read()
-                        title_match = re.search(
-                            r"<ti:title[^>]*>(.*?)</ti:title>", content
-                        )
+                        title_match = re.search(r"<ti:title[^>]*>(.*?)</ti:title>", content)
                         if title_match:
                             work_title = title_match.group(1).strip()
                         lang_match = re.search(r'xml:lang="([^"]+)"', content)
@@ -92,16 +91,12 @@ def get_works_by_author(author_id):
 
                         # Get title if not found in metadata
                         if not work_title:
-                            title_matches = re.findall(
-                                r"<title[^>]*>(.*?)</title>", content
-                            )
+                            title_matches = re.findall(r"<title[^>]*>(.*?)</title>", content)
                             if title_matches:
                                 work_title = title_matches[0].strip()
 
                         # Get editor
-                        editor_matches = re.findall(
-                            r"<editor[^>]*>(.*?)</editor>", content
-                        )
+                        editor_matches = re.findall(r"<editor[^>]*>(.*?)</editor>", content)
                         if editor_matches and len(editor_matches[0].strip()) > 0:
                             work_editor = editor_matches[0].strip()
 
@@ -120,8 +115,15 @@ def get_works_by_author(author_id):
     return author_name, works
 
 
-def get_works_by_editor(editor_name):
-    """Get list of works edited by a specific editor."""
+def get_works_by_editor(editor_name: str) -> List[Dict[str, str]]:
+    """Get list of works edited by a specific editor.
+
+    Args:
+        editor_name: Name of the editor to get works for
+
+    Returns:
+        List of works, each containing title, language, and author info
+    """
     works = []
 
     # Walk through all XML files
@@ -140,19 +142,12 @@ def get_works_by_editor(editor_name):
                             if editor_name.lower() in match.lower():
                                 # Get work details
                                 author_name = "Unknown"
-                                author_matches = re.findall(
-                                    r"<author[^>]*>(.*?)</author>", content
-                                )
-                                if (
-                                    author_matches
-                                    and len(author_matches[0].strip()) > 0
-                                ):
+                                author_matches = re.findall(r"<author[^>]*>(.*?)</author>", content)
+                                if author_matches and len(author_matches[0].strip()) > 0:
                                     author_name = author_matches[0].strip()
 
                                 work_title = "Unknown"
-                                title_matches = re.findall(
-                                    r"<title[^>]*>(.*?)</title>", content
-                                )
+                                title_matches = re.findall(r"<title[^>]*>(.*?)</title>", content)
                                 if title_matches:
                                     work_title = title_matches[0].strip()
 
@@ -170,192 +165,83 @@ def get_works_by_editor(editor_name):
     return works
 
 
-def render_works_page(author_id):
-    """Generate works listing page for an author."""
+def render_works_page(author_id: str, works: Optional[List[Dict[str, str]]] = None) -> str:
+    """Return HTML for the works listing page.
+
+    Args:
+        author_id: ID of the author whose works to display
+        works: Optional list of works to display
+
+    Returns:
+        HTML string for the works page
+    """
     author_name, works = get_works_by_author(author_id)
 
-    html = f"""<!DOCTYPE html>
-<html>
-<head>
-    <title>Works by {author_name}</title>
-    <meta charset="UTF-8">
-    <style>
-        {MAIN_STYLESHEET}
-        .works-grid {{
-            display: grid;
-            grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
-            grid-gap: 20px;
-            margin-top: 20px;
-        }}
-        .work-card {{
-            background-color: #333;
-            border-radius: 8px;
-            padding: 20px;
-            transition: transform 0.2s;
-        }}
-        .work-card:hover {{
-            transform: translateY(-5px);
-            background-color: #444;
-        }}
-        .work-title {{
-            font-weight: bold;
-            margin-bottom: 10px;
-            color: #4299e1;
-        }}
-        .work-info {{
-            color: #aaa;
-            font-size: 0.9em;
-            margin-bottom: 15px;
-        }}
-        .nav-links {{
-            margin: 20px 0;
-        }}
-        .button {{
-            display: inline-block;
-            padding: 10px 20px;
-            background: #4299e1;
-            color: white;
-            border-radius: 4px;
-            text-decoration: none;
-            margin-right: 10px;
-        }}
-        .button:hover {{
-            background: #3182ce;
-        }}
-        .work-actions {{
-            display: flex;
-            gap: 10px;
-        }}
-    </style>
-</head>
-<body>
-    <div class="container">
-        <h1>Works by {author_name}</h1>
-
-        <div class="nav-links">
-            <a href="/" class="button">Home</a>
-            <a href="/browse/authors" class="button">Browse Authors</a>
-            <a href="/browse/editors" class="button">Browse Editors</a>
-        </div>
-
-        <p>Showing {len(works)} works</p>
-
-        <div class="works-grid">
-"""
-
-    for work in works:
-        html += f"""
-            <div class="work-card">
-                <div class="work-title">{work['title']}</div>
-                <div class="work-info">
-                    Language: {work['language']}<br>
-                    Editor: {work['editor']}
-                </div>
-                <div class="work-actions">
-                    <a href="/view?path={work['file_path']}" class="button">View XML</a>
-                    <a href="/reader?path={work['file_path']}" class="button">Open in Reader</a>
-                </div>
+    return f"""
+        <div style="background-color: #f5f5f5; padding: 20px; border-radius: 5px">
+            <h2>Works by {author_name}</h2>
+            <div style="margin-top: 20px">
+                {render_works_list(works)}
             </div>
-"""
-
-    html += """
+            <div style="margin-top: 20px">
+                <a href="/" style="background-color: #5bc0de; color: white; padding: 10px 20px; text-decoration: none; border-radius: 3px">
+                    Return to Home
+                </a>
+            </div>
         </div>
-    </div>
-</body>
-</html>"""
-    return html
+    """
 
 
-def render_editor_works_page(editor_name):
-    """Generate works listing page for an editor."""
+def render_editor_works_page(editor_name: str, works: Optional[List[Dict[str, str]]] = None) -> str:
+    """Return HTML for the editor's works listing page.
+
+    Args:
+        editor_name: Name of the editor whose works to display
+        works: Optional list of works to display
+
+    Returns:
+        HTML string for the editor's works page
+    """
     works = get_works_by_editor(editor_name)
 
-    html = f"""<!DOCTYPE html>
-<html>
-<head>
-    <title>Works edited by {editor_name}</title>
-    <meta charset="UTF-8">
-    <style>
-        {MAIN_STYLESHEET}
-        .works-grid {{
-            display: grid;
-            grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
-            grid-gap: 20px;
-            margin-top: 20px;
-        }}
-        .work-card {{
-            background-color: #333;
-            border-radius: 8px;
-            padding: 20px;
-            transition: transform 0.2s;
-        }}
-        .work-card:hover {{
-            transform: translateY(-5px);
-            background-color: #444;
-        }}
-        .work-title {{
-            font-weight: bold;
-            margin-bottom: 10px;
-            color: #4299e1;
-        }}
-        .work-info {{
-            color: #aaa;
-            font-size: 0.9em;
-            margin-bottom: 15px;
-        }}
-        .nav-links {{
-            margin: 20px 0;
-        }}
-        .button {{
-            display: inline-block;
-            padding: 10px 20px;
-            background: #4299e1;
-            color: white;
-            border-radius: 4px;
-            text-decoration: none;
-            margin-right: 10px;
-        }}
-        .button:hover {{
-            background: #3182ce;
-        }}
-        .work-actions {{
-            display: flex;
-            gap: 10px;
-        }}
-    </style>
-</head>
-<body>
-    <div class="container">
-        <h1>Works edited by {editor_name}</h1>
-
-        <div class="nav-links">
-            <a href="/" class="button">Home</a>
-            <a href="/browse/authors" class="button">Browse Authors</a>
-            <a href="/browse/editors" class="button">Browse Editors</a>
+    return f"""
+        <div style="background-color: #f5f5f5; padding: 20px; border-radius: 5px">
+            <h2>Works edited by {editor_name}</h2>
+            <div style="margin-top: 20px">
+                {render_works_list(works)}
+            </div>
+            <div style="margin-top: 20px">
+                <a href="/" style="background-color: #5bc0de; color: white; padding: 10px 20px; text-decoration: none; border-radius: 3px">
+                    Return to Home
+                </a>
+            </div>
         </div>
+    """
 
-        <p>Showing {len(works)} works</p>
 
-        <div class="works-grid">
-"""
+def render_works_list(works):
+    if not works:
+        return """
+            <div style="color: #666">
+                No works found
+            </div>
+        """
 
+    works_html = []
     for work in works:
-        html += f"""
-            <div class="work-card">
-                <div class="work-title">{work['title']}</div>
-                <div class="work-info">
-                    Author: {work['author']}
-                </div>
-                <div class="work-actions">
-                    <a href="/view?path={work['file_path']}" class="button">View XML</a>
-                    <a href="/reader?path={work['file_path']}" class="button">Open in Reader</a>
+        works_html.append(
+            f"""
+            <div style="margin-top: 10px; padding: 10px; background-color: white; border-radius: 3px">
+                <h3>{work['title']}</h3>
+                <p style="color: #666">Language: {work['language']}</p>
+                <p style="color: #666">Editor: {work['editor']}</p>
+                <div style="margin-top: 10px">
+                    <a href="/view/{work['file_path']}" style="color: #4CAF50; text-decoration: none">
+                        View Text
+                    </a>
                 </div>
             </div>
-"""
+        """
+        )
 
-    html += """
-        </div>
-    </div>
-</body>
-</html>"""
-    return html
+    return "\n".join(works_html)

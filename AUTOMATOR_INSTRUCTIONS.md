@@ -46,4 +46,4 @@ python3 browse_texts_fixed.py
 
 - This method creates a more native-looking macOS application than the script methods
 - To quit the application, you'll need to close the Terminal window that opens
-- The current path in the script must be the exact location of your First1KGreek project 
+- The current path in the script must be the exact location of your First1KGreek project

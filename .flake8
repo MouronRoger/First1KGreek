@@ -9,4 +9,4 @@ ignore = E203,W503
 # W503: Line break before binary operator (conflicts with Black)
 per-file-ignores =
     # Allow unused imports in __init__.py files
-    */__init__.py:F401 
+    */__init__.py:F401

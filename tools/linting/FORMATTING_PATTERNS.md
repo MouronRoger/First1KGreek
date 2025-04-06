@@ -37,15 +37,15 @@ Additional details can be included here.
 
 class MyClass:
     """Class docstring describing the class purpose and behavior."""
-    
+
     def my_method(self, arg1, arg2=None):
         """
         Method docstring describing what this method does.
-        
+
         Args:
             arg1: Description of arg1
             arg2: Description of arg2, defaults to None
-            
+
         Returns:
             Description of the return value
         """
@@ -66,7 +66,7 @@ def function_with_many_parameters(
 ):
     """
     Function docstring here.
-    
+
     Args:
         param1: Description
         param2: Description
@@ -144,7 +144,7 @@ For complex conditions, use parentheses and line breaks for clarity:
 
 ```python
 if (
-    condition1 and 
+    condition1 and
     condition2 and
     (condition3 or condition4)
 ):
@@ -191,11 +191,11 @@ Prefer configuration classes over global variables:
 ```python
 class Config:
     """Configuration for the application."""
-    
+
     PORT = 8000
     DEBUG = False
     DATA_DIR = "data"
-    
+
     @classmethod
     def from_file(cls, file_path):
         """Load configuration from a file."""
@@ -216,13 +216,13 @@ def process_data(
 ) -> List[str]:
     """
     Process the input data.
-    
+
     Args:
         data: List of data dictionaries to process
         options: Optional processing parameters
-        
+
     Returns:
         List of processed string results
     """
     # Implementation
-``` 
+```

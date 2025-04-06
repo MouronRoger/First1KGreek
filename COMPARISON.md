@@ -34,13 +34,13 @@ if revision_desc is not None:
 revision_desc = root.find('.//revisionDesc')
 if revision_desc is None:
     revision_desc = root.find('.//tei_revisionDesc')
-    
+
 if revision_desc is not None:
     # ... code ...
     changes = revision_desc.findall('.//change')
     if not changes:
         changes = revision_desc.findall('.//tei_change')
-        
+
     for change in changes:
         # ... code ...
 ```
@@ -103,4 +103,4 @@ The `browse_texts_fixed.py` version is recommended for general use as it:
 - Eliminates deprecation warnings
 - Has better error handling
 - Is more maintainable
-- Has the same functionality as the original 
+- Has the same functionality as the original

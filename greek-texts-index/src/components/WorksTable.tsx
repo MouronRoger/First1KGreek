@@ -137,4 +137,4 @@ export function WorksTable({ works, onToggleFavorite }: WorksTableProps) {
       </div>
     </div>
   );
-} 
+}

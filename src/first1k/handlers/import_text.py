@@ -5,13 +5,12 @@ import re
 import urllib.request
 import xml.etree.ElementTree as ET
 from urllib.error import HTTPError, URLError
+from typing import Optional
 
 from ..config import MAIN_STYLESHEET
 
 
-def import_text_from_scaife(
-    scaife_url, provided_author_name="", provided_work_title=""
-):
+def import_text_from_scaife(scaife_url, provided_author_name="", provided_work_title=""):
     """Import text from Scaife URL and save to the corpus."""
     print(f"Importing from URL: {scaife_url}")
 
@@ -125,14 +124,10 @@ def get_author_name_from_files(author_id):
                     file_path = os.path.join(work_path, file)
                     try:
                         with open(file_path, "r", encoding="utf-8") as f:
-                            content = f.read(
-                                10000
-                            )  # Read beginning where metadata usually is
+                            content = f.read(10000)  # Read beginning where metadata usually is
 
                         # Look for author tag with reasonable content
-                        author_matches = re.findall(
-                            r"<author[^>]*>(.*?)</author>", content
-                        )
+                        author_matches = re.findall(r"<author[^>]*>(.*?)</author>", content)
                         if author_matches and len(author_matches[0].strip()) > 0:
                             return author_matches[0].strip()
 
@@ -175,9 +170,7 @@ def detect_language_from_xml(xml_content):
     try:
         root = ET.fromstring(xml_content)
         # Check for xml:lang attribute
-        for elem in root.findall(
-            ".//*[@xml:lang]", {"xml": "http://www.w3.org/XML/1998/namespace"}
-        ):
+        for elem in root.findall(".//*[@xml:lang]", {"xml": "http://www.w3.org/XML/1998/namespace"}):
             lang = elem.get("{http://www.w3.org/XML/1998/namespace}lang")
             if lang:
                 return lang
@@ -188,266 +181,83 @@ def detect_language_from_xml(xml_content):
         return "grc"
 
 
-def render_import_page():
-    """Return the import page HTML."""
-    html = f"""<!DOCTYPE html>
-<html>
-<head>
-    <title>Import Texts from Scaife</title>
-    <style>
-        {MAIN_STYLESHEET}
-        .tabs {{
-            display: flex;
-            margin-bottom: 20px;
-        }}
-        .tab {{
-            padding: 10px 20px;
-            background: #2a4365;
-            color: white;
-            cursor: pointer;
-            border-radius: 4px 4px 0 0;
-            margin-right: 2px;
-        }}
-        .tab.active {{
-            background: #3182ce;
-        }}
-        .tab-content {{
-            display: none;
-            padding: 20px;
-            background: #2a4365;
-            border-radius: 0 4px 4px 4px;
-        }}
-        .tab-content.active {{
-            display: block;
-        }}
-        .form-group {{
-            margin-bottom: 20px;
-        }}
-        label {{
-            display: block;
-            margin-bottom: 5px;
-            font-weight: bold;
-        }}
-        textarea, input[type="text"] {{
-            width: 100%;
-            padding: 10px;
-            border: 1px solid #444;
-            border-radius: 4px;
-            background-color: #333;
-            color: white;
-            font-family: monospace;
-        }}
-        button {{
-            padding: 10px 20px;
-            background: #4299e1;
-            color: white;
-            border: none;
-            border-radius: 4px;
-            cursor: pointer;
-        }}
-        button:hover {{
-            background: #3182ce;
-        }}
-        .info-box {{
-            background-color: #2a4365;
-            border-left: 5px solid #4299e1;
-            padding: 15px;
-            margin: 20px 0;
-            border-radius: 4px;
-        }}
-        .metadata-fields {{
-            background: #2d3748;
-            padding: 15px;
-            border-radius: 4px;
-            margin-top: 15px;
-        }}
-    </style>
-    <script>
-        function showTab(tabId) {{
-            var contents = document.querySelectorAll(".tab-content");
-            for (var i = 0; i < contents.length; i++) {{
-                contents[i].classList.remove("active");
-            }}
-            var tabs = document.querySelectorAll(".tab");
-            for (var i = 0; i < tabs.length; i++) {{
-                tabs[i].classList.remove("active");
-            }}
-            document.getElementById(tabId + "-tab").classList.add("active");
-            var tabs = document.querySelectorAll(".tab");
-            for (var i = 0; i < tabs.length; i++) {{
-                if (tabs[i].innerText.toLowerCase().indexOf(tabId) !== -1) {{
-                    tabs[i].classList.add("active");
-                }}
-            }}
-        }}
-    </script>
-</head>
-<body>
-    <div class="container">
-        <h1>Import Texts from Scaife/Perseus</h1>
-
-        <div class="info-box">
-            <p><strong>Instructions:</strong> Enter one or more Scaife API XML URLs to import texts into the First1KGreek corpus.</p>
-            <p>Use the format: <code>https://scaife.perseus.org/library/urn:cts:greekLit:tlg0007.tlg136.perseus-grc2:1-47/cts-api-xml/</code></p>
-            <p>You can add metadata for each URL to improve import quality.</p>
-        </div>
-
-        <div class="tabs">
-            <div class="tab active" onclick="showTab('single')">Single URL</div>
-            <div class="tab" onclick="showTab('batch')">Batch Import</div>
-        </div>
-
-        <div id="single-tab" class="tab-content active">
-            <form action="/import_text" method="post">
-                <div class="form-group">
-                    <label>Scaife URL:</label>
-                    <input type="text" name="scaife_url" placeholder="https://scaife.perseus.org/library/urn:cts:greekLit:tlg0007.tlg136.perseus-grc2:1-47/cts-api-xml/">
+def render_import_page() -> str:
+    """Return HTML for the import page."""
+    return f"""
+    <div style="padding: 20px; background-color: #f5f5f5; border-radius: 5px">
+        <h2>Import Text</h2>
+        <div style="margin-bottom: 20px">
+            <form action="/import" method="post">
+                <div style="margin-bottom: 15px">
+                    <label for="author_name" style="display: block; margin-bottom: 5px">Author Name:</label>
+                    <input type="text" id="author_name" name="author_name" required 
+                           style="width: 100%; padding: 8px; border: 1px solid #ddd; border-radius: 4px">
                 </div>
-
-                <div class="metadata-fields">
-                    <h3>Metadata (Optional)</h3>
-                    <div class="form-group">
-                        <label>Author Name:</label>
-                        <input type="text" name="author_name" placeholder="e.g., Plutarch">
-                    </div>
-                    <div class="form-group">
-                        <label>Work Title:</label>
-                        <input type="text" name="work_title" placeholder="e.g., De Stoicorum Repugnantiis">
-                    </div>
+                
+                <div style="margin-bottom: 15px">
+                    <label for="work_title" style="display: block; margin-bottom: 5px">Work Title:</label>
+                    <input type="text" id="work_title" name="work_title" required
+                           style="width: 100%; padding: 8px; border: 1px solid #ddd; border-radius: 4px">
                 </div>
-
-                <input type="hidden" name="import_type" value="single">
-                <button type="submit">Import Text</button>
+                
+                <div style="margin-bottom: 15px">
+                    <label for="text_content" style="display: block; margin-bottom: 5px">Text Content (XML):</label>
+                    <textarea id="text_content" name="text_content" required
+                             style="width: 100%; height: 200px; padding: 8px; border: 1px solid #ddd; border-radius: 4px"></textarea>
+                </div>
+                
+                <button type="submit" 
+                        style="padding: 10px 20px; background-color: #4CAF50; color: white; border: none; border-radius: 4px; cursor: pointer">
+                    Import Text
+                </button>
             </form>
         </div>
-
-        <div id="batch-tab" class="tab-content">
-            <form action="/import_text" method="post">
-                <div class="form-group">
-                    <label>Scaife URLs (one per line):</label>
-                    <textarea name="scaife_urls" rows="10" placeholder="https://scaife.perseus.org/library/urn:cts:greekLit:tlg0007.tlg136.perseus-grc2:1-47/cts-api-xml/
-https://scaife.perseus.org/library/urn:cts:greekLit:tlg0007.tlg137.perseus-grc2:1-6/cts-api-xml/
-https://scaife.perseus.org/library/urn:cts:greekLit:tlg0007.tlg138.perseus-grc2:1-50/cts-api-xml/"></textarea>
-                </div>
-
-                <div class="metadata-fields">
-                    <h3>Default Metadata (Optional)</h3>
-                    <p>This metadata will be used for all imported texts if their data cannot be detected automatically.</p>
-                    <div class="form-group">
-                        <label>Default Author Name:</label>
-                        <input type="text" name="default_author_name" placeholder="e.g., Plutarch">
-                    </div>
-                </div>
-
-                <input type="hidden" name="import_type" value="batch">
-                <button type="submit">Import Texts</button>
-            </form>
+        
+        <div>
+            <a href="/" style="color: #4CAF50; text-decoration: none">Return to Home</a>
         </div>
     </div>
-</body>
-</html>"""
-    return html
+    """
 
 
-def render_import_success_page(message):
-    """Return the import success page HTML."""
-    html = f"""<!DOCTYPE html>
-<html>
-<head>
-    <title>Import Success</title>
-    <style>
-        {MAIN_STYLESHEET}
-        .success-box {{
-            background-color: #2c4a2c;
-            border-left: 5px solid #48bb78;
-            padding: 15px;
-            margin: 20px 0;
-            border-radius: 4px;
-        }}
-        .nav-links {{
-            margin-top: 20px;
-            padding-top: 20px;
-            border-top: 1px solid #444;
-        }}
-        .button {{
-            display: inline-block;
-            padding: 10px 20px;
-            background: #4299e1;
-            color: white;
-            border-radius: 4px;
-            text-decoration: none;
-            margin-right: 10px;
-        }}
-        .button:hover {{
-            background: #3182ce;
-        }}
-    </style>
-</head>
-<body>
-    <div class="container">
-        <h1>Import Successful</h1>
-
-        <div class="success-box">
-            <p>{message}</p>
+def render_import_success_page(author_name: str, work_title: str) -> str:
+    """Return HTML for the import success page.
+    
+    Args:
+        author_name: The name of the author whose work was imported
+        work_title: The title of the imported work
+    """
+    return f"""
+    <div style="padding: 20px; background-color: #f5f5f5; border-radius: 5px">
+        <h2>Import Successful</h2>
+        <div style="margin-bottom: 20px">
+            <p>Successfully imported "{work_title}" by {author_name}.</p>
         </div>
-
-        <div class="nav-links">
-            <a href="/import" class="button">Back to Import</a>
-            <a href="/" class="button">Home</a>
+        <div>
+            <a href="/import" style="color: #4CAF50; text-decoration: none">Import Another Text</a>
+            <span style="margin: 0 10px">|</span>
+            <a href="/" style="color: #4CAF50; text-decoration: none">Return to Home</a>
         </div>
     </div>
-</body>
-</html>"""
-    return html
+    """
 
 
-def render_import_error_page(error):
-    """Return the import error page HTML."""
-    html = f"""<!DOCTYPE html>
-<html>
-<head>
-    <title>Import Error</title>
-    <style>
-        {MAIN_STYLESHEET}
-        .error-box {{
-            background-color: #4a2c2c;
-            border-left: 5px solid #f56565;
-            padding: 15px;
-            margin: 20px 0;
-            border-radius: 4px;
-        }}
-        .nav-links {{
-            margin-top: 20px;
-            padding-top: 20px;
-            border-top: 1px solid #444;
-        }}
-        .button {{
-            display: inline-block;
-            padding: 10px 20px;
-            background: #4299e1;
-            color: white;
-            border-radius: 4px;
-            text-decoration: none;
-            margin-right: 10px;
-        }}
-        .button:hover {{
-            background: #3182ce;
-        }}
-    </style>
-</head>
-<body>
-    <div class="container">
-        <h1>Import Error</h1>
-
-        <div class="error-box">
-            <p>{error}</p>
+def render_import_error_page(error_message: str) -> str:
+    """Return HTML for the import error page.
+    
+    Args:
+        error_message: The error message to display
+    """
+    return f"""
+    <div style="padding: 20px; background-color: #f5f5f5; border-radius: 5px">
+        <h2>Import Error</h2>
+        <div style="margin-bottom: 20px">
+            <p style="color: #dc3545">{error_message}</p>
         </div>
-
-        <div class="nav-links">
-            <a href="/import" class="button">Back to Import</a>
-            <a href="/" class="button">Home</a>
+        <div>
+            <a href="/import" style="color: #4CAF50; text-decoration: none">Try Again</a>
+            <span style="margin: 0 10px">|</span>
+            <a href="/" style="color: #4CAF50; text-decoration: none">Return to Home</a>
         </div>
     </div>
-</body>
-</html>"""
-    return html
+    """

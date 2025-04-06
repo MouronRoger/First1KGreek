@@ -13,8 +13,8 @@
 [1m+++ simple_test.py	2025-04-05 21:50:27.906133+00:00[0m
 [36m@@ -6,19 +6,19 @@[0m
  import sys
- 
- 
+
+
  class SimpleTest(unittest.TestCase):
      """A simple test case to verify unittest functionality."""
 [31m-    [0m
@@ -30,8 +30,8 @@
          """Test that we can verify file existence."""
 [31m-        self.assertTrue(os.path.exists('browse_texts_fixed.py'))[0m
 [32m+        self.assertTrue(os.path.exists("browse_texts_fixed.py"))[0m
- 
- 
+
+
 [31m-if __name__ == '__main__':[0m
 [31m-    unittest.main() [0m
 \ No newline at end of file
@@ -40,11 +40,11 @@
 [1m--- simple_server.py	2025-04-05 20:10:15.424736+00:00[0m
 [1m+++ simple_server.py	2025-04-05 21:50:27.951233+00:00[0m
 [36m@@ -5,22 +5,26 @@[0m
- 
+
  import http.server
  import socketserver
  import argparse
- 
+
 [32m+[0m
  def parse_args():
 [31m-    parser = argparse.ArgumentParser(description='Simple HTTP Server')[0m
@@ -55,10 +55,10 @@
 [32m+    )[0m
      return parser.parse_args()
 [32m+[0m
- 
+
  # Use the standard SimpleHTTPRequestHandler
  Handler = http.server.SimpleHTTPRequestHandler
- 
+
  if __name__ == "__main__":
      args = parse_args()
      PORT = args.port
@@ -80,13 +80,13 @@
  import shutil
  import sys
 [32m+[0m
- 
+
  def copy_directory_structure(source_dir, dest_dir):
      """
      Copy all TLG files from source_dir to dest_dir, preserving the directory structure.
      """
 [36m@@ -19,69 +20,69 @@[0m
- 
+
      # Walk through the source directory
      for root, dirs, files in os.walk(source_dir):
          # Create relative path to maintain structure
@@ -140,8 +140,8 @@
          print("\n--- Errors ---")
          for error in errors:
              print(error)
- 
- 
+
+
  if __name__ == "__main__":
      # Paths
      source_dir = "/Users/james/Documents/GitHub/First1KGreek/data_copy"
@@ -192,8 +192,8 @@
 [1m+++ simple_xml_test.py	2025-04-05 21:50:28.038305+00:00[0m
 [36m@@ -8,20 +8,21 @@[0m
  import xml.etree.ElementTree as ET
- 
- 
+
+
  class SimpleXMLTest(unittest.TestCase):
      """Simple test case for XML parsing."""
 [31m-    [0m
@@ -295,8 +295,8 @@
          self.assertIsNotNone(p)
 [31m-        self.assertIn('This is test content with Greek', p.text)[0m
 [32m+        self.assertIn("This is test content with Greek", p.text)[0m
- 
- 
+
+
 [31m-if __name__ == '__main__':[0m
 [31m-    unittest.main(verbosity=2) [0m
 \ No newline at end of file
@@ -305,16 +305,16 @@
 [1m--- simple_integration_test.py	2025-04-05 21:22:47.769964+00:00[0m
 [1m+++ simple_integration_test.py	2025-04-05 21:50:28.046540+00:00[0m
 [36m@@ -13,75 +13,76 @@[0m
- 
- 
+
+
  def find_free_port():
      """Find an available port."""
      with socket.socket(socket.AF_INET, socket.SOCK_STREAM) as s:
 [31m-        s.bind(('', 0))[0m
 [32m+        s.bind(("", 0))[0m
          return s.getsockname()[1]
- 
- 
+
+
  class SimpleHTTPRequestHandler(http.server.SimpleHTTPRequestHandler):
      """Simple HTTP request handler for testing."""
 [31m-    [0m
@@ -336,8 +336,8 @@
 [32m+            self.wfile.write(b"<html><body><h1>Test Server</h1></body></html>")[0m
          else:
              self.send_error(404, "Not found")
- 
- 
+
+
  class SimpleIntegrationTest(unittest.TestCase):
      """Simple integration test case."""
 [31m-    [0m
@@ -395,8 +395,8 @@
 [31m-        response = requests.get(f'http://localhost:{self.port}/nonexistent')[0m
 [32m+        response = requests.get(f"http://localhost:{self.port}/nonexistent")[0m
          self.assertEqual(response.status_code, 404)
- 
- 
+
+
 [31m-if __name__ == '__main__':[0m
 [31m-    unittest.main(verbosity=2) [0m
 \ No newline at end of file
@@ -406,8 +406,8 @@
 [1m+++ run_first1k_tests.py	2025-04-05 21:50:28.048471+00:00[0m
 [36m@@ -20,65 +20,71 @@[0m
  from simple_performance_test import SimplePerformanceTest
- 
- 
+
+
  def parse_args():
      """Parse command line arguments."""
 [31m-    parser = argparse.ArgumentParser(description='Run First1KGreek Browser tests')[0m
@@ -429,8 +429,8 @@
 [32m+    parser.add_argument("--all", action="store_true", help="Run all tests (default)")[0m
 [32m+    parser.add_argument("--verbose", "-v", action="store_true", help="Verbose output")[0m
      return parser.parse_args()
- 
- 
+
+
  def run_tests(args):
      """Run the specified test suites."""
      # Create test suite
@@ -488,8 +488,8 @@
 [31m-    [0m
 [32m+[0m
      return result.wasSuccessful()
- 
- 
+
+
 [31m-if __name__ == '__main__':[0m
 [32m+if __name__ == "__main__":[0m
      args = parse_args()
@@ -501,16 +501,16 @@
 [1m+++ src/first1k/handlers/ui.py	2025-04-05 21:50:28.055959+00:00[0m
 [36m@@ -1,8 +1,9 @@[0m
  """UI handlers for First1KGreek Browser."""
- 
+
  from ..config import MAIN_STYLESHEET
 [32m+[0m
- 
+
  def render_main_page():
      """Render the main page HTML."""
      return f"""<!DOCTYPE html>
  <html lang="en">
 [36m@@ -70,6 +71,6 @@[0m
-             <p>Browse and search through Greek texts from the First Thousand Years Project. 
+             <p>Browse and search through Greek texts from the First Thousand Years Project.
              Features include browsing by author or editor, full-text search, and importing texts from Scaife/Perseus.</p>
          </div>
      </div>
@@ -522,8 +522,8 @@
 [1m+++ simple_performance_test.py	2025-04-05 21:50:28.101810+00:00[0m
 [36m@@ -9,125 +9,128 @@[0m
  import xml.etree.ElementTree as ET
- 
- 
+
+
  def generate_large_xml(file_path, num_divisions=100, num_paragraphs=10):
      """Generate a large XML file for performance testing."""
 [31m-    with open(file_path, 'w', encoding='utf-8') as f:[0m
@@ -581,8 +581,8 @@
 [32m+        f.write("    </body>\n")[0m
 [32m+        f.write("  </text>\n")[0m
 [32m+        f.write("</TEI>")[0m
- 
- 
+
+
 [31m-def process_xml_for_reading(element, processed_text=''):[0m
 [32m+def process_xml_for_reading(element, processed_text=""):[0m
      """Process XML for reading, simplified version for testing."""
@@ -603,8 +603,8 @@
 [31m-        [0m
 [32m+[0m
      return processed_text
- 
- 
+
+
  class SimplePerformanceTest(unittest.TestCase):
      """Simple performance test case."""
 [31m-    [0m
@@ -689,8 +689,8 @@
          print(f"Large XML processing time: {process_time:.3f} seconds")
          print(f"Processed text length: {len(result)} characters")
          self.assertLess(process_time, 5.0)  # Should process in less than 5 seconds
- 
- 
+
+
 [31m-if __name__ == '__main__':[0m
 [31m-    unittest.main(verbosity=2) [0m
 \ No newline at end of file
@@ -703,7 +703,7 @@
  import re
  from xml.sax.saxutils import escape
  from ..config import MAIN_STYLESHEET
- 
+
 [32m+[0m
  def render_xml_view_page(file_path):
      """Generate XML view page."""
@@ -770,7 +770,7 @@
      </div>
  </body>
  </html>"""
- 
+
 [32m+[0m
  def render_reader_view_page(file_path):
      """Generate reader view page."""
@@ -834,11 +834,11 @@
 [1m--- src/first1k/handlers/search.py	2025-03-26 19:15:04.551784+00:00[0m
 [1m+++ src/first1k/handlers/search.py	2025-04-05 21:50:28.410318+00:00[0m
 [36m@@ -2,109 +2,121 @@[0m
- 
+
  import os
  import re
  from ..config import MAIN_STYLESHEET
- 
+
 [32m+[0m
  def search_corpus(search_term):
      """Search for the given term in all XML files."""
@@ -977,7 +977,7 @@
 [32m+[0m
      return results
 [32m+[0m
- 
+
  def render_search_page(search_term=None):
      """Generate search results page."""
      results = []
@@ -995,7 +995,7 @@
 [36m@@ -204,11 +216,11 @@[0m
          </div>
  """
- 
+
      if search_term:
          html += f"<h2>Results for: {search_term}</h2>"
 [31m-        [0m
@@ -1017,11 +1017,11 @@
 [1m--- src/first1k/handlers/browse.py	2025-03-26 19:12:24.372452+00:00[0m
 [1m+++ src/first1k/handlers/browse.py	2025-04-05 21:50:28.561597+00:00[0m
 [36m@@ -2,56 +2,64 @@[0m
- 
+
  import os
  import re
  from ..config import MAIN_STYLESHEET
- 
+
 [32m+[0m
  def get_author_name_from_files(author_id):
      """Attempt to find an author name from XML files."""
@@ -1063,7 +1063,7 @@
 [32m+[0m
      return None
 [32m+[0m
- 
+
  def render_authors_page():
      """Generate the authors listing page."""
      # Get author directories from the data folder
@@ -1097,9 +1097,9 @@
      <title>First1K Greek - Authors</title>
      <meta charset="UTF-8">
 [36m@@ -103,150 +111,165 @@[0m
-         
+
          <p>Showing {len(author_items)} authors, alphabetically ordered by name</p>
-         
+
          <div class="author-grid">
  """
 [31m-    [0m
@@ -1127,7 +1127,7 @@
 [31m-    return html [0m
 [32m+    return html[0m
 [32m+[0m
- 
+
  def get_editors_data():
      """Gather data about editors from the XML files."""
      editors = {}
@@ -1261,7 +1261,7 @@
 [32m+[0m
      return result
 [32m+[0m
- 
+
  def get_editor_bio(editor_name):
      """Get a biography for an editor if available."""
      editor_bios = {
@@ -1276,7 +1276,7 @@
 [32m+[0m
      return editor_bios.get(editor_name, "Classical scholar and editor")
 [32m+[0m
- 
+
  def render_editors_page():
      """Generate the editors listing page."""
      editors_data = get_editors_data()
@@ -1302,7 +1302,7 @@
      <title>First1K Greek - Editors</title>
      <meta charset="UTF-8">
 [36m@@ -310,11 +333,11 @@[0m
- 
+
      if featured_editor:
          name = featured_editor["name"]
          count = featured_editor["count"]
@@ -1339,11 +1339,11 @@
 [1m--- src/first1k/editor/manager.py	2025-03-26 18:58:46.446283+00:00[0m
 [1m+++ src/first1k/editor/manager.py	2025-04-05 21:50:28.565091+00:00[0m
 [36m@@ -2,122 +2,135 @@[0m
- 
+
  import os
  import re
  from urllib.parse import quote
- 
+
 [32m+[0m
  def get_editors_data():
      """Gather data about editors from the XML files."""
@@ -1477,7 +1477,7 @@
 [32m+[0m
      return result
 [32m+[0m
- 
+
  def get_editor_bio(editor_name):
      """Get a biography for an editor if available."""
      editor_bios = {
@@ -1492,7 +1492,7 @@
 [32m+[0m
      return editor_bios.get(editor_name, "Classical scholar and editor")
 [32m+[0m
- 
+
  def get_editor_works(editor_name):
      """Find all works edited by a specific editor."""
      works = []
@@ -1549,7 +1549,7 @@
 [32m+[0m
      return works
 [32m+[0m
- 
+
  def process_editor_file(file_path, found_files):
      """Process a single file for editor works."""
      works = []
@@ -1622,11 +1622,11 @@
 [1m--- src/first1k/search/searcher.py	2025-03-26 18:59:07.195810+00:00[0m
 [1m+++ src/first1k/search/searcher.py	2025-04-05 21:50:28.592282+00:00[0m
 [36m@@ -2,96 +2,107 @@[0m
- 
+
  import os
  import re
  from html import escape
- 
+
 [32m+[0m
  def search_corpus(search_term):
      """Search for the given term in all XML files."""
@@ -1773,7 +1773,7 @@
  from urllib.error import URLError, HTTPError
  from urllib.parse import quote
  from ..config import MAIN_STYLESHEET
- 
+
 [31m-def import_text_from_scaife(scaife_url, provided_author_name='', provided_work_title=''):[0m
 [32m+[0m
 [32m+def import_text_from_scaife([0m
@@ -1903,7 +1903,7 @@
 [32m+[0m
      return f"Imported {work_title} by {author_name} ({full_id})"
 [32m+[0m
- 
+
  def get_author_name_from_files(author_id):
      """Attempt to find an author name from XML files."""
 [31m-    author_path = os.path.join('data', author_id)[0m
@@ -1944,7 +1944,7 @@
 [32m+[0m
      return None
 [32m+[0m
- 
+
  def get_author_name_from_id(author_id):
      """Get author name from ID using various methods."""
      author_map = {
@@ -1954,7 +1954,7 @@
          "tlg0086": "Aristotle",
      }
      return author_map.get(author_id)
- 
+
 [32m+[0m
  def extract_title_from_xml(xml_content):
      """Extract the title from the XML content."""
@@ -1969,7 +1969,7 @@
      except Exception as e:
          print(f"Warning: Could not extract title from XML: {str(e)}")
          return None
- 
+
 [32m+[0m
  def detect_language_from_xml(xml_content):
      """Detect the language from the XML content."""
@@ -1990,7 +1990,7 @@
          print(f"Warning: Could not detect language from XML: {str(e)}")
          return "grc"
 [32m+[0m
- 
+
  def render_import_page():
      """Return the import page HTML."""
      html = f"""<!DOCTYPE html>
@@ -2000,7 +2000,7 @@
  </body>
  </html>"""
      return html
- 
+
 [32m+[0m
  def render_import_success_page(message):
      """Return the import success page HTML."""
@@ -2012,7 +2012,7 @@
  </body>
  </html>"""
      return html
- 
+
 [32m+[0m
  def render_import_error_page(error):
      """Return the import error page HTML."""
@@ -2031,11 +2031,11 @@
 [1m--- src/first1k/handlers/works.py	2025-03-26 19:18:12.051834+00:00[0m
 [1m+++ src/first1k/handlers/works.py	2025-04-05 21:50:28.636805+00:00[0m
 [36m@@ -2,152 +2,179 @@[0m
- 
+
  import os
  import re
  from ..config import MAIN_STYLESHEET
- 
+
 [32m+[0m
  def get_works_by_author(author_id):
      """Get list of works for an author."""
@@ -2183,7 +2183,7 @@
 [32m+[0m
      return author_name, works
 [32m+[0m
- 
+
  def get_works_by_editor(editor_name):
      """Get list of works edited by a specific editor."""
      works = []
@@ -2250,7 +2250,7 @@
 [32m+[0m
      return works
 [32m+[0m
- 
+
  def render_works_page(author_id):
      """Generate works listing page for an author."""
      author_name, works = get_works_by_author(author_id)
@@ -2266,7 +2266,7 @@
  </body>
  </html>"""
      return html
- 
+
 [32m+[0m
  def render_editor_works_page(editor_name):
      """Generate works listing page for an editor."""
@@ -2291,17 +2291,17 @@
 [1m+++ src/first1k/import_export/scaife.py	2025-04-05 21:50:28.709578+00:00[0m
 [36m@@ -9,11 +9,13 @@[0m
  from urllib.error import HTTPError, URLError
- 
+
  from ..xml_utils.processor import detect_language_from_xml, extract_title_from_xml
- 
- 
+
+
 [31m-def import_text_from_scaife(scaife_url, provided_author_name="", provided_work_title=""):[0m
 [32m+def import_text_from_scaife([0m
 [32m+    scaife_url, provided_author_name="", provided_work_title=""[0m
 [32m+):[0m
      """Import text from Scaife URL and save to the corpus."""
      print(f"Importing from URL: {scaife_url}")
- 
+
      # Extract URN from URL
      urn_match = re.search(r"urn:cts:greekLit:([^:]+)\.([^:]+)\.([^:/]+)", scaife_url)
 [36m@@ -171,14 +173,18 @@[0m
@@ -2314,7 +2314,7 @@
 [32m+                            content = f.read([0m
 [32m+                                10000[0m
 [32m+                            )  # Just read the beginning where metadata usually is[0m
- 
+
                          # Look for author tag with reasonable content
 [31m-                        author_matches = re.findall(r"<author[^>]*>(.*?)</author>", content)[0m
 [32m+                        author_matches = re.findall([0m
@@ -2322,17 +2322,17 @@
 [32m+                        )[0m
                          if author_matches and len(author_matches[0].strip()) > 0:
                              return author_matches[0].strip()
- 
+
                      except Exception as e:
                          pass
 [1m--- src/first1k/xml_utils/processor.py	2025-03-26 18:58:09.139348+00:00[0m
 [1m+++ src/first1k/xml_utils/processor.py	2025-04-05 21:50:28.773258+00:00[0m
 [36m@@ -2,164 +2,196 @@[0m
- 
+
  import re
  import xml.etree.ElementTree as ET
  from html import escape
- 
+
 [32m+[0m
  def process_xml_for_reading(xml_content):
      """Process XML content for reader-friendly display using structured XML parsing."""
@@ -2553,7 +2553,7 @@
          print(f"Error processing XML: {str(e)}")
          print(traceback.format_exc())
          return fallback_xml_rendering(xml_content)
- 
+
 [32m+[0m
  def fallback_xml_rendering(xml_content):
      """Fallback rendering when XML parsing fails."""
@@ -2567,7 +2567,7 @@
 [32m+    """[0m
      return html
 [32m+[0m
- 
+
  def extract_title_from_xml(xml_content):
      """Extract the title from the XML content."""
      try:
@@ -2580,7 +2580,7 @@
      except Exception as e:
          print(f"Warning: Could not extract title from XML: {str(e)}")
          return None
- 
+
 [32m+[0m
  def detect_language_from_xml(xml_content):
      """Detect the language from the XML content."""
@@ -2604,16 +2604,16 @@
 [1m+++ src/first1k/server/server.py	2025-04-05 21:50:28.784715+00:00[0m
 [36m@@ -126,11 +126,13 @@[0m
                      work_title = params.get("work_title", [""])[0]
- 
+
                      if not scaife_url:
                          raise ValueError("Missing Scaife URL")
- 
+
 [31m-                    result = import_text_from_scaife(scaife_url, author_name, work_title)[0m
 [32m+                    result = import_text_from_scaife([0m
 [32m+                        scaife_url, author_name, work_title[0m
 [32m+                    )[0m
                      self.send_html_response(render_import_success_page(result))
- 
+
                  else:  # batch import
                      scaife_urls = params.get("scaife_urls", [""])[0].split("\n")
                      default_author = params.get("default_author_name", [""])[0]
@@ -2624,14 +2624,14 @@
  import tempfile
  import json
  from pathlib import Path
- 
+
 [32m+[0m
  def print_section(title):
      """Print a section title with decorative formatting."""
      print("\n" + "=" * 80)
      print(f" {title} ".center(80, "="))
      print("=" * 80 + "\n")
- 
+
 [32m+[0m
  def get_staged_python_files():
      """Get list of staged Python files."""
@@ -2650,7 +2650,7 @@
 [32m+    files = process.stdout.strip().split("\n")[0m
 [32m+    return [f for f in files if f.endswith(".py") and os.path.exists(f)][0m
 [32m+[0m
- 
+
  def check_syntax(file_path):
      """Check Python syntax without executing the file."""
 [31m-    with open(file_path, 'r', encoding='utf-8') as f:[0m
@@ -2665,7 +2665,7 @@
      except SyntaxError as e:
          print(f"Syntax error in {file_path}: {e}")
          return False
- 
+
 [32m+[0m
  def check_critical_issues(file_path):
      """Check for critical issues using pylint."""
@@ -2701,7 +2701,7 @@
      except json.JSONDecodeError:
          print(f"Error parsing pylint output for {file_path}")
          return False
- 
+
 [32m+[0m
  def main():
      """Run pre-commit checks on staged Python files."""
@@ -2749,7 +2749,7 @@
 [32m+[0m
      print_section("All Checks Passed")
      return 0
- 
+
 [32m+[0m
  if __name__ == "__main__":
 [31m-    sys.exit(main()) [0m
@@ -2762,14 +2762,14 @@
  import argparse
  import json
  from pathlib import Path
- 
+
 [32m+[0m
  def print_section(title):
      """Print a section title with decorative formatting."""
      print("\n" + "=" * 80)
      print(f" {title} ".center(80, "="))
      print("=" * 80 + "\n")
- 
+
 [32m+[0m
  def get_critical_issues(file_path):
      """Get critical issues in the file using pylint."""
@@ -2798,7 +2798,7 @@
      except json.JSONDecodeError:
          print(f"Error parsing pylint output: {process.stdout}")
          return []
- 
+
 [32m+[0m
  def check_syntax(file_path):
      """Check Python syntax without executing the file."""
@@ -2813,7 +2813,7 @@
          return None
      except SyntaxError as e:
          return e
- 
+
 [32m+[0m
  def backup_file(file_path):
      """Create a backup of the file."""
@@ -2825,7 +2825,7 @@
          dst.write(src.read())
      return backup_path
 [32m+[0m
- 
+
  def fix_unused_imports(file_path):
      """Fix unused imports in the file."""
      print(f"Checking for unused imports in {file_path}")
@@ -2848,7 +2848,7 @@
 [32m+[0m
      return True
 [32m+[0m
- 
+
  def process_file(file_path, fix=False):
      """Process a single file to identify and optionally fix issues."""
      print_section(f"Processing {file_path}")
@@ -2916,7 +2916,7 @@
 [32m+[0m
      return fixed
 [32m+[0m
- 
+
  def main():
      """Process files to identify and fix critical issues."""
 [31m-    parser = argparse.ArgumentParser(description='Find and fix critical issues in Python files.')[0m
@@ -2962,7 +2962,7 @@
 [31m-    [0m
 [32m+[0m
      sys.exit(0 if success else 1)
- 
+
 [32m+[0m
  if __name__ == "__main__":
 [31m-    main() [0m
@@ -2975,14 +2975,14 @@
  import tempfile
  import shutil
  from pathlib import Path
- 
+
 [32m+[0m
  def print_section(title):
      """Print a section title with decorative formatting."""
      print("\n" + "=" * 80)
      print(f" {title} ".center(80, "="))
      print("=" * 80 + "\n")
- 
+
 [32m+[0m
  def backup_file(file_path):
      """Create a backup of the file."""
@@ -2994,7 +2994,7 @@
          dst.write(src.read())
      return backup_path
 [32m+[0m
- 
+
  def run_tests():
      """Run the test suite."""
      print("Running tests...")
@@ -3027,7 +3027,7 @@
 [32m+[0m
      return success
 [32m+[0m
- 
+
  def format_file(file_path, tool, options=None):
      """Format a file with the specified tool."""
      if options is None:
@@ -3053,7 +3053,7 @@
 [31m-    [0m
 [32m+[0m
      return True
- 
+
 [31m-def process_file(file_path, tools, run_tests_after=True, dry_run=False, restore_on_failure=True):[0m
 [32m+[0m
 [32m+def process_file([0m
@@ -3134,7 +3134,7 @@
 [32m+[0m
      return success
 [32m+[0m
- 
+
  def main():
      """Process files incrementally with formatting tools."""
 [31m-    parser = argparse.ArgumentParser(description='Format Python files incrementally.')[0m
@@ -3206,7 +3206,7 @@
 [31m-    [0m
 [32m+[0m
      sys.exit(0 if success else 1)
- 
+
 [32m+[0m
  if __name__ == "__main__":
 [31m-    main() [0m
@@ -3219,14 +3219,14 @@
  from pathlib import Path
  import json
  from datetime import datetime
- 
+
 [32m+[0m
  def print_section(title):
      """Print a section title with decorative formatting."""
      print("\n" + "=" * 80)
      print(f" {title} ".center(80, "="))
      print("=" * 80 + "\n")
- 
+
 [32m+[0m
  def ensure_tools_installed():
      """Check if required tools are installed and install if missing."""
@@ -3264,7 +3264,7 @@
 [32m+[0m
      return python_files
 [32m+[0m
- 
+
  def run_flake8(files, report_dir):
      """Run flake8 on the files and generate a report."""
      print_section("Running Flake8")
@@ -3325,7 +3325,7 @@
      print(f"Total Flake8 issues: {error_count}")
      return error_count
 [32m+[0m
- 
+
  def run_pylint(files, report_dir):
      """Run pylint on the files and generate a report."""
      print_section("Running Pylint")
@@ -3390,7 +3390,7 @@
      print(f"Critical Pylint issues: {critical_count}")
      return critical_count
 [32m+[0m
- 
+
  def analyze_black_changes(files, report_dir):
      """Check what changes Black would make without applying them."""
      print_section("Analyzing Black Formatting Changes")
@@ -3433,7 +3433,7 @@
      print(f"Files that would be reformatted by Black: {changed_files}")
      return changed_files
 [32m+[0m
- 
+
  def analyze_isort_changes(files, report_dir):
      """Check what changes isort would make without applying them."""
      print_section("Analyzing Import Sorting Changes")
@@ -3472,7 +3472,7 @@
 [32m+[0m
      print(f"Files that would have imports resorted: {changed_files}")
      return changed_files
- 
+
 [32m+[0m
  def create_summary_report(report_dir, stats):
      """Create a summary report with all findings."""
@@ -3514,7 +3514,7 @@
 [32m+[0m
      print(f"\nSummary report saved to {summary_path}")
 [32m+[0m
- 
+
  def main():
      """Run code analysis without modifying any files."""
 [31m-    parser = argparse.ArgumentParser(description='Analyze Python code quality without enforcing standards.')[0m
@@ -3561,7 +3561,7 @@
      print_section("Analysis Complete")
      print(f"All reports saved to {report_dir}")
      print("Review the summary_report.txt for findings and next steps")
- 
+
 [32m+[0m
  if __name__ == "__main__":
 [31m-    main() [0m
@@ -3571,7 +3571,7 @@
 [1m+++ browse_texts_fixed.py	2025-04-05 21:50:28.995217+00:00[0m
 [36m@@ -24,24 +24,25 @@[0m
  from html import escape
- 
+
  # Configure logging
  logging.basicConfig(
      level=logging.DEBUG,
@@ -3584,7 +3584,7 @@
 [32m+    handlers=[logging.StreamHandler(), logging.FileHandler("server.log", mode="w")],[0m
  )
  logger = logging.getLogger(__name__)
- 
+
 [32m+[0m
  # Parse command line arguments
  def parse_args():
@@ -3598,15 +3598,15 @@
 [32m+    parser.add_argument("--debug", action="store_true", help="Enable debug mode")[0m
      return parser.parse_args()
 [32m+[0m
- 
+
  # Global variable to store server instance
  server_instance = None
- 
+
  # Constants
 [36m@@ -51,11 +52,11 @@[0m
  SHUTDOWN_PATH = "/shutdown"
  DEBUG = args.debug
- 
+
  # Load author data
  try:
 [31m-    with open('authors_data.json', 'r', encoding='utf-8') as f:[0m
@@ -3624,17 +3624,17 @@
  }
 [31m-""" [0m
 [32m+"""[0m
- 
+
  # Main stylesheet
  MAIN_STYLESHEET = """
- body { 
-     font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif; 
+ body {
+     font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif;
 [36m@@ -507,134 +508,139 @@[0m
  .retry-btn:hover {
      background-color: #3182ce;
  }
  """
- 
+
 [32m+[0m
  def is_port_in_use(port):
      """Check if a port is in use"""
@@ -3644,7 +3644,7 @@
          logger.debug(f"Port {port} is {'in use' if result else 'available'}")
          return result
 [32m+[0m
- 
+
  def find_available_port(start_port=8000, max_attempts=10):
      """Find an available port starting from start_port"""
      logger.debug(f"Searching for available port starting from {start_port}")
@@ -3658,7 +3658,7 @@
 [32m+    )[0m
      return start_port
 [32m+[0m
- 
+
  class CustomHTTPRequestHandler(http.server.SimpleHTTPRequestHandler):
      """Custom HTTP server handler for browsing and viewing texts"""
 [31m-    [0m
@@ -3717,7 +3717,7 @@
                  # Search page
                  html = self.get_search_page()
                  self.send_html_response(html)
- 
+
 [31m-            elif self.path.startswith('/api/author_works?'):[0m
 [32m+            elif self.path.startswith("/api/author_works?"):[0m
                  # API endpoint to get works for an author
@@ -3753,7 +3753,7 @@
              logger.error(f"Error handling GET request: {str(e)}")
              logger.error(traceback.format_exc())
              self.send_error(500, f"Internal server error: {str(e)}")
- 
+
      def do_POST(self):
          try:
 [31m-            content_length = int(self.headers['Content-Length'])[0m
@@ -3780,7 +3780,7 @@
              logger.error(f"Error handling POST request: {str(e)}")
              logger.error(traceback.format_exc())
              self.send_error(500, f"Internal server error: {str(e)}")
- 
+
      def handle_update_preference(self, post_data):
          """Handle updating user preferences"""
 [31m-        author_id = post_data.get('author_id', [''])[0][0m
@@ -3789,11 +3789,11 @@
 [32m+        author_id = post_data.get("author_id", [""])[0][0m
 [32m+        pref_type = post_data.get("pref_type", [""])[0][0m
 [32m+        value = post_data.get("value", ["false"])[0].lower() == "true"[0m
- 
+
          if not author_id or not pref_type:
              self.send_error(400, "Missing required parameters")
              return
- 
+
          try:
              # Load current preferences
              try:
@@ -3803,42 +3803,42 @@
              except (FileNotFoundError, json.JSONDecodeError):
 [31m-                prefs = {'favorites': [], 'archived': [], 'deleted': []}[0m
 [32m+                prefs = {"favorites": [], "archived": [], "deleted": []}[0m
- 
+
              # Update preference
              if pref_type not in prefs:
                  prefs[pref_type] = []
- 
+
 [36m@@ -642,126 +648,133 @@[0m
                  prefs[pref_type].append(author_id)
              elif not value and author_id in prefs[pref_type]:
                  prefs[pref_type].remove(author_id)
- 
+
              # Save updated preferences
 [31m-            with open('user_preferences.json', 'w') as f:[0m
 [32m+            with open("user_preferences.json", "w") as f:[0m
                  json.dump(prefs, f, indent=2)
- 
+
              self.send_response(200)
 [31m-            self.send_header('Content-type', 'application/json')[0m
 [32m+            self.send_header("Content-type", "application/json")[0m
              self.end_headers()
 [31m-            self.wfile.write(json.dumps({'success': True}).encode())[0m
 [32m+            self.wfile.write(json.dumps({"success": True}).encode())[0m
- 
+
          except Exception as e:
              self.send_error(500, f"Error updating preferences: {str(e)}")
- 
+
      def handle_update_century(self, post_data):
          """Handle updating author century"""
 [31m-        author_id = post_data.get('author_id', [''])[0][0m
 [31m-        century = post_data.get('century', [''])[0][0m
 [32m+        author_id = post_data.get("author_id", [""])[0][0m
 [32m+        century = post_data.get("century", [""])[0][0m
- 
+
          if not author_id or not century:
              self.send_error(400, "Missing required parameters")
              return
- 
+
          try:
              # Load current author data
              try:
@@ -3847,17 +3847,17 @@
                      authors_data = json.load(f)
              except (FileNotFoundError, json.JSONDecodeError):
                  authors_data = {}
- 
+
              # Update century
              if author_id in authors_data:
 [31m-                authors_data[author_id]['century'] = century[0m
 [32m+                authors_data[author_id]["century"] = century[0m
- 
+
                  # Save updated data
 [31m-                with open('authors_data.json', 'w') as f:[0m
 [32m+                with open("authors_data.json", "w") as f:[0m
                      json.dump(authors_data, f, indent=2)
- 
+
                  self.send_response(200)
 [31m-                self.send_header('content-type', 'application/json')[0m
 [32m+                self.send_header("content-type", "application/json")[0m
@@ -3866,10 +3866,10 @@
 [32m+                self.wfile.write(json.dumps({"success": True}).encode())[0m
              else:
                  self.send_error(404, "Author not found")
- 
+
          except Exception as e:
              self.send_error(500, f"Error updating century: {str(e)}")
- 
+
      def handle_update_work_preference(self, post_data):
          """Handle updating work preferences (favorite, archive, delete)"""
 [31m-        work_key = post_data.get('work_key', [''])[0][0m
@@ -3964,7 +3964,7 @@
          self.end_headers()
 [31m-        self.wfile.write(json.dumps({'success': True}).encode())[0m
 [32m+        self.wfile.write(json.dumps({"success": True}).encode())[0m
- 
+
      def get_authors_table_page(self):
          """Generate the authors table page"""
          # Load user preferences
@@ -3975,7 +3975,7 @@
          except (FileNotFoundError, json.JSONDecodeError):
 [31m-            user_prefs = {'favorites': [], 'archived': [], 'deleted': []}[0m
 [32m+            user_prefs = {"favorites": [], "archived": [], "deleted": []}[0m
- 
+
          # Load author data
          try:
 [31m-            with open('authors_data.json', 'r') as f:[0m
@@ -3983,7 +3983,7 @@
                  authors_data = json.load(f)
          except (FileNotFoundError, json.JSONDecodeError):
              authors_data = {}
- 
+
          # HTML template with JavaScript and CSS includes
 [31m-        html = f'''[0m
 [32m+        html = f"""[0m
@@ -4000,13 +4000,13 @@
                      <tbody>
 [31m-                '''[0m
 [32m+                """[0m
- 
+
          # Add table rows
          for author_id, author_data in authors_data.items():
 [31m-            if author_id in (user_prefs.get('deleted', []) or []):[0m
 [32m+            if author_id in (user_prefs.get("deleted", []) or []):[0m
                  continue
- 
+
 [31m-            author_name = author_data.get('name', '')[0m
 [31m-            century = author_data.get('century', '')[0m
 [31m-            allegiance = author_data.get('allegiance', '')[0m
@@ -4014,7 +4014,7 @@
 [32m+            century = author_data.get("century", "")[0m
 [32m+            allegiance = author_data.get("allegiance", "")[0m
              works_count = len(self.get_author_works(author_id))
- 
+
              # Add icons for favorite/archived status
 [31m-            name_prefix = ''[0m
 [31m-            if author_id in (user_prefs.get('favorites', []) or []):[0m
@@ -4024,7 +4024,7 @@
 [31m-            if author_id in (user_prefs.get('archived', []) or []):[0m
 [32m+            if author_id in (user_prefs.get("archived", []) or []):[0m
                  name_prefix += '<span class="archived-icon">📦</span> '
- 
+
 [31m-            html += f'''[0m
 [32m+            html += f"""[0m
                          <tr data-id="{author_id}">
@@ -4040,15 +4040,15 @@
                          </tr>
 [31m-                    '''[0m
 [32m+                    """[0m
- 
+
          # Close table and add modal
 [31m-        html += '''[0m
 [32m+        html += """[0m
                      </tbody>
                  </table>
-                 
+
                  <div class="pagination"></div>
- 
+
 [36m@@ -880,149 +893,169 @@[0m
                      </div>
                  </div>
@@ -4057,9 +4057,9 @@
          </html>
 [31m-        '''[0m
 [32m+        """[0m
- 
+
          return html
- 
+
      def get_work_editor(self, author_id, work_id):
          """Extract editor information from the __cts__.xml file if available"""
 [31m-        cts_file = os.path.join('data', author_id, work_id, '__cts__.xml')[0m
@@ -4103,7 +4103,7 @@
 [32m+            )[0m
 [32m+[0m
          return None
- 
+
      def get_author_works(self, author_id):
          """Get list of works for an author"""
          works = []
@@ -4170,7 +4170,7 @@
 [32m+[0m
          logger.debug(f"Total works found for {author_id}: {len(works)}")
          return works
- 
+
      def handle_get_author_works(self, query_params):
          """Handle API request to get works for an author"""
 [31m-        author_id = query_params.get('author_id', [''])[0][0m
@@ -4236,7 +4236,7 @@
 [32m+            f"Sending works response for author_id={author_id}: {response_body[:100]}..."[0m
 [32m+        )[0m
          self.wfile.write(response_body.encode())
- 
+
      def serve_static_file(self, path):
          """Serve static files"""
          try:
@@ -4252,11 +4252,11 @@
 [32m+[0m
              logger.debug(f"Serving static file from: {full_path}")
              content_type = self.get_content_type(file_path)
- 
+
 [31m-            with open(full_path, 'rb') as f:[0m
 [32m+            with open(full_path, "rb") as f:[0m
                  content = f.read()
- 
+
              self.send_response(200)
 [31m-            self.send_header('Content-type', content_type)[0m
 [31m-            self.send_header('Content-Length', len(content))[0m
@@ -4264,11 +4264,11 @@
 [32m+            self.send_header("Content-Length", len(content))[0m
              self.end_headers()
              self.wfile.write(content)
- 
+
          except FileNotFoundError:
              logger.error(f"Static file not found: {path}")
 [36m@@ -1033,42 +1066,42 @@[0m
- 
+
      def get_content_type(self, file_path):
          """Get content type based on file extension"""
          ext = os.path.splitext(file_path)[1].lower()
@@ -4290,7 +4290,7 @@
          }
 [31m-        return content_types.get(ext, 'application/octet-stream')[0m
 [32m+        return content_types.get(ext, "application/octet-stream")[0m
- 
+
      def send_html_response(self, html):
          """Send HTML response"""
          logger.debug(f"Sending HTML response, length: {len(html) if html else 0}")
@@ -4367,7 +4367,7 @@
              <div class="container">
                  <h1>Works by {author_name}</h1>
                  <p><a href="/">&laquo; Home</a> | <a href="/authors">Authors Table</a></p>
-                 
+
                  <h2>Available Works</h2>
 [31m-                '''[0m
 [31m-                [0m
@@ -4565,7 +4565,7 @@
                      <li><strong>Technical Lead:</strong> Perseus Digital Library</li>
                      <li><strong>Contributors:</strong> The scholarly community</li>
                  </ul>
-                 
+
                  <h2>Editors ({len(editors)} found)</h2>
 [31m-        '''[0m
 [31m-        [0m
@@ -4651,7 +4651,7 @@
              <title>Search Texts</title>
              <style>
 [36m@@ -1452,17 +1493,17 @@[0m
-                 
+
                  <p>Note: Full text search will be implemented in a future update.</p>
              </div>
          </body>
@@ -4684,7 +4684,7 @@
 [32m+[0m
          return html
 [32m+[0m
- 
+
  if __name__ == "__main__":
      try:
          # Make sure socket is properly released after previous runs

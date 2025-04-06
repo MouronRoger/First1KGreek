@@ -1,7 +1,7 @@
-#First1K memory 
+#First1K memory
 
 
-## 4-4-25 
+## 4-4-25
 
 ### Enhanced Author Data Structure
 Created a more comprehensive author_centuries.json file that now includes both author names and their centuries
@@ -57,9 +57,9 @@ Pagination showing 50 authors per page
 Search functionality
 Status filters (All, Favorites, Archived, Normal)
 Century filters
-Sorting by any column 
+Sorting by any column
 
-###tidy-up 
+###tidy-up
 
 Fixed the linter errors in browse_texts_fixed.py
 Created a combined authors_data.json file that merges the century data from author_centuries_updated.json and allegiance data from author-allegiances.js
@@ -77,4 +77,3 @@ Search functionality
 Status filters (All, Favorites, Archived, Normal)
 Century filters
 Sorting by any column
-

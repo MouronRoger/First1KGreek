@@ -114,4 +114,4 @@ ignore = E203, W503
 | Current | 40.91% | - | E1,E2,E3,E7,E9,F4,F63,F7,F82,W2,W3,W5 |
 | Phase 1 | 60% | Q3 2025 | + W1,W4 |
 | Phase 2 | 70% | Q4 2025 | + E4,E5 |
-| Phase 3 | 80% | Q1 2026 | All E,F,W (with exclusions) | 
+| Phase 3 | 80% | Q1 2026 | All E,F,W (with exclusions) |

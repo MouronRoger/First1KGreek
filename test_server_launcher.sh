@@ -38,7 +38,7 @@ if [ ! -f "static/test.html" ]; then
     <h1>First1KGreek Browser Test Page</h1>
     <p>If you can see this page, the server is working correctly.</p>
     <p>Time: <span id="current-time"></span></p>
-    
+
     <script>
         document.getElementById('current-time').textContent = new Date().toLocaleTimeString();
     </script>
@@ -52,4 +52,4 @@ echo "Starting simple HTTP server on port 8080..."
 python3 simple_server.py --port 8080
 
 # Keep terminal window open in case of errors
-read -p "Press enter to close this window..." 
+read -p "Press enter to close this window..."

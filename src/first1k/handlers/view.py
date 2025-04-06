@@ -6,8 +6,15 @@ from xml.sax.saxutils import escape
 from ..config import MAIN_STYLESHEET
 
 
-def render_xml_view_page(file_path):
-    """Generate XML view page."""
+def render_xml_view_page(file_path: str) -> str:
+    """Return HTML for the XML view page.
+
+    Args:
+        file_path: Path to the XML file to display
+
+    Returns:
+        HTML string for the XML view page
+    """
     try:
         with open(file_path, "r", encoding="utf-8") as f:
             xml_content = f.read()
@@ -27,15 +34,9 @@ def render_xml_view_page(file_path):
         xml_display = escape(xml_content)
 
         # Add syntax highlighting
-        xml_display = re.sub(
-            r"(&lt;[^&]*&gt;)", r'<span class="tag">\1</span>', xml_display
-        )
-        xml_display = re.sub(
-            r"(&lt;/[^&]*&gt;)", r'<span class="tag">\1</span>', xml_display
-        )
-        xml_display = re.sub(
-            r'("[^"]*")', r'<span class="string">\1</span>', xml_display
-        )
+        xml_display = re.sub(r"(&lt;[^&]*&gt;)", r'<span class="tag">\1</span>', xml_display)
+        xml_display = re.sub(r"(&lt;/[^&]*&gt;)", r'<span class="tag">\1</span>', xml_display)
+        xml_display = re.sub(r'("[^"]*")', r'<span class="string">\1</span>', xml_display)
 
         html = f"""<!DOCTYPE html>
 <html>
@@ -130,8 +131,15 @@ def render_xml_view_page(file_path):
 </html>"""
 
 
-def render_reader_view_page(file_path):
-    """Generate reader view page."""
+def render_reader_view_page(file_path: str) -> str:
+    """Return HTML for the reader view page.
+
+    Args:
+        file_path: Path to the text file to display
+
+    Returns:
+        HTML string for the reader view page
+    """
     try:
         with open(file_path, "r", encoding="utf-8") as f:
             xml_content = f.read()
@@ -254,9 +262,7 @@ def render_reader_view_page(file_path):
         </div>
 
         <div class="reader-container">
-            <div class="reader-text">
-{text_content}
-            </div>
+            <div class="reader-text">{text_content}</div>
         </div>
 
         <div class="controls">
@@ -285,3 +291,51 @@ def render_reader_view_page(file_path):
     </div>
 </body>
 </html>"""
+
+
+def highlight_xml(file_path: str) -> str:
+    """Apply syntax highlighting to XML content.
+
+    Args:
+        file_path: Path to the XML file
+
+    Returns:
+        HTML string with syntax-highlighted XML
+    """
+    with open(file_path, "r", encoding="utf-8") as f:
+        content = f.read()
+
+    # Escape HTML special characters
+    content = content.replace("&", "&amp;").replace("<", "&lt;").replace(">", "&gt;")
+
+    # Highlight XML tags
+    content = re.sub(r"&lt;([/\w]+).*?&gt;", r'<span style="color: #800000">&lt;\1&gt;</span>', content)
+
+    # Highlight attributes
+    content = re.sub(
+        r'(\w+)="([^"]*)"', r'<span style="color: #0000ff">\1</span>="<span style="color: #a31515">\2</span>"', content
+    )
+
+    return content
+
+
+def format_text_for_reading(file_path: str) -> str:
+    """Format text content for reading view.
+
+    Args:
+        file_path: Path to the text file
+
+    Returns:
+        HTML string with formatted text for reading
+    """
+    with open(file_path, "r", encoding="utf-8") as f:
+        content = f.read()
+
+    # Remove XML tags while preserving line breaks
+    content = re.sub(r"<[^>]+>", "", content)
+    content = content.replace("\n", "<br>")
+
+    # Convert special characters
+    content = content.replace("&", "&amp;").replace("<", "&lt;").replace(">", "&gt;")
+
+    return f'<div style="white-space: pre-wrap">{content}</div>'

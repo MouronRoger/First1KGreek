@@ -80,4 +80,4 @@ For information on contributing to the project, please refer to the original pro
 
 ## License
 
-The texts in this repository are available under a Creative Commons Attribution-ShareAlike 4.0 International License, as indicated in the XML files. 
+The texts in this repository are available under a Creative Commons Attribution-ShareAlike 4.0 International License, as indicated in the XML files.

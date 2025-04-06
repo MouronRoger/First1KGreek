@@ -8,11 +8,11 @@ This script automatically fixes common Flake8 issues across files:
 - E302: Expected 2 blank lines before function/class
 """
 
-import os
-import sys
-import re
 import argparse
 import glob
+import os
+import re
+import sys
 from pathlib import Path
 
 
@@ -30,49 +30,49 @@ def get_python_files(directory):
 
 def fix_blank_line_issues(content):
     """Fix W293: Blank line contains whitespace."""
-    lines = content.split('\n')
+    lines = content.split("\n")
     for i in range(len(lines)):
-        if lines[i].strip() == '':
-            lines[i] = ''
-    return '\n'.join(lines)
+        if lines[i].strip() == "":
+            lines[i] = ""
+    return "\n".join(lines)
 
 
 def fix_trailing_whitespace(content):
     """Fix W291: Trailing whitespace."""
-    lines = content.split('\n')
+    lines = content.split("\n")
     for i in range(len(lines)):
         lines[i] = lines[i].rstrip()
-    return '\n'.join(lines)
+    return "\n".join(lines)
 
 
 def fix_spacing_errors(content):
     """Fix E302: Expected 2 blank lines before function/class."""
     # Pattern for function or class definition
-    pattern = r'(\n[^\n]+)\n([^\n]*)(def|class)\s+'
+    pattern = r"(\n[^\n]+)\n([^\n]*)(def|class)\s+"
     # Replace with 2 blank lines before function/class
-    return re.sub(pattern, r'\1\n\n\n\3 ', content)
+    return re.sub(pattern, r"\1\n\n\n\3 ", content)
 
 
 def fix_file(file_path, dry_run=False):
     """Fix common issues in a single file."""
     try:
-        with open(file_path, 'r', encoding='utf-8') as f:
+        with open(file_path, "r", encoding="utf-8") as f:
             content = f.read()
-        
+
         original_content = content
-        
+
         # Apply fixes
         content = fix_blank_line_issues(content)
         content = fix_trailing_whitespace(content)
         content = fix_spacing_errors(content)
-        
+
         # Only write if content has changed
         if content != original_content:
             if dry_run:
                 print(f"Would fix issues in {file_path}")
                 return True
             else:
-                with open(file_path, 'w', encoding='utf-8') as f:
+                with open(file_path, "w", encoding="utf-8") as f:
                     f.write(content)
                 print(f"✓ Fixed issues in {file_path}")
                 return True
@@ -86,35 +86,35 @@ def fix_file(file_path, dry_run=False):
 
 def main():
     """Process all Python files in the specified directories."""
-    parser = argparse.ArgumentParser(description='Fix common Flake8 issues in Python files.')
-    parser.add_argument('directories', nargs='+', help='Directories to process')
-    parser.add_argument('--dry-run', action='store_true', help='Show changes without applying them')
+    parser = argparse.ArgumentParser(description="Fix common Flake8 issues in Python files.")
+    parser.add_argument("directories", nargs="+", help="Directories to process")
+    parser.add_argument("--dry-run", action="store_true", help="Show changes without applying them")
     args = parser.parse_args()
-    
+
     print_section("Fixing common Flake8 issues")
     if args.dry_run:
         print("Dry run - no changes will be made")
-    
+
     fixed_files = 0
     total_files = 0
-    
+
     for directory in args.directories:
         if not os.path.isdir(directory):
             print(f"Error: {directory} is not a valid directory")
             continue
-        
+
         files = get_python_files(directory)
         total_files += len(files)
         print(f"Found {len(files)} Python files in {directory}")
-        
+
         for file_path in files:
             if fix_file(file_path, args.dry_run):
                 fixed_files += 1
-    
+
     print_section("Summary")
     print(f"Total files processed: {total_files}")
     print(f"Files fixed: {fixed_files}")
-    
+
     if fixed_files > 0:
         print("✓ Successfully fixed common Flake8 issues")
     else:
@@ -122,4 +122,4 @@ def main():
 
 
 if __name__ == "__main__":
-    main() 
+    main()

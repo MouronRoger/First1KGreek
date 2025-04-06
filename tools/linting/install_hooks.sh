@@ -20,4 +20,4 @@ if ! command -v pylint &> /dev/null; then
 fi
 
 echo "Pre-commit hook installed successfully"
-echo "The hook will run automatically on future commits" 
+echo "The hook will run automatically on future commits"

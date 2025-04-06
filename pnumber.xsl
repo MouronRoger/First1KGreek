@@ -4,7 +4,7 @@
     xmlns:tei="http://www.tei-c.org/ns/1.0"
     exclude-result-prefixes="xs"
     version="2.0">
-    
+
     <xsl:template name="teip">
         <xsl:param name="pnumber">0</xsl:param>
         <xsl:copy>
@@ -13,7 +13,7 @@
             <xsl:apply-templates  select="node()|comment()"/>
         </xsl:copy>
     </xsl:template>
-    
+
     <xsl:template match="//tei:div[@subtype='chapter']">
         <xsl:variable name="pnumber">
             <xsl:number value="1" />
@@ -37,11 +37,11 @@
             </xsl:for-each>
         </xsl:copy>
     </xsl:template>
-    
+
     <xsl:template match="@*">
         <xsl:copy/>
     </xsl:template>
-    
+
     <xsl:template match="node()|comment()">
         <xsl:copy>
             <xsl:apply-templates select="./@*"/>

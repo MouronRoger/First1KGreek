@@ -14,4 +14,4 @@ async function copyData() {
   }
 }
 
-copyData(); 
+copyData();

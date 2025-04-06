@@ -21,7 +21,7 @@ from browse_texts_fixed import CustomHTTPRequestHandler, run_server
 
 class TestEnvironment:
     """Base class for setting up test environment"""
-    
+
     @classmethod
     def setUpClass(cls):
         """Set up test environment including temporary directories and test server"""
@@ -29,30 +29,30 @@ class TestEnvironment:
         cls.test_dir = tempfile.mkdtemp()
         cls.test_data_dir = os.path.join(cls.test_dir, 'data')
         os.mkdir(cls.test_data_dir)
-        
+
         # Copy minimal sample data for testing
         cls.setup_sample_data()
-        
+
         # Start test server in a separate thread
         cls.server_thread = Thread(target=cls.run_test_server)
         cls.server_thread.daemon = True
         cls.server_thread.start()
-    
+
     @classmethod
     def tearDownClass(cls):
         """Clean up test environment"""
         # Remove temporary directory
         shutil.rmtree(cls.test_dir)
-        
+
         # Server thread is daemon, so it will terminate with the main thread
-    
+
     @classmethod
     def setup_sample_data(cls):
         """Set up minimal sample data for testing"""
         # Create sample XML files with minimal structure for testing
         # This will vary based on the actual XML structure used in the project
         pass
-    
+
     @classmethod
     def run_test_server(cls):
         """Run test server on a different port from the main application"""
@@ -77,17 +77,17 @@ from browse_texts_fixed import process_xml_for_reading  # Adjust import path as 
 
 class XMLProcessingTests(unittest.TestCase, TestEnvironment):
     """Test XML processing functionality"""
-    
+
     @classmethod
     def setUpClass(cls):
         """Set up test environment"""
         TestEnvironment.setUpClass()
-    
+
     @classmethod
     def tearDownClass(cls):
         """Clean up test environment"""
         TestEnvironment.tearDownClass()
-    
+
     def test_process_xml_basic(self):
         """Test basic XML processing"""
         sample_xml = '<TEI><text><body><p>Sample Greek text: <foreign xml:lang="grc">λόγος</foreign></p></body></text></TEI>'
@@ -95,7 +95,7 @@ class XMLProcessingTests(unittest.TestCase, TestEnvironment):
         result = process_xml_for_reading(root)
         self.assertIn('Sample Greek text:', result)
         self.assertIn('λόγος', result)
-    
+
     def test_process_xml_nested(self):
         """Test processing nested XML elements"""
         sample_xml = '<TEI><text><body><div><p>Outer text <div><p>Inner text <foreign xml:lang="grc">φύσις</foreign></p></div></p></div></body></text></TEI>'
@@ -120,34 +120,34 @@ from browse_texts_fixed import get_author_name_from_files  # Adjust import path 
 
 class MetadataTests(unittest.TestCase, TestEnvironment):
     """Test metadata extraction functionality"""
-    
+
     @classmethod
     def setUpClass(cls):
         """Set up test environment"""
         TestEnvironment.setUpClass()
-        
+
         # Create a test XML file with author metadata
         cls.test_xml_path = os.path.join(cls.test_data_dir, 'test_author.xml')
         with open(cls.test_xml_path, 'w', encoding='utf-8') as f:
             f.write('<TEI><teiHeader><fileDesc><titleStmt><author>Test Author</author></titleStmt></fileDesc></teiHeader></TEI>')
-    
+
     @classmethod
     def tearDownClass(cls):
         """Clean up test environment"""
         TestEnvironment.tearDownClass()
-    
+
     def test_get_author_name(self):
         """Test extracting author name from XML file"""
         result = get_author_name_from_files([self.test_xml_path])
         self.assertEqual(result, 'Test Author')
-    
+
     def test_get_author_name_multiple_files(self):
         """Test extracting author name from multiple XML files (should use first one)"""
         # Create a second test file
         second_xml_path = os.path.join(self.test_data_dir, 'test_author2.xml')
         with open(second_xml_path, 'w', encoding='utf-8') as f:
             f.write('<TEI><teiHeader><fileDesc><titleStmt><author>Another Author</author></titleStmt></fileDesc></teiHeader></TEI>')
-        
+
         result = get_author_name_from_files([self.test_xml_path, second_xml_path])
         self.assertEqual(result, 'Test Author')
 ```
@@ -167,17 +167,17 @@ from browse_texts_fixed import import_text_from_scaife  # Adjust import path as 
 
 class ImportTests(unittest.TestCase, TestEnvironment):
     """Test import functionality"""
-    
+
     @classmethod
     def setUpClass(cls):
         """Set up test environment"""
         TestEnvironment.setUpClass()
-    
+
     @classmethod
     def tearDownClass(cls):
         """Clean up test environment"""
         TestEnvironment.tearDownClass()
-    
+
     @patch('browse_texts_fixed.requests.get')
     def test_import_single_text(self, mock_get):
         """Test importing a single text from Scaife/Perseus"""
@@ -186,10 +186,10 @@ class ImportTests(unittest.TestCase, TestEnvironment):
         mock_response.status_code = 200
         mock_response.text = '<TEI><teiHeader><fileDesc><titleStmt><title>Test Work</title><author>Test Author</author></titleStmt></fileDesc></teiHeader><text><body><p>Test content</p></body></text></TEI>'
         mock_get.return_value = mock_response
-        
+
         # Call import function
         result = import_text_from_scaife('urn:cts:test:test.work', self.test_data_dir)
-        
+
         # Assert expected behavior
         self.assertTrue(result)  # Import should succeed
         # Check that file was created with correct content
@@ -213,31 +213,31 @@ from test_environment import TestEnvironment
 
 class IntegrationTests(unittest.TestCase, TestEnvironment):
     """Integration tests for the application"""
-    
+
     @classmethod
     def setUpClass(cls):
         """Set up test environment including test server"""
         TestEnvironment.setUpClass()
         # Give the server time to start
         time.sleep(1)
-    
+
     @classmethod
     def tearDownClass(cls):
         """Clean up test environment"""
         TestEnvironment.tearDownClass()
-    
+
     def test_home_page(self):
         """Test that home page loads successfully"""
         response = requests.get('http://localhost:8001/')
         self.assertEqual(response.status_code, 200)
         self.assertIn('First1KGreek Browser', response.text)
-    
+
     def test_authors_page(self):
         """Test that authors page loads successfully"""
         response = requests.get('http://localhost:8001/authors')
         self.assertEqual(response.status_code, 200)
         # Additional assertions based on expected content
-    
+
     def test_works_page(self):
         """Test that works page loads for a sample author"""
         # This will need to be adjusted based on how author IDs are structured
@@ -257,31 +257,31 @@ from test_environment import TestEnvironment
 
 class EndToEndTests(unittest.TestCase, TestEnvironment):
     """End-to-end tests for complete workflows"""
-    
+
     @classmethod
     def setUpClass(cls):
         """Set up test environment including test server"""
         TestEnvironment.setUpClass()
         # Give the server time to start
         time.sleep(1)
-    
+
     @classmethod
     def tearDownClass(cls):
         """Clean up test environment"""
         TestEnvironment.tearDownClass()
-    
+
     def test_browse_and_read(self):
         """Test complete workflow: browse authors, select work, view text"""
         # Step 1: Get authors list
         response = requests.get('http://localhost:8001/authors')
         self.assertEqual(response.status_code, 200)
-        
+
         # Step 2: Select an author (will need to extract author ID from response)
         # For test purposes, we'll use a hardcoded author ID
         author_id = 'test_author'
         response = requests.get(f'http://localhost:8001/works?author={author_id}')
         self.assertEqual(response.status_code, 200)
-        
+
         # Step 3: Select a work (will need to extract work ID from response)
         # For test purposes, we'll use a hardcoded work ID
         work_id = 'test_work'
@@ -289,19 +289,19 @@ class EndToEndTests(unittest.TestCase, TestEnvironment):
         self.assertEqual(response.status_code, 200)
         # Check for expected content in reader
         self.assertIn('Test content', response.text)
-    
+
     def test_import_and_read(self):
         """Test complete workflow: import text, browse to it, view it"""
         # Step 1: Import a text
         urn = 'urn:cts:test:test.import_work'
         response = requests.post('http://localhost:8001/import', data={'urn': urn})
         self.assertEqual(response.status_code, 200)
-        
+
         # Step 2: Browse to imported text
         author_id = 'test'  # Based on URN
         response = requests.get(f'http://localhost:8001/works?author={author_id}')
         self.assertEqual(response.status_code, 200)
-        
+
         # Step 3: View imported text
         work_id = 'test.import_work'  # Based on URN
         response = requests.get(f'http://localhost:8001/read?author={author_id}&work={work_id}')
@@ -320,31 +320,31 @@ from test_environment import TestEnvironment
 
 class PerformanceTests(unittest.TestCase, TestEnvironment):
     """Performance tests for the application"""
-    
+
     @classmethod
     def setUpClass(cls):
         """Set up test environment including test server"""
         TestEnvironment.setUpClass()
         # Give the server time to start
         time.sleep(1)
-    
+
     @classmethod
     def tearDownClass(cls):
         """Clean up test environment"""
         TestEnvironment.tearDownClass()
-    
+
     def test_home_page_load_time(self):
         """Test home page load time"""
         start_time = time.time()
         response = requests.get('http://localhost:8001/')
         end_time = time.time()
-        
+
         self.assertEqual(response.status_code, 200)
         load_time = end_time - start_time
         print(f"Home page load time: {load_time:.2f} seconds")
         # Threshold depends on what's reasonable for your application
         self.assertLess(load_time, 1.0)  # Should load in less than 1 second
-    
+
     def test_xml_processing_time(self):
         """Test XML processing time for a large document"""
         # This would require setting up a large test document
@@ -371,7 +371,7 @@ def run_tests():
     """Run all tests"""
     # Create test suite
     test_suite = unittest.TestSuite()
-    
+
     # Add test cases
     test_suite.addTest(unittest.makeSuite(XMLProcessingTests))
     test_suite.addTest(unittest.makeSuite(MetadataTests))
@@ -379,11 +379,11 @@ def run_tests():
     test_suite.addTest(unittest.makeSuite(IntegrationTests))
     test_suite.addTest(unittest.makeSuite(EndToEndTests))
     test_suite.addTest(unittest.makeSuite(PerformanceTests))
-    
+
     # Run tests
     runner = unittest.TextTestRunner(verbosity=2)
     result = runner.run(test_suite)
-    
+
     return result.wasSuccessful()
 
 if __name__ == '__main__':
