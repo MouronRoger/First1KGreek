@@ -1,8 +1,7 @@
 #!/usr/bin/env python3
-"""Simple performance tests for First1KGreek Browser."""
+"""Performance tests for First1KGreek Browser XML processing."""
 
 import os
-import sys
 import tempfile
 import time
 import unittest
@@ -60,8 +59,8 @@ def process_xml_for_reading(element, processed_text=""):
     return processed_text
 
 
-class SimplePerformanceTest(unittest.TestCase):
-    """Simple performance test case."""
+class XMLPerformanceTest(unittest.TestCase):
+    """Performance test case for XML processing."""
 
     @classmethod
     def setUpClass(cls):

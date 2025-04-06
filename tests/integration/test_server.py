@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""Simple integration tests for First1KGreek Browser."""
+"""Integration tests for First1KGreek Browser server."""
 
 import http.server
 import socket
@@ -23,6 +23,7 @@ class SimpleHTTPRequestHandler(http.server.SimpleHTTPRequestHandler):
 
     def log_message(self, format, *args):
         """Override to suppress log messages."""
+        pass
 
     def do_GET(self):
         """Handle GET requests."""
@@ -35,8 +36,8 @@ class SimpleHTTPRequestHandler(http.server.SimpleHTTPRequestHandler):
             self.send_error(404, "Not found")
 
 
-class SimpleIntegrationTest(unittest.TestCase):
-    """Simple integration test case."""
+class ServerIntegrationTest(unittest.TestCase):
+    """Integration test case for server functionality."""
 
     @classmethod
     def setUpClass(cls):

@@ -2,11 +2,11 @@
 # These are the dependencies needed to run the test suite
 
 # HTTP client for testing
-requests>=2.25.0
+requests>=2.31.0
 
 # Code coverage measurement
-coverage>=5.5.0
+coverage>=7.0.0
 
 # Pytest for additional testing capabilities (optional)
-pytest>=6.2.5
-pytest-cov>=2.12.1
+pytest>=7.0.0
+pytest-cov>=4.0.0
