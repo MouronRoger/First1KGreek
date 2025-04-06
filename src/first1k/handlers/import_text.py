@@ -4,8 +4,8 @@ import os
 import re
 import urllib.request
 import xml.etree.ElementTree as ET
-from urllib.error import HTTPError, URLError
 from typing import Optional
+from urllib.error import HTTPError, URLError
 
 from ..config import MAIN_STYLESHEET
 
@@ -190,29 +190,29 @@ def render_import_page() -> str:
             <form action="/import" method="post">
                 <div style="margin-bottom: 15px">
                     <label for="author_name" style="display: block; margin-bottom: 5px">Author Name:</label>
-                    <input type="text" id="author_name" name="author_name" required 
+                    <input type="text" id="author_name" name="author_name" required
                            style="width: 100%; padding: 8px; border: 1px solid #ddd; border-radius: 4px">
                 </div>
-                
+
                 <div style="margin-bottom: 15px">
                     <label for="work_title" style="display: block; margin-bottom: 5px">Work Title:</label>
                     <input type="text" id="work_title" name="work_title" required
                            style="width: 100%; padding: 8px; border: 1px solid #ddd; border-radius: 4px">
                 </div>
-                
+
                 <div style="margin-bottom: 15px">
                     <label for="text_content" style="display: block; margin-bottom: 5px">Text Content (XML):</label>
                     <textarea id="text_content" name="text_content" required
                              style="width: 100%; height: 200px; padding: 8px; border: 1px solid #ddd; border-radius: 4px"></textarea>
                 </div>
-                
-                <button type="submit" 
+
+                <button type="submit"
                         style="padding: 10px 20px; background-color: #4CAF50; color: white; border: none; border-radius: 4px; cursor: pointer">
                     Import Text
                 </button>
             </form>
         </div>
-        
+
         <div>
             <a href="/" style="color: #4CAF50; text-decoration: none">Return to Home</a>
         </div>
@@ -222,7 +222,7 @@ def render_import_page() -> str:
 
 def render_import_success_page(author_name: str, work_title: str) -> str:
     """Return HTML for the import success page.
-    
+
     Args:
         author_name: The name of the author whose work was imported
         work_title: The title of the imported work
@@ -244,7 +244,7 @@ def render_import_success_page(author_name: str, work_title: str) -> str:
 
 def render_import_error_page(error_message: str) -> str:
     """Return HTML for the import error page.
-    
+
     Args:
         error_message: The error message to display
     """

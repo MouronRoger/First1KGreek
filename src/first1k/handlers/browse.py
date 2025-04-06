@@ -2,11 +2,8 @@
 
 from typing import Dict, List, Optional, Tuple
 
-from ..xml_utils.processor import (
-    get_author_metadata,
-    get_editor_metadata,
-    get_work_metadata
-)
+from ..xml_utils.processor import get_author_metadata, get_editor_metadata, get_work_metadata
+
 
 def render_browse_page() -> str:
     """Return HTML for the browse page."""
@@ -21,7 +18,7 @@ def render_browse_page() -> str:
                 </button>
             </form>
         </div>
-        
+
         <div style="margin-bottom: 20px">
             <h3>Browse by Editor</h3>
             <form action="/browse/editors" method="get">
@@ -30,16 +27,17 @@ def render_browse_page() -> str:
                 </button>
             </form>
         </div>
-        
+
         <div>
             <a href="/" style="color: #4CAF50; text-decoration: none">Return to Home</a>
         </div>
     </div>
     """
 
+
 def render_authors_page(authors: List[Tuple[str, str]]) -> str:
     """Return HTML for the authors listing page.
-    
+
     Args:
         authors: List of (author_id, author_name) tuples
     """
@@ -65,9 +63,10 @@ def render_authors_page(authors: List[Tuple[str, str]]) -> str:
     </div>
     """
 
+
 def render_editors_page(editors: List[str]) -> str:
     """Return HTML for the editors listing page.
-    
+
     Args:
         editors: List of editor names
     """
@@ -93,9 +92,10 @@ def render_editors_page(editors: List[str]) -> str:
     </div>
     """
 
+
 def render_works_list(works: List[Dict[str, str]]) -> str:
     """Return HTML for a list of works.
-    
+
     Args:
         works: List of work metadata dictionaries
     """
@@ -113,19 +113,20 @@ def render_works_list(works: List[Dict[str, str]]) -> str:
         """
     return works_html
 
+
 def render_author_works_page(author_id: str, works: Optional[List[Dict[str, str]]] = None) -> str:
     """Return HTML for an author's works page.
-    
+
     Args:
         author_id: The ID of the author
         works: Optional list of work metadata dictionaries
     """
     if works is None:
         works = []
-        
+
     author_metadata = get_author_metadata(author_id)
-    author_name = author_metadata.get('name', 'Unknown Author')
-    
+    author_name = author_metadata.get("name", "Unknown Author")
+
     return f"""
     <div style="padding: 20px; background-color: #f5f5f5; border-radius: 5px">
         <h2>Works by {author_name}</h2>
@@ -140,16 +141,17 @@ def render_author_works_page(author_id: str, works: Optional[List[Dict[str, str]
     </div>
     """
 
+
 def render_editor_works_page(editor_name: str, works: Optional[List[Dict[str, str]]] = None) -> str:
     """Return HTML for an editor's works page.
-    
+
     Args:
         editor_name: The name of the editor
         works: Optional list of work metadata dictionaries
     """
     if works is None:
         works = []
-        
+
     return f"""
     <div style="padding: 20px; background-color: #f5f5f5; border-radius: 5px">
         <h2>Works edited by {editor_name}</h2>
