@@ -4,9 +4,13 @@
 import unittest
 import socket
 from unittest import mock
+import pytest
 
 from tests.test_base import BaseTest
 import browse_texts_fixed
+
+# Mark all tests in this module as unit tests for pytest
+pytestmark = pytest.mark.unit
 
 
 class ServerTests(BaseTest):
@@ -109,6 +113,32 @@ class ServerTests(BaseTest):
             # This should attempt to retry with a new port
             browse_texts_fixed.main()
             # We're primarily testing that it doesn't crash with the OSError
+
+
+# Example of a pytest-style test function (can coexist with unittest tests)
+@pytest.mark.unit
+def test_is_port_in_use_pytest_style():
+    """Test port availability checking using pytest style."""
+    # Mock socket.socket to control its behavior
+    with mock.patch('socket.socket') as mock_socket:
+        # Configure the mock to indicate port is in use
+        mock_socket_instance = mock.MagicMock()
+        mock_socket.return_value.__enter__.return_value = mock_socket_instance
+        mock_socket_instance.connect_ex.return_value = 0  # 0 means success (port in use)
+
+        # Test when port is in use
+        result = browse_texts_fixed.is_port_in_use(8000)
+        assert result is True
+        mock_socket_instance.connect_ex.assert_called_with(('localhost', 8000))
+
+        # Reset and configure for port not in use
+        mock_socket_instance.reset_mock()
+        mock_socket_instance.connect_ex.return_value = 1  # Non-zero means failure (port not in use)
+
+        # Test when port is not in use
+        result = browse_texts_fixed.is_port_in_use(8000)
+        assert result is False
+        mock_socket_instance.connect_ex.assert_called_with(('localhost', 8000))
 
 
 if __name__ == '__main__':

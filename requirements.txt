@@ -2,3 +2,8 @@
 # These are the minimal dependencies needed to run the application
 
 # No external dependencies beyond Python 3.6+ standard library 
+
+# Development dependencies
+pytest==8.0.0
+pytest-cov==4.1.0
+pytest-mock==3.11.1 

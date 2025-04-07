@@ -13,6 +13,16 @@ The test suite is organized into the following files:
 - `tests/test_page_generation.py` - Tests for HTML content generation
 - `tests/test_utils.py` - Tests for utility functions
 - `tests/conftest.py` - Configuration and fixtures for pytest integration
+- `tests/test_pytest_sample.py` - Example of pure pytest-style tests
+
+## Testing Frameworks
+
+The project supports two testing approaches:
+
+1. **unittest** - Traditional unittest-based tests that extend `unittest.TestCase`
+2. **pytest** - More modern pytest-style tests with fixtures and improved assertions
+
+We are gradually transitioning from unittest to pytest while maintaining backward compatibility. New tests should be written in pytest style when possible.
 
 ## Test Design Choices
 
@@ -36,6 +46,31 @@ The test suite was designed with the following principles in mind:
 
 ## Running the Tests
 
+### Using pytest (recommended)
+
+```bash
+# Run all tests
+pytest
+
+# Run all tests with coverage report
+pytest --cov=src --cov=browse_texts_fixed
+
+# Run tests by category
+pytest -m unit
+pytest -m integration
+pytest -m performance
+
+# Run a specific test file
+pytest tests/test_server.py
+
+# Run a specific test function
+pytest tests/test_server.py::test_is_port_in_use_pytest_style
+
+# Using the pytest runner script
+python run_pytest.py --unit
+python run_pytest.py --all --coverage
+```
+
 ### Using unittest
 
 ```bash
@@ -52,50 +87,58 @@ python -m unittest tests.test_utils
 python -m unittest tests.test_server.ServerTests
 ```
 
-### Using pytest
-
-```bash
-# Run all tests
-pytest tests/
-
-# Run a specific test file
-pytest tests/test_server.py
-pytest tests/test_http_handler.py
-pytest tests/test_page_generation.py
-pytest tests/test_utils.py
-
-# Run a specific test function
-pytest tests/test_server.py::ServerTests::test_is_port_in_use
-```
-
 ## Test Coverage
 
-To generate a test coverage report, you'll need the `coverage` package:
+To generate a test coverage report, you can use pytest-cov:
 
 ```bash
-# Install coverage package
-pip install coverage
-
-# Run tests with coverage
-coverage run -m unittest discover -s tests
-
-# Generate report
-coverage report -m
+# Generate coverage report
+pytest --cov=src --cov=browse_texts_fixed
 
 # Generate HTML report
-coverage html
+pytest --cov=src --cov=browse_texts_fixed --cov-report=html
 ```
 
 ## Writing New Tests
 
 When adding new features or fixing bugs, please ensure that appropriate tests are added or updated. Follow these guidelines:
 
-1. Use the base test class from `test_base.py` for common utilities
-2. Isolate tests by using mocks and temporary directories
+1. Write new tests in pytest style when possible
+2. Isolate tests by using fixtures and mocks
 3. Keep tests independent and avoid dependencies between test cases
 4. Document test purpose with docstrings
-5. Follow the same structure and naming conventions as existing tests
+5. Use parametrization for testing multiple scenarios
 6. Include tests for both success and error cases
+
+### pytest Style Example
+
+```python
+import pytest
+from unittest import mock
+
+# Mark test category
+@pytest.mark.unit
+def test_my_function():
+    """Test my_function behaves as expected."""
+    # Setup
+    test_input = "test input"
+    
+    # Exercise
+    result = my_function(test_input)
+    
+    # Verify
+    assert result == "expected output"
+    
+# Parameterized test example
+@pytest.mark.parametrize("input_val,expected", [
+    ("input1", "output1"),
+    ("input2", "output2"),
+])
+def test_my_function_parameterized(input_val, expected):
+    """Test my_function with multiple inputs."""
+    result = my_function(input_val)
+    assert result == expected
+```
 
 ## Mocking Strategy
 

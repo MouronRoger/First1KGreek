@@ -1,90 +1,179 @@
-2025-04-07 16:31:14,862 - INFO - Loaded author data with 63 entries
-2025-04-07 16:31:14,862 - INFO - Starting First1KGreek Browser - Fixed Version 1.2.0
-2025-04-07 16:31:14,862 - INFO - With dark theme and improved editor detection
-2025-04-07 16:31:14,863 - INFO - Checking port 8000 availability...
-2025-04-07 16:31:14,865 - DEBUG - Port 8000 is available
-2025-04-07 16:31:14,865 - INFO - Starting server on port 8000...
-2025-04-07 16:31:14,865 - INFO - Server started at http://localhost:8000 (took 0.000s)
-2025-04-07 16:31:22,797 - INFO - PageGenerator loaded author data with 63 entries
-2025-04-07 16:31:22,798 - INFO - PageGenerator loaded user preferences with 0 total entries
-2025-04-07 16:31:22,799 - INFO - GET request for / from ('127.0.0.1', 53387)
-2025-04-07 16:31:22,799 - DEBUG - Serving home page
-2025-04-07 16:31:22,799 - INFO - 127.0.0.1 - "GET / HTTP/1.1" 200 -
-2025-04-07 16:31:22,800 - DEBUG - Sending HTML response, length: 906
-2025-04-07 16:31:22,800 - DEBUG - Successfully sent 906 bytes
-2025-04-07 16:31:22,800 - DEBUG - Request processed in 0.0012 seconds
-2025-04-07 16:31:22,800 - INFO - PageGenerator loaded author data with 63 entries
-2025-04-07 16:31:22,801 - INFO - PageGenerator loaded user preferences with 0 total entries
-2025-04-07 16:31:22,819 - INFO - GET request for /static/css/main.css from ('127.0.0.1', 53388)
-2025-04-07 16:31:22,819 - DEBUG - Serving static file: /static/css/main.css
-2025-04-07 16:31:22,825 - INFO - 127.0.0.1 - "GET /static/css/main.css HTTP/1.1" 200 -
-2025-04-07 16:31:22,825 - DEBUG - Successfully sent 538 bytes
-2025-04-07 16:31:22,826 - DEBUG - Request processed in 0.0064 seconds
-2025-04-07 16:31:24,457 - INFO - PageGenerator loaded author data with 63 entries
-2025-04-07 16:31:24,457 - INFO - PageGenerator loaded user preferences with 0 total entries
-2025-04-07 16:31:24,572 - INFO - GET request for /authors from ('127.0.0.1', 53404)
-2025-04-07 16:31:24,572 - DEBUG - Serving authors table page
-2025-04-07 16:31:24,572 - DEBUG - Reloading data from disk
-2025-04-07 16:31:24,572 - INFO - PageGenerator loaded author data with 63 entries
-2025-04-07 16:31:24,573 - INFO - PageGenerator loaded user preferences with 0 total entries
-2025-04-07 16:31:24,573 - DEBUG - Data reload completed in 0.001s
-2025-04-07 16:31:24,593 - INFO - 127.0.0.1 - "GET /authors HTTP/1.1" 200 -
-2025-04-07 16:31:24,594 - DEBUG - Sending HTML response, length: 81458
-2025-04-07 16:31:24,594 - DEBUG - Successfully sent 81458 bytes
-2025-04-07 16:31:24,594 - DEBUG - Request processed in 0.0228 seconds
-2025-04-07 16:31:24,595 - INFO - PageGenerator loaded author data with 63 entries
-2025-04-07 16:31:24,596 - INFO - PageGenerator loaded user preferences with 0 total entries
-2025-04-07 16:31:24,613 - INFO - GET request for /static/css/main.css from ('127.0.0.1', 53405)
-2025-04-07 16:31:24,613 - DEBUG - Serving static file: /static/css/main.css
-2025-04-07 16:31:24,613 - INFO - 127.0.0.1 - "GET /static/css/main.css HTTP/1.1" 200 -
-2025-04-07 16:31:24,613 - DEBUG - Successfully sent 538 bytes
-2025-04-07 16:31:24,613 - DEBUG - Request processed in 0.0004 seconds
-2025-04-07 16:31:24,613 - INFO - PageGenerator loaded author data with 63 entries
-2025-04-07 16:31:24,614 - INFO - PageGenerator loaded user preferences with 0 total entries
-2025-04-07 16:31:24,614 - INFO - GET request for /static/css/authors-table.css from ('127.0.0.1', 53406)
-2025-04-07 16:31:24,614 - DEBUG - Serving static file: /static/css/authors-table.css
-2025-04-07 16:31:24,614 - INFO - 127.0.0.1 - "GET /static/css/authors-table.css HTTP/1.1" 200 -
-2025-04-07 16:31:24,614 - DEBUG - Successfully sent 4811 bytes
-2025-04-07 16:31:24,614 - DEBUG - Request processed in 0.0003 seconds
-2025-04-07 16:31:24,614 - INFO - PageGenerator loaded author data with 63 entries
-2025-04-07 16:31:24,614 - INFO - PageGenerator loaded user preferences with 0 total entries
-2025-04-07 16:31:24,615 - INFO - GET request for /static/js/authors_table.js?v=1744039884 from ('127.0.0.1', 53407)
-2025-04-07 16:31:24,615 - DEBUG - Serving static file: /static/js/authors_table.js
-2025-04-07 16:31:24,615 - INFO - 127.0.0.1 - "GET /static/js/authors_table.js?v=1744039884 HTTP/1.1" 200 -
-2025-04-07 16:31:24,615 - DEBUG - Successfully sent 21094 bytes
-2025-04-07 16:31:24,615 - DEBUG - Request processed in 0.0008 seconds
-2025-04-07 16:31:34,651 - INFO - PageGenerator loaded author data with 63 entries
-2025-04-07 16:31:34,652 - INFO - PageGenerator loaded user preferences with 0 total entries
-2025-04-07 16:31:34,653 - INFO - POST request for /update_century from ('127.0.0.1', 53423)
-2025-04-07 16:31:34,653 - DEBUG - POST data: {'author_id': ['tlg0026'], 'century': ['6 BCE']}
-2025-04-07 16:31:34,653 - DEBUG - Handling update_century request
-2025-04-07 16:31:34,653 - INFO - Century update request: author_id='tlg0026', century='6 BCE'
-2025-04-07 16:31:34,653 - DEBUG - Creating backup at /Users/james/Documents/GitHub/First1KGreek/authors_data.json.bak
-2025-04-07 16:31:34,655 - INFO - Updating global AUTHORS_DATA: tlg0026 century from '9 BCE' to '6 BCE'
-2025-04-07 16:31:34,655 - DEBUG - Loading author data from /Users/james/Documents/GitHub/First1KGreek/authors_data.json
-2025-04-07 16:31:34,655 - DEBUG - File loaded, size: 6316 bytes
-2025-04-07 16:31:34,656 - DEBUG - JSON parsed successfully with 63 authors
-2025-04-07 16:31:34,656 - INFO - Updating author 'tlg0026' century from '9 BCE' to '6 BCE'
-2025-04-07 16:31:34,656 - DEBUG - Writing to temporary file authors_data.json.tmp
-2025-04-07 16:31:34,657 - DEBUG - Renaming authors_data.json.tmp to authors_data.json
-2025-04-07 16:31:34,657 - DEBUG - Set permissions on authors_data.json to 0o644
-2025-04-07 16:31:34,761 - INFO - File saved successfully, size: 6316 bytes
-2025-04-07 16:31:34,762 - INFO - Updated global AUTHORS_DATA from file
-2025-04-07 16:31:34,762 - DEBUG - Updated PageGenerator's in-memory data
-2025-04-07 16:31:34,763 - INFO - 127.0.0.1 - "POST /update_century HTTP/1.1" 200 -
-2025-04-07 16:31:34,763 - INFO - Century update successful for tlg0026: 6 BCE
-2025-04-07 16:31:34,764 - DEBUG - Request processed in 0.1112 seconds
-2025-04-07 17:14:42,796 - INFO - PageGenerator loaded author data with 63 entries
-2025-04-07 17:14:42,799 - INFO - PageGenerator loaded user preferences with 0 total entries
-2025-04-07 17:14:42,805 - INFO - GET request for /static/css/main.css from ('127.0.0.1', 56487)
-2025-04-07 17:14:42,805 - DEBUG - Serving static file: /static/css/main.css
-2025-04-07 17:14:42,807 - INFO - 127.0.0.1 - "GET /static/css/main.css HTTP/1.1" 200 -
-2025-04-07 17:14:42,808 - DEBUG - Successfully sent 538 bytes
-2025-04-07 17:14:42,809 - DEBUG - Request processed in 0.0045 seconds
-2025-04-07 17:14:42,810 - INFO - PageGenerator loaded author data with 63 entries
-2025-04-07 17:14:42,810 - INFO - PageGenerator loaded user preferences with 0 total entries
-2025-04-07 17:14:42,810 - INFO - GET request for /static/css/authors-table.css from ('127.0.0.1', 56488)
-2025-04-07 17:14:42,810 - DEBUG - Serving static file: /static/css/authors-table.css
-2025-04-07 17:14:42,811 - INFO - 127.0.0.1 - "GET /static/css/authors-table.css HTTP/1.1" 200 -
-2025-04-07 17:14:42,811 - DEBUG - Successfully sent 4811 bytes
-2025-04-07 17:14:42,811 - DEBUG - Request processed in 0.0009 seconds
+2025-04-07 17:55:38,827 - INFO - Loaded author data with 368 entries
+2025-04-07 17:55:38,827 - INFO - Starting First1KGreek Browser - Fixed Version 1.2.0
+2025-04-07 17:55:38,827 - INFO - With dark theme and improved editor detection
+2025-04-07 17:55:38,828 - INFO - Checking port 8000 availability...
+2025-04-07 17:55:38,829 - DEBUG - Port 8000 is available
+2025-04-07 17:55:38,829 - INFO - Starting server on port 8000...
+2025-04-07 17:55:38,829 - INFO - Server started at http://localhost:8000 (took 0.000s)
+2025-04-07 17:55:43,860 - INFO - PageGenerator loaded author data with 368 entries
+2025-04-07 17:55:43,861 - INFO - PageGenerator loaded user preferences with 0 total entries
+2025-04-07 17:55:43,862 - INFO - GET request for / from ('127.0.0.1', 62614)
+2025-04-07 17:55:43,862 - DEBUG - Serving home page
+2025-04-07 17:55:43,862 - INFO - 127.0.0.1 - "GET / HTTP/1.1" 200 -
+2025-04-07 17:55:43,862 - DEBUG - Sending HTML response, length: 906
+2025-04-07 17:55:43,862 - DEBUG - Successfully sent 906 bytes
+2025-04-07 17:55:43,863 - DEBUG - Request processed in 0.0010 seconds
+2025-04-07 17:55:43,864 - INFO - PageGenerator loaded author data with 368 entries
+2025-04-07 17:55:43,867 - INFO - PageGenerator loaded user preferences with 0 total entries
+2025-04-07 17:55:43,880 - INFO - GET request for /static/css/main.css from ('127.0.0.1', 62615)
+2025-04-07 17:55:43,881 - DEBUG - Serving static file: /static/css/main.css
+2025-04-07 17:55:43,881 - INFO - 127.0.0.1 - "GET /static/css/main.css HTTP/1.1" 200 -
+2025-04-07 17:55:43,882 - DEBUG - Successfully sent 538 bytes
+2025-04-07 17:55:43,886 - DEBUG - Request processed in 0.0056 seconds
+2025-04-07 17:55:45,562 - INFO - PageGenerator loaded author data with 368 entries
+2025-04-07 17:55:45,563 - INFO - PageGenerator loaded user preferences with 0 total entries
+2025-04-07 17:55:45,681 - INFO - GET request for /authors from ('127.0.0.1', 62631)
+2025-04-07 17:55:45,682 - DEBUG - Serving authors table page
+2025-04-07 17:55:45,682 - DEBUG - Reloading data from disk
+2025-04-07 17:55:45,695 - INFO - PageGenerator loaded author data with 368 entries
+2025-04-07 17:55:45,696 - INFO - PageGenerator loaded user preferences with 0 total entries
+2025-04-07 17:55:45,696 - DEBUG - Data reload completed in 0.014s
+2025-04-07 17:55:45,732 - INFO - 127.0.0.1 - "GET /authors HTTP/1.1" 200 -
+2025-04-07 17:55:45,733 - DEBUG - Sending HTML response, length: 512046
+2025-04-07 17:55:45,733 - DEBUG - Successfully sent 512046 bytes
+2025-04-07 17:55:45,733 - DEBUG - Request processed in 0.0517 seconds
+2025-04-07 17:55:45,733 - INFO - PageGenerator loaded author data with 368 entries
+2025-04-07 17:55:45,734 - INFO - PageGenerator loaded user preferences with 0 total entries
+2025-04-07 17:55:45,746 - INFO - GET request for /static/css/main.css from ('127.0.0.1', 62632)
+2025-04-07 17:55:45,746 - DEBUG - Serving static file: /static/css/main.css
+2025-04-07 17:55:45,746 - INFO - 127.0.0.1 - "GET /static/css/main.css HTTP/1.1" 200 -
+2025-04-07 17:55:45,746 - DEBUG - Successfully sent 538 bytes
+2025-04-07 17:55:45,747 - DEBUG - Request processed in 0.0006 seconds
+2025-04-07 17:55:45,747 - INFO - PageGenerator loaded author data with 368 entries
+2025-04-07 17:55:45,747 - INFO - PageGenerator loaded user preferences with 0 total entries
+2025-04-07 17:55:45,747 - INFO - GET request for /static/css/authors-table.css from ('127.0.0.1', 62633)
+2025-04-07 17:55:45,747 - DEBUG - Serving static file: /static/css/authors-table.css
+2025-04-07 17:55:45,747 - INFO - 127.0.0.1 - "GET /static/css/authors-table.css HTTP/1.1" 200 -
+2025-04-07 17:55:45,747 - DEBUG - Successfully sent 5017 bytes
+2025-04-07 17:55:45,747 - DEBUG - Request processed in 0.0003 seconds
+2025-04-07 17:55:45,748 - INFO - PageGenerator loaded author data with 368 entries
+2025-04-07 17:55:45,748 - INFO - PageGenerator loaded user preferences with 0 total entries
+2025-04-07 17:55:45,748 - INFO - GET request for /static/js/authors_table.js?v=1744044945 from ('127.0.0.1', 62634)
+2025-04-07 17:55:45,748 - DEBUG - Serving static file: /static/js/authors_table.js
+2025-04-07 17:55:45,748 - INFO - 127.0.0.1 - "GET /static/js/authors_table.js?v=1744044945 HTTP/1.1" 200 -
+2025-04-07 17:55:45,748 - DEBUG - Successfully sent 21868 bytes
+2025-04-07 17:55:45,748 - DEBUG - Request processed in 0.0003 seconds
+2025-04-07 17:56:18,318 - INFO - PageGenerator loaded author data with 368 entries
+2025-04-07 17:56:18,320 - INFO - PageGenerator loaded user preferences with 0 total entries
+2025-04-07 17:56:18,321 - INFO - POST request for /update_century from ('127.0.0.1', 62650)
+2025-04-07 17:56:18,321 - DEBUG - POST data: {'author_id': ['tlg0532'], 'century': ['1 CE']}
+2025-04-07 17:56:18,321 - DEBUG - Handling update_century request
+2025-04-07 17:56:18,321 - INFO - Century update request: author_id='tlg0532', century_input='1 CE'
+2025-04-07 17:56:18,321 - INFO - Parsed century value: 1
+2025-04-07 17:56:18,322 - DEBUG - Creating backup at /Users/james/Documents/GitHub/First1KGreek/authors_data.json.bak
+2025-04-07 17:56:18,323 - INFO - Updating global AUTHORS_DATA: tlg0532 century from '2' to '1'
+2025-04-07 17:56:18,323 - DEBUG - Loading author data from /Users/james/Documents/GitHub/First1KGreek/authors_data.json
+2025-04-07 17:56:18,324 - DEBUG - File loaded, size: 40577 bytes
+2025-04-07 17:56:18,325 - DEBUG - JSON parsed successfully with 368 authors
+2025-04-07 17:56:18,325 - INFO - Updating author 'tlg0532' century from '2' to '1'
+2025-04-07 17:56:18,325 - DEBUG - Writing to temporary file authors_data.json.tmp
+2025-04-07 17:56:18,332 - DEBUG - Renaming authors_data.json.tmp to authors_data.json
+2025-04-07 17:56:18,334 - DEBUG - Set permissions on authors_data.json to 0o644
+2025-04-07 17:56:18,440 - INFO - File saved successfully, size: 34689 bytes
+2025-04-07 17:56:18,440 - INFO - Updated global AUTHORS_DATA from file
+2025-04-07 17:56:18,440 - DEBUG - Updated PageGenerator's in-memory data
+2025-04-07 17:56:18,440 - INFO - 127.0.0.1 - "POST /update_century HTTP/1.1" 200 -
+2025-04-07 17:56:18,440 - INFO - Century update successful for tlg0532: 1
+2025-04-07 17:56:18,440 - DEBUG - Request processed in 0.1196 seconds
+2025-04-07 17:56:22,395 - INFO - PageGenerator loaded author data with 368 entries
+2025-04-07 17:56:22,396 - INFO - PageGenerator loaded user preferences with 0 total entries
+2025-04-07 17:56:22,396 - INFO - GET request for /authors from ('127.0.0.1', 62658)
+2025-04-07 17:56:22,397 - DEBUG - Serving authors table page
+2025-04-07 17:56:22,397 - DEBUG - Reloading data from disk
+2025-04-07 17:56:22,398 - INFO - PageGenerator loaded author data with 368 entries
+2025-04-07 17:56:22,398 - INFO - PageGenerator loaded user preferences with 0 total entries
+2025-04-07 17:56:22,398 - DEBUG - Data reload completed in 0.001s
+2025-04-07 17:56:22,433 - INFO - 127.0.0.1 - "GET /authors HTTP/1.1" 200 -
+2025-04-07 17:56:22,434 - DEBUG - Sending HTML response, length: 512046
+2025-04-07 17:56:22,434 - DEBUG - Successfully sent 512046 bytes
+2025-04-07 17:56:22,434 - DEBUG - Request processed in 0.0374 seconds
+2025-04-07 17:56:22,434 - INFO - PageGenerator loaded author data with 368 entries
+2025-04-07 17:56:22,434 - INFO - PageGenerator loaded user preferences with 0 total entries
+2025-04-07 17:56:22,451 - INFO - GET request for /static/css/main.css from ('127.0.0.1', 62659)
+2025-04-07 17:56:22,452 - DEBUG - Serving static file: /static/css/main.css
+2025-04-07 17:56:22,453 - INFO - 127.0.0.1 - "GET /static/css/main.css HTTP/1.1" 200 -
+2025-04-07 17:56:22,454 - DEBUG - Successfully sent 538 bytes
+2025-04-07 17:56:22,454 - DEBUG - Request processed in 0.0027 seconds
+2025-04-07 17:56:22,455 - INFO - PageGenerator loaded author data with 368 entries
+2025-04-07 17:56:22,455 - INFO - PageGenerator loaded user preferences with 0 total entries
+2025-04-07 17:56:22,455 - INFO - GET request for /static/css/authors-table.css from ('127.0.0.1', 62660)
+2025-04-07 17:56:22,455 - DEBUG - Serving static file: /static/css/authors-table.css
+2025-04-07 17:56:22,456 - INFO - 127.0.0.1 - "GET /static/css/authors-table.css HTTP/1.1" 200 -
+2025-04-07 17:56:22,457 - DEBUG - Successfully sent 5017 bytes
+2025-04-07 17:56:22,457 - DEBUG - Request processed in 0.0015 seconds
+2025-04-07 17:56:22,457 - INFO - PageGenerator loaded author data with 368 entries
+2025-04-07 17:56:22,458 - INFO - PageGenerator loaded user preferences with 0 total entries
+2025-04-07 17:56:22,459 - INFO - GET request for /static/js/authors_table.js?v=1744044982 from ('127.0.0.1', 62661)
+2025-04-07 17:56:22,459 - DEBUG - Serving static file: /static/js/authors_table.js
+2025-04-07 17:56:22,459 - INFO - 127.0.0.1 - "GET /static/js/authors_table.js?v=1744044982 HTTP/1.1" 200 -
+2025-04-07 17:56:22,459 - DEBUG - Successfully sent 21868 bytes
+2025-04-07 17:56:22,459 - DEBUG - Request processed in 0.0004 seconds
+2025-04-07 17:56:33,611 - INFO - PageGenerator loaded author data with 368 entries
+2025-04-07 17:56:33,614 - INFO - PageGenerator loaded user preferences with 0 total entries
+2025-04-07 17:56:33,614 - INFO - POST request for /update_century from ('127.0.0.1', 62673)
+2025-04-07 17:56:33,615 - DEBUG - POST data: {'author_id': ['tlg0532'], 'century': ['2 CE']}
+2025-04-07 17:56:33,615 - DEBUG - Handling update_century request
+2025-04-07 17:56:33,615 - INFO - Century update request: author_id='tlg0532', century_input='2 CE'
+2025-04-07 17:56:33,615 - INFO - Parsed century value: 2
+2025-04-07 17:56:33,615 - DEBUG - Creating backup at /Users/james/Documents/GitHub/First1KGreek/authors_data.json.bak
+2025-04-07 17:56:33,617 - INFO - Updating global AUTHORS_DATA: tlg0532 century from '1' to '2'
+2025-04-07 17:56:33,618 - DEBUG - Loading author data from /Users/james/Documents/GitHub/First1KGreek/authors_data.json
+2025-04-07 17:56:33,620 - DEBUG - File loaded, size: 34689 bytes
+2025-04-07 17:56:33,620 - DEBUG - JSON parsed successfully with 368 authors
+2025-04-07 17:56:33,621 - INFO - Updating author 'tlg0532' century from '1' to '2'
+2025-04-07 17:56:33,621 - DEBUG - Writing to temporary file authors_data.json.tmp
+2025-04-07 17:56:33,624 - DEBUG - Renaming authors_data.json.tmp to authors_data.json
+2025-04-07 17:56:33,625 - DEBUG - Set permissions on authors_data.json to 0o644
+2025-04-07 17:56:33,729 - INFO - File saved successfully, size: 34689 bytes
+2025-04-07 17:56:33,729 - INFO - Updated global AUTHORS_DATA from file
+2025-04-07 17:56:33,729 - DEBUG - Updated PageGenerator's in-memory data
+2025-04-07 17:56:33,729 - INFO - 127.0.0.1 - "POST /update_century HTTP/1.1" 200 -
+2025-04-07 17:56:33,729 - INFO - Century update successful for tlg0532: 2
+2025-04-07 17:56:33,729 - DEBUG - Request processed in 0.1146 seconds
+2025-04-07 17:56:38,890 - INFO - PageGenerator loaded author data with 368 entries
+2025-04-07 17:56:38,891 - INFO - PageGenerator loaded user preferences with 0 total entries
+2025-04-07 17:56:38,891 - INFO - GET request for /authors from ('127.0.0.1', 62674)
+2025-04-07 17:56:38,892 - DEBUG - Serving authors table page
+2025-04-07 17:56:38,892 - DEBUG - Reloading data from disk
+2025-04-07 17:56:38,892 - INFO - PageGenerator loaded author data with 368 entries
+2025-04-07 17:56:38,892 - INFO - PageGenerator loaded user preferences with 0 total entries
+2025-04-07 17:56:38,892 - DEBUG - Data reload completed in 0.001s
+2025-04-07 17:56:38,919 - INFO - 127.0.0.1 - "GET /authors HTTP/1.1" 200 -
+2025-04-07 17:56:38,919 - DEBUG - Sending HTML response, length: 512046
+2025-04-07 17:56:38,919 - DEBUG - Successfully sent 512046 bytes
+2025-04-07 17:56:38,919 - DEBUG - Request processed in 0.0278 seconds
+2025-04-07 17:56:38,920 - INFO - PageGenerator loaded author data with 368 entries
+2025-04-07 17:56:38,920 - INFO - PageGenerator loaded user preferences with 0 total entries
+2025-04-07 17:56:38,929 - INFO - GET request for /static/css/main.css from ('127.0.0.1', 62675)
+2025-04-07 17:56:38,930 - DEBUG - Serving static file: /static/css/main.css
+2025-04-07 17:56:38,930 - INFO - 127.0.0.1 - "GET /static/css/main.css HTTP/1.1" 200 -
+2025-04-07 17:56:38,930 - DEBUG - Successfully sent 538 bytes
+2025-04-07 17:56:38,931 - DEBUG - Request processed in 0.0016 seconds
+2025-04-07 17:56:38,931 - INFO - PageGenerator loaded author data with 368 entries
+2025-04-07 17:56:38,931 - INFO - PageGenerator loaded user preferences with 0 total entries
+2025-04-07 17:56:38,932 - INFO - GET request for /static/css/authors-table.css from ('127.0.0.1', 62676)
+2025-04-07 17:56:38,932 - DEBUG - Serving static file: /static/css/authors-table.css
+2025-04-07 17:56:38,932 - INFO - 127.0.0.1 - "GET /static/css/authors-table.css HTTP/1.1" 200 -
+2025-04-07 17:56:38,932 - DEBUG - Successfully sent 5017 bytes
+2025-04-07 17:56:38,932 - DEBUG - Request processed in 0.0003 seconds
+2025-04-07 17:56:38,932 - INFO - PageGenerator loaded author data with 368 entries
+2025-04-07 17:56:38,932 - INFO - PageGenerator loaded user preferences with 0 total entries
+2025-04-07 17:56:38,932 - INFO - GET request for /static/js/authors_table.js?v=1744044998 from ('127.0.0.1', 62677)
+2025-04-07 17:56:38,932 - DEBUG - Serving static file: /static/js/authors_table.js
+2025-04-07 17:56:38,933 - INFO - 127.0.0.1 - "GET /static/js/authors_table.js?v=1744044998 HTTP/1.1" 200 -
+2025-04-07 17:56:38,933 - DEBUG - Successfully sent 21868 bytes
+2025-04-07 17:56:38,933 - DEBUG - Request processed in 0.0003 seconds
+2025-04-07 17:57:30,305 - INFO - PageGenerator loaded author data with 368 entries
+2025-04-07 17:57:30,306 - INFO - PageGenerator loaded user preferences with 0 total entries
+2025-04-07 17:57:30,306 - INFO - GET request for /static/css/main.css from ('127.0.0.1', 62699)
+2025-04-07 17:57:30,306 - DEBUG - Serving static file: /static/css/main.css
+2025-04-07 17:57:30,307 - INFO - 127.0.0.1 - "GET /static/css/main.css HTTP/1.1" 200 -
+2025-04-07 17:57:30,307 - DEBUG - Successfully sent 538 bytes
+2025-04-07 17:57:30,307 - DEBUG - Request processed in 0.0005 seconds
+2025-04-07 17:57:30,307 - INFO - PageGenerator loaded author data with 368 entries
+2025-04-07 17:57:30,308 - INFO - PageGenerator loaded user preferences with 0 total entries
+2025-04-07 17:57:30,308 - INFO - GET request for /static/css/authors-table.css from ('127.0.0.1', 62700)
+2025-04-07 17:57:30,308 - DEBUG - Serving static file: /static/css/authors-table.css
+2025-04-07 17:57:30,308 - INFO - 127.0.0.1 - "GET /static/css/authors-table.css HTTP/1.1" 200 -
+2025-04-07 17:57:30,308 - DEBUG - Successfully sent 5017 bytes
+2025-04-07 17:57:30,308 - DEBUG - Request processed in 0.0005 seconds
