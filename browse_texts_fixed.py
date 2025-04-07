@@ -1566,8 +1566,12 @@ def handle_shutdown(sig, frame):
         try:
             server_instance.shutdown()
             logger.info("Server has been shut down via signal handler")
+            # Force exit after a short delay
+            threading.Timer(1.0, lambda: os.kill(os.getpid(), signal.SIGKILL)).start()
         except Exception as e:
             logger.error(f"Error during signal-triggered shutdown: {str(e)}")
+            # Force exit even if shutdown failed
+            threading.Timer(1.0, lambda: os.kill(os.getpid(), signal.SIGKILL)).start()
 
 if __name__ == "__main__":
     try:
