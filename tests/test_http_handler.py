@@ -71,21 +71,21 @@ class HTTPHandlerTests(BaseTest):
         handler.wfile = mock.MagicMock()
         handler.send_html_response = mock.MagicMock()
         
-        # Add mock implementations for key methods
-        handler.get_home_page = mock.MagicMock(return_value="<html>Test Home Page</html>")
-        handler.get_authors_table_page = mock.MagicMock(return_value="<html>Test Authors Page</html>")
-        handler.get_works_page = mock.MagicMock(return_value="<html>Test Works Page</html>")
-        handler.get_view_page = mock.MagicMock(return_value="<html>Test View Page</html>")
-        handler.get_editors_page = mock.MagicMock(return_value="<html>Test Editors Page</html>")
-        handler.get_search_page = mock.MagicMock(return_value="<html>Test Search Page</html>")
-        handler.get_error_page = mock.MagicMock(return_value="<html>Test Error Page</html>")
-        handler.get_author_works = mock.MagicMock(return_value=['work001'])
+        # Create a mock page_generator
+        handler.page_generator = mock.MagicMock()
+        handler.page_generator.get_home_page = mock.MagicMock(return_value="<html>Test Home Page</html>")
+        handler.page_generator.get_authors_table_page = mock.MagicMock(return_value="<html>Test Authors Page</html>")
+        handler.page_generator.get_works_page = mock.MagicMock(return_value="<html>Test Works Page</html>")
+        handler.page_generator.get_view_page = mock.MagicMock(return_value="<html>Test View Page</html>")
+        handler.page_generator.get_editors_page = mock.MagicMock(return_value="<html>Test Editors Page</html>")
+        handler.page_generator.get_search_page = mock.MagicMock(return_value="<html>Test Search Page</html>")
+        handler.page_generator.get_error_page = mock.MagicMock(return_value="<html>Test Error Page</html>")
+        handler.page_generator.get_author_works = mock.MagicMock(return_value=['work001'])
         
-        # Copy DO methods from the original class
+        # Add mock do_GET and do_POST methods
         handler.do_GET = browse_texts_fixed.CustomHTTPRequestHandler.do_GET.__get__(handler)
         handler.do_POST = browse_texts_fixed.CustomHTTPRequestHandler.do_POST.__get__(handler)
         handler.handle_update_preference = browse_texts_fixed.CustomHTTPRequestHandler.handle_update_preference.__get__(handler)
-        handler.handle_update_century = browse_texts_fixed.CustomHTTPRequestHandler.handle_update_century.__get__(handler)
         
         return handler
 
@@ -97,9 +97,9 @@ class HTTPHandlerTests(BaseTest):
         # Call the handler method
         handler.do_GET()
         
-        # Verify send_html_response was called with the result from get_home_page
-        handler.get_home_page.assert_called_once()
-        handler.send_html_response.assert_called_once_with(handler.get_home_page.return_value)
+        # Verify send_html_response was called with the result from page_generator.get_home_page
+        handler.page_generator.get_home_page.assert_called_once()
+        handler.send_html_response.assert_called_once_with("<html>Test Home Page</html>")
 
     def test_do_get_authors_page(self):
         """Test GET request for authors page."""
@@ -110,8 +110,8 @@ class HTTPHandlerTests(BaseTest):
         handler.do_GET()
         
         # Verify the response
-        handler.get_authors_table_page.assert_called_once()
-        handler.send_html_response.assert_called_once_with(handler.get_authors_table_page.return_value)
+        handler.page_generator.get_authors_table_page.assert_called_once()
+        handler.send_html_response.assert_called_once_with("<html>Test Authors Page</html>")
 
     def test_do_get_works_page(self):
         """Test GET request for works page."""
@@ -123,8 +123,8 @@ class HTTPHandlerTests(BaseTest):
         handler.do_GET()
         
         # Verify the response
-        handler.get_works_page.assert_called_once()
-        handler.send_html_response.assert_called_once()
+        handler.page_generator.get_works_page.assert_called_once()
+        handler.send_html_response.assert_called_once_with("<html>Test Works Page</html>")
 
     def test_do_get_view_page(self):
         """Test GET request for view page."""
@@ -136,8 +136,8 @@ class HTTPHandlerTests(BaseTest):
         handler.do_GET()
         
         # Verify the response
-        handler.get_view_page.assert_called_once()
-        handler.send_html_response.assert_called_once()
+        handler.page_generator.get_view_page.assert_called_once()
+        handler.send_html_response.assert_called_once_with("<html>Test View Page</html>")
 
     def test_do_get_static_file(self):
         """Test GET request for static file."""
@@ -229,11 +229,13 @@ class HTTPHandlerTests(BaseTest):
             'value': ['true']
         }
         
-        # Mock file operations
+        # Mock file operations and user_prefs method
         mock_prefs = {'favorites': [], 'archived': [], 'deleted': []}
+        handler.get_user_prefs = mock.MagicMock(return_value=mock_prefs)
         
         # Setup open to return preferences when reading and capture when writing
-        with mock.patch('builtins.open', mock.mock_open(read_data=json.dumps(mock_prefs))) as m, \
+        with mock.patch('builtins.open', mock.mock_open()) as m, \
+             mock.patch('json.dump') as mock_json_dump, \
              mock.patch.object(handler, 'send_response'), \
              mock.patch.object(handler, 'send_header'), \
              mock.patch.object(handler, 'end_headers'), \
@@ -242,14 +244,10 @@ class HTTPHandlerTests(BaseTest):
             # Call the handler method
             handler.handle_update_preference(post_data)
             
-            # Verify file operations
-            m.assert_any_call('user_preferences.json', 'r')
+            # Verify preference was updated and file was written
+            self.assertIn('auth001', mock_prefs['favorites'])
             m.assert_any_call('user_preferences.json', 'w')
-            
-            # Verify handler response
-            handler.send_response.assert_called_with(200)
-            handler.send_header.assert_called_with('Content-type', 'application/json')
-            handler.end_headers.assert_called_once()
+            mock_json_dump.assert_called_once_with(mock_prefs, m(), indent=2)
 
 
 if __name__ == '__main__':

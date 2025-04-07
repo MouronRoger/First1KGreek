@@ -101,368 +101,6 @@ logger.info("With dark theme and improved editor detection")
 # STYLESHEET REFERENCES
 # ====================================================================
 # Stylesheets moved to external files in static/css
-# For reference, keeping the original definitions commented out
-
-# Reader mode stylesheet
-"""
-READER_STYLESHEET = '''
-body { 
-    font-family: 'New Athena Unicode', 'GFS Artemisia', 'Arial Unicode MS', 'Lucida Sans Unicode', 'Cardo', serif; 
-    margin: 0; 
-    padding: 0;
-    line-height: 1.8; 
-    background-color: #2a2a2a; 
-    color: #f2f2f2; 
-}
-h1, h2, h3 { 
-    color: #fff;
-    font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif;
-    margin-top: 1.5em;
-    margin-bottom: 0.5em;
-}
-a { color: #4299e1; text-decoration: none; }
-a:hover { text-decoration: underline; }
-.container { 
-    max-width: 800px; 
-    margin: 0 auto; 
-    padding: 20px;
-    background-color: #333;
-    box-shadow: 0 0 10px rgba(0,0,0,0.3);
-    min-height: 100vh;
-}
-'''
-"""
-
-# Main stylesheet
-"""
-MAIN_STYLESHEET = '''
-body { 
-    font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif; 
-    margin: 0; 
-    padding: 0;
-    line-height: 1.6; 
-    background-color: #1a1a1a; 
-    color: #ffffff; 
-}
-h1, h2, h3 { 
-    color: #4299e1;
-    margin-top: 1.5em;
-    margin-bottom: 0.5em;
-}
-a { color: #4299e1; text-decoration: none; }
-a:hover { text-decoration: underline; }
-.container { 
-    max-width: 1000px; 
-    margin: 0 auto; 
-    padding: 20px;
-    background-color: #2d2d2d;
-    box-shadow: 0 0 10px rgba(0,0,0,0.5);
-    min-height: 100vh;
-}
-'''
-"""
-
-# Authors table stylesheet
-"""
-AUTHORS_TABLE_STYLESHEET = '''
-.authors-table {
-    width: 100%;
-    border-collapse: collapse;
-    margin: 20px 0;
-    background-color: #333;
-    border-radius: 5px;
-    overflow: hidden;
-    table-layout: fixed;
-}
-
-.authors-table th {
-    padding: 12px 15px;
-    text-align: left;
-    background-color: #1a365d;
-    color: white;
-    font-weight: bold;
-    cursor: pointer;
-}
-
-.authors-table th:hover {
-    background-color: #2a4365;
-}
-
-.authors-table td {
-    padding: 10px 15px;
-    border-bottom: 1px solid #444;
-    white-space: nowrap;
-    overflow: hidden;
-    text-overflow: ellipsis;
-}
-
-/* Fixed column widths */
-.authors-table th:nth-child(1),
-.authors-table td:nth-child(1) {
-    width: 20ch;
-}
-
-.authors-table th:nth-child(2),
-.authors-table td:nth-child(2) {
-    width: 12ch;
-}
-
-.authors-table th:nth-child(3),
-.authors-table td:nth-child(3) {
-    width: 8ch;
-}
-
-.authors-table th:nth-child(4),
-.authors-table td:nth-child(4) {
-    width: 15ch;
-}
-
-.authors-table th:nth-child(5),
-.authors-table td:nth-child(5) {
-    width: auto;
-}
-
-.authors-table tr:hover {
-    background-color: #3a3a3a;
-}
-
-.action-btn {
-    padding: 5px 10px;
-    margin-right: 5px;
-    border: none;
-    border-radius: 3px;
-    cursor: pointer;
-    color: white;
-}
-
-.favorite-btn {
-    background-color: #f6ad55;
-}
-
-.favorite-btn:hover {
-    background-color: #ed8936;
-}
-
-.favorite-btn.active {
-    background-color: #ed8936;
-}
-
-.archive-btn {
-    background-color: #68d391;
-}
-
-.archive-btn:hover {
-    background-color: #48bb78;
-}
-
-.archive-btn.active {
-    background-color: #48bb78;
-}
-
-.delete-btn {
-    background-color: #fc8181;
-}
-
-.delete-btn:hover {
-    background-color: #f56565;
-}
-
-.delete-btn.active {
-    background-color: #f56565;
-}
-
-.edit-btn {
-    background-color: #4299e1;
-}
-
-.edit-btn:hover {
-    background-color: #3182ce;
-}
-
-.status-filters, .century-filters {
-    margin: 10px 0;
-}
-
-.status-filters button, .century-filters button {
-    padding: 8px 15px;
-    margin-right: 10px;
-    background-color: #2d3748;
-    color: white;
-    border: none;
-    border-radius: 4px;
-    cursor: pointer;
-}
-
-.status-filters button:hover, .century-filters button:hover {
-    background-color: #4a5568;
-}
-
-.status-filters button.active, .century-filters button.active {
-    background-color: #3182ce;
-}
-
-.pagination {
-    margin: 20px 0;
-    text-align: center;
-}
-
-.pagination button {
-    padding: 8px 15px;
-    margin: 0 5px;
-    background-color: #2d3748;
-    color: white;
-    border: none;
-    border-radius: 4px;
-    cursor: pointer;
-}
-
-.pagination button:hover {
-    background-color: #4a5568;
-}
-
-.pagination button.active {
-    background-color: #3182ce;
-}
-
-.search-filter {
-    margin: 20px 0;
-    padding: 20px;
-    background-color: #2a4365;
-    border-radius: 5px;
-}
-
-.search-filter input[type="text"] {
-    padding: 10px;
-    width: 70%;
-    border: 1px solid #444;
-    background-color: #333;
-    color: white;
-    border-radius: 4px;
-}
-
-.search-filter button {
-    padding: 10px 20px;
-    background-color: #3182ce;
-    color: white;
-    border: none;
-    cursor: pointer;
-    border-radius: 4px;
-    margin-left: 10px;
-}
-
-.search-filter button:hover {
-    background-color: #2c5282;
-}
-
-.favorites-star {
-    color: #f6ad55;
-    font-size: 1.2em;
-    margin-right: 5px;
-}
-
-.archived-icon {
-    color: #68d391;
-    font-size: 1.2em;
-    margin-right: 5px;
-}
-
-/* Century edit modal */
-.modal {
-    display: none;
-    position: fixed;
-    z-index: 1000;
-    left: 0;
-    top: 0;
-    width: 100%;
-    height: 100%;
-    background-color: rgba(0, 0, 0, 0.5);
-}
-
-.modal-content {
-    background-color: #2d2d2d;
-    margin: 15% auto;
-    padding: 20px;
-    border-radius: 5px;
-    width: 50%;
-    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
-}
-
-.modal-header {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    border-bottom: 1px solid #444;
-    padding-bottom: 10px;
-    margin-bottom: 20px;
-}
-
-.modal-header h2 {
-    margin: 0;
-    color: #4299e1;
-}
-
-.close-modal {
-    color: #aaa;
-    font-size: 28px;
-    font-weight: bold;
-    cursor: pointer;
-}
-
-.close-modal:hover {
-    color: #fff;
-}
-
-.modal-body {
-    margin-bottom: 20px;
-}
-
-.modal-body label {
-    display: block;
-    margin-bottom: 5px;
-    color: #eee;
-}
-
-.modal-body input {
-    width: 100%;
-    padding: 8px;
-    margin-bottom: 15px;
-    border: 1px solid #444;
-    background-color: #333;
-    color: white;
-    border-radius: 4px;
-}
-
-.modal-footer {
-    text-align: right;
-}
-
-.modal-footer button {
-    padding: 8px 16px;
-    margin-left: 10px;
-    border: none;
-    border-radius: 4px;
-    cursor: pointer;
-}
-
-.save-btn {
-    background-color: #4299e1;
-    color: white;
-}
-
-.save-btn:hover {
-    background-color: #3182ce;
-}
-
-.cancel-btn {
-    background-color: #718096;
-    color: white;
-}
-
-.cancel-btn:hover {
-    background-color: #4a5568;
-}
-'''
-"""
 
 # ====================================================================
 # UTILITY FUNCTIONS
@@ -590,12 +228,12 @@ class PageGenerator:
         Returns:
             str: The complete HTML for the home page
         """
-        html = '''
+        html = f'''
         <!DOCTYPE html>
         <html>
         <head>
             <title>First1KGreek Browser</title>
-            <link rel="stylesheet" href="/static/css/main.css">
+            <link rel="stylesheet" href="/static/css/main.css?v={int(time.time())}">
         </head>
         <body>
             <div class="container">
@@ -637,8 +275,8 @@ class PageGenerator:
         <html>
         <head>
             <title>Authors Table</title>
-            <link rel="stylesheet" href="/static/css/main.css">
-            <link rel="stylesheet" href="/static/css/authors-table.css">
+            <link rel="stylesheet" href="/static/css/main.css?v={int(time.time())}">
+            <link rel="stylesheet" href="/static/css/authors-table.css?v={int(time.time())}">
             <script id="user-prefs" type="application/json">
                 {json.dumps(self.user_prefs)}
             </script>
@@ -849,7 +487,7 @@ class PageGenerator:
         <html>
         <head>
             <title>Works by {author_name}</title>
-            <link rel="stylesheet" href="/static/css/main.css">
+            <link rel="stylesheet" href="/static/css/main.css?v={int(time.time())}">
             <style>
                 .work-item {{
                     margin-bottom: 15px;
@@ -930,7 +568,7 @@ class PageGenerator:
         <html>
         <head>
             <title>{work_id} by {author_name}</title>
-            <link rel="stylesheet" href="/static/css/reader.css">
+            <link rel="stylesheet" href="/static/css/reader.css?v={int(time.time())}">
             <style>
                 .view-toggle {{
                     margin: 10px 0;
@@ -1088,12 +726,12 @@ class PageGenerator:
             
         # TODO: Implement proper editors browsing functionality
         """
-        html = '''
+        html = f'''
         <!DOCTYPE html>
         <html>
         <head>
             <title>Editors</title>
-            <link rel="stylesheet" href="/static/css/main.css">
+            <link rel="stylesheet" href="/static/css/main.css?v={int(time.time())}">
         </head>
         <body>
             <div class="container">
@@ -1119,30 +757,30 @@ class PageGenerator:
         # TODO: Implement full-text search functionality
         # TODO: Consider adding vector search capabilities
         """
-        html = '''
+        html = f'''
         <!DOCTYPE html>
         <html>
         <head>
             <title>Search Texts</title>
-            <link rel="stylesheet" href="/static/css/main.css">
+            <link rel="stylesheet" href="/static/css/main.css?v={int(time.time())}">
             <style>
-                .search-form {
+                .search-form {{
                     margin: 20px 0;
                     padding: 20px;
                     background-color: #333;
                     border-radius: 5px;
-                }
+                }}
                 
-                .search-form input[type="text"] {
+                .search-form input[type="text"] {{
                     padding: 10px;
                     width: 70%;
                     background-color: #444;
                     color: white;
                     border: 1px solid #555;
                     border-radius: 4px;
-                }
+                }}
                 
-                .search-form button {
+                .search-form button {{
                     padding: 10px 20px;
                     background-color: #3182ce;
                     color: white;
@@ -1150,11 +788,11 @@ class PageGenerator:
                     border-radius: 4px;
                     cursor: pointer;
                     margin-left: 10px;
-                }
+                }}
                 
-                .search-form button:hover {
+                .search-form button:hover {{
                     background-color: #2c5282;
-                }
+                }}
             </style>
         </head>
         <body>
@@ -1192,7 +830,7 @@ class PageGenerator:
         <html>
         <head>
             <title>Error</title>
-            <link rel="stylesheet" href="/static/css/main.css">
+            <link rel="stylesheet" href="/static/css/main.css?v={int(time.time())}">
             <style>
                 .error-container {{
                     background-color: #422;
