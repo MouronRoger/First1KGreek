@@ -668,7 +668,38 @@ class PageGenerator:
             for item in os.listdir(author_dir):
                 work_path = os.path.join(author_dir, item)
                 if os.path.isdir(work_path) and not item.startswith('__'):
-                    works.append(item)
+                    # Get more information about the work
+                    work_info = {
+                        'id': item,
+                        'title': item,  # Default to directory name
+                        'files': []
+                    }
+                    
+                    # Check if there's any metadata available
+                    cts_file = os.path.join(work_path, '__cts__.xml')
+                    if os.path.exists(cts_file):
+                        try:
+                            with open(cts_file, 'r', encoding='utf-8') as f:
+                                content = f.read()
+                                title_match = re.search(r'<ti:title[^>]*>(.*?)</ti:title>', content)
+                                if title_match:
+                                    work_info['title'] = title_match.group(1).strip()
+                        except Exception as e:
+                            logger.error(f"Error reading metadata for {work_path}: {str(e)}")
+                    
+                    # Get file list
+                    try:
+                        for file in os.listdir(work_path):
+                            file_path = os.path.join(work_path, file)
+                            if os.path.isfile(file_path) and not file.startswith('__'):
+                                work_info['files'].append({
+                                    'name': file,
+                                    'type': file.split('.')[-1] if '.' in file else 'unknown'
+                                })
+                    except Exception as e:
+                        logger.error(f"Error listing files for {work_path}: {str(e)}")
+                    
+                    works.append(work_info)
         
         return works
     
@@ -719,11 +750,11 @@ class PageGenerator:
         
         # Add each work as a list item
         if works:
-            for work_id in works:
+            for work_info in works:
                 html += f'''
                     <div class="work-item">
-                        <div class="work-title">{work_id}</div>
-                        <a href="/view?author_id={author_id}&work_id={work_id}">View Content</a>
+                        <div class="work-title">{work_info['title']}</div>
+                        <a href="/view?author_id={author_id}&work_id={work_info['id']}">View Content</a>
                     </div>
                 '''
         else:
@@ -745,6 +776,7 @@ class PageGenerator:
         query_params = urllib.parse.parse_qs(query_string)
         author_id = query_params.get('author_id', [''])[0]
         work_id = query_params.get('work_id', [''])[0]
+        view_mode = query_params.get('view_mode', ['readable'])[0]
         
         if not author_id or not work_id:
             return self.get_error_page("Missing author_id or work_id parameter")
@@ -759,6 +791,36 @@ class PageGenerator:
         <head>
             <title>{work_id} by {author_name}</title>
             <link rel="stylesheet" href="/static/css/reader.css">
+            <style>
+                .view-toggle {{
+                    margin: 10px 0;
+                    text-align: right;
+                }}
+                .view-toggle a {{
+                    display: inline-block;
+                    padding: 8px 16px;
+                    background-color: #2d3748;
+                    color: white;
+                    text-decoration: none;
+                    border-radius: 4px;
+                    margin-left: 10px;
+                }}
+                .view-toggle a.active {{
+                    background-color: #3182ce;
+                }}
+                .view-toggle a:hover {{
+                    background-color: #4a5568;
+                }}
+                pre.xml-view {{
+                    background-color: #222;
+                    padding: 15px;
+                    border-radius: 5px;
+                    overflow-x: auto;
+                    font-family: monospace;
+                    line-height: 1.4;
+                    font-size: 0.9em;
+                }}
+            </style>
         </head>
         <body>
             <div class="container">
@@ -766,8 +828,15 @@ class PageGenerator:
                 <p>Author: {author_name}</p>
                 <p><a href="/works?author_id={author_id}">&laquo; Back to Works</a></p>
                 
+                <div class="view-toggle">
+                    <a href="/view?author_id={author_id}&work_id={work_id}&view_mode=readable" 
+                       class="{'' if view_mode == 'readable' else 'active'}">Human Readable</a>
+                    <a href="/view?author_id={author_id}&work_id={work_id}&view_mode=raw" 
+                       class="{'' if view_mode == 'raw' else 'active'}">Raw XML</a>
+                </div>
+                
                 <div class="work-content">
-                    {self.get_work_content(author_id, work_id)}
+                    {self.get_work_content(author_id, work_id, view_mode)}
                 </div>
             </div>
         </body>
@@ -776,7 +845,7 @@ class PageGenerator:
         
         return html
     
-    def get_work_content(self, author_id, work_id):
+    def get_work_content(self, author_id, work_id, view_mode='readable'):
         """Get the content of a work"""
         work_path = os.path.join('data', author_id, work_id)
         content_start_time = time.time()
@@ -823,13 +892,16 @@ class PageGenerator:
                         with open(file_path, 'r', encoding='utf-8') as f:
                             file_content = f.read()
                             if file.endswith('.xml'):
-                                # Basic XML handling - just escape and display for now
-                                file_content = escape(file_content)
+                                if view_mode == 'raw':
+                                    # For raw XML view, just escape and display in a pre tag
+                                    content += f"<li><h3>{file} (Raw XML)</h3><pre class='xml-view'>{escape(file_content)}</pre></li>"
+                                else:
+                                    # Basic XML handling for readable view - just escape and display for now
+                                    content += f"<li><h3>{file}</h3><pre>{escape(file_content)}</pre></li>"
                                 xml_files += 1
                             elif file.endswith('.txt'):
                                 text_files += 1
-                                
-                            content += f"<li><h3>{file}</h3><pre>{file_content}</pre></li>"
+                                content += f"<li><h3>{file}</h3><pre>{file_content}</pre></li>"
                     except UnicodeDecodeError:
                         logger.error(f"Unicode decode error for file: {file_path}")
                         content += f"<li><h3>{file}</h3><p>Error: This file contains non-UTF-8 characters and cannot be displayed.</p></li>"
@@ -1011,8 +1083,24 @@ class CustomHTTPRequestHandler(http.server.SimpleHTTPRequestHandler):
                 params = urllib.parse.parse_qs(parsed_path.query)
                 author_id = params.get('author_id', [''])[0]
                 work_id = params.get('work_id', [''])[0]
-                logger.debug(f"Serving view page for author_id: {author_id}, work_id: {work_id}")
+                view_mode = params.get('view_mode', ['readable'])[0]
+                logger.debug(f"Serving view page for author_id: {author_id}, work_id: {work_id}, view_mode: {view_mode}")
                 self.send_html_response(self.page_generator.get_view_page(parsed_path.query))
+            elif path == '/get_author_works':
+                author_id = urllib.parse.parse_qs(parsed_path.query).get('author_id', [''])[0]
+                if author_id:
+                    logger.debug(f"Getting works for author_id: {author_id}")
+                    try:
+                        works = self.page_generator.get_author_works(author_id)
+                        logger.info(f"Found {len(works)} works for author {author_id}")
+                        self.send_json_response(works)
+                    except Exception as e:
+                        logger.error(f"Error getting works for {author_id}: {str(e)}")
+                        logger.error(traceback.format_exc())
+                        self.send_error(500, f"Error retrieving works: {str(e)}")
+                else:
+                    logger.warning("Missing author_id parameter")
+                    self.send_error(400, "Missing author_id parameter")
             elif path == '/editors':
                 logger.debug("Serving editors page")
                 self.send_html_response(self.page_generator.get_editors_page())
@@ -1047,6 +1135,9 @@ class CustomHTTPRequestHandler(http.server.SimpleHTTPRequestHandler):
             if path == '/update_preference':
                 logger.debug("Handling update_preference request")
                 self.handle_update_preference(post_data)
+            elif path == '/update_work_preference':
+                logger.debug("Handling update_work_preference request")
+                self.handle_update_work_preference(post_data)
             elif path == '/update_century':
                 logger.debug("Handling update_century request")
                 self.handle_update_century(post_data)
@@ -1102,6 +1193,57 @@ class CustomHTTPRequestHandler(http.server.SimpleHTTPRequestHandler):
             logger.error(f"Error updating preferences: {str(e)}")
             logger.error(traceback.format_exc())
             self.send_error(500, f"Error updating preferences: {str(e)}")
+
+    def handle_update_work_preference(self, post_data):
+        """Handle updating user preferences for works"""
+        author_id = post_data.get('author_id', [''])[0]
+        work_id = post_data.get('work_id', [''])[0]
+        pref_type = post_data.get('pref_type', [''])[0]
+        value = post_data.get('value', ['false'])[0].lower() == 'true'
+
+        if not author_id or not work_id or not pref_type:
+            self.send_error(400, "Missing required parameters")
+            return
+
+        try:
+            # Load current preferences
+            try:
+                with open('user_preferences.json', 'r') as f:
+                    prefs = json.load(f)
+            except (FileNotFoundError, json.JSONDecodeError):
+                prefs = {'favorites': [], 'archived': [], 'deleted': [], 
+                         'work_favorites': [], 'work_archived': [], 'work_deleted': []}
+
+            # Ensure work preference keys exist
+            for key in ['work_favorites', 'work_archived', 'work_deleted']:
+                if key not in prefs:
+                    prefs[key] = []
+
+            # Create a unique work identifier
+            work_identifier = f"{author_id}/{work_id}"
+            
+            # Determine which preference list to update
+            work_pref_key = f"work_{pref_type}"
+            
+            # Update preference
+            if value and work_identifier not in prefs[work_pref_key]:
+                prefs[work_pref_key].append(work_identifier)
+            elif not value and work_identifier in prefs[work_pref_key]:
+                prefs[work_pref_key].remove(work_identifier)
+
+            # Save updated preferences
+            with open('user_preferences.json', 'w') as f:
+                json.dump(prefs, f, indent=2)
+
+            self.send_response(200)
+            self.send_header('Content-type', 'application/json')
+            self.end_headers()
+            self.wfile.write(json.dumps({'success': True}).encode())
+
+        except Exception as e:
+            logger.error(f"Error updating work preferences: {str(e)}")
+            logger.error(traceback.format_exc())
+            self.send_error(500, f"Error updating work preferences: {str(e)}")
 
     def handle_update_century(self, post_data):
         """Handle updating author century"""
@@ -1308,6 +1450,25 @@ class CustomHTTPRequestHandler(http.server.SimpleHTTPRequestHandler):
             logger.debug(f"Successfully sent {len(encoded_html)} bytes")
         except Exception as e:
             logger.error(f"Error sending HTML response: {str(e)}")
+            logger.error(traceback.format_exc())
+            self.send_error(500, f"Error sending response: {str(e)}")
+            
+    def send_json_response(self, data):
+        """Send a JSON response"""
+        try:
+            encoded_json = json.dumps(data).encode('utf-8')
+            self.send_response(200)
+            self.send_header('Content-type', 'application/json; charset=utf-8')
+            self.send_header('Content-Length', len(encoded_json))
+            # Add cache-busting headers to ensure fresh content
+            self.send_header('Cache-Control', 'no-cache, no-store, must-revalidate')
+            self.send_header('Pragma', 'no-cache')
+            self.send_header('Expires', '0')
+            self.end_headers()
+            self.wfile.write(encoded_json)
+            logger.debug(f"Sending JSON response, length: {len(encoded_json)}")
+        except Exception as e:
+            logger.error(f"Error sending JSON response: {str(e)}")
             logger.error(traceback.format_exc())
             self.send_error(500, f"Error sending response: {str(e)}")
             
