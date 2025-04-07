@@ -1,573 +1,70 @@
-2025-04-07 18:57:58,379 - INFO - Loaded author data with 368 entries
-2025-04-07 18:57:58,379 - INFO - Starting First1KGreek Browser - Fixed Version 1.2.0
-2025-04-07 18:57:58,379 - INFO - With dark theme and improved editor detection
-2025-04-07 18:57:58,380 - INFO - Checking port 8000 availability...
-2025-04-07 18:57:58,381 - DEBUG - Port 8000 is available
-2025-04-07 18:57:58,381 - INFO - Starting server on port 8000...
-2025-04-07 18:57:58,381 - INFO - Server started at http://localhost:8000 (took 0.000s)
-2025-04-07 18:58:04,238 - INFO - PageGenerator loaded author data with 368 entries
-2025-04-07 18:58:04,239 - INFO - PageGenerator loaded user preferences with 0 total entries
-2025-04-07 18:58:04,240 - INFO - GET request for / from ('127.0.0.1', 58551)
-2025-04-07 18:58:04,240 - DEBUG - Serving home page
-2025-04-07 18:58:04,240 - INFO - 127.0.0.1 - "GET / HTTP/1.1" 200 -
-2025-04-07 18:58:04,240 - DEBUG - Sending HTML response, length: 906
-2025-04-07 18:58:04,241 - DEBUG - Successfully sent 906 bytes
-2025-04-07 18:58:04,241 - DEBUG - Request processed in 0.0007 seconds
-2025-04-07 18:58:04,241 - INFO - PageGenerator loaded author data with 368 entries
-2025-04-07 18:58:04,242 - INFO - PageGenerator loaded user preferences with 0 total entries
-2025-04-07 18:58:04,259 - INFO - GET request for /static/css/main.css from ('127.0.0.1', 58552)
-2025-04-07 18:58:04,259 - DEBUG - Serving static file: /static/css/main.css
-2025-04-07 18:58:04,259 - INFO - 127.0.0.1 - "GET /static/css/main.css HTTP/1.1" 200 -
-2025-04-07 18:58:04,259 - DEBUG - Successfully sent 538 bytes
-2025-04-07 18:58:04,259 - DEBUG - Request processed in 0.0009 seconds
-2025-04-07 18:58:07,862 - INFO - PageGenerator loaded author data with 368 entries
-2025-04-07 18:58:07,863 - INFO - PageGenerator loaded user preferences with 0 total entries
-2025-04-07 18:58:08,010 - INFO - GET request for /authors from ('127.0.0.1', 58568)
-2025-04-07 18:58:08,010 - DEBUG - Serving authors table page
-2025-04-07 18:58:08,010 - DEBUG - Reloading data from disk
-2025-04-07 18:58:08,019 - INFO - PageGenerator loaded author data with 368 entries
-2025-04-07 18:58:08,020 - INFO - PageGenerator loaded user preferences with 0 total entries
-2025-04-07 18:58:08,020 - DEBUG - Data reload completed in 0.009s
-2025-04-07 18:58:08,243 - INFO - 127.0.0.1 - "GET /authors HTTP/1.1" 200 -
-2025-04-07 18:58:08,243 - DEBUG - Sending HTML response, length: 512046
-2025-04-07 18:58:08,243 - DEBUG - Successfully sent 512046 bytes
-2025-04-07 18:58:08,243 - DEBUG - Request processed in 0.2334 seconds
-2025-04-07 18:58:08,244 - INFO - PageGenerator loaded author data with 368 entries
-2025-04-07 18:58:08,244 - INFO - PageGenerator loaded user preferences with 0 total entries
-2025-04-07 18:58:08,264 - INFO - GET request for /static/css/main.css from ('127.0.0.1', 58569)
-2025-04-07 18:58:08,264 - DEBUG - Serving static file: /static/css/main.css
-2025-04-07 18:58:08,264 - INFO - 127.0.0.1 - "GET /static/css/main.css HTTP/1.1" 200 -
-2025-04-07 18:58:08,265 - DEBUG - Successfully sent 538 bytes
-2025-04-07 18:58:08,265 - DEBUG - Request processed in 0.0008 seconds
-2025-04-07 18:58:08,265 - INFO - PageGenerator loaded author data with 368 entries
-2025-04-07 18:58:08,265 - INFO - PageGenerator loaded user preferences with 0 total entries
-2025-04-07 18:58:08,265 - INFO - GET request for /static/css/authors-table.css from ('127.0.0.1', 58570)
-2025-04-07 18:58:08,265 - DEBUG - Serving static file: /static/css/authors-table.css
-2025-04-07 18:58:08,265 - INFO - 127.0.0.1 - "GET /static/css/authors-table.css HTTP/1.1" 200 -
-2025-04-07 18:58:08,265 - DEBUG - Successfully sent 7633 bytes
-2025-04-07 18:58:08,265 - DEBUG - Request processed in 0.0001 seconds
-2025-04-07 18:58:08,266 - INFO - PageGenerator loaded author data with 368 entries
-2025-04-07 18:58:08,266 - INFO - PageGenerator loaded user preferences with 0 total entries
-2025-04-07 18:58:08,266 - INFO - GET request for /static/js/authors_table.js?v=1744048688 from ('127.0.0.1', 58571)
-2025-04-07 18:58:08,266 - DEBUG - Serving static file: /static/js/authors_table.js
-2025-04-07 18:58:08,266 - INFO - 127.0.0.1 - "GET /static/js/authors_table.js?v=1744048688 HTTP/1.1" 200 -
-2025-04-07 18:58:08,266 - DEBUG - Successfully sent 35329 bytes
-2025-04-07 18:58:08,266 - DEBUG - Request processed in 0.0002 seconds
-2025-04-07 18:58:10,579 - INFO - PageGenerator loaded author data with 368 entries
-2025-04-07 18:58:10,579 - INFO - PageGenerator loaded user preferences with 0 total entries
-2025-04-07 18:58:10,580 - INFO - GET request for /get_author_works?author_id=tlg2949 from ('127.0.0.1', 58586)
-2025-04-07 18:58:10,580 - DEBUG - Getting works for author_id: tlg2949
-2025-04-07 18:58:10,581 - INFO - Found 1 works for author tlg2949
-2025-04-07 18:58:10,581 - INFO - 127.0.0.1 - "GET /get_author_works?author_id=tlg2949 HTTP/1.1" 200 -
-2025-04-07 18:58:10,581 - DEBUG - Sending JSON response, length: 113
-2025-04-07 18:58:10,582 - DEBUG - Request processed in 0.0014 seconds
-2025-04-07 18:58:17,129 - INFO - PageGenerator loaded author data with 368 entries
-2025-04-07 18:58:17,129 - INFO - PageGenerator loaded user preferences with 0 total entries
-2025-04-07 18:58:17,262 - INFO - GET request for /view?author_id=tlg2949&work_id=tlg001 from ('127.0.0.1', 58589)
-2025-04-07 18:58:17,263 - DEBUG - Serving view page for author_id: tlg2949, work_id: tlg001, view_mode: readable
-2025-04-07 18:58:17,264 - INFO - Processed 2 XML files and 0 text files for tlg2949/tlg001
-2025-04-07 18:58:17,264 - DEBUG - get_work_content(tlg2949, tlg001) took 0.002s
-2025-04-07 18:58:17,265 - INFO - 127.0.0.1 - "GET /view?author_id=tlg2949&work_id=tlg001 HTTP/1.1" 200 -
-2025-04-07 18:58:17,265 - DEBUG - Sending HTML response, length: 40166
-2025-04-07 18:58:17,265 - DEBUG - Successfully sent 40166 bytes
-2025-04-07 18:58:17,266 - DEBUG - Request processed in 0.0033 seconds
-2025-04-07 18:58:17,267 - INFO - PageGenerator loaded author data with 368 entries
-2025-04-07 18:58:17,267 - INFO - PageGenerator loaded user preferences with 0 total entries
-2025-04-07 18:58:17,284 - INFO - GET request for /static/css/reader.css from ('127.0.0.1', 58590)
-2025-04-07 18:58:17,285 - DEBUG - Serving static file: /static/css/reader.css
-2025-04-07 18:58:17,285 - INFO - 127.0.0.1 - "GET /static/css/reader.css HTTP/1.1" 200 -
-2025-04-07 18:58:17,285 - DEBUG - Successfully sent 646 bytes
-2025-04-07 18:58:17,286 - DEBUG - Request processed in 0.0011 seconds
-2025-04-07 18:58:25,241 - INFO - PageGenerator loaded author data with 368 entries
-2025-04-07 18:58:25,241 - INFO - PageGenerator loaded user preferences with 0 total entries
-2025-04-07 18:58:25,242 - INFO - GET request for /authors from ('127.0.0.1', 58606)
-2025-04-07 18:58:25,242 - DEBUG - Serving authors table page
-2025-04-07 18:58:25,242 - DEBUG - Reloading data from disk
-2025-04-07 18:58:25,243 - INFO - PageGenerator loaded author data with 368 entries
-2025-04-07 18:58:25,243 - INFO - PageGenerator loaded user preferences with 0 total entries
-2025-04-07 18:58:25,243 - DEBUG - Data reload completed in 0.001s
-2025-04-07 18:58:25,467 - INFO - 127.0.0.1 - "GET /authors HTTP/1.1" 200 -
-2025-04-07 18:58:25,468 - DEBUG - Sending HTML response, length: 512046
-2025-04-07 18:58:25,468 - DEBUG - Successfully sent 512046 bytes
-2025-04-07 18:58:25,468 - DEBUG - Request processed in 0.2260 seconds
-2025-04-07 18:58:25,468 - INFO - PageGenerator loaded author data with 368 entries
-2025-04-07 18:58:25,468 - INFO - PageGenerator loaded user preferences with 0 total entries
-2025-04-07 18:58:25,488 - INFO - GET request for /static/js/authors_table.js?v=1744048705 from ('127.0.0.1', 58607)
-2025-04-07 18:58:25,488 - DEBUG - Serving static file: /static/js/authors_table.js
-2025-04-07 18:58:25,488 - INFO - 127.0.0.1 - "GET /static/js/authors_table.js?v=1744048705 HTTP/1.1" 200 -
-2025-04-07 18:58:25,488 - DEBUG - Successfully sent 35329 bytes
-2025-04-07 18:58:25,488 - DEBUG - Request processed in 0.0009 seconds
-2025-04-07 18:58:28,475 - INFO - PageGenerator loaded author data with 368 entries
-2025-04-07 18:58:28,476 - INFO - PageGenerator loaded user preferences with 0 total entries
-2025-04-07 18:58:28,476 - INFO - GET request for /get_author_works?author_id=tlg0731 from ('127.0.0.1', 58622)
-2025-04-07 18:58:28,477 - DEBUG - Getting works for author_id: tlg0731
-2025-04-07 18:58:28,478 - INFO - Found 4 works for author tlg0731
-2025-04-07 18:58:28,478 - INFO - 127.0.0.1 - "GET /get_author_works?author_id=tlg0731 HTTP/1.1" 200 -
-2025-04-07 18:58:28,478 - DEBUG - Sending JSON response, length: 360
-2025-04-07 18:58:28,478 - DEBUG - Request processed in 0.0018 seconds
-2025-04-07 18:58:49,047 - INFO - PageGenerator loaded author data with 368 entries
-2025-04-07 18:58:49,048 - INFO - PageGenerator loaded user preferences with 0 total entries
-2025-04-07 18:58:49,189 - INFO - GET request for /view?author_id=tlg0731&work_id=tlg003%202 from ('127.0.0.1', 58625)
-2025-04-07 18:58:49,190 - DEBUG - Serving view page for author_id: tlg0731, work_id: tlg003 2, view_mode: readable
-2025-04-07 18:58:49,190 - INFO - No files found in work directory: data/tlg0731/tlg003 2
-2025-04-07 18:58:49,190 - DEBUG - get_work_content(tlg0731, tlg003 2) took 0.000s
-2025-04-07 18:58:49,190 - INFO - 127.0.0.1 - "GET /view?author_id=tlg0731&work_id=tlg003%202 HTTP/1.1" 200 -
-2025-04-07 18:58:49,190 - DEBUG - Sending HTML response, length: 2017
-2025-04-07 18:58:49,190 - DEBUG - Successfully sent 2017 bytes
-2025-04-07 18:58:49,191 - DEBUG - Request processed in 0.0012 seconds
-2025-04-07 18:58:49,192 - INFO - PageGenerator loaded author data with 368 entries
-2025-04-07 18:58:49,193 - INFO - PageGenerator loaded user preferences with 0 total entries
-2025-04-07 18:58:49,204 - INFO - GET request for /static/css/reader.css from ('127.0.0.1', 58626)
-2025-04-07 18:58:49,204 - DEBUG - Serving static file: /static/css/reader.css
-2025-04-07 18:58:49,204 - INFO - 127.0.0.1 - "GET /static/css/reader.css HTTP/1.1" 200 -
-2025-04-07 18:58:49,204 - DEBUG - Successfully sent 646 bytes
-2025-04-07 18:58:49,204 - DEBUG - Request processed in 0.0008 seconds
-2025-04-07 18:58:53,445 - INFO - PageGenerator loaded author data with 368 entries
-2025-04-07 18:58:53,446 - INFO - PageGenerator loaded user preferences with 0 total entries
-2025-04-07 18:58:53,447 - INFO - GET request for /authors from ('127.0.0.1', 58643)
-2025-04-07 18:58:53,447 - DEBUG - Serving authors table page
-2025-04-07 18:58:53,447 - DEBUG - Reloading data from disk
-2025-04-07 18:58:53,447 - INFO - PageGenerator loaded author data with 368 entries
-2025-04-07 18:58:53,448 - INFO - PageGenerator loaded user preferences with 0 total entries
-2025-04-07 18:58:53,448 - DEBUG - Data reload completed in 0.001s
-2025-04-07 18:58:53,669 - INFO - 127.0.0.1 - "GET /authors HTTP/1.1" 200 -
-2025-04-07 18:58:53,669 - DEBUG - Sending HTML response, length: 512046
-2025-04-07 18:58:53,669 - DEBUG - Successfully sent 512046 bytes
-2025-04-07 18:58:53,669 - DEBUG - Request processed in 0.2226 seconds
-2025-04-07 18:58:53,669 - INFO - PageGenerator loaded author data with 368 entries
-2025-04-07 18:58:53,669 - INFO - PageGenerator loaded user preferences with 0 total entries
-2025-04-07 18:58:53,688 - INFO - GET request for /static/js/authors_table.js?v=1744048733 from ('127.0.0.1', 58644)
-2025-04-07 18:58:53,688 - DEBUG - Serving static file: /static/js/authors_table.js
-2025-04-07 18:58:53,688 - INFO - 127.0.0.1 - "GET /static/js/authors_table.js?v=1744048733 HTTP/1.1" 200 -
-2025-04-07 18:58:53,688 - DEBUG - Successfully sent 35329 bytes
-2025-04-07 18:58:53,688 - DEBUG - Request processed in 0.0009 seconds
-2025-04-07 18:59:01,012 - INFO - PageGenerator loaded author data with 368 entries
-2025-04-07 18:59:01,013 - INFO - PageGenerator loaded user preferences with 0 total entries
-2025-04-07 18:59:01,014 - INFO - GET request for /get_author_works?author_id=tlg0607 from ('127.0.0.1', 58659)
-2025-04-07 18:59:01,014 - DEBUG - Getting works for author_id: tlg0607
-2025-04-07 18:59:01,015 - INFO - Found 2 works for author tlg0607
-2025-04-07 18:59:01,015 - INFO - 127.0.0.1 - "GET /get_author_works?author_id=tlg0607 HTTP/1.1" 200 -
-2025-04-07 18:59:01,015 - DEBUG - Sending JSON response, length: 232
-2025-04-07 18:59:01,015 - DEBUG - Request processed in 0.0014 seconds
-2025-04-07 18:59:04,340 - INFO - PageGenerator loaded author data with 368 entries
-2025-04-07 18:59:04,341 - INFO - PageGenerator loaded user preferences with 0 total entries
-2025-04-07 18:59:04,450 - INFO - GET request for /view?author_id=tlg0607&work_id=tlg001%202 from ('127.0.0.1', 58660)
-2025-04-07 18:59:04,451 - DEBUG - Serving view page for author_id: tlg0607, work_id: tlg001 2, view_mode: readable
-2025-04-07 18:59:04,451 - INFO - No files found in work directory: data/tlg0607/tlg001 2
-2025-04-07 18:59:04,451 - DEBUG - get_work_content(tlg0607, tlg001 2) took 0.000s
-2025-04-07 18:59:04,451 - INFO - 127.0.0.1 - "GET /view?author_id=tlg0607&work_id=tlg001%202 HTTP/1.1" 200 -
-2025-04-07 18:59:04,451 - DEBUG - Sending HTML response, length: 2005
-2025-04-07 18:59:04,452 - DEBUG - Successfully sent 2005 bytes
-2025-04-07 18:59:04,452 - DEBUG - Request processed in 0.0015 seconds
-2025-04-07 18:59:04,456 - INFO - PageGenerator loaded author data with 368 entries
-2025-04-07 18:59:04,461 - INFO - PageGenerator loaded user preferences with 0 total entries
-2025-04-07 18:59:04,471 - INFO - GET request for /static/css/reader.css from ('127.0.0.1', 58661)
-2025-04-07 18:59:04,471 - DEBUG - Serving static file: /static/css/reader.css
-2025-04-07 18:59:04,471 - INFO - 127.0.0.1 - "GET /static/css/reader.css HTTP/1.1" 200 -
-2025-04-07 18:59:04,472 - DEBUG - Successfully sent 646 bytes
-2025-04-07 18:59:04,472 - DEBUG - Request processed in 0.0011 seconds
-2025-04-07 18:59:06,699 - INFO - PageGenerator loaded author data with 368 entries
-2025-04-07 18:59:06,700 - INFO - PageGenerator loaded user preferences with 0 total entries
-2025-04-07 18:59:06,700 - INFO - GET request for /authors from ('127.0.0.1', 58677)
-2025-04-07 18:59:06,701 - DEBUG - Serving authors table page
-2025-04-07 18:59:06,701 - DEBUG - Reloading data from disk
-2025-04-07 18:59:06,702 - INFO - PageGenerator loaded author data with 368 entries
-2025-04-07 18:59:06,702 - INFO - PageGenerator loaded user preferences with 0 total entries
-2025-04-07 18:59:06,702 - DEBUG - Data reload completed in 0.001s
-2025-04-07 18:59:06,919 - INFO - 127.0.0.1 - "GET /authors HTTP/1.1" 200 -
-2025-04-07 18:59:06,920 - DEBUG - Sending HTML response, length: 512046
-2025-04-07 18:59:06,920 - DEBUG - Successfully sent 512046 bytes
-2025-04-07 18:59:06,920 - DEBUG - Request processed in 0.2193 seconds
-2025-04-07 18:59:06,920 - INFO - PageGenerator loaded author data with 368 entries
-2025-04-07 18:59:06,920 - INFO - PageGenerator loaded user preferences with 0 total entries
-2025-04-07 18:59:06,938 - INFO - GET request for /static/js/authors_table.js?v=1744048746 from ('127.0.0.1', 58678)
-2025-04-07 18:59:06,938 - DEBUG - Serving static file: /static/js/authors_table.js
-2025-04-07 18:59:06,939 - INFO - 127.0.0.1 - "GET /static/js/authors_table.js?v=1744048746 HTTP/1.1" 200 -
-2025-04-07 18:59:06,939 - DEBUG - Successfully sent 35329 bytes
-2025-04-07 18:59:06,939 - DEBUG - Request processed in 0.0007 seconds
-2025-04-07 18:59:10,268 - INFO - PageGenerator loaded author data with 368 entries
-2025-04-07 18:59:10,268 - INFO - PageGenerator loaded user preferences with 0 total entries
-2025-04-07 18:59:10,269 - INFO - GET request for /get_author_works?author_id=tlg0067 from ('127.0.0.1', 58693)
-2025-04-07 18:59:10,269 - DEBUG - Getting works for author_id: tlg0067
-2025-04-07 18:59:10,269 - INFO - Found 2 works for author tlg0067
-2025-04-07 18:59:10,269 - INFO - 127.0.0.1 - "GET /get_author_works?author_id=tlg0067 HTTP/1.1" 200 -
-2025-04-07 18:59:10,270 - DEBUG - Sending JSON response, length: 167
-2025-04-07 18:59:10,270 - DEBUG - Request processed in 0.0011 seconds
-2025-04-07 18:59:17,146 - INFO - PageGenerator loaded author data with 368 entries
-2025-04-07 18:59:17,147 - INFO - PageGenerator loaded user preferences with 0 total entries
-2025-04-07 18:59:17,147 - INFO - GET request for /get_author_works?author_id=tlg0090 from ('127.0.0.1', 58694)
-2025-04-07 18:59:17,147 - DEBUG - Getting works for author_id: tlg0090
-2025-04-07 18:59:17,148 - INFO - Found 2 works for author tlg0090
-2025-04-07 18:59:17,148 - INFO - 127.0.0.1 - "GET /get_author_works?author_id=tlg0090 HTTP/1.1" 200 -
-2025-04-07 18:59:17,148 - DEBUG - Sending JSON response, length: 736
-2025-04-07 18:59:17,149 - DEBUG - Request processed in 0.0014 seconds
-2025-04-07 18:59:28,336 - INFO - PageGenerator loaded author data with 368 entries
-2025-04-07 18:59:28,337 - INFO - PageGenerator loaded user preferences with 0 total entries
-2025-04-07 18:59:28,450 - INFO - GET request for /view?author_id=tlg0090&work_id=tlg001%203 from ('127.0.0.1', 58696)
-2025-04-07 18:59:28,451 - DEBUG - Serving view page for author_id: tlg0090, work_id: tlg001 3, view_mode: readable
-2025-04-07 18:59:28,451 - INFO - No files found in work directory: data/tlg0090/tlg001 3
-2025-04-07 18:59:28,452 - DEBUG - get_work_content(tlg0090, tlg001 3) took 0.000s
-2025-04-07 18:59:28,452 - INFO - 127.0.0.1 - "GET /view?author_id=tlg0090&work_id=tlg001%203 HTTP/1.1" 200 -
-2025-04-07 18:59:28,452 - DEBUG - Sending HTML response, length: 2003
-2025-04-07 18:59:28,452 - DEBUG - Successfully sent 2003 bytes
-2025-04-07 18:59:28,452 - DEBUG - Request processed in 0.0017 seconds
-2025-04-07 18:59:28,461 - INFO - PageGenerator loaded author data with 368 entries
-2025-04-07 18:59:28,462 - INFO - PageGenerator loaded user preferences with 0 total entries
-2025-04-07 18:59:28,474 - INFO - GET request for /static/css/reader.css from ('127.0.0.1', 58697)
-2025-04-07 18:59:28,475 - DEBUG - Serving static file: /static/css/reader.css
-2025-04-07 18:59:28,475 - INFO - 127.0.0.1 - "GET /static/css/reader.css HTTP/1.1" 200 -
-2025-04-07 18:59:28,475 - DEBUG - Successfully sent 646 bytes
-2025-04-07 18:59:28,475 - DEBUG - Request processed in 0.0006 seconds
-2025-04-07 18:59:33,197 - INFO - PageGenerator loaded author data with 368 entries
-2025-04-07 18:59:33,197 - INFO - PageGenerator loaded user preferences with 0 total entries
-2025-04-07 18:59:33,345 - INFO - GET request for /view?author_id=tlg0090&work_id=tlg001%203&view_mode=raw from ('127.0.0.1', 58713)
-2025-04-07 18:59:33,346 - DEBUG - Serving view page for author_id: tlg0090, work_id: tlg001 3, view_mode: raw
-2025-04-07 18:59:33,346 - INFO - No files found in work directory: data/tlg0090/tlg001 3
-2025-04-07 18:59:33,346 - DEBUG - get_work_content(tlg0090, tlg001 3) took 0.000s
-2025-04-07 18:59:33,346 - INFO - 127.0.0.1 - "GET /view?author_id=tlg0090&work_id=tlg001%203&view_mode=raw HTTP/1.1" 200 -
-2025-04-07 18:59:33,346 - DEBUG - Sending HTML response, length: 2003
-2025-04-07 18:59:33,346 - DEBUG - Successfully sent 2003 bytes
-2025-04-07 18:59:33,346 - DEBUG - Request processed in 0.0009 seconds
-2025-04-07 18:59:33,349 - INFO - PageGenerator loaded author data with 368 entries
-2025-04-07 18:59:33,350 - INFO - PageGenerator loaded user preferences with 0 total entries
-2025-04-07 18:59:33,373 - INFO - GET request for /static/css/reader.css from ('127.0.0.1', 58714)
-2025-04-07 18:59:33,373 - DEBUG - Serving static file: /static/css/reader.css
-2025-04-07 18:59:33,373 - INFO - 127.0.0.1 - "GET /static/css/reader.css HTTP/1.1" 200 -
-2025-04-07 18:59:33,373 - DEBUG - Successfully sent 646 bytes
-2025-04-07 18:59:33,373 - DEBUG - Request processed in 0.0006 seconds
-2025-04-07 18:59:34,286 - INFO - PageGenerator loaded author data with 368 entries
-2025-04-07 18:59:34,286 - INFO - PageGenerator loaded user preferences with 0 total entries
-2025-04-07 18:59:34,391 - INFO - GET request for /view?author_id=tlg0090&work_id=tlg001%203&view_mode=readable from ('127.0.0.1', 58725)
-2025-04-07 18:59:34,392 - DEBUG - Serving view page for author_id: tlg0090, work_id: tlg001 3, view_mode: readable
-2025-04-07 18:59:34,392 - INFO - No files found in work directory: data/tlg0090/tlg001 3
-2025-04-07 18:59:34,392 - DEBUG - get_work_content(tlg0090, tlg001 3) took 0.000s
-2025-04-07 18:59:34,392 - INFO - 127.0.0.1 - "GET /view?author_id=tlg0090&work_id=tlg001%203&view_mode=readable HTTP/1.1" 200 -
-2025-04-07 18:59:34,392 - DEBUG - Sending HTML response, length: 2003
-2025-04-07 18:59:34,392 - DEBUG - Successfully sent 2003 bytes
-2025-04-07 18:59:34,392 - DEBUG - Request processed in 0.0005 seconds
-2025-04-07 18:59:34,394 - INFO - PageGenerator loaded author data with 368 entries
-2025-04-07 18:59:34,394 - INFO - PageGenerator loaded user preferences with 0 total entries
-2025-04-07 18:59:34,412 - INFO - GET request for /static/css/reader.css from ('127.0.0.1', 58728)
-2025-04-07 18:59:34,413 - DEBUG - Serving static file: /static/css/reader.css
-2025-04-07 18:59:34,413 - INFO - 127.0.0.1 - "GET /static/css/reader.css HTTP/1.1" 200 -
-2025-04-07 18:59:34,413 - DEBUG - Successfully sent 646 bytes
-2025-04-07 18:59:34,414 - DEBUG - Request processed in 0.0016 seconds
-2025-04-07 18:59:40,166 - INFO - PageGenerator loaded author data with 368 entries
-2025-04-07 18:59:40,167 - INFO - PageGenerator loaded user preferences with 0 total entries
-2025-04-07 18:59:40,168 - INFO - GET request for /works?author_id=tlg0090 from ('127.0.0.1', 58773)
-2025-04-07 18:59:40,168 - DEBUG - Serving works page for author_id: tlg0090
-2025-04-07 18:59:40,169 - INFO - 127.0.0.1 - "GET /works?author_id=tlg0090 HTTP/1.1" 200 -
-2025-04-07 18:59:40,169 - DEBUG - Sending HTML response, length: 1428
-2025-04-07 18:59:40,169 - DEBUG - Successfully sent 1428 bytes
-2025-04-07 18:59:40,169 - DEBUG - Request processed in 0.0019 seconds
-2025-04-07 18:59:40,170 - INFO - PageGenerator loaded author data with 368 entries
-2025-04-07 18:59:40,170 - INFO - PageGenerator loaded user preferences with 0 total entries
-2025-04-07 18:59:40,185 - INFO - GET request for /static/css/main.css from ('127.0.0.1', 58774)
-2025-04-07 18:59:40,185 - DEBUG - Serving static file: /static/css/main.css
-2025-04-07 18:59:40,187 - INFO - 127.0.0.1 - "GET /static/css/main.css HTTP/1.1" 200 -
-2025-04-07 18:59:40,187 - DEBUG - Successfully sent 538 bytes
-2025-04-07 18:59:40,187 - DEBUG - Request processed in 0.0015 seconds
-2025-04-07 18:59:41,962 - INFO - PageGenerator loaded author data with 368 entries
-2025-04-07 18:59:41,962 - INFO - PageGenerator loaded user preferences with 0 total entries
-2025-04-07 18:59:42,091 - INFO - GET request for /authors from ('127.0.0.1', 58791)
-2025-04-07 18:59:42,091 - DEBUG - Serving authors table page
-2025-04-07 18:59:42,091 - DEBUG - Reloading data from disk
-2025-04-07 18:59:42,092 - INFO - PageGenerator loaded author data with 368 entries
-2025-04-07 18:59:42,092 - INFO - PageGenerator loaded user preferences with 0 total entries
-2025-04-07 18:59:42,092 - DEBUG - Data reload completed in 0.001s
-2025-04-07 18:59:42,308 - INFO - 127.0.0.1 - "GET /authors HTTP/1.1" 200 -
-2025-04-07 18:59:42,309 - DEBUG - Sending HTML response, length: 512046
-2025-04-07 18:59:42,309 - DEBUG - Successfully sent 512046 bytes
-2025-04-07 18:59:42,309 - DEBUG - Request processed in 0.2178 seconds
-2025-04-07 18:59:42,309 - INFO - PageGenerator loaded author data with 368 entries
-2025-04-07 18:59:42,309 - INFO - PageGenerator loaded user preferences with 0 total entries
-2025-04-07 18:59:42,330 - INFO - GET request for /static/css/main.css from ('127.0.0.1', 58792)
-2025-04-07 18:59:42,331 - DEBUG - Serving static file: /static/css/main.css
-2025-04-07 18:59:42,331 - INFO - 127.0.0.1 - "GET /static/css/main.css HTTP/1.1" 200 -
-2025-04-07 18:59:42,331 - DEBUG - Successfully sent 538 bytes
-2025-04-07 18:59:42,331 - DEBUG - Request processed in 0.0007 seconds
-2025-04-07 18:59:42,332 - INFO - PageGenerator loaded author data with 368 entries
-2025-04-07 18:59:42,332 - INFO - PageGenerator loaded user preferences with 0 total entries
-2025-04-07 18:59:42,332 - INFO - GET request for /static/css/authors-table.css from ('127.0.0.1', 58793)
-2025-04-07 18:59:42,332 - DEBUG - Serving static file: /static/css/authors-table.css
-2025-04-07 18:59:42,332 - INFO - 127.0.0.1 - "GET /static/css/authors-table.css HTTP/1.1" 200 -
-2025-04-07 18:59:42,332 - DEBUG - Successfully sent 7633 bytes
-2025-04-07 18:59:42,332 - DEBUG - Request processed in 0.0003 seconds
-2025-04-07 18:59:42,333 - INFO - PageGenerator loaded author data with 368 entries
-2025-04-07 18:59:42,333 - INFO - PageGenerator loaded user preferences with 0 total entries
-2025-04-07 18:59:42,333 - INFO - GET request for /static/js/authors_table.js?v=1744048782 from ('127.0.0.1', 58794)
-2025-04-07 18:59:42,333 - DEBUG - Serving static file: /static/js/authors_table.js
-2025-04-07 18:59:42,333 - INFO - 127.0.0.1 - "GET /static/js/authors_table.js?v=1744048782 HTTP/1.1" 200 -
-2025-04-07 18:59:42,333 - DEBUG - Successfully sent 35329 bytes
-2025-04-07 18:59:42,333 - DEBUG - Request processed in 0.0003 seconds
-2025-04-07 18:59:54,259 - INFO - PageGenerator loaded author data with 368 entries
-2025-04-07 18:59:54,259 - INFO - PageGenerator loaded user preferences with 0 total entries
-2025-04-07 18:59:54,260 - INFO - GET request for /get_author_works?author_id=tlg1264 from ('127.0.0.1', 58809)
-2025-04-07 18:59:54,260 - DEBUG - Getting works for author_id: tlg1264
-2025-04-07 18:59:54,261 - INFO - Found 4 works for author tlg1264
-2025-04-07 18:59:54,261 - INFO - 127.0.0.1 - "GET /get_author_works?author_id=tlg1264 HTTP/1.1" 200 -
-2025-04-07 18:59:54,261 - DEBUG - Sending JSON response, length: 542
-2025-04-07 18:59:54,261 - DEBUG - Request processed in 0.0012 seconds
-2025-04-07 19:00:01,285 - INFO - PageGenerator loaded author data with 368 entries
-2025-04-07 19:00:01,287 - INFO - PageGenerator loaded user preferences with 0 total entries
-2025-04-07 19:00:01,287 - INFO - POST request for /update_preference from ('127.0.0.1', 58812)
-2025-04-07 19:00:01,288 - DEBUG - POST data: {'author_id': ['tlg1264'], 'pref_type': ['favorites'], 'value': ['true']}
-2025-04-07 19:00:01,288 - DEBUG - Handling update_preference request
-2025-04-07 19:00:01,289 - INFO - 127.0.0.1 - "POST /update_preference HTTP/1.1" 200 -
-2025-04-07 19:00:01,290 - DEBUG - Request processed in 0.0023 seconds
-2025-04-07 19:00:18,201 - INFO - PageGenerator loaded author data with 368 entries
-2025-04-07 19:00:18,202 - INFO - PageGenerator loaded user preferences with 1 total entries
-2025-04-07 19:00:18,290 - INFO - GET request for /view?author_id=tlg1264&work_id=tlg001 from ('127.0.0.1', 58813)
-2025-04-07 19:00:18,291 - DEBUG - Serving view page for author_id: tlg1264, work_id: tlg001, view_mode: readable
-2025-04-07 19:00:18,310 - INFO - Processed 2 XML files and 0 text files for tlg1264/tlg001
-2025-04-07 19:00:18,310 - DEBUG - get_work_content(tlg1264, tlg001) took 0.019s
-2025-04-07 19:00:18,314 - INFO - 127.0.0.1 - "GET /view?author_id=tlg1264&work_id=tlg001 HTTP/1.1" 200 -
-2025-04-07 19:00:18,315 - DEBUG - Sending HTML response, length: 1702371
-2025-04-07 19:00:18,315 - DEBUG - Successfully sent 1702371 bytes
-2025-04-07 19:00:18,316 - DEBUG - Request processed in 0.0257 seconds
-2025-04-07 19:00:18,318 - INFO - PageGenerator loaded author data with 368 entries
-2025-04-07 19:00:18,318 - INFO - PageGenerator loaded user preferences with 1 total entries
-2025-04-07 19:00:18,337 - INFO - GET request for /static/css/reader.css from ('127.0.0.1', 58814)
-2025-04-07 19:00:18,337 - DEBUG - Serving static file: /static/css/reader.css
-2025-04-07 19:00:18,338 - INFO - 127.0.0.1 - "GET /static/css/reader.css HTTP/1.1" 200 -
-2025-04-07 19:00:18,339 - DEBUG - Successfully sent 646 bytes
-2025-04-07 19:00:18,339 - DEBUG - Request processed in 0.0023 seconds
-2025-04-07 19:00:20,812 - INFO - PageGenerator loaded author data with 368 entries
-2025-04-07 19:00:20,814 - INFO - PageGenerator loaded user preferences with 1 total entries
-2025-04-07 19:00:20,904 - INFO - GET request for /view?author_id=tlg1264&work_id=tlg001&view_mode=readable from ('127.0.0.1', 58830)
-2025-04-07 19:00:20,904 - DEBUG - Serving view page for author_id: tlg1264, work_id: tlg001, view_mode: readable
-2025-04-07 19:00:20,917 - INFO - Processed 2 XML files and 0 text files for tlg1264/tlg001
-2025-04-07 19:00:20,918 - DEBUG - get_work_content(tlg1264, tlg001) took 0.014s
-2025-04-07 19:00:20,921 - INFO - 127.0.0.1 - "GET /view?author_id=tlg1264&work_id=tlg001&view_mode=readable HTTP/1.1" 200 -
-2025-04-07 19:00:20,922 - DEBUG - Sending HTML response, length: 1702371
-2025-04-07 19:00:20,922 - DEBUG - Successfully sent 1702371 bytes
-2025-04-07 19:00:20,923 - DEBUG - Request processed in 0.0188 seconds
-2025-04-07 19:00:20,924 - INFO - PageGenerator loaded author data with 368 entries
-2025-04-07 19:00:20,924 - INFO - PageGenerator loaded user preferences with 1 total entries
-2025-04-07 19:00:20,937 - INFO - GET request for /static/css/reader.css from ('127.0.0.1', 58831)
-2025-04-07 19:00:20,938 - DEBUG - Serving static file: /static/css/reader.css
-2025-04-07 19:00:20,938 - INFO - 127.0.0.1 - "GET /static/css/reader.css HTTP/1.1" 200 -
-2025-04-07 19:00:20,938 - DEBUG - Successfully sent 646 bytes
-2025-04-07 19:00:20,938 - DEBUG - Request processed in 0.0009 seconds
-2025-04-07 19:02:37,133 - INFO - PageGenerator loaded author data with 368 entries
-2025-04-07 19:02:37,134 - INFO - PageGenerator loaded user preferences with 1 total entries
-2025-04-07 19:02:37,315 - INFO - GET request for /works?author_id=tlg1264 from ('127.0.0.1', 58894)
-2025-04-07 19:02:37,315 - DEBUG - Serving works page for author_id: tlg1264
-2025-04-07 19:02:37,318 - INFO - 127.0.0.1 - "GET /works?author_id=tlg1264 HTTP/1.1" 200 -
-2025-04-07 19:02:37,318 - DEBUG - Sending HTML response, length: 2002
-2025-04-07 19:02:37,318 - DEBUG - Successfully sent 2002 bytes
-2025-04-07 19:02:37,318 - DEBUG - Request processed in 0.0029 seconds
-2025-04-07 19:02:37,319 - INFO - PageGenerator loaded author data with 368 entries
-2025-04-07 19:02:37,319 - INFO - PageGenerator loaded user preferences with 1 total entries
-2025-04-07 19:02:37,337 - INFO - GET request for /static/css/main.css from ('127.0.0.1', 58895)
-2025-04-07 19:02:37,338 - DEBUG - Serving static file: /static/css/main.css
-2025-04-07 19:02:37,338 - INFO - 127.0.0.1 - "GET /static/css/main.css HTTP/1.1" 200 -
-2025-04-07 19:02:37,338 - DEBUG - Successfully sent 538 bytes
-2025-04-07 19:02:37,338 - DEBUG - Request processed in 0.0010 seconds
-2025-04-07 19:02:41,701 - INFO - PageGenerator loaded author data with 368 entries
-2025-04-07 19:02:41,701 - INFO - PageGenerator loaded user preferences with 1 total entries
-2025-04-07 19:02:41,881 - INFO - GET request for /view?author_id=tlg1264&work_id=tlg001 from ('127.0.0.1', 58913)
-2025-04-07 19:02:41,881 - DEBUG - Serving view page for author_id: tlg1264, work_id: tlg001, view_mode: readable
-2025-04-07 19:02:41,894 - INFO - Processed 2 XML files and 0 text files for tlg1264/tlg001
-2025-04-07 19:02:41,895 - DEBUG - get_work_content(tlg1264, tlg001) took 0.013s
-2025-04-07 19:02:41,897 - INFO - 127.0.0.1 - "GET /view?author_id=tlg1264&work_id=tlg001 HTTP/1.1" 200 -
-2025-04-07 19:02:41,898 - DEBUG - Sending HTML response, length: 1702371
-2025-04-07 19:02:41,898 - DEBUG - Successfully sent 1702371 bytes
-2025-04-07 19:02:41,898 - DEBUG - Request processed in 0.0171 seconds
-2025-04-07 19:02:41,899 - INFO - PageGenerator loaded author data with 368 entries
-2025-04-07 19:02:41,899 - INFO - PageGenerator loaded user preferences with 1 total entries
-2025-04-07 19:02:41,911 - INFO - GET request for /static/css/reader.css from ('127.0.0.1', 58914)
-2025-04-07 19:02:41,911 - DEBUG - Serving static file: /static/css/reader.css
-2025-04-07 19:02:41,912 - INFO - 127.0.0.1 - "GET /static/css/reader.css HTTP/1.1" 200 -
-2025-04-07 19:02:41,912 - DEBUG - Successfully sent 646 bytes
-2025-04-07 19:02:41,913 - DEBUG - Request processed in 0.0014 seconds
-2025-04-07 19:02:49,979 - INFO - PageGenerator loaded author data with 368 entries
-2025-04-07 19:02:49,980 - INFO - PageGenerator loaded user preferences with 1 total entries
-2025-04-07 19:02:50,068 - INFO - GET request for /view?author_id=tlg1264&work_id=tlg001&view_mode=readable from ('127.0.0.1', 58933)
-2025-04-07 19:02:50,068 - DEBUG - Serving view page for author_id: tlg1264, work_id: tlg001, view_mode: readable
-2025-04-07 19:02:50,079 - INFO - Processed 2 XML files and 0 text files for tlg1264/tlg001
-2025-04-07 19:02:50,079 - DEBUG - get_work_content(tlg1264, tlg001) took 0.011s
-2025-04-07 19:02:50,081 - INFO - 127.0.0.1 - "GET /view?author_id=tlg1264&work_id=tlg001&view_mode=readable HTTP/1.1" 200 -
-2025-04-07 19:02:50,084 - DEBUG - Sending HTML response, length: 1702371
-2025-04-07 19:02:50,084 - DEBUG - Successfully sent 1702371 bytes
-2025-04-07 19:02:50,084 - DEBUG - Request processed in 0.0162 seconds
-2025-04-07 19:02:50,087 - INFO - PageGenerator loaded author data with 368 entries
-2025-04-07 19:02:50,088 - INFO - PageGenerator loaded user preferences with 1 total entries
-2025-04-07 19:02:50,105 - INFO - GET request for /static/css/reader.css from ('127.0.0.1', 58934)
-2025-04-07 19:02:50,105 - DEBUG - Serving static file: /static/css/reader.css
-2025-04-07 19:02:50,106 - INFO - 127.0.0.1 - "GET /static/css/reader.css HTTP/1.1" 200 -
-2025-04-07 19:02:50,106 - DEBUG - Successfully sent 646 bytes
-2025-04-07 19:02:50,106 - DEBUG - Request processed in 0.0016 seconds
-2025-04-07 19:03:07,628 - INFO - PageGenerator loaded author data with 368 entries
-2025-04-07 19:03:07,629 - INFO - PageGenerator loaded user preferences with 1 total entries
-2025-04-07 19:03:07,749 - INFO - GET request for /works?author_id=tlg1264 from ('127.0.0.1', 58955)
-2025-04-07 19:03:07,750 - DEBUG - Serving works page for author_id: tlg1264
-2025-04-07 19:03:07,754 - INFO - 127.0.0.1 - "GET /works?author_id=tlg1264 HTTP/1.1" 200 -
-2025-04-07 19:03:07,754 - DEBUG - Sending HTML response, length: 2002
-2025-04-07 19:03:07,755 - DEBUG - Successfully sent 2002 bytes
-2025-04-07 19:03:07,755 - DEBUG - Request processed in 0.0057 seconds
-2025-04-07 19:03:07,757 - INFO - PageGenerator loaded author data with 368 entries
-2025-04-07 19:03:07,757 - INFO - PageGenerator loaded user preferences with 1 total entries
-2025-04-07 19:03:07,775 - INFO - GET request for /static/css/main.css from ('127.0.0.1', 58956)
-2025-04-07 19:03:07,775 - DEBUG - Serving static file: /static/css/main.css
-2025-04-07 19:03:07,776 - INFO - 127.0.0.1 - "GET /static/css/main.css HTTP/1.1" 200 -
-2025-04-07 19:03:07,776 - DEBUG - Successfully sent 538 bytes
-2025-04-07 19:03:07,776 - DEBUG - Request processed in 0.0008 seconds
-2025-04-07 19:03:11,237 - INFO - PageGenerator loaded author data with 368 entries
-2025-04-07 19:03:11,238 - INFO - PageGenerator loaded user preferences with 1 total entries
-2025-04-07 19:03:11,404 - INFO - GET request for /view?author_id=tlg1264&work_id=tlg004 from ('127.0.0.1', 58973)
-2025-04-07 19:03:11,405 - DEBUG - Serving view page for author_id: tlg1264, work_id: tlg004, view_mode: readable
-2025-04-07 19:03:11,408 - INFO - Processed 2 XML files and 0 text files for tlg1264/tlg004
-2025-04-07 19:03:11,408 - DEBUG - get_work_content(tlg1264, tlg004) took 0.003s
-2025-04-07 19:03:11,408 - INFO - 127.0.0.1 - "GET /view?author_id=tlg1264&work_id=tlg004 HTTP/1.1" 200 -
-2025-04-07 19:03:11,408 - DEBUG - Sending HTML response, length: 106914
-2025-04-07 19:03:11,409 - DEBUG - Successfully sent 106914 bytes
-2025-04-07 19:03:11,409 - DEBUG - Request processed in 0.0046 seconds
-2025-04-07 19:03:11,410 - INFO - PageGenerator loaded author data with 368 entries
-2025-04-07 19:03:11,410 - INFO - PageGenerator loaded user preferences with 1 total entries
-2025-04-07 19:03:11,424 - INFO - GET request for /static/css/reader.css from ('127.0.0.1', 58974)
-2025-04-07 19:03:11,425 - DEBUG - Serving static file: /static/css/reader.css
-2025-04-07 19:03:11,425 - INFO - 127.0.0.1 - "GET /static/css/reader.css HTTP/1.1" 200 -
-2025-04-07 19:03:11,425 - DEBUG - Successfully sent 646 bytes
-2025-04-07 19:03:11,426 - DEBUG - Request processed in 0.0018 seconds
-2025-04-07 19:03:32,387 - INFO - PageGenerator loaded author data with 368 entries
-2025-04-07 19:03:32,387 - INFO - PageGenerator loaded user preferences with 1 total entries
-2025-04-07 19:03:32,387 - INFO - GET request for /view?author_id=tlg1264&work_id=tlg001 from ('127.0.0.1', 59005)
-2025-04-07 19:03:32,388 - DEBUG - Serving view page for author_id: tlg1264, work_id: tlg001, view_mode: readable
-2025-04-07 19:03:32,405 - INFO - Processed 2 XML files and 0 text files for tlg1264/tlg001
-2025-04-07 19:03:32,405 - DEBUG - get_work_content(tlg1264, tlg001) took 0.018s
-2025-04-07 19:03:32,409 - INFO - 127.0.0.1 - "GET /view?author_id=tlg1264&work_id=tlg001 HTTP/1.1" 200 -
-2025-04-07 19:03:32,410 - DEBUG - Sending HTML response, length: 1702371
-2025-04-07 19:03:32,410 - DEBUG - Successfully sent 1702371 bytes
-2025-04-07 19:03:32,410 - DEBUG - Request processed in 0.0227 seconds
-2025-04-07 19:03:32,411 - INFO - PageGenerator loaded author data with 368 entries
-2025-04-07 19:03:32,411 - INFO - PageGenerator loaded user preferences with 1 total entries
-2025-04-07 19:03:32,445 - INFO - GET request for /static/css/reader.css from ('127.0.0.1', 59006)
-2025-04-07 19:03:32,445 - DEBUG - Serving static file: /static/css/reader.css
-2025-04-07 19:03:32,446 - INFO - 127.0.0.1 - "GET /static/css/reader.css HTTP/1.1" 200 -
-2025-04-07 19:03:32,446 - DEBUG - Successfully sent 646 bytes
-2025-04-07 19:03:32,446 - DEBUG - Request processed in 0.0005 seconds
-2025-04-07 19:04:07,235 - INFO - PageGenerator loaded author data with 368 entries
-2025-04-07 19:04:07,236 - INFO - PageGenerator loaded user preferences with 1 total entries
-2025-04-07 19:04:07,381 - INFO - GET request for /view?author_id=tlg1264&work_id=tlg001&view_mode=raw from ('127.0.0.1', 59032)
-2025-04-07 19:04:07,382 - DEBUG - Serving view page for author_id: tlg1264, work_id: tlg001, view_mode: raw
-2025-04-07 19:04:07,398 - INFO - Processed 2 XML files and 0 text files for tlg1264/tlg001
-2025-04-07 19:04:07,398 - DEBUG - get_work_content(tlg1264, tlg001) took 0.016s
-2025-04-07 19:04:07,402 - INFO - 127.0.0.1 - "GET /view?author_id=tlg1264&work_id=tlg001&view_mode=raw HTTP/1.1" 200 -
-2025-04-07 19:04:07,403 - DEBUG - Sending HTML response, length: 1702425
-2025-04-07 19:04:07,403 - DEBUG - Successfully sent 1702425 bytes
-2025-04-07 19:04:07,404 - DEBUG - Request processed in 0.0221 seconds
-2025-04-07 19:04:07,404 - INFO - PageGenerator loaded author data with 368 entries
-2025-04-07 19:04:07,404 - INFO - PageGenerator loaded user preferences with 1 total entries
-2025-04-07 19:04:07,422 - INFO - GET request for /static/css/reader.css from ('127.0.0.1', 59033)
-2025-04-07 19:04:07,422 - DEBUG - Serving static file: /static/css/reader.css
-2025-04-07 19:04:07,424 - INFO - 127.0.0.1 - "GET /static/css/reader.css HTTP/1.1" 200 -
-2025-04-07 19:04:07,424 - DEBUG - Successfully sent 646 bytes
-2025-04-07 19:04:07,424 - DEBUG - Request processed in 0.0020 seconds
-2025-04-07 19:04:22,556 - INFO - PageGenerator loaded author data with 368 entries
-2025-04-07 19:04:22,557 - INFO - PageGenerator loaded user preferences with 1 total entries
-2025-04-07 19:04:22,719 - INFO - GET request for /view?author_id=tlg1264&work_id=tlg001&view_mode=raw from ('127.0.0.1', 59050)
-2025-04-07 19:04:22,720 - DEBUG - Serving view page for author_id: tlg1264, work_id: tlg001, view_mode: raw
-2025-04-07 19:04:22,739 - INFO - Processed 2 XML files and 0 text files for tlg1264/tlg001
-2025-04-07 19:04:22,739 - DEBUG - get_work_content(tlg1264, tlg001) took 0.019s
-2025-04-07 19:04:22,743 - INFO - 127.0.0.1 - "GET /view?author_id=tlg1264&work_id=tlg001&view_mode=raw HTTP/1.1" 200 -
-2025-04-07 19:04:22,745 - DEBUG - Sending HTML response, length: 1702425
-2025-04-07 19:04:22,745 - DEBUG - Successfully sent 1702425 bytes
-2025-04-07 19:04:22,746 - DEBUG - Request processed in 0.0275 seconds
-2025-04-07 19:04:22,747 - INFO - PageGenerator loaded author data with 368 entries
-2025-04-07 19:04:22,747 - INFO - PageGenerator loaded user preferences with 1 total entries
-2025-04-07 19:04:22,762 - INFO - GET request for /static/css/reader.css from ('127.0.0.1', 59051)
-2025-04-07 19:04:22,762 - DEBUG - Serving static file: /static/css/reader.css
-2025-04-07 19:04:22,762 - INFO - 127.0.0.1 - "GET /static/css/reader.css HTTP/1.1" 200 -
-2025-04-07 19:04:22,762 - DEBUG - Successfully sent 646 bytes
-2025-04-07 19:04:22,762 - DEBUG - Request processed in 0.0005 seconds
-2025-04-07 19:04:24,800 - INFO - PageGenerator loaded author data with 368 entries
-2025-04-07 19:04:24,801 - INFO - PageGenerator loaded user preferences with 1 total entries
-2025-04-07 19:04:24,949 - INFO - GET request for /view?author_id=tlg1264&work_id=tlg001&view_mode=readable from ('127.0.0.1', 59061)
-2025-04-07 19:04:24,949 - DEBUG - Serving view page for author_id: tlg1264, work_id: tlg001, view_mode: readable
-2025-04-07 19:04:24,965 - INFO - Processed 2 XML files and 0 text files for tlg1264/tlg001
-2025-04-07 19:04:24,966 - DEBUG - get_work_content(tlg1264, tlg001) took 0.016s
-2025-04-07 19:04:24,969 - INFO - 127.0.0.1 - "GET /view?author_id=tlg1264&work_id=tlg001&view_mode=readable HTTP/1.1" 200 -
-2025-04-07 19:04:24,971 - DEBUG - Sending HTML response, length: 1702371
-2025-04-07 19:04:24,971 - DEBUG - Successfully sent 1702371 bytes
-2025-04-07 19:04:24,971 - DEBUG - Request processed in 0.0224 seconds
-2025-04-07 19:04:24,973 - INFO - PageGenerator loaded author data with 368 entries
-2025-04-07 19:04:24,973 - INFO - PageGenerator loaded user preferences with 1 total entries
-2025-04-07 19:04:24,988 - INFO - GET request for /static/css/reader.css from ('127.0.0.1', 59062)
-2025-04-07 19:04:24,988 - DEBUG - Serving static file: /static/css/reader.css
-2025-04-07 19:04:24,988 - INFO - 127.0.0.1 - "GET /static/css/reader.css HTTP/1.1" 200 -
-2025-04-07 19:04:24,988 - DEBUG - Successfully sent 646 bytes
-2025-04-07 19:04:24,988 - DEBUG - Request processed in 0.0003 seconds
-2025-04-07 19:04:28,304 - INFO - PageGenerator loaded author data with 368 entries
-2025-04-07 19:04:28,304 - INFO - PageGenerator loaded user preferences with 1 total entries
-2025-04-07 19:04:28,399 - INFO - GET request for /works?author_id=tlg1264 from ('127.0.0.1', 59077)
-2025-04-07 19:04:28,400 - DEBUG - Serving works page for author_id: tlg1264
-2025-04-07 19:04:28,403 - INFO - 127.0.0.1 - "GET /works?author_id=tlg1264 HTTP/1.1" 200 -
-2025-04-07 19:04:28,404 - DEBUG - Sending HTML response, length: 2002
-2025-04-07 19:04:28,404 - DEBUG - Successfully sent 2002 bytes
-2025-04-07 19:04:28,405 - DEBUG - Request processed in 0.0055 seconds
-2025-04-07 19:04:28,408 - INFO - PageGenerator loaded author data with 368 entries
-2025-04-07 19:04:28,409 - INFO - PageGenerator loaded user preferences with 1 total entries
-2025-04-07 19:04:28,421 - INFO - GET request for /static/css/main.css from ('127.0.0.1', 59078)
-2025-04-07 19:04:28,421 - DEBUG - Serving static file: /static/css/main.css
-2025-04-07 19:04:28,421 - INFO - 127.0.0.1 - "GET /static/css/main.css HTTP/1.1" 200 -
-2025-04-07 19:04:28,422 - DEBUG - Successfully sent 538 bytes
-2025-04-07 19:04:28,422 - DEBUG - Request processed in 0.0009 seconds
-2025-04-07 19:04:29,750 - INFO - PageGenerator loaded author data with 368 entries
-2025-04-07 19:04:29,750 - INFO - PageGenerator loaded user preferences with 1 total entries
-2025-04-07 19:04:29,889 - INFO - GET request for /authors from ('127.0.0.1', 59093)
-2025-04-07 19:04:29,889 - DEBUG - Serving authors table page
-2025-04-07 19:04:29,889 - DEBUG - Reloading data from disk
-2025-04-07 19:04:29,890 - INFO - PageGenerator loaded author data with 368 entries
-2025-04-07 19:04:29,890 - INFO - PageGenerator loaded user preferences with 1 total entries
-2025-04-07 19:04:29,890 - DEBUG - Data reload completed in 0.001s
-2025-04-07 19:04:30,213 - INFO - 127.0.0.1 - "GET /authors HTTP/1.1" 200 -
-2025-04-07 19:04:30,213 - DEBUG - Sending HTML response, length: 512097
-2025-04-07 19:04:30,214 - DEBUG - Successfully sent 512097 bytes
-2025-04-07 19:04:30,214 - DEBUG - Request processed in 0.3248 seconds
-2025-04-07 19:04:30,214 - INFO - PageGenerator loaded author data with 368 entries
-2025-04-07 19:04:30,214 - INFO - PageGenerator loaded user preferences with 1 total entries
-2025-04-07 19:04:30,245 - INFO - GET request for /static/css/main.css from ('127.0.0.1', 59094)
-2025-04-07 19:04:30,245 - DEBUG - Serving static file: /static/css/main.css
-2025-04-07 19:04:30,250 - INFO - 127.0.0.1 - "GET /static/css/main.css HTTP/1.1" 200 -
-2025-04-07 19:04:30,250 - DEBUG - Successfully sent 538 bytes
-2025-04-07 19:04:30,250 - DEBUG - Request processed in 0.0044 seconds
-2025-04-07 19:04:30,250 - INFO - PageGenerator loaded author data with 368 entries
-2025-04-07 19:04:30,251 - INFO - PageGenerator loaded user preferences with 1 total entries
-2025-04-07 19:04:30,251 - INFO - GET request for /static/css/authors-table.css from ('127.0.0.1', 59095)
-2025-04-07 19:04:30,251 - DEBUG - Serving static file: /static/css/authors-table.css
-2025-04-07 19:04:30,254 - INFO - 127.0.0.1 - "GET /static/css/authors-table.css HTTP/1.1" 200 -
-2025-04-07 19:04:30,254 - DEBUG - Successfully sent 7633 bytes
-2025-04-07 19:04:30,254 - DEBUG - Request processed in 0.0033 seconds
-2025-04-07 19:04:30,255 - INFO - PageGenerator loaded author data with 368 entries
-2025-04-07 19:04:30,255 - INFO - PageGenerator loaded user preferences with 1 total entries
-2025-04-07 19:04:30,255 - INFO - GET request for /static/js/authors_table.js?v=1744049069 from ('127.0.0.1', 59096)
-2025-04-07 19:04:30,255 - DEBUG - Serving static file: /static/js/authors_table.js
-2025-04-07 19:04:30,256 - INFO - 127.0.0.1 - "GET /static/js/authors_table.js?v=1744049069 HTTP/1.1" 200 -
-2025-04-07 19:04:30,256 - DEBUG - Successfully sent 35329 bytes
-2025-04-07 19:04:30,256 - DEBUG - Request processed in 0.0006 seconds
-2025-04-07 19:04:46,737 - INFO - PageGenerator loaded author data with 368 entries
-2025-04-07 19:04:46,738 - INFO - PageGenerator loaded user preferences with 1 total entries
-2025-04-07 19:04:46,739 - INFO - GET request for /get_author_works?author_id=tlg0004 from ('127.0.0.1', 59113)
-2025-04-07 19:04:46,739 - DEBUG - Getting works for author_id: tlg0004
-2025-04-07 19:04:46,740 - INFO - Found 1 works for author tlg0004
-2025-04-07 19:04:46,740 - INFO - 127.0.0.1 - "GET /get_author_works?author_id=tlg0004 HTTP/1.1" 200 -
-2025-04-07 19:04:46,741 - DEBUG - Sending JSON response, length: 181
-2025-04-07 19:04:46,745 - DEBUG - Request processed in 0.0067 seconds
-2025-04-07 19:04:56,979 - INFO - PageGenerator loaded author data with 368 entries
-2025-04-07 19:04:56,980 - INFO - PageGenerator loaded user preferences with 1 total entries
-2025-04-07 19:04:57,117 - INFO - GET request for /view?author_id=tlg0004&work_id=tlg001 from ('127.0.0.1', 59114)
-2025-04-07 19:04:57,117 - DEBUG - Serving view page for author_id: tlg0004, work_id: tlg001, view_mode: readable
-2025-04-07 19:04:57,151 - INFO - Processed 3 XML files and 0 text files for tlg0004/tlg001
-2025-04-07 19:04:57,151 - DEBUG - get_work_content(tlg0004, tlg001) took 0.034s
-2025-04-07 19:04:57,156 - INFO - 127.0.0.1 - "GET /view?author_id=tlg0004&work_id=tlg001 HTTP/1.1" 200 -
-2025-04-07 19:04:57,158 - DEBUG - Sending HTML response, length: 3446367
-2025-04-07 19:04:57,159 - DEBUG - Successfully sent 3446367 bytes
-2025-04-07 19:04:57,160 - DEBUG - Request processed in 0.0430 seconds
-2025-04-07 19:04:57,162 - INFO - PageGenerator loaded author data with 368 entries
-2025-04-07 19:04:57,162 - INFO - PageGenerator loaded user preferences with 1 total entries
-2025-04-07 19:04:57,170 - INFO - GET request for /static/css/reader.css from ('127.0.0.1', 59115)
-2025-04-07 19:04:57,170 - DEBUG - Serving static file: /static/css/reader.css
-2025-04-07 19:04:57,171 - INFO - 127.0.0.1 - "GET /static/css/reader.css HTTP/1.1" 200 -
-2025-04-07 19:04:57,171 - DEBUG - Successfully sent 646 bytes
-2025-04-07 19:04:57,171 - DEBUG - Request processed in 0.0004 seconds
+2025-04-07 19:32:09,497 - INFO - Loaded author data with 368 entries
+2025-04-07 19:32:09,497 - INFO - Starting First1KGreek Browser - Fixed Version 1.2.0
+2025-04-07 19:32:09,497 - INFO - With dark theme and improved editor detection
+2025-04-07 19:32:09,498 - INFO - Starting server on port 8000...
+2025-04-07 19:32:09,499 - INFO - Server started at http://localhost:8000
+2025-04-07 19:32:14,899 - INFO - GET request for / from ('127.0.0.1', 60149)
+2025-04-07 19:32:14,899 - DEBUG - Serving home page
+2025-04-07 19:32:14,899 - INFO - 127.0.0.1 - "GET / HTTP/1.1" 200 -
+2025-04-07 19:32:14,899 - DEBUG - Sending HTML response, length: 906
+2025-04-07 19:32:14,899 - DEBUG - Successfully sent 906 bytes
+2025-04-07 19:32:14,899 - DEBUG - Request processed in 0.0006 seconds
+2025-04-07 19:32:14,917 - INFO - GET request for /static/css/main.css from ('127.0.0.1', 60150)
+2025-04-07 19:32:14,918 - DEBUG - Serving static file: /static/css/main.css
+2025-04-07 19:32:14,921 - INFO - 127.0.0.1 - "GET /static/css/main.css HTTP/1.1" 200 -
+2025-04-07 19:32:14,922 - DEBUG - Successfully sent 538 bytes
+2025-04-07 19:32:14,922 - DEBUG - Request processed in 0.0058 seconds
+2025-04-07 19:32:16,593 - INFO - GET request for /authors from ('127.0.0.1', 60166)
+2025-04-07 19:32:16,594 - DEBUG - Serving authors table page
+2025-04-07 19:32:16,594 - ERROR - Error handling GET request: 'CustomHTTPRequestHandler' object has no attribute 'get_user_prefs'
+2025-04-07 19:32:16,612 - ERROR - Traceback (most recent call last):
+  File "/Users/james/Documents/GitHub/First1KGreek/browse_texts_fixed.py", line 476, in do_GET
+    self.send_html_response(self.get_authors_table_page())
+                            ~~~~~~~~~~~~~~~~~~~~~~~~~~~^^
+  File "/Users/james/Documents/GitHub/First1KGreek/browse_texts_fixed.py", line 896, in get_authors_table_page
+    {json.dumps(self.get_user_prefs())}
+                ^^^^^^^^^^^^^^^^^^^
+AttributeError: 'CustomHTTPRequestHandler' object has no attribute 'get_user_prefs'
+
+2025-04-07 19:32:16,613 - INFO - 127.0.0.1 - code 500, message Internal Server Error: 'CustomHTTPRequestHandler' object has no attribute 'get_user_prefs'
+2025-04-07 19:32:16,613 - INFO - 127.0.0.1 - "GET /authors HTTP/1.1" 500 -
+2025-04-07 19:32:16,613 - DEBUG - Request processed in 0.0197 seconds
+2025-04-07 19:33:49,801 - INFO - GET request for /search from ('127.0.0.1', 60241)
+2025-04-07 19:33:49,802 - DEBUG - Serving search page
+2025-04-07 19:33:49,802 - ERROR - Error handling GET request: 'CustomHTTPRequestHandler' object has no attribute 'get_search_page'
+2025-04-07 19:33:49,804 - ERROR - Traceback (most recent call last):
+  File "/Users/james/Documents/GitHub/First1KGreek/browse_texts_fixed.py", line 508, in do_GET
+    self.send_html_response(self.get_search_page())
+                            ^^^^^^^^^^^^^^^^^^^^
+AttributeError: 'CustomHTTPRequestHandler' object has no attribute 'get_search_page'. Did you mean: 'get_works_page'?
+
+2025-04-07 19:33:49,804 - INFO - 127.0.0.1 - code 500, message Internal Server Error: 'CustomHTTPRequestHandler' object has no attribute 'get_search_page'
+2025-04-07 19:33:49,804 - INFO - 127.0.0.1 - "GET /search HTTP/1.1" 500 -
+2025-04-07 19:33:49,805 - DEBUG - Request processed in 0.0035 seconds
+2025-04-07 19:33:53,101 - INFO - GET request for /editors from ('127.0.0.1', 60242)
+2025-04-07 19:33:53,101 - DEBUG - Serving editors page
+2025-04-07 19:33:53,102 - ERROR - Error handling GET request: 'CustomHTTPRequestHandler' object has no attribute 'get_editors_page'
+2025-04-07 19:33:53,102 - ERROR - Traceback (most recent call last):
+  File "/Users/james/Documents/GitHub/First1KGreek/browse_texts_fixed.py", line 505, in do_GET
+    self.send_html_response(self.get_editors_page())
+                            ^^^^^^^^^^^^^^^^^^^^^
+AttributeError: 'CustomHTTPRequestHandler' object has no attribute 'get_editors_page'. Did you mean: 'get_works_page'?
+
+2025-04-07 19:33:53,103 - INFO - 127.0.0.1 - code 500, message Internal Server Error: 'CustomHTTPRequestHandler' object has no attribute 'get_editors_page'
+2025-04-07 19:33:53,103 - INFO - 127.0.0.1 - "GET /editors HTTP/1.1" 500 -
+2025-04-07 19:33:53,103 - DEBUG - Request processed in 0.0021 seconds
+2025-04-07 19:33:58,557 - INFO - GET request for /authors from ('127.0.0.1', 60271)
+2025-04-07 19:33:58,557 - DEBUG - Serving authors table page
+2025-04-07 19:33:58,558 - ERROR - Error handling GET request: 'CustomHTTPRequestHandler' object has no attribute 'get_user_prefs'
+2025-04-07 19:33:58,559 - ERROR - Traceback (most recent call last):
+  File "/Users/james/Documents/GitHub/First1KGreek/browse_texts_fixed.py", line 476, in do_GET
+    self.send_html_response(self.get_authors_table_page())
+                            ~~~~~~~~~~~~~~~~~~~~~~~~~~~^^
+  File "/Users/james/Documents/GitHub/First1KGreek/browse_texts_fixed.py", line 896, in get_authors_table_page
+    {json.dumps(self.get_user_prefs())}
+                ^^^^^^^^^^^^^^^^^^^
+AttributeError: 'CustomHTTPRequestHandler' object has no attribute 'get_user_prefs'
+
+2025-04-07 19:33:58,559 - INFO - 127.0.0.1 - code 500, message Internal Server Error: 'CustomHTTPRequestHandler' object has no attribute 'get_user_prefs'
+2025-04-07 19:33:58,559 - INFO - 127.0.0.1 - "GET /authors HTTP/1.1" 500 -
+2025-04-07 19:33:58,559 - DEBUG - Request processed in 0.0027 seconds

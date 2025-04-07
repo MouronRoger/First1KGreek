@@ -72,4 +72,40 @@ Potential areas for further improvement:
 
 ## Original Project
 
-This is a fork of the [OpenGreekAndLatin/First1KGreek](https://github.com/OpenGreekAndLatin/First1KGreek) project, which contains XML files for works in the First Thousand Years of Greek Project. 
+This is a fork of the [OpenGreekAndLatin/First1KGreek](https://github.com/OpenGreekAndLatin/First1KGreek) project, which contains XML files for works in the First Thousand Years of Greek Project.
+
+## Linting Setup
+
+The project now includes standardized linting configuration files:
+
+- `pyproject.toml`: Contains settings for Black formatter with a line length of 120
+- `.flake8`: Contains Flake8 settings with docstring checking (D100s)
+
+### Running the Linters
+
+To check and format code, run these commands:
+
+```bash
+# Check for linting issues
+flake8 browse_texts_fixed.py
+
+# Format code automatically
+black browse_texts_fixed.py
+
+# Combined check for imports, formatting, and lint
+isort browse_texts_fixed.py && black browse_texts_fixed.py && flake8 browse_texts_fixed.py
+```
+
+### Linting Standards
+
+- Line length: 120 characters
+- Docstrings: Required for all public modules, classes, and functions (D100, D101, D102, D103)
+- Import organization: Using isort with Black compatibility
+
+### Incremental Adoption
+
+The linting configuration is designed for incremental adoption:
+- Focus on fixing critical issues first (undefined variables, function redefinitions)
+- Add proper docstrings to new code
+- Format code with Black when making substantial edits
+- Be cautious with XML-containing files/directories which are excluded from automatic formatting 
