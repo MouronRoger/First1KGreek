@@ -1,70 +1,10 @@
-2025-04-07 19:32:09,497 - INFO - Loaded author data with 368 entries
-2025-04-07 19:32:09,497 - INFO - Starting First1KGreek Browser - Fixed Version 1.2.0
-2025-04-07 19:32:09,497 - INFO - With dark theme and improved editor detection
-2025-04-07 19:32:09,498 - INFO - Starting server on port 8000...
-2025-04-07 19:32:09,499 - INFO - Server started at http://localhost:8000
-2025-04-07 19:32:14,899 - INFO - GET request for / from ('127.0.0.1', 60149)
-2025-04-07 19:32:14,899 - DEBUG - Serving home page
-2025-04-07 19:32:14,899 - INFO - 127.0.0.1 - "GET / HTTP/1.1" 200 -
-2025-04-07 19:32:14,899 - DEBUG - Sending HTML response, length: 906
-2025-04-07 19:32:14,899 - DEBUG - Successfully sent 906 bytes
-2025-04-07 19:32:14,899 - DEBUG - Request processed in 0.0006 seconds
-2025-04-07 19:32:14,917 - INFO - GET request for /static/css/main.css from ('127.0.0.1', 60150)
-2025-04-07 19:32:14,918 - DEBUG - Serving static file: /static/css/main.css
-2025-04-07 19:32:14,921 - INFO - 127.0.0.1 - "GET /static/css/main.css HTTP/1.1" 200 -
-2025-04-07 19:32:14,922 - DEBUG - Successfully sent 538 bytes
-2025-04-07 19:32:14,922 - DEBUG - Request processed in 0.0058 seconds
-2025-04-07 19:32:16,593 - INFO - GET request for /authors from ('127.0.0.1', 60166)
-2025-04-07 19:32:16,594 - DEBUG - Serving authors table page
-2025-04-07 19:32:16,594 - ERROR - Error handling GET request: 'CustomHTTPRequestHandler' object has no attribute 'get_user_prefs'
-2025-04-07 19:32:16,612 - ERROR - Traceback (most recent call last):
-  File "/Users/james/Documents/GitHub/First1KGreek/browse_texts_fixed.py", line 476, in do_GET
-    self.send_html_response(self.get_authors_table_page())
-                            ~~~~~~~~~~~~~~~~~~~~~~~~~~~^^
-  File "/Users/james/Documents/GitHub/First1KGreek/browse_texts_fixed.py", line 896, in get_authors_table_page
-    {json.dumps(self.get_user_prefs())}
-                ^^^^^^^^^^^^^^^^^^^
-AttributeError: 'CustomHTTPRequestHandler' object has no attribute 'get_user_prefs'
+2025-04-07 19:36:42,207 - INFO - Loaded author data with 368 entries
+2025-04-07 19:36:42,207 - INFO - Starting First1KGreek Browser - Fixed Version 1.2.0
+2025-04-07 19:36:42,207 - INFO - With dark theme and improved editor detection
+2025-04-07 19:36:42,207 - ERROR - Unhandled exception in main program: name 'handle_shutdown' is not defined
+2025-04-07 19:36:42,210 - ERROR - Traceback (most recent call last):
+  File "/Users/james/Documents/GitHub/First1KGreek/browse_texts_fixed.py", line 1137, in <module>
+    signal.signal(signal.SIGINT, handle_shutdown)
+                                 ^^^^^^^^^^^^^^^
+NameError: name 'handle_shutdown' is not defined
 
-2025-04-07 19:32:16,613 - INFO - 127.0.0.1 - code 500, message Internal Server Error: 'CustomHTTPRequestHandler' object has no attribute 'get_user_prefs'
-2025-04-07 19:32:16,613 - INFO - 127.0.0.1 - "GET /authors HTTP/1.1" 500 -
-2025-04-07 19:32:16,613 - DEBUG - Request processed in 0.0197 seconds
-2025-04-07 19:33:49,801 - INFO - GET request for /search from ('127.0.0.1', 60241)
-2025-04-07 19:33:49,802 - DEBUG - Serving search page
-2025-04-07 19:33:49,802 - ERROR - Error handling GET request: 'CustomHTTPRequestHandler' object has no attribute 'get_search_page'
-2025-04-07 19:33:49,804 - ERROR - Traceback (most recent call last):
-  File "/Users/james/Documents/GitHub/First1KGreek/browse_texts_fixed.py", line 508, in do_GET
-    self.send_html_response(self.get_search_page())
-                            ^^^^^^^^^^^^^^^^^^^^
-AttributeError: 'CustomHTTPRequestHandler' object has no attribute 'get_search_page'. Did you mean: 'get_works_page'?
-
-2025-04-07 19:33:49,804 - INFO - 127.0.0.1 - code 500, message Internal Server Error: 'CustomHTTPRequestHandler' object has no attribute 'get_search_page'
-2025-04-07 19:33:49,804 - INFO - 127.0.0.1 - "GET /search HTTP/1.1" 500 -
-2025-04-07 19:33:49,805 - DEBUG - Request processed in 0.0035 seconds
-2025-04-07 19:33:53,101 - INFO - GET request for /editors from ('127.0.0.1', 60242)
-2025-04-07 19:33:53,101 - DEBUG - Serving editors page
-2025-04-07 19:33:53,102 - ERROR - Error handling GET request: 'CustomHTTPRequestHandler' object has no attribute 'get_editors_page'
-2025-04-07 19:33:53,102 - ERROR - Traceback (most recent call last):
-  File "/Users/james/Documents/GitHub/First1KGreek/browse_texts_fixed.py", line 505, in do_GET
-    self.send_html_response(self.get_editors_page())
-                            ^^^^^^^^^^^^^^^^^^^^^
-AttributeError: 'CustomHTTPRequestHandler' object has no attribute 'get_editors_page'. Did you mean: 'get_works_page'?
-
-2025-04-07 19:33:53,103 - INFO - 127.0.0.1 - code 500, message Internal Server Error: 'CustomHTTPRequestHandler' object has no attribute 'get_editors_page'
-2025-04-07 19:33:53,103 - INFO - 127.0.0.1 - "GET /editors HTTP/1.1" 500 -
-2025-04-07 19:33:53,103 - DEBUG - Request processed in 0.0021 seconds
-2025-04-07 19:33:58,557 - INFO - GET request for /authors from ('127.0.0.1', 60271)
-2025-04-07 19:33:58,557 - DEBUG - Serving authors table page
-2025-04-07 19:33:58,558 - ERROR - Error handling GET request: 'CustomHTTPRequestHandler' object has no attribute 'get_user_prefs'
-2025-04-07 19:33:58,559 - ERROR - Traceback (most recent call last):
-  File "/Users/james/Documents/GitHub/First1KGreek/browse_texts_fixed.py", line 476, in do_GET
-    self.send_html_response(self.get_authors_table_page())
-                            ~~~~~~~~~~~~~~~~~~~~~~~~~~~^^
-  File "/Users/james/Documents/GitHub/First1KGreek/browse_texts_fixed.py", line 896, in get_authors_table_page
-    {json.dumps(self.get_user_prefs())}
-                ^^^^^^^^^^^^^^^^^^^
-AttributeError: 'CustomHTTPRequestHandler' object has no attribute 'get_user_prefs'
-
-2025-04-07 19:33:58,559 - INFO - 127.0.0.1 - code 500, message Internal Server Error: 'CustomHTTPRequestHandler' object has no attribute 'get_user_prefs'
-2025-04-07 19:33:58,559 - INFO - 127.0.0.1 - "GET /authors HTTP/1.1" 500 -
-2025-04-07 19:33:58,559 - DEBUG - Request processed in 0.0027 seconds
