@@ -18,7 +18,6 @@ import urllib.parse
 import argparse
 import logging
 import traceback
-from html import escape
 
 # Configure logging
 logging.basicConfig(
@@ -33,6 +32,7 @@ logger = logging.getLogger(__name__)
 
 # Parse command line arguments
 def parse_args():
+    """Parse command line arguments for the server."""
     parser = argparse.ArgumentParser(description='First1KGreek Browser')
     parser.add_argument('--port', type=int, default=8000, help='Port to run the server on')
     parser.add_argument('--debug', action='store_true', help='Enable debug mode')
@@ -432,26 +432,12 @@ def is_port_in_use(port):
         logger.debug(f"Port {port} is {'in use' if result else 'available'}")
         return result
 
-def find_available_port(start_port=8000, max_attempts=10):
+def find_available_port(start_port=8000, max_attempts=100):
     """Find an available port starting from start_port"""
     logger.debug(f"Searching for available port starting from {start_port}")
     for port in range(start_port, start_port + max_attempts):
         if not is_port_in_use(port):
             logger.debug(f"Found available port: {port}")
-            return port
-    logger.warning(f"No available ports found in range {start_port}-{start_port+max_attempts-1}")
-    return start_port
-
-def is_port_in_use(port):
-    """Check if a port is already in use"""
-    with socket.socket(socket.AF_INET, socket.SOCK_STREAM) as s:
-        return s.connect_ex(('localhost', port)) == 0
-
-def find_available_port(start_port):
-    """Find an available port starting from a given port"""
-    max_attempts = 100
-    for port in range(start_port, start_port + max_attempts):
-        if not is_port_in_use(port):
             return port
     logger.warning(f"No available ports found in range {start_port}-{start_port+max_attempts-1}")
     return start_port
@@ -1130,6 +1116,53 @@ class CustomHTTPRequestHandler(http.server.SimpleHTTPRequestHandler):
         </html>
         '''
         return html
+
+def handle_shutdown(sig, frame):
+    """Handle external shutdown signals"""
+    logger.info(f"Received signal {sig}, initiating shutdown...")
+    if server_instance:
+        try:
+            server_instance.shutdown()
+            logger.info("Server has been shut down via signal handler")
+        except Exception as e:
+            logger.error(f"Error during signal-triggered shutdown: {str(e)}")
+
+def main():
+    """Main function to start the server"""
+    global server_instance, PORT, DEBUG
+    
+    # Parse command line arguments when running as main
+    args = parse_args()
+    PORT = args.port
+    DEBUG = args.debug
+    
+    try:
+        # Make sure socket is properly released
+        socketserver.TCPServer.allow_reuse_address = True
+        
+        logger.info(f"Starting server on port {PORT}...")
+        server_instance = socketserver.TCPServer((HOST, PORT), CustomHTTPRequestHandler)
+        logger.info(f"Server started at http://{HOST}:{PORT}")
+        
+        # Print directly to console for visibility
+        print("\n======================================")
+        print(f"Server is running at http://{HOST}:{PORT}")
+        print("Press Ctrl+C to shutdown")
+        print("======================================\n")
+        
+        server_instance.serve_forever()
+            
+    except KeyboardInterrupt:
+        logger.info("\nServer shutdown requested.")
+        if server_instance:
+            try:
+                server_instance.shutdown()
+                logger.info("Server has been shut down gracefully")
+            except Exception as e:
+                logger.error(f"Error during shutdown: {str(e)}")
+    except Exception as e:
+        logger.error(f"Error starting server: {str(e)}")
+        logger.error(traceback.format_exc())
 
 if __name__ == "__main__":
     try:
