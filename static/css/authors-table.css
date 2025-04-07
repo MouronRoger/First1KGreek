@@ -29,6 +29,13 @@
     text-overflow: ellipsis;
 }
 
+.author-type {
+    font-size: 0.8em;
+    color: #aaa;
+    margin-top: 3px;
+    font-style: italic;
+}
+
 /* Fixed column widths */
 .authors-table th:nth-child(1),
 .authors-table td:nth-child(1) {
@@ -267,6 +274,13 @@
     background-color: #333;
     color: white;
     border-radius: 4px;
+}
+
+.modal-help {
+    font-size: 0.85em;
+    color: #aaa;
+    margin-top: -5px;
+    margin-bottom: 15px;
 }
 
 .modal-footer {

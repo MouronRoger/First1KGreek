@@ -570,7 +570,7 @@ class PageGenerator:
                             <th data-sort="author_name">Author Name</th>
                             <th data-sort="century">Century</th>
                             <th data-sort="works">Works</th>
-                            <th data-sort="allegiance">Allegiance</th>
+                            <th data-sort="type">Type</th>
                             <th>Actions</th>
                         </tr>
                     </thead>
@@ -583,8 +583,18 @@ class PageGenerator:
                 continue
 
             author_name = author_data.get('name', '')
-            century = author_data.get('century', '')
-            allegiance = author_data.get('allegiance', '')
+            century_value = author_data.get('century', '')
+            
+            # Format century value - negative for BCE, positive for CE
+            if isinstance(century_value, int):
+                if century_value < 0:
+                    century = f"{abs(century_value)} BCE"
+                else:
+                    century = f"{century_value} CE"
+            else:
+                century = str(century_value)
+                
+            type_value = author_data.get('type', author_data.get('allegiance', ''))
             works_count = len(self.get_author_works(author_id))
 
             # Add icons for favorite/archived status
@@ -596,10 +606,13 @@ class PageGenerator:
 
             html += f'''
                         <tr data-id="{author_id}">
-                            <td data-column="author_name">{name_prefix}{author_name}</td>
+                            <td data-column="author_name">
+                                {name_prefix}{author_name}
+                                <div class="author-type">{type_value}</div>
+                            </td>
                             <td data-column="century">{century}</td>
                             <td data-column="works">{works_count}</td>
-                            <td data-column="allegiance">{allegiance}</td>
+                            <td data-column="type">{type_value}</td>
                             <td class="actions">
                                 <button class="favorite-btn" data-author-id="{author_id}">
                                     {'Unfavorite' if author_id in (self.user_prefs.get('favorites', []) or []) else 'Favorite'}
@@ -631,7 +644,8 @@ class PageGenerator:
                         <h2>Edit Century</h2>
                         <p id="edit-author-name"></p>
                         <input type="hidden" id="edit-author-id">
-                        <input type="text" id="edit-century" placeholder="Enter century (e.g., 2 BCE, 1 CE)">
+                        <input type="text" id="edit-century" placeholder="Enter century (e.g., -5 for 5 BCE, 2 for 2 CE)">
+                        <p class="modal-help">Use negative values for BCE (e.g., -5 for 5 BCE) and positive values for CE (e.g., 2 for 2 CE)</p>
                         <div class="modal-buttons">
                             <button class="cancel-btn">Cancel</button>
                             <button class="save-btn">Save</button>
@@ -1093,14 +1107,33 @@ class CustomHTTPRequestHandler(http.server.SimpleHTTPRequestHandler):
         """Handle updating author century"""
         global AUTHORS_DATA  # Directly reference the global AUTHORS_DATA
         author_id = post_data.get('author_id', [''])[0]
-        century = post_data.get('century', [''])[0]
+        century_input = post_data.get('century', [''])[0]
         
-        logger.info(f"Century update request: author_id='{author_id}', century='{century}'")
+        logger.info(f"Century update request: author_id='{author_id}', century_input='{century_input}'")
 
-        if not author_id or not century:
-            logger.warning(f"Missing required parameters: author_id={author_id}, century={century}")
+        if not author_id or not century_input:
+            logger.warning(f"Missing required parameters: author_id={author_id}, century_input={century_input}")
             self.send_error(400, "Missing required parameters")
             return
+            
+        # Process century input - convert to integer
+        try:
+            # Check if the input contains "BCE" or "CE" and convert accordingly
+            if "BCE" in century_input.upper():
+                # Remove "BCE" and convert to negative integer
+                century_value = -int(century_input.upper().replace("BCE", "").strip())
+            elif "CE" in century_input.upper():
+                # Remove "CE" and convert to positive integer
+                century_value = int(century_input.upper().replace("CE", "").strip())
+            else:
+                # Try to directly convert to integer
+                century_value = int(century_input.strip())
+        except ValueError:
+            logger.error(f"Invalid century format: {century_input}")
+            self.send_error(400, "Invalid century format. Use integer values (negative for BCE, positive for CE)")
+            return
+
+        logger.info(f"Parsed century value: {century_value}")
 
         try:
             # Make a backup of the current data
@@ -1117,8 +1150,8 @@ class CustomHTTPRequestHandler(http.server.SimpleHTTPRequestHandler):
             # First, try to update the global variable directly
             if author_id in AUTHORS_DATA:
                 old_century = AUTHORS_DATA[author_id].get('century', 'None')
-                logger.info(f"Updating global AUTHORS_DATA: {author_id} century from '{old_century}' to '{century}'")
-                AUTHORS_DATA[author_id]['century'] = century
+                logger.info(f"Updating global AUTHORS_DATA: {author_id} century from '{old_century}' to '{century_value}'")
+                AUTHORS_DATA[author_id]['century'] = century_value
             
             # Next, handle the file-based update
             authors_data = {}
@@ -1146,8 +1179,8 @@ class CustomHTTPRequestHandler(http.server.SimpleHTTPRequestHandler):
             # Update century in the loaded data
             if author_id in authors_data:
                 old_century = authors_data[author_id].get('century', 'None')
-                logger.info(f"Updating author '{author_id}' century from '{old_century}' to '{century}'")
-                authors_data[author_id]['century'] = century
+                logger.info(f"Updating author '{author_id}' century from '{old_century}' to '{century_value}'")
+                authors_data[author_id]['century'] = century_value
                 
                 # Write to file with atomic operation to prevent partial writes
                 try:
@@ -1195,12 +1228,12 @@ class CustomHTTPRequestHandler(http.server.SimpleHTTPRequestHandler):
                         response_data = {
                             'success': True, 
                             'author_id': author_id, 
-                            'century': century,
+                            'century': century_value,
                             'timestamp': time.time()
                         }
                         self.wfile.write(json.dumps(response_data).encode())
                         
-                        logger.info(f"Century update successful for {author_id}: {century}")
+                        logger.info(f"Century update successful for {author_id}: {century_value}")
                     else:
                         logger.error(f"File does not exist after save: {authors_data_path}")
                         self.send_error(500, "File disappeared after saving")

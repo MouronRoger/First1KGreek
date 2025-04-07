@@ -86,13 +86,29 @@ document.addEventListener('DOMContentLoaded', function () {
                         const response = JSON.parse(xhr.responseText);
                         console.log('Response:', response);
 
+                        // Format the century value for display
+                        const centuryValue = response.century;
+                        let displayCentury;
+
+                        if (typeof centuryValue === 'number') {
+                            // Format negative values as BCE, positive as CE
+                            if (centuryValue < 0) {
+                                displayCentury = `${Math.abs(centuryValue)} BCE`;
+                            } else {
+                                displayCentury = `${centuryValue} CE`;
+                            }
+                        } else {
+                            // Fallback for string values
+                            displayCentury = centuryValue;
+                        }
+
                         // Update the displayed century
                         const row = document.querySelector(`tr[data-id="${authorId}"]`);
                         if (row) {
                             const centuryCell = row.querySelector('[data-column="century"]');
                             if (centuryCell) {
-                                centuryCell.textContent = century;
-                                console.log(`Updated UI: ${authorId} century cell now displays "${century}"`);
+                                centuryCell.textContent = displayCentury;
+                                console.log(`Updated UI: ${authorId} century cell now displays "${displayCentury}"`);
                             } else {
                                 console.error(`Century cell not found for author ${authorId}`);
                             }
@@ -100,13 +116,13 @@ document.addEventListener('DOMContentLoaded', function () {
                             // Update the author object
                             const author = authors.find(a => a.id === authorId);
                             if (author) {
-                                author.century = century;
-                                console.log(`Updated author object: ${authorId} century now "${century}"`);
+                                author.century = displayCentury;
+                                console.log(`Updated author object: ${authorId} century now "${displayCentury}"`);
 
                                 // Update the edit button data attribute
                                 const editBtn = row.querySelector('.edit-btn');
                                 if (editBtn) {
-                                    editBtn.setAttribute('data-century', century);
+                                    editBtn.setAttribute('data-century', displayCentury);
                                     console.log(`Updated edit button data attribute for ${authorId}`);
                                 }
 
@@ -121,7 +137,7 @@ document.addEventListener('DOMContentLoaded', function () {
                                 successMsg.style.color = 'white';
                                 successMsg.style.borderRadius = '4px';
                                 successMsg.style.zIndex = '2000';
-                                successMsg.textContent = `Century updated successfully to "${century}"`;
+                                successMsg.textContent = `Century updated successfully to "${displayCentury}"`;
                                 document.body.appendChild(successMsg);
 
                                 // Remove after 3 seconds
@@ -201,14 +217,14 @@ document.addEventListener('DOMContentLoaded', function () {
         const authorName = row.querySelector('[data-column="author_name"]').textContent.trim();
         const century = row.querySelector('[data-column="century"]').textContent;
         const numWorks = parseInt(row.querySelector('[data-column="works"]').textContent);
-        const allegiance = row.querySelector('[data-column="allegiance"]').textContent;
+        const type = row.querySelector('[data-column="type"]').textContent;
 
         const author = {
             id: authorId,
             author_name: authorName,
             century: century,
             works: numWorks,
-            allegiance: allegiance,
+            type: type,
             favorite: userPrefs.favorites && userPrefs.favorites.includes(authorId),
             archived: userPrefs.archived && userPrefs.archived.includes(authorId),
             deleted: userPrefs.deleted && userPrefs.deleted.includes(authorId),
@@ -273,7 +289,7 @@ document.addEventListener('DOMContentLoaded', function () {
             if (searchText) {
                 return author.author_name.toLowerCase().includes(searchText) ||
                     author.century.toLowerCase().includes(searchText) ||
-                    author.allegiance.toLowerCase().includes(searchText) ||
+                    author.type.toLowerCase().includes(searchText) ||
                     author.id.toLowerCase().includes(searchText);
             }
 
