@@ -11,16 +11,13 @@ import http.server
 import socketserver
 import json
 import re
-import threading
 import time
 import socket
 import signal
-import xml.etree.ElementTree as ET
 import urllib.parse
 import argparse
 import logging
 import traceback
-from urllib.error import URLError, HTTPError
 from html import escape
 
 # Configure logging
@@ -445,608 +442,24 @@ def find_available_port(start_port=8000, max_attempts=10):
     logger.warning(f"No available ports found in range {start_port}-{start_port+max_attempts-1}")
     return start_port
 
-class PageGenerator:
-    """Class to handle HTML page generation"""
-    
-    def __init__(self):
-        """Initialize with common data"""
-        self.authors_data = {}
-        self.user_prefs = {'favorites': [], 'archived': [], 'deleted': []}
-        
-        # Load data with proper error handling
-        self.load_data()
-    
-    def load_data(self):
-        """Load data with error handling"""
-        # Load authors data
-        try:
-            with open('authors_data.json', 'r', encoding='utf-8') as f:
-                self.authors_data = json.load(f)
-            logger.info(f"PageGenerator loaded author data with {len(self.authors_data)} entries")
-        except FileNotFoundError:
-            logger.error("authors_data.json not found - using empty dictionary")
-        except json.JSONDecodeError as e:
-            logger.error(f"Error parsing authors_data.json: {str(e)}")
-            logger.error(f"At line {e.lineno}, column {e.colno}: {e.msg}")
-        except Exception as e:
-            logger.error(f"Unexpected error loading authors_data.json: {str(e)}")
-            logger.error(traceback.format_exc())
-            
-        # Load user preferences    
-        try:
-            with open('user_preferences.json', 'r', encoding='utf-8') as f:
-                self.user_prefs = json.load(f)
-            logger.info(f"PageGenerator loaded user preferences with {sum(len(v) for v in self.user_prefs.values())} total entries")
-        except FileNotFoundError:
-            logger.info("user_preferences.json not found - using default preferences")
-        except json.JSONDecodeError as e:
-            logger.error(f"Error parsing user_preferences.json: {str(e)}")
-            logger.error(f"At line {e.lineno}, column {e.colno}: {e.msg}")
-        except Exception as e:
-            logger.error(f"Unexpected error loading user_preferences.json: {str(e)}")
-            logger.error(traceback.format_exc())
-    
-    def reload_data(self):
-        """Reload data from disk to ensure we have the latest version"""
-        logger.debug("Reloading data from disk")
-        data_reload_start = time.time()
-        self.load_data()
-        logger.debug(f"Data reload completed in {time.time() - data_reload_start:.3f}s")
-    
-    def get_home_page(self):
-        """Generate the home page"""
-        html = '''
-        <!DOCTYPE html>
-        <html>
-        <head>
-            <title>First1KGreek Browser</title>
-            <link rel="stylesheet" href="/static/css/main.css">
-        </head>
-        <body>
-            <div class="container">
-                <h1>First1KGreek Browser</h1>
-                <p>Welcome to the First1KGreek Browser. This tool allows you to browse, search, and view texts from the First 1000 Years of Greek project.</p>
-                
-                <h2>Navigation</h2>
-                <ul>
-                    <li><a href="/authors">Browse Authors</a></li>
-                    <li><a href="/editors">Browse Editors</a></li>
-                    <li><a href="/search">Search Texts</a></li>
-                </ul>
-                
-                <p><small>Version 1.2.0 (with dark theme) - Last updated: 2025-03-07</small></p>
-            </div>
-        </body>
-        </html>
-        '''
-        return html
-    
-    def get_authors_table_page(self):
-        """Generate the authors table page"""
-        # Reload data to ensure we have the latest values
-        self.reload_data()
-        
-        # HTML template with JavaScript and CSS includes
-        html = f'''
-        <!DOCTYPE html>
-        <html>
-        <head>
-            <title>Authors Table</title>
-            <link rel="stylesheet" href="/static/css/main.css">
-            <link rel="stylesheet" href="/static/css/authors-table.css">
-            <script id="user-prefs" type="application/json">
-                {json.dumps(self.user_prefs)}
-            </script>
-            <script src="/static/js/authors_table.js?v={int(time.time())}"></script>
-        </head>
-        <body>
-            <div class="container">
-                <h1>Authors Table</h1>
-                
-                <div class="filters">
-                    <div class="search-box">
-                        <input type="text" id="search-input" placeholder="Search authors...">
-                        <button id="search-btn">Search</button>
-                    </div>
-                    
-                    <div class="status-filters">
-                        <button class="active" data-filter="all">All</button>
-                        <button data-filter="favorites">Favorites</button>
-                        <button data-filter="archived">Archived</button>
-                        <button data-filter="normal">Normal</button>
-                    </div>
-                    
-                    <div class="century-filters">
-                        <button class="active" data-filter="all">All Centuries</button>
-                        <button data-filter="BCE">BCE</button>
-                        <button data-filter="CE-1-3">CE 1-3</button>
-                        <button data-filter="CE-4-6">CE 4-6</button>
-                    </div>
-                </div>
+def is_port_in_use(port):
+    """Check if a port is already in use"""
+    with socket.socket(socket.AF_INET, socket.SOCK_STREAM) as s:
+        return s.connect_ex(('localhost', port)) == 0
 
-                <table id="authors-table" class="authors-table">
-                    <thead>
-                        <tr>
-                            <th data-sort="author_name">Author Name</th>
-                            <th data-sort="century">Century</th>
-                            <th data-sort="works">Works</th>
-                            <th data-sort="type">Type</th>
-                            <th>Actions</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                '''
-
-        # Add table rows
-        for author_id, author_data in self.authors_data.items():
-            if author_id in (self.user_prefs.get('deleted', []) or []):
-                continue
-
-            author_name = author_data.get('name', '')
-            century_value = author_data.get('century', '')
-            
-            # Format century value - negative for BCE, positive for CE
-            if isinstance(century_value, int):
-                if century_value < 0:
-                    century = f"{abs(century_value)} BCE"
-                else:
-                    century = f"{century_value} CE"
-            else:
-                century = str(century_value)
-                
-            type_value = author_data.get('type', author_data.get('allegiance', ''))
-            works_count = len(self.get_author_works(author_id))
-
-            # Add icons for favorite/archived status
-            name_prefix = ''
-            if author_id in (self.user_prefs.get('favorites', []) or []):
-                name_prefix += '<span class="favorites-star">★</span> '
-            if author_id in (self.user_prefs.get('archived', []) or []):
-                name_prefix += '<span class="archived-icon">📦</span> '
-
-            html += f'''
-                        <tr data-id="{author_id}">
-                            <td data-column="author_name">
-                                {name_prefix}{author_name}
-                                <div class="author-type">{type_value}</div>
-                            </td>
-                            <td data-column="century">{century}</td>
-                            <td data-column="works">{works_count}</td>
-                            <td data-column="type">{type_value}</td>
-                            <td class="actions">
-                                <button class="favorite-btn" data-author-id="{author_id}">
-                                    {'Unfavorite' if author_id in (self.user_prefs.get('favorites', []) or []) else 'Favorite'}
-                                </button>
-                                <button class="archive-btn" data-author-id="{author_id}">
-                                    {'Unarchive' if author_id in (self.user_prefs.get('archived', []) or []) else 'Archive'}
-                                </button>
-                                <button class="delete-btn" data-author-id="{author_id}">Delete</button>
-                                <button class="edit-btn" 
-                                        data-author-id="{author_id}"
-                                        data-author-name="{author_name}"
-                                        data-century="{century}">
-                                    Edit Century
-                                </button>
-                            </td>
-                        </tr>
-                    '''
-
-        # Close table and add modal
-        html += '''
-                    </tbody>
-                </table>
-                
-                <div class="pagination"></div>
-
-                <div id="century-modal" class="modal">
-                    <div class="modal-content">
-                        <span class="close-modal">&times;</span>
-                        <h2>Edit Century</h2>
-                        <p id="edit-author-name"></p>
-                        <input type="hidden" id="edit-author-id">
-                        <input type="text" id="edit-century" placeholder="Enter century (e.g., -5 for 5 BCE, 2 for 2 CE)">
-                        <p class="modal-help">Use negative values for BCE (e.g., -5 for 5 BCE) and positive values for CE (e.g., 2 for 2 CE)</p>
-                        <div class="modal-buttons">
-                            <button class="cancel-btn">Cancel</button>
-                            <button class="save-btn">Save</button>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </body>
-        </html>
-        '''
-
-        return html
-    
-    def get_author_works(self, author_id):
-        """Get list of works for an author"""
-        works = []
-        author_dir = os.path.join('data', author_id)
-        
-        if os.path.exists(author_dir):
-            for item in os.listdir(author_dir):
-                work_path = os.path.join(author_dir, item)
-                if os.path.isdir(work_path) and not item.startswith('__'):
-                    # Get more information about the work
-                    work_info = {
-                        'id': item,
-                        'title': item,  # Default to directory name
-                        'files': []
-                    }
-                    
-                    # Check if there's any metadata available
-                    cts_file = os.path.join(work_path, '__cts__.xml')
-                    if os.path.exists(cts_file):
-                        try:
-                            with open(cts_file, 'r', encoding='utf-8') as f:
-                                content = f.read()
-                                title_match = re.search(r'<ti:title[^>]*>(.*?)</ti:title>', content)
-                                if title_match:
-                                    work_info['title'] = title_match.group(1).strip()
-                        except Exception as e:
-                            logger.error(f"Error reading metadata for {work_path}: {str(e)}")
-                    
-                    # Get file list
-                    try:
-                        for file in os.listdir(work_path):
-                            file_path = os.path.join(work_path, file)
-                            if os.path.isfile(file_path) and not file.startswith('__'):
-                                work_info['files'].append({
-                                    'name': file,
-                                    'type': file.split('.')[-1] if '.' in file else 'unknown'
-                                })
-                    except Exception as e:
-                        logger.error(f"Error listing files for {work_path}: {str(e)}")
-                    
-                    works.append(work_info)
-        
-        return works
-    
-    def get_works_page(self, query_string):
-        """Generate the works page"""
-        # Parse query parameters
-        query_params = urllib.parse.parse_qs(query_string)
-        author_id = query_params.get('author_id', [''])[0]
-        
-        if not author_id:
-            return self.get_error_page("Missing author_id parameter")
-        
-        # Get author data
-        author_data = self.authors_data.get(author_id, {})
-        author_name = author_data.get('name', 'Unknown Author')
-        
-        # Get works for this author
-        works = self.get_author_works(author_id)
-        
-        html = f'''
-        <!DOCTYPE html>
-        <html>
-        <head>
-            <title>Works by {author_name}</title>
-            <link rel="stylesheet" href="/static/css/main.css">
-            <style>
-                .work-item {{
-                    margin-bottom: 15px;
-                    padding: 15px;
-                    background-color: #333;
-                    border-radius: 5px;
-                }}
-                
-                .work-title {{
-                    font-size: 1.2em;
-                    font-weight: bold;
-                    margin-bottom: 10px;
-                }}
-            </style>
-        </head>
-        <body>
-            <div class="container">
-                <h1>Works by {author_name}</h1>
-                <p><a href="/authors">&laquo; Back to Authors</a></p>
-                
-                <div class="works-list">
-        '''
-        
-        # Add each work as a list item
-        if works:
-            for work_info in works:
-                html += f'''
-                    <div class="work-item">
-                        <div class="work-title">{work_info['title']}</div>
-                        <a href="/view?author_id={author_id}&work_id={work_info['id']}">View Content</a>
-                    </div>
-                '''
-        else:
-            html += '<p>No works found for this author.</p>'
-        
-        # Close HTML structure
-        html += '''
-                </div>
-            </div>
-        </body>
-        </html>
-        '''
-        
-        return html
-    
-    def get_view_page(self, query_string):
-        """Generate the view page"""
-        # Parse query parameters
-        query_params = urllib.parse.parse_qs(query_string)
-        author_id = query_params.get('author_id', [''])[0]
-        work_id = query_params.get('work_id', [''])[0]
-        view_mode = query_params.get('view_mode', ['readable'])[0]
-        
-        if not author_id or not work_id:
-            return self.get_error_page("Missing author_id or work_id parameter")
-        
-        # Get author data
-        author_data = self.authors_data.get(author_id, {})
-        author_name = author_data.get('name', 'Unknown Author')
-        
-        html = f'''
-        <!DOCTYPE html>
-        <html>
-        <head>
-            <title>{work_id} by {author_name}</title>
-            <link rel="stylesheet" href="/static/css/reader.css">
-            <style>
-                .view-toggle {{
-                    margin: 10px 0;
-                    text-align: right;
-                }}
-                .view-toggle a {{
-                    display: inline-block;
-                    padding: 8px 16px;
-                    background-color: #2d3748;
-                    color: white;
-                    text-decoration: none;
-                    border-radius: 4px;
-                    margin-left: 10px;
-                }}
-                .view-toggle a.active {{
-                    background-color: #3182ce;
-                }}
-                .view-toggle a:hover {{
-                    background-color: #4a5568;
-                }}
-                pre.xml-view {{
-                    background-color: #222;
-                    padding: 15px;
-                    border-radius: 5px;
-                    overflow-x: auto;
-                    font-family: monospace;
-                    line-height: 1.4;
-                    font-size: 0.9em;
-                }}
-            </style>
-        </head>
-        <body>
-            <div class="container">
-                <h1>{work_id}</h1>
-                <p>Author: {author_name}</p>
-                <p><a href="/works?author_id={author_id}">&laquo; Back to Works</a></p>
-                
-                <div class="view-toggle">
-                    <a href="/view?author_id={author_id}&work_id={work_id}&view_mode=readable" 
-                       class="{'' if view_mode == 'readable' else 'active'}">Human Readable</a>
-                    <a href="/view?author_id={author_id}&work_id={work_id}&view_mode=raw" 
-                       class="{'' if view_mode == 'raw' else 'active'}">Raw XML</a>
-                </div>
-                
-                <div class="work-content">
-                    {self.get_work_content(author_id, work_id, view_mode)}
-                </div>
-            </div>
-        </body>
-        </html>
-        '''
-        
-        return html
-    
-    def get_work_content(self, author_id, work_id, view_mode='readable'):
-        """Get the content of a work"""
-        work_path = os.path.join('data', author_id, work_id)
-        content_start_time = time.time()
-        content = "<p>This work contains multiple files. Please select from the list below:</p><ul>"
-        
-        try:
-            # Check if the work directory exists
-            if not os.path.exists(work_path):
-                logger.warning(f"Work directory not found: {work_path}")
-                return f"<p>Error: Work directory for {work_id} not found.</p>"
-                
-            # List all files in the work directory
-            try:
-                files = os.listdir(work_path)
-            except PermissionError:
-                logger.error(f"Permission denied when accessing directory: {work_path}")
-                return f"<p>Error: Permission denied when accessing work directory.</p>"
-            except Exception as e:
-                logger.error(f"Error listing directory {work_path}: {str(e)}")
-                logger.error(traceback.format_exc())
-                return f"<p>Error accessing work files: {str(e)}</p>"
-            
-            if not files:
-                logger.info(f"No files found in work directory: {work_path}")
-                content = "<p>No content files found for this work.</p>"
-            else:
-                xml_files = 0
-                text_files = 0
-                
-                for file in files:
-                    file_path = os.path.join(work_path, file)
-                    
-                    # Skip directories and non-content files
-                    if os.path.isdir(file_path) or not (file.endswith('.xml') or file.endswith('.txt')):
-                        continue
-                        
-                    try:
-                        file_size = os.path.getsize(file_path)
-                        if file_size > 5 * 1024 * 1024:  # 5MB
-                            logger.warning(f"Skipping large file: {file_path} ({file_size / 1024 / 1024:.2f} MB)")
-                            content += f"<li><h3>{file}</h3><p>File too large to display ({file_size / 1024 / 1024:.2f} MB)</p></li>"
-                            continue
-                            
-                        with open(file_path, 'r', encoding='utf-8') as f:
-                            file_content = f.read()
-                            if file.endswith('.xml'):
-                                if view_mode == 'raw':
-                                    # For raw XML view, just escape and display in a pre tag
-                                    content += f"<li><h3>{file} (Raw XML)</h3><pre class='xml-view'>{escape(file_content)}</pre></li>"
-                                else:
-                                    # Basic XML handling for readable view - just escape and display for now
-                                    content += f"<li><h3>{file}</h3><pre>{escape(file_content)}</pre></li>"
-                                xml_files += 1
-                            elif file.endswith('.txt'):
-                                text_files += 1
-                                content += f"<li><h3>{file}</h3><pre>{file_content}</pre></li>"
-                    except UnicodeDecodeError:
-                        logger.error(f"Unicode decode error for file: {file_path}")
-                        content += f"<li><h3>{file}</h3><p>Error: This file contains non-UTF-8 characters and cannot be displayed.</p></li>"
-                    except Exception as e:
-                        logger.error(f"Error reading {file_path}: {str(e)}")
-                        logger.error(traceback.format_exc())
-                        content += f"<li><h3>{file}</h3><p>Error reading file: {str(e)}</p></li>"
-                
-                # Add summary
-                logger.info(f"Processed {xml_files} XML files and {text_files} text files for {author_id}/{work_id}")
-        except Exception as e:
-            logger.error(f"Error accessing work content for {author_id}/{work_id}: {str(e)}")
-            logger.error(traceback.format_exc())
-            content = f"<p>Error accessing work content: {str(e)}</p>"
-        finally:
-            content_time = time.time() - content_start_time
-            logger.debug(f"get_work_content({author_id}, {work_id}) took {content_time:.3f}s")
-            
-        return content
-    
-    def get_editors_page(self):
-        """Generate the editors page"""
-        html = '''
-        <!DOCTYPE html>
-        <html>
-        <head>
-            <title>Editors</title>
-            <link rel="stylesheet" href="/static/css/main.css">
-        </head>
-        <body>
-            <div class="container">
-                <h1>Editors</h1>
-                <p><a href="/">&laquo; Home</a></p>
-                
-                <p>This page will list all editors of the texts in the corpus.</p>
-                <p>Feature coming soon!</p>
-            </div>
-        </body>
-        </html>
-        '''
-        
-        return html
-    
-    def get_search_page(self):
-        """Generate the search page"""
-        html = '''
-        <!DOCTYPE html>
-        <html>
-        <head>
-            <title>Search Texts</title>
-            <link rel="stylesheet" href="/static/css/main.css">
-            <style>
-                .search-form {
-                    margin: 20px 0;
-                    padding: 20px;
-                    background-color: #333;
-                    border-radius: 5px;
-                }
-                
-                .search-form input[type="text"] {
-                    padding: 10px;
-                    width: 70%;
-                    background-color: #444;
-                    color: white;
-                    border: 1px solid #555;
-                    border-radius: 4px;
-                }
-                
-                .search-form button {
-                    padding: 10px 20px;
-                    background-color: #3182ce;
-                    color: white;
-                    border: none;
-                    border-radius: 4px;
-                    cursor: pointer;
-                    margin-left: 10px;
-                }
-                
-                .search-form button:hover {
-                    background-color: #2c5282;
-                }
-            </style>
-        </head>
-        <body>
-            <div class="container">
-                <h1>Search Texts</h1>
-                <p><a href="/">&laquo; Home</a></p>
-                
-                <div class="search-form">
-                    <form action="/search" method="get">
-                        <input type="text" name="q" placeholder="Search for authors, works, or content...">
-                        <button type="submit">Search</button>
-                    </form>
-                </div>
-                
-                <p>Note: Full text search will be implemented in a future update.</p>
-            </div>
-        </body>
-        </html>
-        '''
-        
-        return html
-    
-    def get_error_page(self, error_message):
-        """Generate an error page"""
-        html = f'''
-        <!DOCTYPE html>
-        <html>
-        <head>
-            <title>Error</title>
-            <link rel="stylesheet" href="/static/css/main.css">
-            <style>
-                .error-container {{
-                    background-color: #422;
-                    padding: 20px;
-                    border-radius: 5px;
-                    margin: 20px 0;
-                }}
-                
-                .error-message {{
-                    color: #f88;
-                }}
-            </style>
-        </head>
-        <body>
-            <div class="container">
-                <h1>Error</h1>
-                
-                <div class="error-container">
-                    <p class="error-message">{error_message}</p>
-                </div>
-                
-                <p><a href="/">&laquo; Back to Home</a></p>
-            </div>
-        </body>
-        </html>
-        '''
-        
-        return html
+def find_available_port(start_port):
+    """Find an available port starting from a given port"""
+    max_attempts = 100
+    for port in range(start_port, start_port + max_attempts):
+        if not is_port_in_use(port):
+            return port
+    logger.warning(f"No available ports found in range {start_port}-{start_port+max_attempts-1}")
+    return start_port
 
 class CustomHTTPRequestHandler(http.server.SimpleHTTPRequestHandler):
     """Custom HTTP server handler for browsing and viewing texts"""
     
     def __init__(self, *args, **kwargs):
-        self.page_generator = PageGenerator()
         self.request_start_time = None
         super().__init__(*args, **kwargs)
     
@@ -1071,27 +484,27 @@ class CustomHTTPRequestHandler(http.server.SimpleHTTPRequestHandler):
             # Handle other routes
             if path == '/':
                 logger.debug("Serving home page")
-                self.send_html_response(self.page_generator.get_home_page())
+                self.send_html_response(self.get_home_page())
             elif path == '/authors':
                 logger.debug("Serving authors table page")
-                self.send_html_response(self.page_generator.get_authors_table_page())
+                self.send_html_response(self.get_authors_table_page())
             elif path == '/works':
                 author_id = urllib.parse.parse_qs(parsed_path.query).get('author_id', [''])[0]
                 logger.debug(f"Serving works page for author_id: {author_id}")
-                self.send_html_response(self.page_generator.get_works_page(parsed_path.query))
+                self.send_html_response(self.get_works_page(parsed_path.query))
             elif path == '/view':
                 params = urllib.parse.parse_qs(parsed_path.query)
                 author_id = params.get('author_id', [''])[0]
                 work_id = params.get('work_id', [''])[0]
                 view_mode = params.get('view_mode', ['readable'])[0]
                 logger.debug(f"Serving view page for author_id: {author_id}, work_id: {work_id}, view_mode: {view_mode}")
-                self.send_html_response(self.page_generator.get_view_page(parsed_path.query))
+                self.send_html_response(self.get_view_page(parsed_path.query))
             elif path == '/get_author_works':
                 author_id = urllib.parse.parse_qs(parsed_path.query).get('author_id', [''])[0]
                 if author_id:
                     logger.debug(f"Getting works for author_id: {author_id}")
                     try:
-                        works = self.page_generator.get_author_works(author_id)
+                        works = self.get_author_works(author_id)
                         logger.info(f"Found {len(works)} works for author {author_id}")
                         self.send_json_response(works)
                     except Exception as e:
@@ -1103,10 +516,10 @@ class CustomHTTPRequestHandler(http.server.SimpleHTTPRequestHandler):
                     self.send_error(400, "Missing author_id parameter")
             elif path == '/editors':
                 logger.debug("Serving editors page")
-                self.send_html_response(self.page_generator.get_editors_page())
+                self.send_html_response(self.get_editors_page())
             elif path == '/search':
                 logger.debug("Serving search page")
-                self.send_html_response(self.page_generator.get_search_page())
+                self.send_html_response(self.get_search_page())
             else:
                 logger.warning(f"404 Not Found: {path}")
                 self.send_error(404, "Not Found")
@@ -1247,7 +660,6 @@ class CustomHTTPRequestHandler(http.server.SimpleHTTPRequestHandler):
 
     def handle_update_century(self, post_data):
         """Handle updating author century"""
-        global AUTHORS_DATA  # Directly reference the global AUTHORS_DATA
         author_id = post_data.get('author_id', [''])[0]
         century_input = post_data.get('century', [''])[0]
         
@@ -1289,13 +701,7 @@ class CustomHTTPRequestHandler(http.server.SimpleHTTPRequestHandler):
                 logger.warning(f"Could not create backup: {str(e)}")
                 # Continue anyway
             
-            # First, try to update the global variable directly
-            if author_id in AUTHORS_DATA:
-                old_century = AUTHORS_DATA[author_id].get('century', 'None')
-                logger.info(f"Updating global AUTHORS_DATA: {author_id} century from '{old_century}' to '{century_value}'")
-                AUTHORS_DATA[author_id]['century'] = century_value
-            
-            # Next, handle the file-based update
+            # Load authors data
             authors_data = {}
             try:
                 authors_data_path = 'authors_data.json'
@@ -1309,9 +715,8 @@ class CustomHTTPRequestHandler(http.server.SimpleHTTPRequestHandler):
                     logger.debug(f"JSON parsed successfully with {len(authors_data)} authors")
             except FileNotFoundError:
                 logger.error(f"File not found: {authors_data_path}")
-                # Use the global data if file not found
-                authors_data = AUTHORS_DATA.copy()
-                logger.info(f"Using global data with {len(authors_data)} entries")
+                self.send_error(500, "Error loading author data")
+                return
             except json.JSONDecodeError as e:
                 logger.error(f"JSON decode error: {str(e)}")
                 logger.error(f"Content excerpt: {file_content[:100]}...")
@@ -1349,15 +754,6 @@ class CustomHTTPRequestHandler(http.server.SimpleHTTPRequestHandler):
                     if os.path.exists(authors_data_path):
                         file_size = os.path.getsize(authors_data_path)
                         logger.info(f"File saved successfully, size: {file_size} bytes")
-                        
-                        # Update global AUTHORS_DATA to match the file
-                        AUTHORS_DATA = authors_data
-                        logger.info("Updated global AUTHORS_DATA from file")
-                        
-                        # Update the PageGenerator's data to ensure consistency
-                        if hasattr(self, 'page_generator'):
-                            self.page_generator.authors_data = authors_data
-                            logger.debug("Updated PageGenerator's in-memory data")
                         
                         # Send success response with cache-busting headers
                         self.send_response(200)
@@ -1472,91 +868,268 @@ class CustomHTTPRequestHandler(http.server.SimpleHTTPRequestHandler):
             logger.error(traceback.format_exc())
             self.send_error(500, f"Error sending response: {str(e)}")
             
-def main():
-    """Main function to start the server"""
-    global server_instance, PORT, DEBUG
+    def get_home_page(self):
+        """Generate the home page"""
+        html = '''
+        <!DOCTYPE html>
+        <html>
+        <head>
+            <title>First1KGreek Browser</title>
+            <link rel="stylesheet" href="/static/css/main.css">
+        </head>
+        <body>
+            <div class="container">
+                <h1>First1KGreek Browser</h1>
+                <p>Welcome to the First1KGreek Browser. This tool allows you to browse, search, and view texts from the First 1000 Years of Greek project.</p>
+                
+                <h2>Navigation</h2>
+                <ul>
+                    <li><a href="/authors">Browse Authors</a></li>
+                    <li><a href="/editors">Browse Editors</a></li>
+                    <li><a href="/search">Search Texts</a></li>
+                </ul>
+                
+                <p><small>Version 1.2.0 (with dark theme) - Last updated: 2025-03-07</small></p>
+            </div>
+        </body>
+        </html>
+        '''
+        return html
     
-    # Start time for server
-    start_time = time.time()
-    
-    # Parse command line arguments only when running as main
-    args = parse_args()
-    PORT = args.port
-    DEBUG = args.debug
-    
-    try:
-        # Make sure socket is properly released after previous runs
-        socketserver.TCPServer.allow_reuse_address = True
-        
-        logger.info(f"Checking port {PORT} availability...")
-        max_retries = 5
-        current_port = PORT
-        
-        for attempt in range(max_retries):
-            try:
-                if is_port_in_use(current_port):
-                    logger.warning(f"Port {current_port} is already in use.")
-                    new_port = find_available_port(current_port + 1)
-                    if new_port != current_port:
-                        logger.info(f"Using alternative port {new_port}")
-                        current_port = new_port
-                    else:
-                        logger.error("Failed to find an available port. Terminating.")
-                        sys.exit(1)
+    def get_authors_table_page(self):
+        """Generate the authors table page"""
+        # HTML template with JavaScript and CSS includes
+        html = f'''
+        <!DOCTYPE html>
+        <html>
+        <head>
+            <title>Authors Table</title>
+            <link rel="stylesheet" href="/static/css/main.css">
+            <link rel="stylesheet" href="/static/css/authors-table.css">
+            <script id="user-prefs" type="application/json">
+                {json.dumps(self.get_user_prefs())}
+            </script>
+            <script src="/static/js/authors_table.js?v={int(time.time())}"></script>
+        </head>
+        <body>
+            <div class="container">
+                <h1>Authors Table</h1>
                 
-                logger.info(f"Starting server on port {current_port}...")
-                server_start = time.time()
-                server_instance = socketserver.TCPServer((HOST, current_port), CustomHTTPRequestHandler)
-                logger.info(f"Server started at http://{HOST}:{current_port} (took {time.time() - server_start:.3f}s)")
-                
-                # Print directly to console for visibility
-                print(f"\n======================================")
-                print(f"Server is running at http://{HOST}:{current_port}")
-                print(f"Press Ctrl+C to shutdown")
-                print(f"======================================\n")
-                
-                server_instance.serve_forever()
-                break  # Exit the retry loop if server starts successfully
-                
-            except OSError as e:
-                if e.errno == 48 or e.errno == 98:  # Address already in use
-                    logger.warning(f"Port {current_port} is blocked, trying another port...")
-                    current_port = current_port + 1
-                    if attempt == max_retries - 1:
-                        logger.error("Maximum retry attempts reached. Terminating.")
-                        sys.exit(1)
-                else:
-                    logger.error(f"OS Error: {str(e)}")
-                    logger.error(traceback.format_exc())
-                    raise
+                <div class="filters">
+                    <div class="search-box">
+                        <input type="text" id="search-input" placeholder="Search authors...">
+                        <button id="search-btn">Search</button>
+                    </div>
                     
-    except KeyboardInterrupt:
-        logger.info("\nServer shutdown requested.")
-        shutdown_time = time.time()
-        if server_instance:
-            try:
-                server_instance.shutdown()
-                logger.info(f"Server has been shut down gracefully (took {time.time() - shutdown_time:.3f}s)")
-            except Exception as e:
-                logger.error(f"Error during shutdown: {str(e)}")
-                logger.error(traceback.format_exc())
-    except Exception as e:
-        logger.error(f"Error starting server: {str(e)}")
-        logger.error(traceback.format_exc())
-    finally:
-        # Log total runtime
-        total_time = time.time() - start_time
-        logger.info(f"Server process finished. Total runtime: {total_time:.2f} seconds")
+                    <div class="status-filters">
+                        <button class="active" data-filter="all">All</button>
+                        <button data-filter="favorites">Favorites</button>
+                        <button data-filter="archived">Archived</button>
+                        <button data-filter="normal">Normal</button>
+                    </div>
+                    
+                    <div class="century-filters">
+                        <button class="active" data-filter="all">All Centuries</button>
+                        <button data-filter="BCE">BCE</button>
+                        <button data-filter="CE-1-3">CE 1-3</button>
+                        <button data-filter="CE-4-6">CE 4-6</button>
+                    </div>
+                </div>
+ 
+                <table id="authors-table" class="authors-table">
+                    <thead>
+                        <tr>
+                            <th data-sort="author_name">Author Name</th>
+                            <th data-sort="century">Century</th>
+                            <th data-sort="works">Works</th>
+                            <th data-sort="type">Type</th>
+                            <th>Actions</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                '''
+        
+        # Add table rows
+        for author_id, author_data in self.get_authors_data().items():
+            if author_id in (self.get_user_prefs().get('deleted', []) or []):
+                continue
+            
+            author_name = author_data.get('name', '')
+            century_value = author_data.get('century', '')
+            
+            # Format century value - negative for BCE, positive for CE
+            if isinstance(century_value, int):
+                if century_value < 0:
+                    century = f"{abs(century_value)} BCE"
+                else:
+                    century = f"{century_value} CE"
+            else:
+                century = str(century_value)
+                
+            type_value = author_data.get('type', author_data.get('allegiance', ''))
+            works_count = len(self.get_author_works(author_id))
+            
+            # Add icons for favorite/archived status
+            name_prefix = ''
+            if author_id in (self.get_user_prefs().get('favorites', []) or []):
+                name_prefix += '<span class="favorites-star">★</span> '
+            if author_id in (self.get_user_prefs().get('archived', []) or []):
+                name_prefix += '<span class="archived-icon">📦</span> '
+            
+            html += f'''
+                        <tr data-id="{author_id}">
+                            <td data-column="author_name">
+                                {name_prefix}{author_name}
+                                <div class="author-type">{type_value}</div>
+                            </td>
+                            <td data-column="century">{century}</td>
+                            <td data-column="works">{works_count}</td>
+                            <td data-column="type">{type_value}</td>
+                            <td class="actions">
+                                <button class="favorite-btn" data-author-id="{author_id}">
+                                    {'Unfavorite' if author_id in (self.get_user_prefs().get('favorites', []) or []) else 'Favorite'}
+                                </button>
+                                <button class="archive-btn" data-author-id="{author_id}">
+                                    {'Unarchive' if author_id in (self.get_user_prefs().get('archived', []) or []) else 'Archive'}
+                                </button>
+                                <button class="delete-btn" data-author-id="{author_id}">Delete</button>
+                                <button class="edit-btn" 
+                                        data-author-id="{author_id}"
+                                        data-author-name="{author_name}"
+                                        data-century="{century}">
+                                    Edit Century
+                                </button>
+                            </td>
+                        </tr>
+                    '''
+        
+        # Close table and add modal
+        html += '''
+                    </tbody>
+                </table>
+                
+                <div class="pagination"></div>
 
-def handle_shutdown(sig, frame):
-    """Handle external shutdown signals"""
-    logger.info(f"Received signal {sig}, initiating shutdown...")
-    if server_instance:
-        try:
-            server_instance.shutdown()
-            logger.info("Server has been shut down via signal handler")
-        except Exception as e:
-            logger.error(f"Error during signal-triggered shutdown: {str(e)}")
+                <div id="century-modal" class="modal">
+                    <div class="modal-content">
+                        <span class="close-modal">&times;</span>
+                        <h2>Edit Century</h2>
+                        <p id="edit-author-name"></p>
+                        <input type="hidden" id="edit-author-id">
+                        <input type="text" id="edit-century" placeholder="Enter century (e.g., -5 for 5 BCE, 2 for 2 CE)">
+                        <p class="modal-help">Use negative values for BCE (e.g., -5 for 5 BCE) and positive values for CE (e.g., 2 for 2 CE)</p>
+                        <div class="modal-buttons">
+                            <button class="cancel-btn">Cancel</button>
+                            <button class="save-btn">Save</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </body>
+        </html>
+        '''
+
+        return html
+    
+    def get_author_works(self, author_id):
+        """Get list of works for an author"""
+        works = []
+        author_dir = os.path.join('data', author_id)
+        
+        if os.path.exists(author_dir):
+            for item in os.listdir(author_dir):
+                work_path = os.path.join(author_dir, item)
+                if os.path.isdir(work_path) and not item.startswith('__'):
+                    # Get more information about the work
+                    work_info = {
+                        'id': item,
+                        'title': item,  # Default to directory name
+                        'files': []
+                    }
+                    
+                    # Check if there's any metadata available
+                    cts_file = os.path.join(work_path, '__cts__.xml')
+                    if os.path.exists(cts_file):
+                        try:
+                            with open(cts_file, 'r', encoding='utf-8') as f:
+                                content = f.read()
+                                title_match = re.search(r'<ti:title[^>]*>(.*?)</ti:title>', content)
+                                if title_match:
+                                    work_info['title'] = title_match.group(1).strip()
+                        except Exception as e:
+                            logger.error(f"Error reading metadata for {work_path}: {str(e)}")
+                    
+                    # Get file list
+                    try:
+                        for file in os.listdir(work_path):
+                            file_path = os.path.join(work_path, file)
+                            if os.path.isfile(file_path) and not file.startswith('__'):
+                                work_info['files'].append({
+                                    'name': file,
+                                    'type': file.split('.')[-1] if '.' in file else 'unknown'
+                                })
+                    except Exception as e:
+                        logger.error(f"Error listing files for {work_path}: {str(e)}")
+                    
+                    works.append(work_info)
+        
+        return works
+    
+    def get_works_page(self, query_string):
+        """Generate the works page"""
+        # Parse query parameters
+        query_params = urllib.parse.parse_qs(query_string)
+        author_id = query_params.get('author_id', [''])[0]
+        
+        if not author_id:
+            return self.get_error_page("Missing author_id parameter")
+        
+        # Get author data
+        author_data = self.get_authors_data().get(author_id, {})
+        author_name = author_data.get('name', 'Unknown Author')
+        
+        # Get works for this author
+        works = self.get_author_works(author_id)
+        
+        html = f'''
+        <!DOCTYPE html>
+        <html>
+        <head>
+            <title>Works by {author_name}</title>
+            <link rel="stylesheet" href="/static/css/main.css">
+            <style>
+                .work-item {{
+                    margin-bottom: 15px;
+                    padding: 15px;
+                    background-color: #333;
+                    border-radius: 5px;
+                }}
+                
+                .work-title {{
+                    font-size: 1.2em;
+                    font-weight: bold;
+                    margin-bottom: 10px;
+                }}
+            </style>
+        </head>
+        <body>
+            <div class="container">
+                <h1>Works by {author_name}</h1>
+                <p>Works by {author_name}</p>
+                
+                <div class="work-list">
+                    {''.join([f'''
+                        <div class="work-item">
+                            <div class="work-title">{work['title']}</div>
+                            <p>{work['description']}</p>
+                        </div>
+                    ''' for work in works])}
+                </div>
+            </div>
+        </body>
+        </html>
+        '''
+        return html
 
 if __name__ == "__main__":
     try:

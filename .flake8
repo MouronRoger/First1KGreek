@@ -1,0 +1,10 @@
+[flake8]
+max-line-length = 120
+extend-ignore = E203, E501
+exclude = .git,__pycache__,docs/source/conf.py,old,build,dist,data,volume_xml
+select = C,E,F,W,B,B950,D100,D101,D102,D103
+
+# D100: Missing docstring in public module
+# D101: Missing docstring in public class
+# D102: Missing docstring in public method
+# D103: Missing docstring in public function 
