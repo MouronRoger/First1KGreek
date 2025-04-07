@@ -35,13 +35,76 @@ import traceback
 from urllib.error import URLError, HTTPError
 from html import escape
 
+# Import from the new modular structure
+try:
+    from src.first1k.config import (
+        PORT, HOST, DEBUG, SHUTDOWN_PATH,
+        VERSION, VERSION_NAME, LAST_UPDATED, FEATURES,
+        AUTHORS_DATA_FILE, USER_PREFS_FILE, LOG_FILE, DATA_DIR
+    )
+    from src.first1k.utils.network import is_port_in_use, find_available_port
+    USING_MODULES = True
+    logger = logging.getLogger(__name__)
+    logger.info("Successfully imported from modular structure")
+except ImportError as e:
+    # Fallback to original constants if imports fail
+    USING_MODULES = False
+    # Constants
+    PORT = 8000  # Default port
+    HOST = "localhost"
+    SHUTDOWN_PATH = "/shutdown"
+    DEBUG = False  # Default debug flag
+    VERSION = "1.2.0"
+    VERSION_NAME = "Fixed Version"
+    LAST_UPDATED = "2025-03-07"
+    FEATURES = "with dark theme and improved editor detection"
+    AUTHORS_DATA_FILE = "authors_data.json"
+    USER_PREFS_FILE = "user_preferences.json"
+    LOG_FILE = "server.log"
+    DATA_DIR = "data"
+    
+    # Define utility functions locally if import fails
+    def is_port_in_use(port):
+        """
+        Check if a port is in use.
+        
+        Args:
+            port (int): The port number to check
+            
+        Returns:
+            bool: True if port is in use, False otherwise
+        """
+        with socket.socket(socket.AF_INET, socket.SOCK_STREAM) as s:
+            result = s.connect_ex(('localhost', port)) == 0
+            logger.debug(f"Port {port} is {'in use' if result else 'available'}")
+            return result
+
+    def find_available_port(start_port=8000, max_attempts=10):
+        """
+        Find an available port starting from start_port.
+        
+        Args:
+            start_port (int, optional): The port to start checking from. Defaults to 8000.
+            max_attempts (int, optional): Maximum number of ports to check. Defaults to 10.
+            
+        Returns:
+            int: An available port, or start_port if none found
+        """
+        logger.debug(f"Searching for available port starting from {start_port}")
+        for port in range(start_port, start_port + max_attempts):
+            if not is_port_in_use(port):
+                logger.debug(f"Found available port: {port}")
+                return port
+        logger.warning(f"No available ports found in range {start_port}-{start_port+max_attempts-1}")
+        return start_port
+
 # Configure logging
 logging.basicConfig(
     level=logging.DEBUG,
     format='%(asctime)s - %(levelname)s - %(message)s',
     handlers=[
         logging.StreamHandler(),
-        logging.FileHandler('server.log', mode='w')
+        logging.FileHandler(LOG_FILE, mode='w')
     ]
 )
 logger = logging.getLogger(__name__)
@@ -69,20 +132,13 @@ def parse_args():
 # Global variable to store server instance
 server_instance = None
 
-# Constants
-# Only define args when run as main module
-PORT = 8000  # Default port
-HOST = "localhost"
-SHUTDOWN_PATH = "/shutdown"
-DEBUG = False  # Default debug flag
-
 # ====================================================================
 # AUTHOR DATA LOADING
 # ====================================================================
 
 # Load author data
 try:
-    with open('authors_data.json', 'r', encoding='utf-8') as f:
+    with open(AUTHORS_DATA_FILE, 'r', encoding='utf-8') as f:
         AUTHORS_DATA = json.load(f)
     logger.info(f"Loaded author data with {len(AUTHORS_DATA)} entries")
 except (FileNotFoundError, json.JSONDecodeError) as e:
@@ -94,8 +150,8 @@ except (FileNotFoundError, json.JSONDecodeError) as e:
 # ====================================================================
 
 # Print version info when starting
-logger.info("Starting First1KGreek Browser - Fixed Version 1.2.0")
-logger.info("With dark theme and improved editor detection")
+logger.info(f"Starting First1KGreek Browser - {VERSION_NAME} {VERSION}")
+logger.info(f"With {FEATURES}")
 
 # ====================================================================
 # STYLESHEET REFERENCES
@@ -105,40 +161,6 @@ logger.info("With dark theme and improved editor detection")
 # ====================================================================
 # UTILITY FUNCTIONS
 # ====================================================================
-
-def is_port_in_use(port):
-    """
-    Check if a port is in use.
-    
-    Args:
-        port (int): The port number to check
-        
-    Returns:
-        bool: True if port is in use, False otherwise
-    """
-    with socket.socket(socket.AF_INET, socket.SOCK_STREAM) as s:
-        result = s.connect_ex(('localhost', port)) == 0
-        logger.debug(f"Port {port} is {'in use' if result else 'available'}")
-        return result
-
-def find_available_port(start_port=8000, max_attempts=10):
-    """
-    Find an available port starting from start_port.
-    
-    Args:
-        start_port (int, optional): The port to start checking from. Defaults to 8000.
-        max_attempts (int, optional): Maximum number of ports to check. Defaults to 10.
-        
-    Returns:
-        int: An available port, or start_port if none found
-    """
-    logger.debug(f"Searching for available port starting from {start_port}")
-    for port in range(start_port, start_port + max_attempts):
-        if not is_port_in_use(port):
-            logger.debug(f"Found available port: {port}")
-            return port
-    logger.warning(f"No available ports found in range {start_port}-{start_port+max_attempts-1}")
-    return start_port
 
 # ====================================================================
 # PAGE GENERATOR CLASS
@@ -180,30 +202,30 @@ class PageGenerator:
         """
         # Load authors data
         try:
-            with open('authors_data.json', 'r', encoding='utf-8') as f:
+            with open(AUTHORS_DATA_FILE, 'r', encoding='utf-8') as f:
                 self.authors_data = json.load(f)
             logger.info(f"PageGenerator loaded author data with {len(self.authors_data)} entries")
         except FileNotFoundError:
-            logger.error("authors_data.json not found - using empty dictionary")
+            logger.error(f"{AUTHORS_DATA_FILE} not found - using empty dictionary")
         except json.JSONDecodeError as e:
-            logger.error(f"Error parsing authors_data.json: {str(e)}")
+            logger.error(f"Error parsing {AUTHORS_DATA_FILE}: {str(e)}")
             logger.error(f"At line {e.lineno}, column {e.colno}: {e.msg}")
         except Exception as e:
-            logger.error(f"Unexpected error loading authors_data.json: {str(e)}")
+            logger.error(f"Unexpected error loading {AUTHORS_DATA_FILE}: {str(e)}")
             logger.error(traceback.format_exc())
             
         # Load user preferences    
         try:
-            with open('user_preferences.json', 'r', encoding='utf-8') as f:
+            with open(USER_PREFS_FILE, 'r', encoding='utf-8') as f:
                 self.user_prefs = json.load(f)
             logger.info(f"PageGenerator loaded user preferences with {sum(len(v) for v in self.user_prefs.values())} total entries")
         except FileNotFoundError:
-            logger.info("user_preferences.json not found - using default preferences")
+            logger.info(f"{USER_PREFS_FILE} not found - using default preferences")
         except json.JSONDecodeError as e:
-            logger.error(f"Error parsing user_preferences.json: {str(e)}")
+            logger.error(f"Error parsing {USER_PREFS_FILE}: {str(e)}")
             logger.error(f"At line {e.lineno}, column {e.colno}: {e.msg}")
         except Exception as e:
-            logger.error(f"Unexpected error loading user_preferences.json: {str(e)}")
+            logger.error(f"Unexpected error loading {USER_PREFS_FILE}: {str(e)}")
             logger.error(traceback.format_exc())
     
     def reload_data(self):
@@ -417,7 +439,7 @@ class PageGenerator:
             list: A list of work dictionaries with metadata
         """
         works = []
-        author_dir = os.path.join('data', author_id)
+        author_dir = os.path.join(DATA_DIR, author_id)
         
         if os.path.exists(author_dir):
             for item in os.listdir(author_dir):
@@ -638,7 +660,7 @@ class PageGenerator:
         # TODO: Implement proper XML to HTML conversion for TEI
         # TODO: Add support for parallel texts (original/translation)
         """
-        work_path = os.path.join('data', author_id, work_id)
+        work_path = os.path.join(DATA_DIR, author_id, work_id)
         content_start_time = time.time()
         content = "<p>This work contains multiple files. Please select from the list below:</p><ul>"
         
@@ -899,19 +921,19 @@ class CustomHTTPRequestHandler(http.server.SimpleHTTPRequestHandler):
         """
         try:
             logger.debug("Loading user preferences from file")
-            with open('user_preferences.json', 'r', encoding='utf-8') as f:
+            with open(USER_PREFS_FILE, 'r', encoding='utf-8') as f:
                 prefs = json.load(f)
                 logger.debug(f"Loaded user preferences with {sum(len(v) for v in prefs.values() if isinstance(v, list))} entries")
                 return prefs
         except FileNotFoundError:
-            logger.warning("user_preferences.json not found - using empty defaults")
+            logger.warning(f"{USER_PREFS_FILE} not found - using empty defaults")
             return {'favorites': [], 'archived': [], 'deleted': []}
         except json.JSONDecodeError as e:
-            logger.error(f"Error parsing user_preferences.json: {str(e)}")
+            logger.error(f"Error parsing {USER_PREFS_FILE}: {str(e)}")
             logger.error(f"At line {e.lineno}, column {e.colno}: {e.msg}")
             return {'favorites': [], 'archived': [], 'deleted': []}
         except Exception as e:
-            logger.error(f"Unexpected error loading user_preferences.json: {str(e)}")
+            logger.error(f"Unexpected error loading {USER_PREFS_FILE}: {str(e)}")
             logger.error(traceback.format_exc())
             return {'favorites': [], 'archived': [], 'deleted': []}
     
@@ -1073,7 +1095,7 @@ class CustomHTTPRequestHandler(http.server.SimpleHTTPRequestHandler):
                 prefs[pref_type].remove(author_id)
 
             # Save updated preferences
-            with open('user_preferences.json', 'w') as f:
+            with open(USER_PREFS_FILE, 'w') as f:
                 json.dump(prefs, f, indent=2)
 
             self.send_response(200)
@@ -1126,7 +1148,7 @@ class CustomHTTPRequestHandler(http.server.SimpleHTTPRequestHandler):
                 prefs[work_pref_key].remove(work_identifier)
 
             # Save updated preferences
-            with open('user_preferences.json', 'w') as f:
+            with open(USER_PREFS_FILE, 'w') as f:
                 json.dump(prefs, f, indent=2)
 
             self.send_response(200)
@@ -1185,11 +1207,11 @@ class CustomHTTPRequestHandler(http.server.SimpleHTTPRequestHandler):
         try:
             # Make a backup of the current data
             try:
-                backup_path = 'authors_data.json.bak'
-                if os.path.exists('authors_data.json'):
+                backup_path = f'{AUTHORS_DATA_FILE}.bak'
+                if os.path.exists(AUTHORS_DATA_FILE):
                     import shutil
                     logger.debug(f"Creating backup at {os.path.abspath(backup_path)}")
-                    shutil.copy2('authors_data.json', backup_path)
+                    shutil.copy2(AUTHORS_DATA_FILE, backup_path)
             except Exception as e:
                 logger.warning(f"Could not create backup: {str(e)}")
                 # Continue anyway
@@ -1203,7 +1225,7 @@ class CustomHTTPRequestHandler(http.server.SimpleHTTPRequestHandler):
             # Next, handle the file-based update
             authors_data = {}
             try:
-                authors_data_path = 'authors_data.json'
+                authors_data_path = AUTHORS_DATA_FILE
                 logger.debug(f"Loading author data from {os.path.abspath(authors_data_path)}")
                 
                 # Read the existing file with explicit UTF-8 encoding

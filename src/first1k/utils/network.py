@@ -1,30 +1,46 @@
-"""Network utility functions for First1KGreek Browser."""
+"""
+Network utility functions for the First1KGreek Browser.
+
+This module provides functions for checking port availability and finding open ports.
+"""
 
 import socket
+import logging
+
+logger = logging.getLogger(__name__)
+
 
 def is_port_in_use(port):
-    """Check if a port is in use."""
+    """
+    Check if a port is in use.
+    
+    Args:
+        port (int): The port number to check
+        
+    Returns:
+        bool: True if port is in use, False otherwise
+    """
     with socket.socket(socket.AF_INET, socket.SOCK_STREAM) as s:
-        return s.connect_ex(('localhost', port)) == 0
+        result = s.connect_ex(('localhost', port)) == 0
+        logger.debug(f"Port {port} is {'in use' if result else 'available'}")
+        return result
+
 
 def find_available_port(start_port=8000, max_attempts=10):
-    """Find an available port starting from start_port."""
+    """
+    Find an available port starting from start_port.
+    
+    Args:
+        start_port (int, optional): The port to start checking from. Defaults to 8000.
+        max_attempts (int, optional): Maximum number of ports to check. Defaults to 10.
+        
+    Returns:
+        int: An available port, or start_port if none found
+    """
+    logger.debug(f"Searching for available port starting from {start_port}")
     for port in range(start_port, start_port + max_attempts):
         if not is_port_in_use(port):
+            logger.debug(f"Found available port: {port}")
             return port
-    return start_port  # Fallback to the original port if none found
-
-def add_shutdown_button(html):
-    """Add a shutdown button to the HTML pages."""
-    shutdown_button = """
-    <div style="position: fixed; bottom: 20px; right: 20px; z-index: 1000;">
-        <a href="/shutdown" style="display: inline-block; padding: 10px 15px; background-color: #f44336; color: white; text-decoration: none; border-radius: 4px; font-family: Arial, sans-serif; font-size: 14px; box-shadow: 0 2px 5px rgba(0,0,0,0.2);">
-            Shutdown Server
-        </a>
-    </div>
-    """
-    # Insert before the closing body tag
-    if "</body>" in html:
-        return html.replace("</body>", f"{shutdown_button}</body>")
-    else:
-        return html + shutdown_button 
+    logger.warning(f"No available ports found in range {start_port}-{start_port+max_attempts-1}")
+    return start_port 

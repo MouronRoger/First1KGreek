@@ -1,71 +1,34 @@
 """
-First1KGreek Browser Configuration
-Version: 1.2.0
-Last updated: 2025-03-07
+Configuration settings for the First1KGreek Browser.
+
+This module contains constants and configuration settings used throughout the application.
 """
 
 import os
 
 # Server configuration
-PORT = 8000
+PORT = 8000  # Default port
+HOST = "localhost"
+SHUTDOWN_PATH = "/shutdown"
+DEBUG = False  # Default debug flag
 
-# Styling
-READER_STYLESHEET = """
-body { 
-    font-family: 'New Athena Unicode', 'GFS Artemisia', 'Arial Unicode MS', 'Lucida Sans Unicode', 'Cardo', serif; 
-    margin: 0; 
-    padding: 0;
-    line-height: 1.8; 
-    background-color: #2a2a2a; 
-    color: #f2f2f2; 
-}
-h1, h2, h3 { 
-    color: #fff;
-    font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif;
-    margin-top: 1.5em;
-    margin-bottom: 0.5em;
-}
-a { color: #4299e1; text-decoration: none; }
-a:hover { text-decoration: underline; }
-.container { 
-    max-width: 800px; 
-    margin: 0 auto; 
-    padding: 20px;
-    background-color: #333;
-    box-shadow: 0 0 10px rgba(0,0,0,0.3);
-    min-height: 100vh;
-}
-"""
+# Version information
+VERSION = "1.2.0"
+VERSION_NAME = "Fixed Version"
+LAST_UPDATED = "2025-03-07"
+FEATURES = "with dark theme and improved editor detection"
 
-MAIN_STYLESHEET = """
-body { 
-    font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif; 
-    margin: 0; 
-    padding: 0;
-    line-height: 1.6; 
-    background-color: #1a1a1a; 
-    color: #ffffff; 
-}
-h1, h2, h3 { 
-    color: #4299e1;
-    margin-top: 1.5em;
-    margin-bottom: 0.5em;
-}
-a { color: #4299e1; text-decoration: none; }
-a:hover { text-decoration: underline; }
-.container { 
-    max-width: 1000px; 
-    margin: 0 auto; 
-    padding: 20px;
-    background-color: #2d2d2d;
-    box-shadow: 0 0 10px rgba(0,0,0,0.5);
-    min-height: 100vh;
-}
-"""
+# Paths
+AUTHORS_DATA_FILE = "authors_data.json"
+USER_PREFS_FILE = "user_preferences.json"
+LOG_FILE = "server.log"
+DATA_DIR = "data"
+STATIC_DIR = "static"
+CSS_DIR = f"{STATIC_DIR}/css"
+JS_DIR = f"{STATIC_DIR}/js"
 
 # Data directories
-DATA_DIR = 'data'
-BACKUP_DIR = 'backup'
+BACKUP_DIR = "backup"
 
 # File paths
 CATALOG_PATH = 'catalog.json'
