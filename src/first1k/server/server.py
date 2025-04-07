@@ -8,6 +8,8 @@ import time
 import shutil
 import os
 import json
+import signal
+import sys
 from urllib.parse import urlparse, parse_qs, unquote
 from ..config import PORT, BACKUP_FILE
 from ..utils.network import is_port_in_use, find_available_port
@@ -165,6 +167,26 @@ class CustomHTTPRequestHandler(http.server.SimpleHTTPRequestHandler):
             server_instance = None
             print("Server closed successfully")
 
+def handle_shutdown(sig, frame):
+    """
+    Handle external shutdown signals.
+    
+    Args:
+        sig: Signal number
+        frame: Current stack frame
+    """
+    print(f"Received signal {sig}, initiating shutdown...")
+    if server_instance:
+        try:
+            server_instance.shutdown()
+            print("Server has been shut down via signal handler")
+            # Force exit after a short delay
+            threading.Timer(1.0, lambda: os.kill(os.getpid(), signal.SIGKILL)).start()
+        except Exception as e:
+            print(f"Error during signal-triggered shutdown: {str(e)}")
+            # Force exit even if shutdown failed
+            threading.Timer(1.0, lambda: os.kill(os.getpid(), signal.SIGKILL)).start()
+
 def run_server():
     """Run the HTTP server."""
     global server_instance, PORT
@@ -188,6 +210,10 @@ def run_server():
     server_instance = socketserver.TCPServer(("", PORT), handler)
     
     print(f"Server running at http://localhost:{PORT}/")
+    
+    # Register signal handlers
+    signal.signal(signal.SIGINT, handle_shutdown)
+    signal.signal(signal.SIGTERM, handle_shutdown)
     
     # Open the browser
     webbrowser.open(f"http://localhost:{PORT}/")

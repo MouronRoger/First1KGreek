@@ -2,11 +2,12 @@
 
 import os
 import re
+import time
 import xml.etree.ElementTree as ET
 import urllib.request
 from urllib.error import URLError, HTTPError
 from urllib.parse import quote
-from ..config import MAIN_STYLESHEET
+from ..config import CSS_DIR
 
 def import_text_from_scaife(scaife_url, provided_author_name='', provided_work_title=''):
     """Import text from Scaife URL and save to the corpus."""
@@ -180,8 +181,8 @@ def render_import_page():
 <html>
 <head>
     <title>Import Texts from Scaife</title>
+    <link rel="stylesheet" href="/static/css/main.css?v={int(time.time())}">
     <style>
-        {MAIN_STYLESHEET}
         .tabs {{
             display: flex;
             margin-bottom: 20px;
@@ -340,8 +341,8 @@ def render_import_success_page(message):
 <html>
 <head>
     <title>Import Success</title>
+    <link rel="stylesheet" href="/static/css/main.css?v={int(time.time())}">
     <style>
-        {MAIN_STYLESHEET}
         .success-box {{
             background-color: #2c4a2c;
             border-left: 5px solid #48bb78;
@@ -391,8 +392,8 @@ def render_import_error_page(error):
 <html>
 <head>
     <title>Import Error</title>
+    <link rel="stylesheet" href="/static/css/main.css?v={int(time.time())}">
     <style>
-        {MAIN_STYLESHEET}
         .error-box {{
             background-color: #4a2c2c;
             border-left: 5px solid #f56565;

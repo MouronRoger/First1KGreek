@@ -1,10 +1,19 @@
 """Main entry point for First1KGreek Browser."""
 
 from .server.server import run_server
-from .config import PORT
+from .config import PORT, DEBUG
+from .utils.cli import parse_args
 
 def main():
     """Main entry point."""
+    # Parse command line arguments
+    args = parse_args()
+    
+    # Update global configuration based on arguments
+    global PORT, DEBUG
+    PORT = args.port
+    DEBUG = args.debug
+    
     try:
         run_server()
     except OSError as e:

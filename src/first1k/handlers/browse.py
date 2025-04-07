@@ -2,7 +2,8 @@
 
 import os
 import re
-from ..config import MAIN_STYLESHEET
+import time
+from ..config import CSS_DIR
 
 def get_author_name_from_files(author_id):
     """Attempt to find an author name from XML files."""
@@ -55,8 +56,8 @@ def render_authors_page():
 <head>
     <title>First1K Greek - Authors</title>
     <meta charset="UTF-8">
+    <link rel="stylesheet" href="/static/css/main.css?v={int(time.time())}">
     <style>
-        {MAIN_STYLESHEET}
         .author-grid {{
             display: grid;
             grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
@@ -250,8 +251,8 @@ def render_editors_page():
 <head>
     <title>First1K Greek - Editors</title>
     <meta charset="UTF-8">
+    <link rel="stylesheet" href="/static/css/main.css?v={int(time.time())}">
     <style>
-        {MAIN_STYLESHEET}
         .editors-grid {{
             display: grid;
             grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));

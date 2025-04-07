@@ -1,6 +1,7 @@
 """UI handlers for First1KGreek Browser."""
 
-from ..config import MAIN_STYLESHEET
+import time
+from ..config import CSS_DIR
 
 def render_main_page():
     """Render the main page HTML."""
@@ -10,8 +11,8 @@ def render_main_page():
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>First1KGreek Browser</title>
+    <link rel="stylesheet" href="/static/css/main.css?v={int(time.time())}">
     <style>
-        {MAIN_STYLESHEET}
         .nav-links {{
             display: flex;
             gap: 20px;

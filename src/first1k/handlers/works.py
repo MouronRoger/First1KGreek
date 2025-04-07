@@ -2,7 +2,8 @@
 
 import os
 import re
-from ..config import MAIN_STYLESHEET
+import time
+from ..config import CSS_DIR
 
 def get_works_by_author(author_id):
     """Get list of works for an author."""
@@ -151,8 +152,9 @@ def render_works_page(author_id):
 <head>
     <title>Works by {author_name}</title>
     <meta charset="UTF-8">
+    <link rel="stylesheet" href="/static/css/main.css?v={int(time.time())}">
+    <link rel="stylesheet" href="/static/css/authors-table.css?v={int(time.time())}">
     <style>
-        {MAIN_STYLESHEET}
         .works-grid {{
             display: grid;
             grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
@@ -246,8 +248,9 @@ def render_editor_works_page(editor_name):
 <head>
     <title>Works edited by {editor_name}</title>
     <meta charset="UTF-8">
+    <link rel="stylesheet" href="/static/css/main.css?v={int(time.time())}">
+    <link rel="stylesheet" href="/static/css/authors-table.css?v={int(time.time())}">
     <style>
-        {MAIN_STYLESHEET}
         .works-grid {{
             display: grid;
             grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));

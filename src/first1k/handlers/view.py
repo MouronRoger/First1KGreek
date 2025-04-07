@@ -2,8 +2,9 @@
 
 import os
 import re
+import time
 from xml.sax.saxutils import escape
-from ..config import MAIN_STYLESHEET
+from ..config import CSS_DIR
 
 def render_xml_view_page(file_path):
     """Generate XML view page."""
@@ -35,8 +36,9 @@ def render_xml_view_page(file_path):
 <head>
     <title>XML View - {work_title}</title>
     <meta charset="UTF-8">
+    <link rel="stylesheet" href="/static/css/main.css?v={int(time.time())}">
+    <link rel="stylesheet" href="/static/css/reader.css?v={int(time.time())}">
     <style>
-        {MAIN_STYLESHEET}
         .xml-container {{
             background: #1a1a1a;
             padding: 20px;
@@ -109,9 +111,7 @@ def render_xml_view_page(file_path):
 <html>
 <head>
     <title>Error</title>
-    <style>
-        {MAIN_STYLESHEET}
-    </style>
+    <link rel="stylesheet" href="/static/css/main.css?v={int(time.time())}">
 </head>
 <body>
     <div class="container">
@@ -150,8 +150,9 @@ def render_reader_view_page(file_path):
 <head>
     <title>Reader - {work_title}</title>
     <meta charset="UTF-8">
+    <link rel="stylesheet" href="/static/css/main.css?v={int(time.time())}">
+    <link rel="stylesheet" href="/static/css/reader.css?v={int(time.time())}">
     <style>
-        {MAIN_STYLESHEET}
         .reader-container {{
             max-width: 800px;
             margin: 0 auto;
@@ -265,9 +266,7 @@ def render_reader_view_page(file_path):
 <html>
 <head>
     <title>Error</title>
-    <style>
-        {MAIN_STYLESHEET}
-    </style>
+    <link rel="stylesheet" href="/static/css/main.css?v={int(time.time())}">
 </head>
 <body>
     <div class="container">

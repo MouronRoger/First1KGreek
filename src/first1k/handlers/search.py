@@ -2,7 +2,8 @@
 
 import os
 import re
-from ..config import MAIN_STYLESHEET
+import time
+from ..config import CSS_DIR
 
 def search_corpus(search_term):
     """Search for the given term in all XML files."""
@@ -108,8 +109,9 @@ def render_search_page(search_term=None):
 <head>
     <title>First1K Greek - Search</title>
     <meta charset="UTF-8">
+    <link rel="stylesheet" href="/static/css/main.css?v={int(time.time())}">
+    <link rel="stylesheet" href="/static/css/styles.css?v={int(time.time())}">
     <style>
-        {MAIN_STYLESHEET}
         .search-box {{
             margin: 30px 0;
             padding: 20px;

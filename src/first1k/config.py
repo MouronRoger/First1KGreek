@@ -32,7 +32,7 @@ BACKUP_DIR = "backup"
 
 # File paths
 CATALOG_PATH = 'catalog.json'
-BACKUP_FILE = 'browse_texts.py.bak'
+BACKUP_FILE = 'browse_texts_fixed.py.bak'
 
 # Create necessary directories
 os.makedirs(DATA_DIR, exist_ok=True)
