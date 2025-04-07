@@ -1,0 +1,972 @@
+{
+  "heb0001": {
+    "century": -6,
+    "name": "Hebrew Bible"
+  },
+  "tlg0001": {
+    "century": -3,
+    "name": "Apollonius Rhodius"
+  },
+  "tlg0003": {
+    "century": -5,
+    "name": "Thucydides"
+  },
+  "tlg0004": {
+    "century": 3,
+    "name": "Diogenes Laertius"
+  },
+  "tlg0005": {
+    "century": -3,
+    "name": "Theocritus"
+  },
+  "tlg0006": {
+    "century": -5,
+    "name": "Euripides"
+  },
+  "tlg0007": {
+    "century": 1,
+    "name": "Plutarch"
+  },
+  "tlg0008": {
+    "century": 2,
+    "name": "Athenaeus of Naucratis"
+  },
+  "tlg0010": {
+    "century": -4,
+    "name": "Isocrates"
+  },
+  "tlg0011": {
+    "century": -5,
+    "name": "Sophocles"
+  },
+  "tlg0012": {
+    "century": -8,
+    "name": "Homer"
+  },
+  "tlg0013": {
+    "century": -6,
+    "name": "Homeric Hymns"
+  },
+  "tlg0014": {
+    "century": -4,
+    "name": "Demosthenes"
+  },
+  "tlg0015": {
+    "century": 2,
+    "name": "Herodian"
+  },
+  "tlg0016": {
+    "century": -5,
+    "name": "Herodotus"
+  },
+  "tlg0017": {
+    "century": -4,
+    "name": "Isaeus"
+  },
+  "tlg0018": {
+    "century": 1,
+    "name": "Philo Judaeus"
+  },
+  "tlg0019": {
+    "century": -5,
+    "name": "Aristophanes"
+  },
+  "tlg0020": {
+    "century": -8,
+    "name": "Hesiod"
+  },
+  "tlg0022": {
+    "century": -2,
+    "name": "Nicander of Colophon"
+  },
+  "tlg0023": {
+    "century": 2,
+    "name": "Oppian"
+  },
+  "tlg0024": {
+    "century": 3,
+    "name": "Oppian of Apamea"
+  },
+  "tlg0026": {
+    "century": -4,
+    "name": "Aeschines"
+  },
+  "tlg0027": {
+    "century": -4,
+    "name": "Andocides"
+  },
+  "tlg0028": {
+    "century": -5,
+    "name": "Antiphon"
+  },
+  "tlg0029": {
+    "century": -4,
+    "name": "Dinarchus"
+  },
+  "tlg0030": {
+    "century": -4,
+    "name": "Hyperides"
+  },
+  "tlg0031": {
+    "century": 1,
+    "name": "New Testament"
+  },
+  "tlg0032": {
+    "century": -4,
+    "name": "Xenophon"
+  },
+  "tlg0033": {
+    "century": -5,
+    "name": "Pindar"
+  },
+  "tlg0034": {
+    "century": -4,
+    "name": "Lycurgus"
+  },
+  "tlg0035": {
+    "century": -2,
+    "name": "Moschus"
+  },
+  "tlg0036": {
+    "century": -2,
+    "name": "Bion of Phlossa"
+  },
+  "tlg0037": {
+    "century": -6,
+    "name": "Anacharsis"
+  },
+  "tlg0039": {
+    "century": -1,
+    "name": "Mithridatis Epistula"
+  },
+  "tlg0041": {
+    "century": -3,
+    "name": "Chionis Epistulae"
+  },
+  "tlg0044": {
+    "century": -3,
+    "name": "Antiochus Epistolographus"
+  },
+  "tlg0045": {
+    "century": -5,
+    "name": "Artaxerxis Epistulae"
+  },
+  "tlg0046": {
+    "century": -5,
+    "name": "Niciae Epistula"
+  },
+  "tlg0048": {
+    "century": -4,
+    "name": "Philip II, King of Macedonia"
+  },
+  "tlg0053": {
+    "century": -4,
+    "name": "Phalaridis Epistulae"
+  },
+  "tlg0055": {
+    "century": -5,
+    "name": "Themistocles"
+  },
+  "tlg0057": {
+    "century": 2,
+    "name": "Galen"
+  },
+  "tlg0058": {
+    "century": -4,
+    "name": "Aeneas Tacticus"
+  },
+  "tlg0059": {
+    "century": -4,
+    "name": "Plato"
+  },
+  "tlg0060": {
+    "century": -1,
+    "name": "Diodorus Siculus"
+  },
+  "tlg0061": {
+    "century": 2,
+    "name": "Pseudo-Lucian"
+  },
+  "tlg0062": {
+    "century": 2,
+    "name": "Lucian of Samosata"
+  },
+  "tlg0064": {
+    "century": -5,
+    "name": "Hanno"
+  },
+  "tlg0065": {
+    "century": -5,
+    "name": "Scylax of Caryanda"
+  },
+  "tlg0066": {
+    "century": -3,
+    "name": "Heraclides, Criticus"
+  },
+  "tlg0067": {
+    "century": -2,
+    "name": "Agatharchides"
+  },
+  "tlg0068": {
+    "century": -2,
+    "name": "Pseudo-Scymnus"
+  },
+  "tlg0069": {
+    "century": -1,
+    "name": "Dionysius, Calliphontis"
+  },
+  "tlg0070": {
+    "century": 1,
+    "name": "Isidore, of Charax"
+  },
+  "tlg0071": {
+    "century": 2,
+    "name": "Pseudo-Arrianus"
+  },
+  "tlg0074": {
+    "century": 2,
+    "name": "Arrian"
+  },
+  "tlg0075": {
+    "century": 2,
+    "name": "Pseudo-Arrianus"
+  },
+  "tlg0077": {
+    "century": 3,
+    "name": "Stadiasmus Magni Maris"
+  },
+  "tlg0081": {
+    "century": -1,
+    "name": "Dionysius of Halicarnassus"
+  },
+  "tlg0082": {
+    "century": 2,
+    "name": "Apollonius Dyscolus"
+  },
+  "tlg0083": {
+    "century": 2,
+    "name": "Dionysius of Byzantium"
+  },
+  "tlg0084": {
+    "century": 2,
+    "name": "Dionysius Periegetes"
+  },
+  "tlg0085": {
+    "century": -5,
+    "name": "Aeschylus"
+  },
+  "tlg0086": {
+    "century": -4,
+    "name": "Aristotle"
+  },
+  "tlg0087": {
+    "century": 2,
+    "name": "Aelius Herodianus"
+  },
+  "tlg0088": {
+    "century": -4,
+    "name": "Aristoxenus"
+  },
+  "tlg0090": {
+    "century": 3,
+    "name": "Agathemerus"
+  },
+  "tlg0092": {
+    "century": 3,
+    "name": "Anonymi Geographiae Expositio Compendiaria"
+  },
+  "tlg0093": {
+    "century": -4,
+    "name": "Theophrastus"
+  },
+  "tlg0094": {
+    "century": 1,
+    "name": "Pseudo-Plutarch"
+  },
+  "tlg0096": {
+    "century": -6,
+    "name": "Aesop"
+  },
+  "tlg0097": {
+    "century": 2,
+    "name": "Diogenianus of Heraclea"
+  },
+  "tlg0098": {
+    "century": 2,
+    "name": "Zenobius Sophista"
+  },
+  "tlg0099": {
+    "century": -1,
+    "name": "Strabo"
+  },
+  "tlg0199": {
+    "century": -5,
+    "name": "Bacchylides"
+  },
+  "tlg0233": {
+    "century": -6,
+    "name": "Hipponax"
+  },
+  "tlg0284": {
+    "century": 2,
+    "name": "Aristides, Aelius"
+  },
+  "tlg0317": {
+    "century": 2,
+    "name": "Acta Joannis"
+  },
+  "tlg0319": {
+    "century": -5,
+    "name": "Critias"
+  },
+  "tlg0341": {
+    "century": -3,
+    "name": "Lycophron"
+  },
+  "tlg0357": {
+    "century": 4,
+    "name": "Didymus Alexandrinus"
+  },
+  "tlg0358": {
+    "century": 2,
+    "name": "Nicomachus of Gerasa"
+  },
+  "tlg0361": {
+    "century": 2,
+    "name": "Cleonides"
+  },
+  "tlg0362": {
+    "century": -2,
+    "name": "Carmina Delphis Inventa"
+  },
+  "tlg0363": {
+    "century": 2,
+    "name": "Claudius Ptolemaeus"
+  },
+  "tlg0385": {
+    "century": 2,
+    "name": "Cassius Dio Cocceianus"
+  },
+  "tlg0509": {
+    "century": -6,
+    "name": "Myia"
+  },
+  "tlg0521": {
+    "century": -5,
+    "name": "Epicharmus"
+  },
+  "tlg0525": {
+    "century": 2,
+    "name": "Pausanias"
+  },
+  "tlg0526": {
+    "century": 1,
+    "name": "Flavius Josephus"
+  },
+  "tlg0527": {
+    "century": -6,
+    "name": "Old Testament"
+  },
+  "tlg0529": {
+    "century": -1,
+    "name": "Arius Didymus"
+  },
+  "tlg0530": {
+    "century": 2,
+    "name": "Pseudo-Galen"
+  },
+  "tlg0532": {
+    "century": 2,
+    "name": "Achilles Tatius"
+  },
+  "tlg0533": {
+    "century": -3,
+    "name": "Callimachus"
+  },
+  "tlg0535": {
+    "century": -4,
+    "name": "Demades"
+  },
+  "tlg0537": {
+    "century": -3,
+    "name": "Epicurus"
+  },
+  "tlg0540": {
+    "century": -5,
+    "name": "Lysias"
+  },
+  "tlg0541": {
+    "century": -3,
+    "name": "Menander"
+  },
+  "tlg0542": {
+    "century": 2,
+    "name": "Julius Pollux"
+  },
+  "tlg0543": {
+    "century": -2,
+    "name": "Polybius"
+  },
+  "tlg0544": {
+    "century": 2,
+    "name": "Sextus Empiricus"
+  },
+  "tlg0545": {
+    "century": 2,
+    "name": "Aelian"
+  },
+  "tlg0548": {
+    "century": 1,
+    "name": "Apollodorus"
+  },
+  "tlg0550": {
+    "century": -3,
+    "name": "Apollonius of Perga"
+  },
+  "tlg0551": {
+    "century": 2,
+    "name": "Appianus of Alexandria"
+  },
+  "tlg0552": {
+    "century": -3,
+    "name": "Archimedes"
+  },
+  "tlg0553": {
+    "century": 2,
+    "name": "Artemidorus"
+  },
+  "tlg0554": {
+    "century": 4,
+    "name": "tlg0554"
+  },
+  "tlg0555": {
+    "century": 2,
+    "name": "Clement of Alexandria"
+  },
+  "tlg0556": {
+    "century": -1,
+    "name": "Asclepiodotus"
+  },
+  "tlg0557": {
+    "century": 1,
+    "name": "Epictetus"
+  },
+  "tlg0559": {
+    "century": 1,
+    "name": "Hero of Alexandria"
+  },
+  "tlg0560": {
+    "century": 3,
+    "name": "Longinus"
+  },
+  "tlg0561": {
+    "century": 2,
+    "name": "Longus"
+  },
+  "tlg0562": {
+    "century": 2,
+    "name": "Marcus Aurelius"
+  },
+  "tlg0563": {
+    "century": 2,
+    "name": "Maximus of Tyre"
+  },
+  "tlg0564": {
+    "century": 1,
+    "name": "Rufus of Ephesus"
+  },
+  "tlg0565": {
+    "century": 2,
+    "name": "Soranus"
+  },
+  "tlg0572": {
+    "century": 2,
+    "name": "Gaius Romanus"
+  },
+  "tlg0575": {
+    "century": 2,
+    "name": "Moschion Gnomologus"
+  },
+  "tlg0579": {
+    "century": -5,
+    "name": "Orphica"
+  },
+  "tlg0580": {
+    "century": 2,
+    "name": "Paradoxographus Florentinus"
+  },
+  "tlg0591": {
+    "century": -5,
+    "name": "Antisthenes"
+  },
+  "tlg0592": {
+    "century": 2,
+    "name": "Hermogenes"
+  },
+  "tlg0593": {
+    "century": -5,
+    "name": "Gorgias of Leontini"
+  },
+  "tlg0594": {
+    "century": 2,
+    "name": "Alexander Numenius"
+  },
+  "tlg0606": {
+    "century": 1,
+    "name": "Rufus Soph."
+  },
+  "tlg0607": {
+    "century": 1,
+    "name": "Aelius Theon"
+  },
+  "tlg0609": {
+    "century": -1,
+    "name": "Tryphon I Grammaticus"
+  },
+  "tlg0610": {
+    "century": -4,
+    "name": "Alcidamas"
+  },
+  "tlg0612": {
+    "century": 1,
+    "name": "Dio Chrysostom"
+  },
+  "tlg0613": {
+    "century": -4,
+    "name": "Demetrius of Phaleron"
+  },
+  "tlg0614": {
+    "century": 1,
+    "name": "Babrius"
+  },
+  "tlg0615": {
+    "century": 2,
+    "name": "Aspasius"
+  },
+  "tlg0616": {
+    "century": 2,
+    "name": "Polyaenus Macedo"
+  },
+  "tlg0618": {
+    "century": -3,
+    "name": "Antigoni Epistula"
+  },
+  "tlg0620": {
+    "century": -4,
+    "name": "Archytas of Tarentum"
+  },
+  "tlg0623": {
+    "century": -3,
+    "name": "Cratetis Epistulae"
+  },
+  "tlg0626": {
+    "century": -5,
+    "name": "Heraclitus of Ephesus"
+  },
+  "tlg0627": {
+    "century": -5,
+    "name": "Hippocrates"
+  },
+  "tlg0628": {
+    "century": 1,
+    "name": "Musonius Rufus"
+  },
+  "tlg0629": {
+    "century": -6,
+    "name": "Periander"
+  },
+  "tlg0632": {
+    "century": -6,
+    "name": "Pythagoras"
+  },
+  "tlg0633": {
+    "century": -4,
+    "name": "Lysis"
+  },
+  "tlg0634": {
+    "century": -4,
+    "name": "Xenocrates of Chalcedon"
+  },
+  "tlg0636": {
+    "century": -4,
+    "name": "Socrates Epistulae"
+  },
+  "tlg0637": {
+    "century": -4,
+    "name": "Socraticorum Epistulae"
+  },
+  "tlg0638": {
+    "century": 3,
+    "name": "Philostratus the Athenian"
+  },
+  "tlg0639": {
+    "century": -4,
+    "name": "Menecrates Medicus"
+  },
+  "tlg0640": {
+    "century": 2,
+    "name": "Alciphron"
+  },
+  "tlg0641": {
+    "century": 2,
+    "name": "Xenophon of Ephesus"
+  },
+  "tlg0643": {
+    "century": 1,
+    "name": "Anonymus Londinensis"
+  },
+  "tlg0644": {
+    "century": -3,
+    "name": "Aristophanes of Byzantium"
+  },
+  "tlg0645": {
+    "century": 2,
+    "name": "Justin Martyr"
+  },
+  "tlg0646": {
+    "century": 2,
+    "name": "Pseudo-Justinus Martyr"
+  },
+  "tlg0647": {
+    "century": 5,
+    "name": "Tryphiodorus"
+  },
+  "tlg0648": {
+    "century": 1,
+    "name": "Onasander"
+  },
+  "tlg0649": {
+    "century": 1,
+    "name": "Lesbonax (Rhetorician)"
+  },
+  "tlg0652": {
+    "century": 3,
+    "name": "Philostratus Minor"
+  },
+  "tlg0653": {
+    "century": -3,
+    "name": "Aratus Solensis"
+  },
+  "tlg0655": {
+    "century": -1,
+    "name": "Parthenius of Nicaea"
+  },
+  "tlg0656": {
+    "century": 1,
+    "name": "Dioscurides Pedianus"
+  },
+  "tlg0657": {
+    "century": -1,
+    "name": "Crateuas"
+  },
+  "tlg0658": {
+    "century": 3,
+    "name": "Heliodorus of Emesa"
+  },
+  "tlg0666": {
+    "century": 2,
+    "name": "Adrianus of Tyre"
+  },
+  "tlg0671": {
+    "century": 3,
+    "name": "Philumenus"
+  },
+  "tlg0676": {
+    "century": 4,
+    "name": "Aglaias, Byzantius"
+  },
+  "tlg0693": {
+    "century": 2,
+    "name": "Albinus"
+  },
+  "tlg0708": {
+    "century": 4,
+    "name": "Ammonius Grammaticus"
+  },
+  "tlg0719": {
+    "century": 2,
+    "name": "Aretaeus of Cappadocia"
+  },
+  "tlg0731": {
+    "century": 4,
+    "name": "Adamantius Judaeus"
+  },
+  "tlg0732": {
+    "century": 2,
+    "name": "Alexander of Aphrodisias"
+  },
+  "tlg0733": {
+    "century": 3,
+    "name": "Cassius Iatrosophista"
+  },
+  "tlg0751": {
+    "century": -5,
+    "name": "Pseudo-Hippocrates"
+  },
+  "tlg1118": {
+    "century": 1,
+    "name": "Pseudo-Dioscorides"
+  },
+  "tlg1126": {
+    "century": 1,
+    "name": "Anubion, Poeta Astrologus"
+  },
+  "tlg1129": {
+    "century": 2,
+    "name": "Anonymi de Barbarismo et Soloecismo"
+  },
+  "tlg1131": {
+    "century": 2,
+    "name": "Anonymus Ad Avircium Marcellum contra Cataphrygas"
+  },
+  "tlg1134": {
+    "century": -5,
+    "name": "Anonymous Iamblichi"
+  },
+  "tlg1146": {
+    "century": -2,
+    "name": "Antipater Tarsensis"
+  },
+  "tlg1147": {
+    "century": -5,
+    "name": "Antiphon of Athens"
+  },
+  "tlg1181": {
+    "century": -3,
+    "name": "Aristarchus of Samos"
+  },
+  "tlg1188": {
+    "century": 2,
+    "name": "Aristocles of Messene"
+  },
+  "tlg1193": {
+    "century": -3,
+    "name": "Ariston of Chios"
+  },
+  "tlg1194": {
+    "century": -2,
+    "name": "Aristonicus of Alexandria"
+  },
+  "tlg1205": {
+    "century": 2,
+    "name": "Athenagoras"
+  },
+  "tlg1210": {
+    "century": -4,
+    "name": "Autolycus"
+  },
+  "tlg1216": {
+    "century": 2,
+    "name": "Barnabae Epistula"
+  },
+  "tlg1220": {
+    "century": -1,
+    "name": "Batrachomyomachia"
+  },
+  "tlg1247": {
+    "century": -4,
+    "name": "Cebes"
+  },
+  "tlg1252": {
+    "century": 2,
+    "name": "Certamen Homeri et Hesiodi"
+  },
+  "tlg1264": {
+    "century": -3,
+    "name": "Chrysippus"
+  },
+  "tlg1269": {
+    "century": -3,
+    "name": "Cleanthes"
+  },
+  "tlg1271": {
+    "century": 1,
+    "name": "Clemens Romanus (Clement of Rome)"
+  },
+  "tlg1272": {
+    "century": 1,
+    "name": "Cleomedes"
+  },
+  "tlg1286": {
+    "century": 2,
+    "name": "Hermetica"
+  },
+  "tlg1287": {
+    "century": -4,
+    "name": "Crantor"
+  },
+  "tlg1304": {
+    "century": -5,
+    "name": "Democritus"
+  },
+  "tlg1309": {
+    "century": -5,
+    "name": "Dialexeis"
+  },
+  "tlg1311": {
+    "century": 1,
+    "name": "Didache"
+  },
+  "tlg1319": {
+    "century": -5,
+    "name": "Diogenes of Apollonia"
+  },
+  "tlg1320": {
+    "century": -2,
+    "name": "Diogenes Babylonius"
+  },
+  "tlg1325": {
+    "century": 1,
+    "name": "Diogenes Sinopensis Epistulae"
+  },
+  "tlg1329": {
+    "century": 2,
+    "name": "Dionysius Corinthius"
+  },
+  "tlg1337": {
+    "century": 1,
+    "name": "Dorotheus of Sidon"
+  },
+  "tlg1347": {
+    "century": -6,
+    "name": "Epimenides"
+  },
+  "tlg1367": {
+    "century": -4,
+    "name": "Euripides Epistulae"
+  },
+  "tlg1383": {
+    "century": 1,
+    "name": "Geminus"
+  },
+  "tlg1389": {
+    "century": 2,
+    "name": "Harpocration"
+  },
+  "tlg1390": {
+    "century": -4,
+    "name": "Hecataeus of Abderita"
+  },
+  "tlg1402": {
+    "century": 2,
+    "name": "Hephaestion"
+  },
+  "tlg1409": {
+    "century": -4,
+    "name": "Heraclides Ponticus"
+  },
+  "tlg1413": {
+    "century": 1,
+    "name": "Heraclitus Paradoxographus"
+  },
+  "tlg1414": {
+    "century": -5,
+    "name": "Heraclitus"
+  },
+  "tlg1416": {
+    "century": 1,
+    "name": "Philo of Byblos"
+  },
+  "tlg1419": {
+    "century": 2,
+    "name": "Hermas, 2nd cent."
+  },
+  "tlg1431": {
+    "century": -2,
+    "name": "Hipparchus"
+  },
+  "tlg1434": {
+    "century": -5,
+    "name": "Hippias of Elis"
+  },
+  "tlg1441": {
+    "century": 2,
+    "name": "Iamblichus (Scr. Erot.)"
+  },
+  "tlg1443": {
+    "century": 1,
+    "name": "Ignatius of Antioch"
+  },
+  "tlg1447": {
+    "century": 2,
+    "name": "Irenaeus, Saint, Bishop of Lyon"
+  },
+  "tlg1463": {
+    "century": -2,
+    "name": "Liber Enoch"
+  },
+  "tlg1482": {
+    "century": 4,
+    "name": "Cyranides"
+  },
+  "tlg1484": {
+    "century": 2,
+    "name": "Martyrium Polycarpi"
+  },
+  "tlg1486": {
+    "century": 3,
+    "name": "Matron of Pitana"
+  },
+  "tlg1487": {
+    "century": 4,
+    "name": "Maximus, Astrologus"
+  },
+  "tlg1542": {
+    "century": 2,
+    "name": "Numenius of Apamea"
+  },
+  "tlg1548": {
+    "century": 2,
+    "name": "Oenomaus of Gadara"
+  },
+  "tlg1551": {
+    "century": 1,
+    "name": "Oracula Sibyllina"
+  },
+  "tlg1553": {
+    "century": -4,
+    "name": "Palaiphatos"
+  },
+  "tlg1562": {
+    "century": -5,
+    "name": "Parmenides"
+  },
+  "tlg1595": {
+    "century": -1,
+    "name": "Philodemus"
+  },
+  "tlg1596": {
+    "century": -5,
+    "name": "Philolaus of Croton"
+  },
+  "tlg1600": {
+    "century": 3,
+    "name": "Philostratus Sophista"
+  },
+  "tlg1602": {
+    "century": -1,
+    "name": "Philoxenus of Alexandria"
+  },
+  "tlg1617": {
+    "century": 2,
+    "name": "Marcus Antonius Polemon"
+  },
+  "tlg1622": {
+    "century": 2,
+    "name": "Polycarp"
+  },
+  "tlg1626": {
+    "century": 2,
+    "name": "Polycrates Ephesius"
+  },
+  "tlg1634": {
+    "century": -5,
+    "name": "Prodicus"
+  },
+  "tlg1664": {
+    "century": 1,
+    "name": "Seniores Alexandrini"
+  },
+  "tlg1665": {
+    "century": 2,
+    "name": "
