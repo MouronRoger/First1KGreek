@@ -131,7 +131,7 @@
   },
   "tlg0026": {
     "name": "Aesop",
-    "century": "4 BCE",
+    "century": "9 BCE",
     "allegiance": "Fabulist"
   },
   "tlg0028": {
@@ -141,7 +141,7 @@
   },
   "tlg0086": {
     "name": "Aristotle",
-    "century": "4 BCE",
+    "century": "5 BCE",
     "allegiance": "Peripatetic"
   },
   "tlg0093": {
@@ -231,7 +231,7 @@
   },
   "tlg1443": {
     "name": "Asclepius",
-    "century": "6 CE",
+    "century": "5 CE",
     "allegiance": "Neoplatonist"
   },
   "tlg1552": {

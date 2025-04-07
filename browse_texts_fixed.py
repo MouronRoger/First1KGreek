@@ -64,8 +64,12 @@ except (FileNotFoundError, json.JSONDecodeError) as e:
 logger.info("Starting First1KGreek Browser - Fixed Version 1.2.0")
 logger.info("With dark theme and improved editor detection")
 
+# Stylesheets moved to external files in static/css
+# For reference, keeping the original definitions commented out
+
 # Reader mode stylesheet
-READER_STYLESHEET = """
+"""
+READER_STYLESHEET = '''
 body { 
     font-family: 'New Athena Unicode', 'GFS Artemisia', 'Arial Unicode MS', 'Lucida Sans Unicode', 'Cardo', serif; 
     margin: 0; 
@@ -90,10 +94,12 @@ a:hover { text-decoration: underline; }
     box-shadow: 0 0 10px rgba(0,0,0,0.3);
     min-height: 100vh;
 }
-""" 
+'''
+"""
 
 # Main stylesheet
-MAIN_STYLESHEET = """
+"""
+MAIN_STYLESHEET = '''
 body { 
     font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif; 
     margin: 0; 
@@ -117,10 +123,12 @@ a:hover { text-decoration: underline; }
     box-shadow: 0 0 10px rgba(0,0,0,0.5);
     min-height: 100vh;
 }
+'''
 """
 
 # Authors table stylesheet
-AUTHORS_TABLE_STYLESHEET = """
+"""
+AUTHORS_TABLE_STYLESHEET = '''
 .authors-table {
     width: 100%;
     border-collapse: collapse;
@@ -417,6 +425,7 @@ AUTHORS_TABLE_STYLESHEET = """
 .cancel-btn:hover {
     background-color: #4a5568;
 }
+'''
 """
 
 def is_port_in_use(port):
@@ -436,184 +445,99 @@ def find_available_port(start_port=8000, max_attempts=10):
     logger.warning(f"No available ports found in range {start_port}-{start_port+max_attempts-1}")
     return start_port
 
-class CustomHTTPRequestHandler(http.server.SimpleHTTPRequestHandler):
-    """Custom HTTP server handler for browsing and viewing texts"""
+class PageGenerator:
+    """Class to handle HTML page generation"""
     
-    def log_message(self, format, *args):
-        """Override to use our logger"""
-        logger.info("%s - %s" % (self.address_string(), format % args))
+    def __init__(self):
+        """Initialize with common data"""
+        self.authors_data = {}
+        self.user_prefs = {'favorites': [], 'archived': [], 'deleted': []}
+        
+        # Load data with proper error handling
+        self.load_data()
     
-    def do_GET(self):
-        """Handle GET requests"""
+    def load_data(self):
+        """Load data with error handling"""
+        # Load authors data
         try:
-            parsed_path = urllib.parse.urlparse(self.path)
-            path = parsed_path.path
-            logger.info(f"GET request for {self.path} from {self.client_address}")
-
-            # Serve static files
-            if path.startswith('/static/'):
-                logger.debug(f"Serving static file: {path}")
-                self.serve_static_file(path)
-                return
-
-            # Handle other routes
-            if path == '/':
-                logger.debug("Serving home page")
-                self.send_html_response(self.get_home_page())
-            elif path == '/authors':
-                logger.debug("Serving authors table page")
-                self.send_html_response(self.get_authors_table_page())
-            elif path == '/works':
-                author_id = urllib.parse.parse_qs(parsed_path.query).get('author_id', [''])[0]
-                logger.debug(f"Serving works page for author_id: {author_id}")
-                self.send_html_response(self.get_works_page(parsed_path.query))
-            elif path == '/view':
-                params = urllib.parse.parse_qs(parsed_path.query)
-                author_id = params.get('author_id', [''])[0]
-                work_id = params.get('work_id', [''])[0]
-                logger.debug(f"Serving view page for author_id: {author_id}, work_id: {work_id}")
-                self.send_html_response(self.get_view_page(parsed_path.query))
-            elif path == '/editors':
-                logger.debug("Serving editors page")
-                self.send_html_response(self.get_editors_page())
-            elif path == '/search':
-                logger.debug("Serving search page")
-                self.send_html_response(self.get_search_page())
-            else:
-                logger.warning(f"404 Not Found: {path}")
-                self.send_error(404, "Not Found")
+            with open('authors_data.json', 'r', encoding='utf-8') as f:
+                self.authors_data = json.load(f)
+            logger.info(f"PageGenerator loaded author data with {len(self.authors_data)} entries")
+        except FileNotFoundError:
+            logger.error("authors_data.json not found - using empty dictionary")
+        except json.JSONDecodeError as e:
+            logger.error(f"Error parsing authors_data.json: {str(e)}")
+            logger.error(f"At line {e.lineno}, column {e.colno}: {e.msg}")
         except Exception as e:
-            logger.error(f"Error handling GET request: {str(e)}")
+            logger.error(f"Unexpected error loading authors_data.json: {str(e)}")
             logger.error(traceback.format_exc())
-            self.send_error(500, f"Internal Server Error: {str(e)}")
-
-    def do_POST(self):
-        """Handle POST requests"""
+            
+        # Load user preferences    
         try:
-            parsed_path = urllib.parse.urlparse(self.path)
-            path = parsed_path.path
-            logger.info(f"POST request for {self.path} from {self.client_address}")
-
-            # Parse form data
-            content_length = int(self.headers.get('Content-Length', 0))
-            post_data = urllib.parse.parse_qs(self.rfile.read(content_length).decode('utf-8'))
-            logger.debug(f"POST data: {post_data}")
-
-            if path == '/update_preference':
-                logger.debug("Handling update_preference request")
-                self.handle_update_preference(post_data)
-            elif path == '/update_century':
-                logger.debug("Handling update_century request")
-                self.handle_update_century(post_data)
-            else:
-                logger.warning(f"404 Not Found: {path}")
-                self.send_error(404, "Not Found")
+            with open('user_preferences.json', 'r', encoding='utf-8') as f:
+                self.user_prefs = json.load(f)
+            logger.info(f"PageGenerator loaded user preferences with {sum(len(v) for v in self.user_prefs.values())} total entries")
+        except FileNotFoundError:
+            logger.info("user_preferences.json not found - using default preferences")
+        except json.JSONDecodeError as e:
+            logger.error(f"Error parsing user_preferences.json: {str(e)}")
+            logger.error(f"At line {e.lineno}, column {e.colno}: {e.msg}")
         except Exception as e:
-            logger.error(f"Error handling POST request: {str(e)}")
+            logger.error(f"Unexpected error loading user_preferences.json: {str(e)}")
             logger.error(traceback.format_exc())
-            self.send_error(500, f"Internal Server Error: {str(e)}")
-
-    def handle_update_preference(self, post_data):
-        """Handle updating user preferences"""
-        author_id = post_data.get('author_id', [''])[0]
-        pref_type = post_data.get('pref_type', [''])[0]
-        value = post_data.get('value', ['false'])[0].lower() == 'true'
-
-        if not author_id or not pref_type:
-            self.send_error(400, "Missing required parameters")
-            return
-
-        try:
-            # Load current preferences
-            try:
-                with open('user_preferences.json', 'r') as f:
-                    prefs = json.load(f)
-            except (FileNotFoundError, json.JSONDecodeError):
-                prefs = {'favorites': [], 'archived': [], 'deleted': []}
-
-            # Update preference
-            if pref_type not in prefs:
-                prefs[pref_type] = []
-
-            if value and author_id not in prefs[pref_type]:
-                prefs[pref_type].append(author_id)
-            elif not value and author_id in prefs[pref_type]:
-                prefs[pref_type].remove(author_id)
-
-            # Save updated preferences
-            with open('user_preferences.json', 'w') as f:
-                json.dump(prefs, f, indent=2)
-
-            self.send_response(200)
-            self.send_header('Content-type', 'application/json')
-            self.end_headers()
-            self.wfile.write(json.dumps({'success': True}).encode())
-
-        except Exception as e:
-            self.send_error(500, f"Error updating preferences: {str(e)}")
-
-    def handle_update_century(self, post_data):
-        """Handle updating author century"""
-        author_id = post_data.get('author_id', [''])[0]
-        century = post_data.get('century', [''])[0]
-
-        if not author_id or not century:
-            self.send_error(400, "Missing required parameters")
-            return
-
-        try:
-            # Load current author data
-            try:
-                with open('authors_data.json', 'r') as f:
-                    authors_data = json.load(f)
-            except (FileNotFoundError, json.JSONDecodeError):
-                authors_data = {}
-
-            # Update century
-            if author_id in authors_data:
-                authors_data[author_id]['century'] = century
-
-                # Save updated data
-                with open('authors_data.json', 'w') as f:
-                    json.dump(authors_data, f, indent=2)
-
-                self.send_response(200)
-                self.send_header('content-type', 'application/json')
-                self.end_headers()
-                self.wfile.write(json.dumps({'success': True}).encode())
-            else:
-                self.send_error(404, "Author not found")
-
-        except Exception as e:
-            self.send_error(500, f"Error updating century: {str(e)}")
-
+    
+    def reload_data(self):
+        """Reload data from disk to ensure we have the latest version"""
+        logger.debug("Reloading data from disk")
+        data_reload_start = time.time()
+        self.load_data()
+        logger.debug(f"Data reload completed in {time.time() - data_reload_start:.3f}s")
+    
+    def get_home_page(self):
+        """Generate the home page"""
+        html = '''
+        <!DOCTYPE html>
+        <html>
+        <head>
+            <title>First1KGreek Browser</title>
+            <link rel="stylesheet" href="/static/css/main.css">
+        </head>
+        <body>
+            <div class="container">
+                <h1>First1KGreek Browser</h1>
+                <p>Welcome to the First1KGreek Browser. This tool allows you to browse, search, and view texts from the First 1000 Years of Greek project.</p>
+                
+                <h2>Navigation</h2>
+                <ul>
+                    <li><a href="/authors">Browse Authors</a></li>
+                    <li><a href="/editors">Browse Editors</a></li>
+                    <li><a href="/search">Search Texts</a></li>
+                </ul>
+                
+                <p><small>Version 1.2.0 (with dark theme) - Last updated: 2025-03-07</small></p>
+            </div>
+        </body>
+        </html>
+        '''
+        return html
+    
     def get_authors_table_page(self):
         """Generate the authors table page"""
-        # Load user preferences
-        try:
-            with open('user_preferences.json', 'r') as f:
-                user_prefs = json.load(f)
-        except (FileNotFoundError, json.JSONDecodeError):
-            user_prefs = {'favorites': [], 'archived': [], 'deleted': []}
-
-        # Load author data
-        try:
-            with open('authors_data.json', 'r') as f:
-                authors_data = json.load(f)
-        except (FileNotFoundError, json.JSONDecodeError):
-            authors_data = {}
-
+        # Reload data to ensure we have the latest values
+        self.reload_data()
+        
         # HTML template with JavaScript and CSS includes
         html = f'''
         <!DOCTYPE html>
         <html>
         <head>
             <title>Authors Table</title>
-            <link rel="stylesheet" href="/static/css/styles.css">
+            <link rel="stylesheet" href="/static/css/main.css">
+            <link rel="stylesheet" href="/static/css/authors-table.css">
             <script id="user-prefs" type="application/json">
-                {json.dumps(user_prefs)}
+                {json.dumps(self.user_prefs)}
             </script>
-            <script src="/static/js/authors_table.js"></script>
+            <script src="/static/js/authors_table.js?v={int(time.time())}"></script>
         </head>
         <body>
             <div class="container">
@@ -654,8 +578,8 @@ class CustomHTTPRequestHandler(http.server.SimpleHTTPRequestHandler):
                 '''
 
         # Add table rows
-        for author_id, author_data in authors_data.items():
-            if author_id in (user_prefs.get('deleted', []) or []):
+        for author_id, author_data in self.authors_data.items():
+            if author_id in (self.user_prefs.get('deleted', []) or []):
                 continue
 
             author_name = author_data.get('name', '')
@@ -665,9 +589,9 @@ class CustomHTTPRequestHandler(http.server.SimpleHTTPRequestHandler):
 
             # Add icons for favorite/archived status
             name_prefix = ''
-            if author_id in (user_prefs.get('favorites', []) or []):
+            if author_id in (self.user_prefs.get('favorites', []) or []):
                 name_prefix += '<span class="favorites-star">★</span> '
-            if author_id in (user_prefs.get('archived', []) or []):
+            if author_id in (self.user_prefs.get('archived', []) or []):
                 name_prefix += '<span class="archived-icon">📦</span> '
 
             html += f'''
@@ -678,10 +602,10 @@ class CustomHTTPRequestHandler(http.server.SimpleHTTPRequestHandler):
                             <td data-column="allegiance">{allegiance}</td>
                             <td class="actions">
                                 <button class="favorite-btn" data-author-id="{author_id}">
-                                    {'Unfavorite' if author_id in (user_prefs.get('favorites', []) or []) else 'Favorite'}
+                                    {'Unfavorite' if author_id in (self.user_prefs.get('favorites', []) or []) else 'Favorite'}
                                 </button>
                                 <button class="archive-btn" data-author-id="{author_id}">
-                                    {'Unarchive' if author_id in (user_prefs.get('archived', []) or []) else 'Archive'}
+                                    {'Unarchive' if author_id in (self.user_prefs.get('archived', []) or []) else 'Archive'}
                                 </button>
                                 <button class="delete-btn" data-author-id="{author_id}">Delete</button>
                                 <button class="edit-btn" 
@@ -720,7 +644,7 @@ class CustomHTTPRequestHandler(http.server.SimpleHTTPRequestHandler):
         '''
 
         return html
-
+    
     def get_author_works(self, author_id):
         """Get list of works for an author"""
         works = []
@@ -733,152 +657,67 @@ class CustomHTTPRequestHandler(http.server.SimpleHTTPRequestHandler):
                     works.append(item)
         
         return works
-
-    def serve_static_file(self, path):
-        """Serve static files"""
-        try:
-            file_path = path[1:]  # Remove leading slash
-            content_type = self.get_content_type(file_path)
-
-            with open(file_path, 'rb') as f:
-                content = f.read()
-
-            self.send_response(200)
-            self.send_header('Content-type', content_type)
-            self.send_header('Content-Length', len(content))
-            self.end_headers()
-            self.wfile.write(content)
-
-        except FileNotFoundError:
-            self.send_error(404, "File not found")
-        except Exception as e:
-            self.send_error(500, f"Error serving file: {str(e)}")
-
-    def get_content_type(self, file_path):
-        """Get content type based on file extension"""
-        ext = os.path.splitext(file_path)[1].lower()
-        content_types = {
-            '.css': 'text/css',
-            '.js': 'application/javascript',
-            '.png': 'image/png',
-            '.jpg': 'image/jpeg',
-            '.jpeg': 'image/jpeg',
-            '.gif': 'image/gif',
-            '.svg': 'image/svg+xml',
-        }
-        return content_types.get(ext, 'application/octet-stream')
-
-    def send_html_response(self, html):
-        """Send HTML response"""
-        logger.debug(f"Sending HTML response, length: {len(html) if html else 0}")
-        self.send_response(200)
-        self.send_header('Content-type', 'text/html')
-        self.end_headers()
-        
-        try:
-            if html:
-                encoded_html = html.encode('utf-8')
-                self.wfile.write(encoded_html)
-                logger.debug(f"Successfully sent {len(encoded_html)} bytes")
-            else:
-                logger.warning("Empty HTML response")
-        except Exception as e:
-            logger.error(f"Error while sending HTML response: {str(e)}")
-            logger.error(traceback.format_exc())
-            raise
     
-    def get_home_page(self):
-        """Generate the home page"""
-        html = f'''
-        <!DOCTYPE html>
-        <html>
-        <head>
-            <title>First1KGreek Browser</title>
-            <style>
-                {MAIN_STYLESHEET}
-            </style>
-        </head>
-        <body>
-            <div class="container">
-                <h1>First1KGreek Browser</h1>
-                <p>Welcome to the First1KGreek Browser. This tool allows you to browse and search ancient Greek texts.</p>
-                
-                <h2>Navigation</h2>
-                <ul>
-                    <li><a href="/authors">Authors Table</a> - Browse all authors</li>
-                    <li><a href="/search">Search</a> - Search for specific texts</li>
-                    <li><a href="/editors">About the Editors</a> - Information about the editors</li>
-                </ul>
-            </div>
-        </body>
-        </html>
-        '''
-        return html
-    
-    def get_works_page(self, query):
-        """Generate the works page for an author"""
-        query_params = urllib.parse.parse_qs(query)
+    def get_works_page(self, query_string):
+        """Generate the works page"""
+        # Parse query parameters
+        query_params = urllib.parse.parse_qs(query_string)
         author_id = query_params.get('author_id', [''])[0]
         
         if not author_id:
             return self.get_error_page("Missing author_id parameter")
-            
-        # Get author info
-        author_name = "Unknown Author"
-        if author_id in AUTHORS_DATA:
-            author_name = AUTHORS_DATA[author_id].get('name', 'Unknown Author')
-            
+        
+        # Get author data
+        author_data = self.authors_data.get(author_id, {})
+        author_name = author_data.get('name', 'Unknown Author')
+        
         # Get works for this author
         works = self.get_author_works(author_id)
-            
+        
         html = f'''
         <!DOCTYPE html>
         <html>
         <head>
             <title>Works by {author_name}</title>
+            <link rel="stylesheet" href="/static/css/main.css">
             <style>
-                {MAIN_STYLESHEET}
-                
-                .works-list {{
-                    list-style-type: none;
-                    padding: 0;
-                }}
-                
-                .works-list li {{
-                    margin-bottom: 10px;
-                    padding: 10px;
+                .work-item {{
+                    margin-bottom: 15px;
+                    padding: 15px;
                     background-color: #333;
                     border-radius: 5px;
                 }}
                 
-                .works-list li:hover {{
-                    background-color: #444;
-                }}
-                
-                .works-list a {{
-                    display: block;
-                    text-decoration: none;
-                    color: #4299e1;
+                .work-title {{
+                    font-size: 1.2em;
+                    font-weight: bold;
+                    margin-bottom: 10px;
                 }}
             </style>
         </head>
         <body>
             <div class="container">
                 <h1>Works by {author_name}</h1>
-                <p><a href="/">&laquo; Home</a> | <a href="/authors">Authors Table</a></p>
+                <p><a href="/authors">&laquo; Back to Authors</a></p>
                 
-                <h2>Available Works</h2>
-                '''
-                
+                <div class="works-list">
+        '''
+        
+        # Add each work as a list item
         if works:
-            html += '<ul class="works-list">'
-            for work in works:
-                html += f'<li><a href="/view?author_id={author_id}&work_id={work}">{work}</a></li>'
-            html += '</ul>'
+            for work_id in works:
+                html += f'''
+                    <div class="work-item">
+                        <div class="work-title">{work_id}</div>
+                        <a href="/view?author_id={author_id}&work_id={work_id}">View Content</a>
+                    </div>
+                '''
         else:
-            html += '<p>No works available for this author.</p>'
-                
+            html += '<p>No works found for this author.</p>'
+        
+        # Close HTML structure
         html += '''
+                </div>
             </div>
         </body>
         </html>
@@ -886,45 +725,35 @@ class CustomHTTPRequestHandler(http.server.SimpleHTTPRequestHandler):
         
         return html
     
-    def get_view_page(self, query):
-        """Generate the view page for a specific work"""
-        query_params = urllib.parse.parse_qs(query)
+    def get_view_page(self, query_string):
+        """Generate the view page"""
+        # Parse query parameters
+        query_params = urllib.parse.parse_qs(query_string)
         author_id = query_params.get('author_id', [''])[0]
         work_id = query_params.get('work_id', [''])[0]
         
         if not author_id or not work_id:
             return self.get_error_page("Missing author_id or work_id parameter")
-            
-        # Get author info
-        author_name = "Unknown Author"
-        if author_id in AUTHORS_DATA:
-            author_name = AUTHORS_DATA[author_id].get('name', 'Unknown Author')
-            
-        # Check if work exists
-        work_path = os.path.join('data', author_id, work_id)
-        if not os.path.exists(work_path):
-            return self.get_error_page(f"Work {work_id} by {author_name} not found")
-            
-        # Get work content
-        content = self.get_work_content(author_id, work_id)
-            
+        
+        # Get author data
+        author_data = self.authors_data.get(author_id, {})
+        author_name = author_data.get('name', 'Unknown Author')
+        
         html = f'''
         <!DOCTYPE html>
         <html>
         <head>
             <title>{work_id} by {author_name}</title>
-            <style>
-                {READER_STYLESHEET}
-            </style>
+            <link rel="stylesheet" href="/static/css/reader.css">
         </head>
         <body>
             <div class="container">
                 <h1>{work_id}</h1>
-                <h2>by {author_name}</h2>
-                <p><a href="/">&laquo; Home</a> | <a href="/works?author_id={author_id}">Back to Works</a></p>
+                <p>Author: {author_name}</p>
+                <p><a href="/works?author_id={author_id}">&laquo; Back to Works</a></p>
                 
                 <div class="work-content">
-                    {content}
+                    {self.get_work_content(author_id, work_id)}
                 </div>
             </div>
         </body>
@@ -936,59 +765,93 @@ class CustomHTTPRequestHandler(http.server.SimpleHTTPRequestHandler):
     def get_work_content(self, author_id, work_id):
         """Get the content of a work"""
         work_path = os.path.join('data', author_id, work_id)
+        content_start_time = time.time()
         content = "<p>This work contains multiple files. Please select from the list below:</p><ul>"
         
         try:
-            # List all files in the work directory
-            files = os.listdir(work_path)
-            if files:
-                for file in files:
-                    if file.endswith('.xml') or file.endswith('.txt'):
-                        file_path = os.path.join(work_path, file)
-                        try:
-                            with open(file_path, 'r', encoding='utf-8') as f:
-                                file_content = f.read()
-                                if file.endswith('.xml'):
-                                    # Basic XML handling - just escape and display for now
-                                    file_content = escape(file_content)
-                                content += f"<li><h3>{file}</h3><pre>{file_content}</pre></li>"
-                        except Exception as e:
-                            content += f"<li>Error reading {file}: {str(e)}</li>"
-            else:
-                content = "<p>No content files found for this work.</p>"
+            # Check if the work directory exists
+            if not os.path.exists(work_path):
+                logger.warning(f"Work directory not found: {work_path}")
+                return f"<p>Error: Work directory for {work_id} not found.</p>"
                 
+            # List all files in the work directory
+            try:
+                files = os.listdir(work_path)
+            except PermissionError:
+                logger.error(f"Permission denied when accessing directory: {work_path}")
+                return f"<p>Error: Permission denied when accessing work directory.</p>"
+            except Exception as e:
+                logger.error(f"Error listing directory {work_path}: {str(e)}")
+                logger.error(traceback.format_exc())
+                return f"<p>Error accessing work files: {str(e)}</p>"
+            
+            if not files:
+                logger.info(f"No files found in work directory: {work_path}")
+                content = "<p>No content files found for this work.</p>"
+            else:
+                xml_files = 0
+                text_files = 0
+                
+                for file in files:
+                    file_path = os.path.join(work_path, file)
+                    
+                    # Skip directories and non-content files
+                    if os.path.isdir(file_path) or not (file.endswith('.xml') or file.endswith('.txt')):
+                        continue
+                        
+                    try:
+                        file_size = os.path.getsize(file_path)
+                        if file_size > 5 * 1024 * 1024:  # 5MB
+                            logger.warning(f"Skipping large file: {file_path} ({file_size / 1024 / 1024:.2f} MB)")
+                            content += f"<li><h3>{file}</h3><p>File too large to display ({file_size / 1024 / 1024:.2f} MB)</p></li>"
+                            continue
+                            
+                        with open(file_path, 'r', encoding='utf-8') as f:
+                            file_content = f.read()
+                            if file.endswith('.xml'):
+                                # Basic XML handling - just escape and display for now
+                                file_content = escape(file_content)
+                                xml_files += 1
+                            elif file.endswith('.txt'):
+                                text_files += 1
+                                
+                            content += f"<li><h3>{file}</h3><pre>{file_content}</pre></li>"
+                    except UnicodeDecodeError:
+                        logger.error(f"Unicode decode error for file: {file_path}")
+                        content += f"<li><h3>{file}</h3><p>Error: This file contains non-UTF-8 characters and cannot be displayed.</p></li>"
+                    except Exception as e:
+                        logger.error(f"Error reading {file_path}: {str(e)}")
+                        logger.error(traceback.format_exc())
+                        content += f"<li><h3>{file}</h3><p>Error reading file: {str(e)}</p></li>"
+                
+                # Add summary
+                logger.info(f"Processed {xml_files} XML files and {text_files} text files for {author_id}/{work_id}")
         except Exception as e:
+            logger.error(f"Error accessing work content for {author_id}/{work_id}: {str(e)}")
+            logger.error(traceback.format_exc())
             content = f"<p>Error accessing work content: {str(e)}</p>"
+        finally:
+            content_time = time.time() - content_start_time
+            logger.debug(f"get_work_content({author_id}, {work_id}) took {content_time:.3f}s")
             
         return content
     
     def get_editors_page(self):
         """Generate the editors page"""
-        html = f'''
+        html = '''
         <!DOCTYPE html>
         <html>
         <head>
-            <title>About the Editors</title>
-            <style>
-                {MAIN_STYLESHEET}
-            </style>
+            <title>Editors</title>
+            <link rel="stylesheet" href="/static/css/main.css">
         </head>
         <body>
             <div class="container">
-                <h1>About the Editors</h1>
+                <h1>Editors</h1>
                 <p><a href="/">&laquo; Home</a></p>
                 
-                <p>First1KGreek is a collection of ancient Greek texts maintained by a dedicated team of editors and scholars.</p>
-                
-                <h2>Editorial Team</h2>
-                <ul>
-                    <li><strong>Project Director:</strong> Digital Classicist Collaborative</li>
-                    <li><strong>Technical Lead:</strong> Perseus Digital Library</li>
-                    <li><strong>Contributors:</strong> The scholarly community</li>
-                </ul>
-                
-                <h2>Contributing</h2>
-                <p>If you would like to contribute to this project, please read the documentation in the repository.</p>
+                <p>This page will list all editors of the texts in the corpus.</p>
+                <p>Feature coming soon!</p>
             </div>
         </body>
         </html>
@@ -998,31 +861,30 @@ class CustomHTTPRequestHandler(http.server.SimpleHTTPRequestHandler):
     
     def get_search_page(self):
         """Generate the search page"""
-        html = f'''
+        html = '''
         <!DOCTYPE html>
         <html>
         <head>
             <title>Search Texts</title>
+            <link rel="stylesheet" href="/static/css/main.css">
             <style>
-                {MAIN_STYLESHEET}
-                
-                .search-form {{
+                .search-form {
                     margin: 20px 0;
                     padding: 20px;
                     background-color: #333;
                     border-radius: 5px;
-                }}
+                }
                 
-                .search-form input[type="text"] {{
+                .search-form input[type="text"] {
                     padding: 10px;
                     width: 70%;
                     background-color: #444;
                     color: white;
                     border: 1px solid #555;
                     border-radius: 4px;
-                }}
+                }
                 
-                .search-form button {{
+                .search-form button {
                     padding: 10px 20px;
                     background-color: #3182ce;
                     color: white;
@@ -1030,11 +892,11 @@ class CustomHTTPRequestHandler(http.server.SimpleHTTPRequestHandler):
                     border-radius: 4px;
                     cursor: pointer;
                     margin-left: 10px;
-                }}
+                }
                 
-                .search-form button:hover {{
+                .search-form button:hover {
                     background-color: #2c5282;
-                }}
+                }
             </style>
         </head>
         <body>
@@ -1064,27 +926,29 @@ class CustomHTTPRequestHandler(http.server.SimpleHTTPRequestHandler):
         <html>
         <head>
             <title>Error</title>
+            <link rel="stylesheet" href="/static/css/main.css">
             <style>
-                {MAIN_STYLESHEET}
-                
-                .error-message {{
-                    color: #fc8181;
-                    font-weight: bold;
+                .error-container {{
+                    background-color: #422;
                     padding: 20px;
-                    background-color: #3a3a3a;
                     border-radius: 5px;
                     margin: 20px 0;
+                }}
+                
+                .error-message {{
+                    color: #f88;
                 }}
             </style>
         </head>
         <body>
             <div class="container">
                 <h1>Error</h1>
-                <p><a href="/">&laquo; Home</a></p>
                 
-                <div class="error-message">
-                    {error_message}
+                <div class="error-container">
+                    <p class="error-message">{error_message}</p>
                 </div>
+                
+                <p><a href="/">&laquo; Back to Home</a></p>
             </div>
         </body>
         </html>
@@ -1092,9 +956,334 @@ class CustomHTTPRequestHandler(http.server.SimpleHTTPRequestHandler):
         
         return html
 
+class CustomHTTPRequestHandler(http.server.SimpleHTTPRequestHandler):
+    """Custom HTTP server handler for browsing and viewing texts"""
+    
+    def __init__(self, *args, **kwargs):
+        self.page_generator = PageGenerator()
+        self.request_start_time = None
+        super().__init__(*args, **kwargs)
+    
+    def log_message(self, format, *args):
+        """Override to use our logger"""
+        logger.info("%s - %s" % (self.address_string(), format % args))
+    
+    def do_GET(self):
+        """Handle GET requests"""
+        self.request_start_time = time.time()
+        try:
+            parsed_path = urllib.parse.urlparse(self.path)
+            path = parsed_path.path
+            logger.info(f"GET request for {self.path} from {self.client_address}")
+
+            # Serve static files
+            if path.startswith('/static/'):
+                logger.debug(f"Serving static file: {path}")
+                self.serve_static_file(path)
+                return
+
+            # Handle other routes
+            if path == '/':
+                logger.debug("Serving home page")
+                self.send_html_response(self.page_generator.get_home_page())
+            elif path == '/authors':
+                logger.debug("Serving authors table page")
+                self.send_html_response(self.page_generator.get_authors_table_page())
+            elif path == '/works':
+                author_id = urllib.parse.parse_qs(parsed_path.query).get('author_id', [''])[0]
+                logger.debug(f"Serving works page for author_id: {author_id}")
+                self.send_html_response(self.page_generator.get_works_page(parsed_path.query))
+            elif path == '/view':
+                params = urllib.parse.parse_qs(parsed_path.query)
+                author_id = params.get('author_id', [''])[0]
+                work_id = params.get('work_id', [''])[0]
+                logger.debug(f"Serving view page for author_id: {author_id}, work_id: {work_id}")
+                self.send_html_response(self.page_generator.get_view_page(parsed_path.query))
+            elif path == '/editors':
+                logger.debug("Serving editors page")
+                self.send_html_response(self.page_generator.get_editors_page())
+            elif path == '/search':
+                logger.debug("Serving search page")
+                self.send_html_response(self.page_generator.get_search_page())
+            else:
+                logger.warning(f"404 Not Found: {path}")
+                self.send_error(404, "Not Found")
+        except Exception as e:
+            logger.error(f"Error handling GET request: {str(e)}")
+            logger.error(traceback.format_exc())
+            self.send_error(500, f"Internal Server Error: {str(e)}")
+        finally:
+            if self.request_start_time:
+                request_time = time.time() - self.request_start_time
+                logger.debug(f"Request processed in {request_time:.4f} seconds")
+
+    def do_POST(self):
+        """Handle POST requests"""
+        self.request_start_time = time.time()
+        try:
+            parsed_path = urllib.parse.urlparse(self.path)
+            path = parsed_path.path
+            logger.info(f"POST request for {self.path} from {self.client_address}")
+
+            # Parse form data
+            content_length = int(self.headers.get('Content-Length', 0))
+            post_data = urllib.parse.parse_qs(self.rfile.read(content_length).decode('utf-8'))
+            logger.debug(f"POST data: {post_data}")
+
+            if path == '/update_preference':
+                logger.debug("Handling update_preference request")
+                self.handle_update_preference(post_data)
+            elif path == '/update_century':
+                logger.debug("Handling update_century request")
+                self.handle_update_century(post_data)
+            else:
+                logger.warning(f"404 Not Found: {path}")
+                self.send_error(404, "Not Found")
+        except Exception as e:
+            logger.error(f"Error handling POST request: {str(e)}")
+            logger.error(traceback.format_exc())
+            self.send_error(500, f"Internal Server Error: {str(e)}")
+        finally:
+            if self.request_start_time:
+                request_time = time.time() - self.request_start_time
+                logger.debug(f"Request processed in {request_time:.4f} seconds")
+
+    def handle_update_preference(self, post_data):
+        """Handle updating user preferences"""
+        author_id = post_data.get('author_id', [''])[0]
+        pref_type = post_data.get('pref_type', [''])[0]
+        value = post_data.get('value', ['false'])[0].lower() == 'true'
+
+        if not author_id or not pref_type:
+            self.send_error(400, "Missing required parameters")
+            return
+
+        try:
+            # Load current preferences
+            try:
+                with open('user_preferences.json', 'r') as f:
+                    prefs = json.load(f)
+            except (FileNotFoundError, json.JSONDecodeError):
+                prefs = {'favorites': [], 'archived': [], 'deleted': []}
+
+            # Update preference
+            if pref_type not in prefs:
+                prefs[pref_type] = []
+
+            if value and author_id not in prefs[pref_type]:
+                prefs[pref_type].append(author_id)
+            elif not value and author_id in prefs[pref_type]:
+                prefs[pref_type].remove(author_id)
+
+            # Save updated preferences
+            with open('user_preferences.json', 'w') as f:
+                json.dump(prefs, f, indent=2)
+
+            self.send_response(200)
+            self.send_header('Content-type', 'application/json')
+            self.end_headers()
+            self.wfile.write(json.dumps({'success': True}).encode())
+
+        except Exception as e:
+            logger.error(f"Error updating preferences: {str(e)}")
+            logger.error(traceback.format_exc())
+            self.send_error(500, f"Error updating preferences: {str(e)}")
+
+    def handle_update_century(self, post_data):
+        """Handle updating author century"""
+        global AUTHORS_DATA  # Directly reference the global AUTHORS_DATA
+        author_id = post_data.get('author_id', [''])[0]
+        century = post_data.get('century', [''])[0]
+        
+        logger.info(f"Century update request: author_id='{author_id}', century='{century}'")
+
+        if not author_id or not century:
+            logger.warning(f"Missing required parameters: author_id={author_id}, century={century}")
+            self.send_error(400, "Missing required parameters")
+            return
+
+        try:
+            # Make a backup of the current data
+            try:
+                backup_path = 'authors_data.json.bak'
+                if os.path.exists('authors_data.json'):
+                    import shutil
+                    logger.debug(f"Creating backup at {os.path.abspath(backup_path)}")
+                    shutil.copy2('authors_data.json', backup_path)
+            except Exception as e:
+                logger.warning(f"Could not create backup: {str(e)}")
+                # Continue anyway
+            
+            # First, try to update the global variable directly
+            if author_id in AUTHORS_DATA:
+                old_century = AUTHORS_DATA[author_id].get('century', 'None')
+                logger.info(f"Updating global AUTHORS_DATA: {author_id} century from '{old_century}' to '{century}'")
+                AUTHORS_DATA[author_id]['century'] = century
+            
+            # Next, handle the file-based update
+            authors_data = {}
+            try:
+                authors_data_path = 'authors_data.json'
+                logger.debug(f"Loading author data from {os.path.abspath(authors_data_path)}")
+                
+                # Read the existing file with explicit UTF-8 encoding
+                with open(authors_data_path, 'r', encoding='utf-8') as f:
+                    file_content = f.read()
+                    logger.debug(f"File loaded, size: {len(file_content)} bytes")
+                    authors_data = json.loads(file_content)
+                    logger.debug(f"JSON parsed successfully with {len(authors_data)} authors")
+            except FileNotFoundError:
+                logger.error(f"File not found: {authors_data_path}")
+                # Use the global data if file not found
+                authors_data = AUTHORS_DATA.copy()
+                logger.info(f"Using global data with {len(authors_data)} entries")
+            except json.JSONDecodeError as e:
+                logger.error(f"JSON decode error: {str(e)}")
+                logger.error(f"Content excerpt: {file_content[:100]}...")
+                self.send_error(500, "Error parsing author data")
+                return
+            
+            # Update century in the loaded data
+            if author_id in authors_data:
+                old_century = authors_data[author_id].get('century', 'None')
+                logger.info(f"Updating author '{author_id}' century from '{old_century}' to '{century}'")
+                authors_data[author_id]['century'] = century
+                
+                # Write to file with atomic operation to prevent partial writes
+                try:
+                    # Write to a temporary file first
+                    temp_path = f"{authors_data_path}.tmp"
+                    logger.debug(f"Writing to temporary file {temp_path}")
+                    
+                    with open(temp_path, 'w', encoding='utf-8') as f:
+                        json.dump(authors_data, f, indent=2, ensure_ascii=False)
+                    
+                    # Rename the temporary file to the target file (atomic operation)
+                    logger.debug(f"Renaming {temp_path} to {authors_data_path}")
+                    os.replace(temp_path, authors_data_path)
+                    
+                    # Set permissions to ensure it's writable
+                    try:
+                        os.chmod(authors_data_path, 0o644)  # Read/write for owner, read for others
+                        logger.debug(f"Set permissions on {authors_data_path} to 0o644")
+                    except Exception as e:
+                        logger.warning(f"Could not set permissions: {str(e)}")
+                    
+                    # Verify the file was updated
+                    time.sleep(0.1)  # Small delay to ensure file system sync
+                    if os.path.exists(authors_data_path):
+                        file_size = os.path.getsize(authors_data_path)
+                        logger.info(f"File saved successfully, size: {file_size} bytes")
+                        
+                        # Update global AUTHORS_DATA to match the file
+                        AUTHORS_DATA = authors_data
+                        logger.info("Updated global AUTHORS_DATA from file")
+                        
+                        # Update the PageGenerator's data to ensure consistency
+                        if hasattr(self, 'page_generator'):
+                            self.page_generator.authors_data = authors_data
+                            logger.debug("Updated PageGenerator's in-memory data")
+                        
+                        # Send success response with cache-busting headers
+                        self.send_response(200)
+                        self.send_header('Content-type', 'application/json')
+                        self.send_header('Cache-Control', 'no-cache, no-store, must-revalidate')
+                        self.send_header('Pragma', 'no-cache')
+                        self.send_header('Expires', '0')
+                        self.end_headers()
+                        
+                        response_data = {
+                            'success': True, 
+                            'author_id': author_id, 
+                            'century': century,
+                            'timestamp': time.time()
+                        }
+                        self.wfile.write(json.dumps(response_data).encode())
+                        
+                        logger.info(f"Century update successful for {author_id}: {century}")
+                    else:
+                        logger.error(f"File does not exist after save: {authors_data_path}")
+                        self.send_error(500, "File disappeared after saving")
+                except PermissionError as e:
+                    logger.error(f"Permission denied: {str(e)}")
+                    self.send_error(500, f"Permission denied: {str(e)}")
+                except OSError as e:
+                    logger.error(f"OS error during file save: {str(e)}")
+                    logger.error(traceback.format_exc())
+                    self.send_error(500, f"File system error: {str(e)}")
+            else:
+                logger.warning(f"Author not found in data: {author_id}")
+                self.send_error(404, f"Author '{author_id}' not found")
+        except Exception as e:
+            logger.error(f"Unhandled error in handle_update_century: {str(e)}")
+            logger.error(traceback.format_exc())
+            self.send_error(500, f"Error updating century: {str(e)}")
+            
+    def serve_static_file(self, path):
+        """Serve static files"""
+        try:
+            file_path = path[1:]  # Remove leading slash
+            content_type = self.get_content_type(file_path)
+
+            with open(file_path, 'rb') as f:
+                content = f.read()
+
+            self.send_response(200)
+            self.send_header('Content-type', content_type)
+            self.send_header('Content-Length', len(content))
+            self.end_headers()
+            self.wfile.write(content)
+            logger.debug(f"Successfully sent {len(content)} bytes")
+        except Exception as e:
+            logger.error(f"Error serving static file {path}: {str(e)}")
+            logger.error(traceback.format_exc())
+            self.send_error(404, f"File not found: {str(e)}")
+
+    def get_content_type(self, file_path):
+        """Get content type based on file extension"""
+        if file_path.endswith('.css'):
+            return 'text/css'
+        elif file_path.endswith('.js'):
+            return 'application/javascript'
+        elif file_path.endswith('.html'):
+            return 'text/html'
+        elif file_path.endswith('.json'):
+            return 'application/json'
+        elif file_path.endswith('.png'):
+            return 'image/png'
+        elif file_path.endswith('.jpg') or file_path.endswith('.jpeg'):
+            return 'image/jpeg'
+        elif file_path.endswith('.gif'):
+            return 'image/gif'
+        else:
+            return 'application/octet-stream'
+
+    def send_html_response(self, html):
+        """Send an HTML response"""
+        try:
+            encoded_html = html.encode('utf-8')
+            self.send_response(200)
+            self.send_header('Content-type', 'text/html; charset=utf-8')
+            self.send_header('Content-Length', len(encoded_html))
+            # Add cache-busting headers to ensure fresh content
+            self.send_header('Cache-Control', 'no-cache, no-store, must-revalidate')
+            self.send_header('Pragma', 'no-cache')
+            self.send_header('Expires', '0')
+            self.end_headers()
+            self.wfile.write(encoded_html)
+            logger.debug(f"Sending HTML response, length: {len(encoded_html)}")
+            logger.debug(f"Successfully sent {len(encoded_html)} bytes")
+        except Exception as e:
+            logger.error(f"Error sending HTML response: {str(e)}")
+            logger.error(traceback.format_exc())
+            self.send_error(500, f"Error sending response: {str(e)}")
+            
 def main():
     """Main function to start the server"""
     global server_instance, PORT, DEBUG
+    
+    # Start time for server
+    start_time = time.time()
     
     # Parse command line arguments only when running as main
     args = parse_args()
@@ -1122,8 +1311,9 @@ def main():
                         sys.exit(1)
                 
                 logger.info(f"Starting server on port {current_port}...")
+                server_start = time.time()
                 server_instance = socketserver.TCPServer((HOST, current_port), CustomHTTPRequestHandler)
-                logger.info(f"Server started at http://{HOST}:{current_port}")
+                logger.info(f"Server started at http://{HOST}:{current_port} (took {time.time() - server_start:.3f}s)")
                 
                 # Print directly to console for visibility
                 print(f"\n======================================")
@@ -1143,16 +1333,46 @@ def main():
                         sys.exit(1)
                 else:
                     logger.error(f"OS Error: {str(e)}")
+                    logger.error(traceback.format_exc())
                     raise
                     
     except KeyboardInterrupt:
         logger.info("\nServer shutdown requested.")
+        shutdown_time = time.time()
         if server_instance:
-            server_instance.shutdown()
-        logger.info("Server has been shut down.")
+            try:
+                server_instance.shutdown()
+                logger.info(f"Server has been shut down gracefully (took {time.time() - shutdown_time:.3f}s)")
+            except Exception as e:
+                logger.error(f"Error during shutdown: {str(e)}")
+                logger.error(traceback.format_exc())
     except Exception as e:
         logger.error(f"Error starting server: {str(e)}")
         logger.error(traceback.format_exc())
+    finally:
+        # Log total runtime
+        total_time = time.time() - start_time
+        logger.info(f"Server process finished. Total runtime: {total_time:.2f} seconds")
+
+def handle_shutdown(sig, frame):
+    """Handle external shutdown signals"""
+    logger.info(f"Received signal {sig}, initiating shutdown...")
+    if server_instance:
+        try:
+            server_instance.shutdown()
+            logger.info("Server has been shut down via signal handler")
+        except Exception as e:
+            logger.error(f"Error during signal-triggered shutdown: {str(e)}")
 
 if __name__ == "__main__":
-    main() 
+    try:
+        # Register signal handlers
+        signal.signal(signal.SIGINT, handle_shutdown)
+        signal.signal(signal.SIGTERM, handle_shutdown)
+        
+        # Start the server
+        main()
+    except Exception as e:
+        logger.error(f"Unhandled exception in main program: {str(e)}")
+        logger.error(traceback.format_exc())
+        sys.exit(1) 
