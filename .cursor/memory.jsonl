@@ -58,3 +58,10 @@
 {"type":"relation","from":"CustomHTTPRequestHandler","relationType":"uses","to":"user_preferences.json","createdAt":"2025-04-07T18:47:27.474Z","version":1}
 {"type":"relation","from":"browse_texts_fixed.py","relationType":"defines","to":"PageGenerator","createdAt":"2025-04-07T18:50:53.571Z","version":1}
 {"type":"relation","from":"PageGenerator","relationType":"uses","to":"user_preferences.json","createdAt":"2025-04-07T18:50:53.571Z","version":1}
+{"type":"relation","from":"browse_texts_fixed.py","relationType":"implements","to":"PageGenerator","createdAt":"2025-04-07T19:06:03.916Z","version":1}
+{"type":"relation","from":"browse_texts_fixed.py","relationType":"implements","to":"CustomHTTPRequestHandler","createdAt":"2025-04-07T19:06:03.926Z","version":1}
+{"type":"relation","from":"PageGenerator","relationType":"generates","to":"HTML pages","createdAt":"2025-04-07T19:06:03.926Z","version":1}
+{"type":"relation","from":"CustomHTTPRequestHandler","relationType":"processes","to":"HTTP requests","createdAt":"2025-04-07T19:06:03.926Z","version":1}
+{"type":"relation","from":"CustomHTTPRequestHandler","relationType":"manages","to":"user preferences","createdAt":"2025-04-07T19:06:03.926Z","version":1}
+{"type":"relation","from":"PageGenerator","relationType":"reads","to":"authors_data.json","createdAt":"2025-04-07T19:06:03.926Z","version":1}
+{"type":"relation","from":"CustomHTTPRequestHandler","relationType":"updates","to":"authors_data.json","createdAt":"2025-04-07T19:06:03.926Z","version":1}

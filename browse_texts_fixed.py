@@ -1,9 +1,21 @@
 #!/usr/bin/env python3
 """
 First1KGreek Browser - Fixed Version
+
+A web-based tool for browsing, searching, and viewing texts from the First 1000 Years of Greek project.
+This application provides a clean interface for navigating the corpus, with features for:
+- Browsing authors by name, century, and type
+- Managing author preferences (favorites, archived)
+- Viewing works and their content in both raw and readable formats
+- Simple search functionality
+
 Version: 1.2.0 (with cache-busting and dark theme)
 Last updated: 2025-03-07
 """
+
+# ====================================================================
+# IMPORTS AND LOGGING SETUP
+# ====================================================================
 
 import os
 import sys
@@ -34,12 +46,25 @@ logging.basicConfig(
 )
 logger = logging.getLogger(__name__)
 
-# Parse command line arguments
+# ====================================================================
+# COMMAND LINE ARGUMENTS
+# ====================================================================
+
 def parse_args():
+    """
+    Parse command line arguments for the server.
+    
+    Returns:
+        argparse.Namespace: The parsed command line arguments
+    """
     parser = argparse.ArgumentParser(description='First1KGreek Browser')
     parser.add_argument('--port', type=int, default=8000, help='Port to run the server on')
     parser.add_argument('--debug', action='store_true', help='Enable debug mode')
     return parser.parse_args()
+
+# ====================================================================
+# GLOBAL VARIABLES AND CONSTANTS
+# ====================================================================
 
 # Global variable to store server instance
 server_instance = None
@@ -51,6 +76,10 @@ HOST = "localhost"
 SHUTDOWN_PATH = "/shutdown"
 DEBUG = False  # Default debug flag
 
+# ====================================================================
+# AUTHOR DATA LOADING
+# ====================================================================
+
 # Load author data
 try:
     with open('authors_data.json', 'r', encoding='utf-8') as f:
@@ -60,10 +89,17 @@ except (FileNotFoundError, json.JSONDecodeError) as e:
     logger.error(f"Error loading author data: {e}")
     AUTHORS_DATA = {}
 
+# ====================================================================
+# VERSION INFORMATION
+# ====================================================================
+
 # Print version info when starting
 logger.info("Starting First1KGreek Browser - Fixed Version 1.2.0")
 logger.info("With dark theme and improved editor detection")
 
+# ====================================================================
+# STYLESHEET REFERENCES
+# ====================================================================
 # Stylesheets moved to external files in static/css
 # For reference, keeping the original definitions commented out
 
@@ -428,15 +464,36 @@ AUTHORS_TABLE_STYLESHEET = '''
 '''
 """
 
+# ====================================================================
+# UTILITY FUNCTIONS
+# ====================================================================
+
 def is_port_in_use(port):
-    """Check if a port is in use"""
+    """
+    Check if a port is in use.
+    
+    Args:
+        port (int): The port number to check
+        
+    Returns:
+        bool: True if port is in use, False otherwise
+    """
     with socket.socket(socket.AF_INET, socket.SOCK_STREAM) as s:
         result = s.connect_ex(('localhost', port)) == 0
         logger.debug(f"Port {port} is {'in use' if result else 'available'}")
         return result
 
 def find_available_port(start_port=8000, max_attempts=10):
-    """Find an available port starting from start_port"""
+    """
+    Find an available port starting from start_port.
+    
+    Args:
+        start_port (int, optional): The port to start checking from. Defaults to 8000.
+        max_attempts (int, optional): Maximum number of ports to check. Defaults to 10.
+        
+    Returns:
+        int: An available port, or start_port if none found
+    """
     logger.debug(f"Searching for available port starting from {start_port}")
     for port in range(start_port, start_port + max_attempts):
         if not is_port_in_use(port):
@@ -445,19 +502,44 @@ def find_available_port(start_port=8000, max_attempts=10):
     logger.warning(f"No available ports found in range {start_port}-{start_port+max_attempts-1}")
     return start_port
 
+# ====================================================================
+# PAGE GENERATOR CLASS
+# ====================================================================
+
 class PageGenerator:
-    """Class to handle HTML page generation"""
+    """
+    Class to handle HTML page generation for the browser interface.
+    
+    This class provides methods for generating various HTML pages and components,
+    handling data loading, and managing user preferences.
+    
+    # TODO: Consider refactoring into separate modules for different page types
+    # TODO: Implement a proper templating system instead of string concatenation
+    """
     
     def __init__(self):
-        """Initialize with common data"""
+        """
+        Initialize PageGenerator with common data.
+        
+        Loads author data and user preferences from disk.
+        """
         self.authors_data = {}
         self.user_prefs = {'favorites': [], 'archived': [], 'deleted': []}
         
         # Load data with proper error handling
         self.load_data()
     
+    # ----------------------------------------------------------------
+    # Data Management Methods
+    # ----------------------------------------------------------------
+    
     def load_data(self):
-        """Load data with error handling"""
+        """
+        Load data with error handling.
+        
+        Loads authors_data.json and user_preferences.json, handling various
+        error conditions gracefully.
+        """
         # Load authors data
         try:
             with open('authors_data.json', 'r', encoding='utf-8') as f:
@@ -487,14 +569,27 @@ class PageGenerator:
             logger.error(traceback.format_exc())
     
     def reload_data(self):
-        """Reload data from disk to ensure we have the latest version"""
+        """
+        Reload data from disk to ensure we have the latest version.
+        
+        Used before generating pages to ensure current data is used.
+        """
         logger.debug("Reloading data from disk")
         data_reload_start = time.time()
         self.load_data()
         logger.debug(f"Data reload completed in {time.time() - data_reload_start:.3f}s")
     
+    # ----------------------------------------------------------------
+    # Page Generation Methods
+    # ----------------------------------------------------------------
+    
     def get_home_page(self):
-        """Generate the home page"""
+        """
+        Generate the home page HTML.
+        
+        Returns:
+            str: The complete HTML for the home page
+        """
         html = '''
         <!DOCTYPE html>
         <html>
@@ -522,7 +617,17 @@ class PageGenerator:
         return html
     
     def get_authors_table_page(self):
-        """Generate the authors table page"""
+        """
+        Generate the authors table page HTML.
+        
+        Includes the complete table of authors with sorting, filtering, and action buttons.
+        
+        Returns:
+            str: The complete HTML for the authors table page
+            
+        # TODO: Implement proper pagination for large datasets
+        # TODO: Consider moving JavaScript to external files
+        """
         # Reload data to ensure we have the latest values
         self.reload_data()
         
@@ -659,8 +764,20 @@ class PageGenerator:
 
         return html
     
+    # ----------------------------------------------------------------
+    # Author Works Methods
+    # ----------------------------------------------------------------
+    
     def get_author_works(self, author_id):
-        """Get list of works for an author"""
+        """
+        Get list of works for an author.
+        
+        Args:
+            author_id (str): The ID of the author to get works for
+            
+        Returns:
+            list: A list of work dictionaries with metadata
+        """
         works = []
         author_dir = os.path.join('data', author_id)
         
@@ -704,7 +821,15 @@ class PageGenerator:
         return works
     
     def get_works_page(self, query_string):
-        """Generate the works page"""
+        """
+        Generate the works page for a specific author.
+        
+        Args:
+            query_string (str): The raw query string from the URL
+            
+        Returns:
+            str: The complete HTML for the works page
+        """
         # Parse query parameters
         query_params = urllib.parse.parse_qs(query_string)
         author_id = query_params.get('author_id', [''])[0]
@@ -770,8 +895,23 @@ class PageGenerator:
         
         return html
     
+    # ----------------------------------------------------------------
+    # Content Viewing Methods
+    # ----------------------------------------------------------------
+    
     def get_view_page(self, query_string):
-        """Generate the view page"""
+        """
+        Generate the view page for a specific work.
+        
+        Args:
+            query_string (str): The raw query string from the URL
+            
+        Returns:
+            str: The complete HTML for the view page
+            
+        # TODO: Implement proper XML rendering with TEI support
+        # TODO: Add text highlighting and scholarly tools
+        """
         # Parse query parameters
         query_params = urllib.parse.parse_qs(query_string)
         author_id = query_params.get('author_id', [''])[0]
@@ -846,7 +986,20 @@ class PageGenerator:
         return html
     
     def get_work_content(self, author_id, work_id, view_mode='readable'):
-        """Get the content of a work"""
+        """
+        Get the content of a work with appropriate formatting.
+        
+        Args:
+            author_id (str): The ID of the author
+            work_id (str): The ID of the work
+            view_mode (str, optional): Either 'readable' or 'raw'. Defaults to 'readable'.
+            
+        Returns:
+            str: HTML content for the work
+            
+        # TODO: Implement proper XML to HTML conversion for TEI
+        # TODO: Add support for parallel texts (original/translation)
+        """
         work_path = os.path.join('data', author_id, work_id)
         content_start_time = time.time()
         content = "<p>This work contains multiple files. Please select from the list below:</p><ul>"
@@ -922,8 +1075,19 @@ class PageGenerator:
             
         return content
     
+    # ----------------------------------------------------------------
+    # Other Page Generation Methods
+    # ----------------------------------------------------------------
+    
     def get_editors_page(self):
-        """Generate the editors page"""
+        """
+        Generate the editors page HTML.
+        
+        Returns:
+            str: The complete HTML for the editors page
+            
+        # TODO: Implement proper editors browsing functionality
+        """
         html = '''
         <!DOCTYPE html>
         <html>
@@ -946,7 +1110,15 @@ class PageGenerator:
         return html
     
     def get_search_page(self):
-        """Generate the search page"""
+        """
+        Generate the search page HTML.
+        
+        Returns:
+            str: The complete HTML for the search page
+            
+        # TODO: Implement full-text search functionality
+        # TODO: Consider adding vector search capabilities
+        """
         html = '''
         <!DOCTYPE html>
         <html>
@@ -1006,7 +1178,15 @@ class PageGenerator:
         return html
     
     def get_error_page(self, error_message):
-        """Generate an error page"""
+        """
+        Generate an error page with custom error message.
+        
+        Args:
+            error_message (str): The error message to display
+            
+        Returns:
+            str: The complete HTML for the error page
+        """
         html = f'''
         <!DOCTYPE html>
         <html>
@@ -1042,16 +1222,43 @@ class PageGenerator:
         
         return html
 
+# ====================================================================
+# CUSTOM HTTP REQUEST HANDLER
+# ====================================================================
+
 class CustomHTTPRequestHandler(http.server.SimpleHTTPRequestHandler):
-    """Custom HTTP server handler for browsing and viewing texts"""
+    """
+    Custom HTTP server handler for browsing and viewing texts.
+    
+    Handles all HTTP requests, including static file serving, page generation,
+    and interaction with user preferences.
+    
+    # TODO: Implement proper input validation and security measures
+    # TODO: Add authentication for administrative functions
+    # TODO: Consider implementing a proper MVC architecture
+    """
     
     def __init__(self, *args, **kwargs):
+        """
+        Initialize the HTTP request handler.
+        
+        Sets up the PageGenerator instance and request timing.
+        """
         self.page_generator = PageGenerator()
         self.request_start_time = None
         super().__init__(*args, **kwargs)
     
+    # ----------------------------------------------------------------
+    # User Preferences Methods
+    # ----------------------------------------------------------------
+    
     def get_user_prefs(self):
-        """Load user preferences from file."""
+        """
+        Load user preferences from file.
+        
+        Returns:
+            dict: User preferences dictionary with favorites, archived, and deleted lists
+        """
         try:
             logger.debug("Loading user preferences from file")
             with open('user_preferences.json', 'r', encoding='utf-8') as f:
@@ -1071,11 +1278,26 @@ class CustomHTTPRequestHandler(http.server.SimpleHTTPRequestHandler):
             return {'favorites': [], 'archived': [], 'deleted': []}
     
     def log_message(self, format, *args):
-        """Override to use our logger"""
+        """
+        Override to use our logger.
+        
+        Args:
+            format (str): Format string
+            args: Variable arguments to format
+        """
         logger.info("%s - %s" % (self.address_string(), format % args))
     
+    # ----------------------------------------------------------------
+    # HTTP Request Handlers
+    # ----------------------------------------------------------------
+    
     def do_GET(self):
-        """Handle GET requests"""
+        """
+        Handle GET requests.
+        
+        Routes requests to appropriate handlers based on path.
+        Serves static files and generates dynamic pages.
+        """
         self.request_start_time = time.time()
         try:
             parsed_path = urllib.parse.urlparse(self.path)
@@ -1140,7 +1362,12 @@ class CustomHTTPRequestHandler(http.server.SimpleHTTPRequestHandler):
                 logger.debug(f"Request processed in {request_time:.4f} seconds")
 
     def do_POST(self):
-        """Handle POST requests"""
+        """
+        Handle POST requests.
+        
+        Routes requests to appropriate handlers based on path.
+        Handles update preferences and century operations.
+        """
         self.request_start_time = time.time()
         try:
             parsed_path = urllib.parse.urlparse(self.path)
@@ -1173,8 +1400,19 @@ class CustomHTTPRequestHandler(http.server.SimpleHTTPRequestHandler):
                 request_time = time.time() - self.request_start_time
                 logger.debug(f"Request processed in {request_time:.4f} seconds")
 
+    # ----------------------------------------------------------------
+    # User Preference Update Handlers
+    # ----------------------------------------------------------------
+    
     def handle_update_preference(self, post_data):
-        """Handle updating user preferences"""
+        """
+        Handle updating user preferences.
+        
+        Args:
+            post_data (dict): POST data containing author_id, pref_type, and value
+            
+        # TODO: Implement input validation and sanitization
+        """
         author_id = post_data.get('author_id', [''])[0]
         pref_type = post_data.get('pref_type', [''])[0]
         value = post_data.get('value', ['false'])[0].lower() == 'true'
@@ -1211,7 +1449,14 @@ class CustomHTTPRequestHandler(http.server.SimpleHTTPRequestHandler):
             self.send_error(500, f"Error updating preferences: {str(e)}")
 
     def handle_update_work_preference(self, post_data):
-        """Handle updating user preferences for works"""
+        """
+        Handle updating user preferences for works.
+        
+        Args:
+            post_data (dict): POST data containing author_id, work_id, pref_type, and value
+            
+        # TODO: Implement input validation and sanitization
+        """
         author_id = post_data.get('author_id', [''])[0]
         work_id = post_data.get('work_id', [''])[0]
         pref_type = post_data.get('pref_type', [''])[0]
@@ -1257,7 +1502,18 @@ class CustomHTTPRequestHandler(http.server.SimpleHTTPRequestHandler):
             self.send_error(500, f"Error updating work preferences: {str(e)}")
 
     def handle_update_century(self, post_data):
-        """Handle updating author century"""
+        """
+        Handle updating author century.
+        
+        This method processes century input, updates both in-memory and 
+        file-based author data, and handles the response.
+        
+        Args:
+            post_data (dict): POST data containing author_id and century
+            
+        # TODO: Consider moving century update logic to a separate module
+        # TODO: Implement proper database layer instead of file-based storage
+        """
         global AUTHORS_DATA  # Directly reference the global AUTHORS_DATA
         author_id = post_data.get('author_id', [''])[0]
         century_input = post_data.get('century', [''])[0]
@@ -1405,8 +1661,20 @@ class CustomHTTPRequestHandler(http.server.SimpleHTTPRequestHandler):
             logger.error(traceback.format_exc())
             self.send_error(500, f"Error updating century: {str(e)}")
             
+    # ----------------------------------------------------------------
+    # File Serving and Response Methods
+    # ----------------------------------------------------------------
+    
     def serve_static_file(self, path):
-        """Serve static files"""
+        """
+        Serve static files.
+        
+        Args:
+            path (str): The path to the file to serve
+            
+        # TODO: Implement proper caching headers
+        # TODO: Consider using a dedicated static file server in production
+        """
         try:
             file_path = path[1:]  # Remove leading slash
             content_type = self.get_content_type(file_path)
@@ -1426,7 +1694,15 @@ class CustomHTTPRequestHandler(http.server.SimpleHTTPRequestHandler):
             self.send_error(404, f"File not found: {str(e)}")
 
     def get_content_type(self, file_path):
-        """Get content type based on file extension"""
+        """
+        Get content type based on file extension.
+        
+        Args:
+            file_path (str): The path to the file
+            
+        Returns:
+            str: The MIME type for the file
+        """
         if file_path.endswith('.css'):
             return 'text/css'
         elif file_path.endswith('.js'):
@@ -1445,7 +1721,12 @@ class CustomHTTPRequestHandler(http.server.SimpleHTTPRequestHandler):
             return 'application/octet-stream'
 
     def send_html_response(self, html):
-        """Send an HTML response"""
+        """
+        Send an HTML response.
+        
+        Args:
+            html (str): The HTML content to send
+        """
         try:
             encoded_html = html.encode('utf-8')
             self.send_response(200)
@@ -1465,7 +1746,12 @@ class CustomHTTPRequestHandler(http.server.SimpleHTTPRequestHandler):
             self.send_error(500, f"Error sending response: {str(e)}")
             
     def send_json_response(self, data):
-        """Send a JSON response"""
+        """
+        Send a JSON response.
+        
+        Args:
+            data: The data to encode as JSON and send
+        """
         try:
             encoded_json = json.dumps(data).encode('utf-8')
             self.send_response(200)
@@ -1483,8 +1769,19 @@ class CustomHTTPRequestHandler(http.server.SimpleHTTPRequestHandler):
             logger.error(traceback.format_exc())
             self.send_error(500, f"Error sending response: {str(e)}")
             
+# ====================================================================
+# SERVER INITIALIZATION AND MAIN FUNCTION
+# ====================================================================
+
 def main():
-    """Main function to start the server"""
+    """
+    Main function to start the server.
+    
+    Handles port selection, server initialization, and graceful shutdown.
+    
+    # TODO: Implement proper signal handling for all platforms
+    # TODO: Add configuration file support for server parameters
+    """
     global server_instance, PORT, DEBUG
     
     # Start time for server
@@ -1560,7 +1857,15 @@ def main():
         logger.info(f"Server process finished. Total runtime: {total_time:.2f} seconds")
 
 def handle_shutdown(sig, frame):
-    """Handle external shutdown signals"""
+    """
+    Handle external shutdown signals.
+    
+    Args:
+        sig: Signal number
+        frame: Current stack frame
+        
+    # TODO: Implement more graceful shutdown with connection draining
+    """
     logger.info(f"Received signal {sig}, initiating shutdown...")
     if server_instance:
         try:
@@ -1572,6 +1877,10 @@ def handle_shutdown(sig, frame):
             logger.error(f"Error during signal-triggered shutdown: {str(e)}")
             # Force exit even if shutdown failed
             threading.Timer(1.0, lambda: os.kill(os.getpid(), signal.SIGKILL)).start()
+
+# ====================================================================
+# ENTRY POINT
+# ====================================================================
 
 if __name__ == "__main__":
     try:
