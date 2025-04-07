@@ -1,0 +1,395 @@
+2025-04-07 01:31:46,836 - INFO - Loaded author data with 63 entries
+2025-04-07 01:31:46,836 - INFO - Starting First1KGreek Browser - Fixed Version 1.2.0
+2025-04-07 01:31:46,836 - INFO - With dark theme and improved editor detection
+2025-04-07 01:31:46,837 - INFO - Checking port 8000 availability...
+2025-04-07 01:31:46,838 - DEBUG - Port 8000 is available
+2025-04-07 01:31:46,838 - INFO - Starting server on port 8000...
+2025-04-07 01:31:46,838 - INFO - Server started at http://localhost:8000
+2025-04-07 01:32:37,429 - DEBUG - GET request for /
+2025-04-07 01:32:37,431 - DEBUG - Sending HTML response, length: 929
+2025-04-07 01:32:37,431 - INFO - 127.0.0.1 - "GET / HTTP/1.1" 200 -
+2025-04-07 01:32:37,431 - DEBUG - Successfully sent 929 bytes
+2025-04-07 01:32:39,708 - DEBUG - GET request for /simple
+2025-04-07 01:32:39,709 - DEBUG - Sending HTML response, length: 8036
+2025-04-07 01:32:39,710 - INFO - 127.0.0.1 - "GET /simple HTTP/1.1" 200 -
+2025-04-07 01:32:39,710 - DEBUG - Successfully sent 8038 bytes
+2025-04-07 01:32:39,721 - DEBUG - GET request for /authors_data.json
+2025-04-07 01:32:39,724 - INFO - 127.0.0.1 - "GET /authors_data.json HTTP/1.1" 200 -
+2025-04-07 01:32:39,751 - DEBUG - GET request for /api/author_works?author_id=heb0001
+2025-04-07 01:32:39,751 - DEBUG - API request for author works: author_id=heb0001
+2025-04-07 01:32:39,752 - DEBUG - Getting works for author ID: heb0001
+2025-04-07 01:32:39,762 - DEBUG - Found 31 works for author ID: heb0001
+2025-04-07 01:32:39,762 - INFO - 127.0.0.1 - "GET /api/author_works?author_id=heb0001 HTTP/1.1" 200 -
+2025-04-07 01:32:39,762 - DEBUG - Sending works response for author_id=heb0001: [{"id": "tlg009", "title": "Helen", "editor": "Van Hook, Larue", "file_count": 5, "author_name": "He...
+2025-04-07 01:32:39,763 - DEBUG - GET request for /api/author_works?author_id=tlg0001
+2025-04-07 01:32:39,763 - DEBUG - API request for author works: author_id=tlg0001
+2025-04-07 01:32:39,763 - DEBUG - Getting works for author ID: tlg0001
+2025-04-07 01:32:39,764 - DEBUG - Found 1 works for author ID: tlg0001
+2025-04-07 01:32:39,764 - INFO - 127.0.0.1 - "GET /api/author_works?author_id=tlg0001 HTTP/1.1" 200 -
+2025-04-07 01:32:39,764 - DEBUG - Sending works response for author_id=tlg0001: [{"id": "tlg001", "title": "Argonautica", "editor": null, "file_count": 1, "author_name": "Apolloniu...
+2025-04-07 01:32:39,764 - DEBUG - GET request for /api/author_works?author_id=tlg0003
+2025-04-07 01:32:39,764 - DEBUG - API request for author works: author_id=tlg0003
+2025-04-07 01:32:39,765 - DEBUG - Getting works for author ID: tlg0003
+2025-04-07 01:32:39,769 - DEBUG - Found 1 works for author ID: tlg0003
+2025-04-07 01:32:39,769 - INFO - 127.0.0.1 - "GET /api/author_works?author_id=tlg0003 HTTP/1.1" 200 -
+2025-04-07 01:32:39,770 - DEBUG - Sending works response for author_id=tlg0003: [{"id": "tlg001", "title": "History of the Peloponnesian War", "editor": null, "file_count": 13, "au...
+2025-04-07 01:32:39,774 - DEBUG - GET request for /api/author_works?author_id=tlg0004
+2025-04-07 01:32:39,774 - DEBUG - API request for author works: author_id=tlg0004
+2025-04-07 01:32:39,775 - DEBUG - Getting works for author ID: tlg0004
+2025-04-07 01:32:39,775 - DEBUG - Found 1 works for author ID: tlg0004
+2025-04-07 01:32:39,775 - INFO - 127.0.0.1 - "GET /api/author_works?author_id=tlg0004 HTTP/1.1" 200 -
+2025-04-07 01:32:39,776 - DEBUG - Sending works response for author_id=tlg0004: [{"id": "tlg001", "title": "Vitae philosophorum", "editor": null, "file_count": 2, "author_name": "D...
+2025-04-07 01:32:39,776 - DEBUG - GET request for /api/author_works?author_id=tlg0005
+2025-04-07 01:32:39,776 - DEBUG - API request for author works: author_id=tlg0005
+2025-04-07 01:32:39,777 - DEBUG - Getting works for author ID: tlg0005
+2025-04-07 01:32:39,777 - DEBUG - Found 3 works for author ID: tlg0005
+2025-04-07 01:32:39,777 - INFO - 127.0.0.1 - "GET /api/author_works?author_id=tlg0005 HTTP/1.1" 200 -
+2025-04-07 01:32:39,777 - DEBUG - Sending works response for author_id=tlg0005: [{"id": "tlg001", "title": "\u0395\u1f30\u03b4\u03cd\u03bb\u03bb\u03b9\u03b1", "editor": "Cholmeley,...
+2025-04-07 01:32:39,778 - DEBUG - GET request for /api/author_works?author_id=tlg0006
+2025-04-07 01:32:39,778 - DEBUG - API request for author works: author_id=tlg0006
+2025-04-07 01:32:39,778 - DEBUG - Getting works for author ID: tlg0006
+2025-04-07 01:32:39,784 - DEBUG - Found 20 works for author ID: tlg0006
+2025-04-07 01:32:39,784 - INFO - 127.0.0.1 - "GET /api/author_works?author_id=tlg0006 HTTP/1.1" 200 -
+2025-04-07 01:32:39,784 - DEBUG - Sending works response for author_id=tlg0006: [{"id": "tlg009", "title": "Heracles", "editor": "Murray, Gilbert", "file_count": 2, "author_name": ...
+2025-04-07 01:32:39,785 - DEBUG - GET request for /api/author_works?author_id=tlg0007
+2025-04-07 01:32:39,785 - DEBUG - API request for author works: author_id=tlg0007
+2025-04-07 01:32:39,785 - DEBUG - Getting works for author ID: tlg0007
+2025-04-07 01:32:39,810 - DEBUG - Found 145 works for author ID: tlg0007
+2025-04-07 01:32:39,810 - INFO - 127.0.0.1 - "GET /api/author_works?author_id=tlg0007 HTTP/1.1" 200 -
+2025-04-07 01:32:39,811 - DEBUG - Sending works response for author_id=tlg0007: [{"id": "tlg118", "title": "Praecepta gerendae reipublicae", "editor": null, "file_count": 3, "autho...
+2025-04-07 01:32:39,811 - DEBUG - GET request for /api/author_works?author_id=tlg0008
+2025-04-07 01:32:39,811 - DEBUG - API request for author works: author_id=tlg0008
+2025-04-07 01:32:39,811 - DEBUG - Getting works for author ID: tlg0008
+2025-04-07 01:32:39,811 - DEBUG - Found 1 works for author ID: tlg0008
+2025-04-07 01:32:39,812 - INFO - 127.0.0.1 - "GET /api/author_works?author_id=tlg0008 HTTP/1.1" 200 -
+2025-04-07 01:32:39,812 - DEBUG - Sending works response for author_id=tlg0008: [{"id": "tlg001", "title": "Deipnosophistae", "editor": null, "file_count": 3, "author_name": "Athen...
+2025-04-07 01:32:39,812 - DEBUG - GET request for /api/author_works?author_id=tlg0010
+2025-04-07 01:32:39,812 - DEBUG - API request for author works: author_id=tlg0010
+2025-04-07 01:32:39,812 - DEBUG - Getting works for author ID: tlg0010
+2025-04-07 01:32:39,812 - DEBUG - Found 0 works for author ID: tlg0010
+2025-04-07 01:32:39,812 - INFO - 127.0.0.1 - "GET /api/author_works?author_id=tlg0010 HTTP/1.1" 200 -
+2025-04-07 01:32:39,813 - DEBUG - Sending works response for author_id=tlg0010: []...
+2025-04-07 01:32:39,813 - DEBUG - GET request for /api/author_works?author_id=tlg0011
+2025-04-07 01:32:39,813 - DEBUG - API request for author works: author_id=tlg0011
+2025-04-07 01:32:39,814 - DEBUG - Getting works for author ID: tlg0011
+2025-04-07 01:32:39,814 - DEBUG - Found 8 works for author ID: tlg0011
+2025-04-07 01:32:39,815 - INFO - 127.0.0.1 - "GET /api/author_works?author_id=tlg0011 HTTP/1.1" 200 -
+2025-04-07 01:32:39,815 - DEBUG - Sending works response for author_id=tlg0011: [{"id": "tlg007", "title": "Oedipus at Colonus", "editor": "Storr, Francis", "file_count": 2, "autho...
+2025-04-07 01:32:39,815 - DEBUG - GET request for /api/author_works?author_id=tlg0012
+2025-04-07 01:32:39,815 - DEBUG - API request for author works: author_id=tlg0012
+2025-04-07 01:32:39,815 - DEBUG - Getting works for author ID: tlg0012
+2025-04-07 01:32:39,816 - DEBUG - Found 3 works for author ID: tlg0012
+2025-04-07 01:32:39,816 - INFO - 127.0.0.1 - "GET /api/author_works?author_id=tlg0012 HTTP/1.1" 200 -
+2025-04-07 01:32:39,816 - DEBUG - Sending works response for author_id=tlg0012: [{"id": "tlg001", "title": "Iliad", "editor": "(Thomas William)", "file_count": 3, "author_name": "H...
+2025-04-07 01:32:39,816 - DEBUG - GET request for /api/author_works?author_id=tlg0013
+2025-04-07 01:32:39,816 - DEBUG - API request for author works: author_id=tlg0013
+2025-04-07 01:32:39,817 - DEBUG - Getting works for author ID: tlg0013
+2025-04-07 01:32:39,821 - DEBUG - Found 33 works for author ID: tlg0013
+2025-04-07 01:32:39,821 - INFO - 127.0.0.1 - "GET /api/author_works?author_id=tlg0013 HTTP/1.1" 200 -
+2025-04-07 01:32:39,821 - DEBUG - Sending works response for author_id=tlg0013: [{"id": "tlg009", "title": "Hymn 9 to Artemis", "editor": null, "file_count": 2, "author_name": "Hom...
+2025-04-07 01:32:39,822 - DEBUG - GET request for /api/author_works?author_id=tlg0014
+2025-04-07 01:32:39,822 - DEBUG - API request for author works: author_id=tlg0014
+2025-04-07 01:32:39,822 - DEBUG - Getting works for author ID: tlg0014
+2025-04-07 01:32:39,833 - DEBUG - Found 63 works for author ID: tlg0014
+2025-04-07 01:32:39,833 - INFO - 127.0.0.1 - "GET /api/author_works?author_id=tlg0014 HTTP/1.1" 200 -
+2025-04-07 01:32:39,833 - DEBUG - Sending works response for author_id=tlg0014: [{"id": "tlg054", "title": "Against Conon", "editor": null, "file_count": 2, "author_name": "Demosth...
+2025-04-07 01:32:39,833 - DEBUG - GET request for /api/author_works?author_id=tlg0015
+2025-04-07 01:32:39,833 - DEBUG - API request for author works: author_id=tlg0015
+2025-04-07 01:32:39,833 - DEBUG - Getting works for author ID: tlg0015
+2025-04-07 01:32:39,834 - DEBUG - Found 2 works for author ID: tlg0015
+2025-04-07 01:32:39,834 - INFO - 127.0.0.1 - "GET /api/author_works?author_id=tlg0015 HTTP/1.1" 200 -
+2025-04-07 01:32:39,834 - DEBUG - Sending works response for author_id=tlg0015: [{"id": "tlg001", "title": "Ab excessu divi Marci", "editor": "Bekker, Immanuel", "file_count": 1, "...
+2025-04-07 01:32:39,834 - DEBUG - GET request for /api/author_works?author_id=tlg0016
+2025-04-07 01:32:39,834 - DEBUG - API request for author works: author_id=tlg0016
+2025-04-07 01:32:39,834 - DEBUG - Getting works for author ID: tlg0016
+2025-04-07 01:32:39,835 - DEBUG - Found 1 works for author ID: tlg0016
+2025-04-07 01:32:39,835 - INFO - 127.0.0.1 - "GET /api/author_works?author_id=tlg0016 HTTP/1.1" 200 -
+2025-04-07 01:32:39,835 - DEBUG - Sending works response for author_id=tlg0016: [{"id": "tlg001", "title": "Histories", "editor": null, "file_count": 2, "author_name": "Herodotus",...
+2025-04-07 01:32:39,835 - DEBUG - GET request for /api/author_works?author_id=tlg0017
+2025-04-07 01:32:39,835 - DEBUG - API request for author works: author_id=tlg0017
+2025-04-07 01:32:39,835 - DEBUG - Getting works for author ID: tlg0017
+2025-04-07 01:32:39,838 - DEBUG - Found 12 works for author ID: tlg0017
+2025-04-07 01:32:39,838 - INFO - 127.0.0.1 - "GET /api/author_works?author_id=tlg0017 HTTP/1.1" 200 -
+2025-04-07 01:32:39,838 - DEBUG - Sending works response for author_id=tlg0017: [{"id": "tlg009", "title": "On the Estate of Astyphilus", "editor": "Forster, Edward Seymour", "file...
+2025-04-07 01:32:39,838 - DEBUG - GET request for /api/author_works?author_id=tlg0018
+2025-04-07 01:32:39,838 - DEBUG - API request for author works: author_id=tlg0018
+2025-04-07 01:32:39,838 - DEBUG - Getting works for author ID: tlg0018
+2025-04-07 01:32:39,843 - DEBUG - Found 57 works for author ID: tlg0018
+2025-04-07 01:32:39,843 - INFO - 127.0.0.1 - "GET /api/author_works?author_id=tlg0018 HTTP/1.1" 200 -
+2025-04-07 01:32:39,843 - DEBUG - Sending works response for author_id=tlg0018: [{"id": "tlg016 2", "title": "tlg016 2", "editor": null, "file_count": 0, "author_name": "Philo Juda...
+2025-04-07 01:32:39,844 - DEBUG - GET request for /api/author_works?author_id=tlg0019
+2025-04-07 01:32:39,844 - DEBUG - API request for author works: author_id=tlg0019
+2025-04-07 01:32:39,844 - DEBUG - Getting works for author ID: tlg0019
+2025-04-07 01:32:39,846 - DEBUG - Found 11 works for author ID: tlg0019
+2025-04-07 01:32:39,846 - INFO - 127.0.0.1 - "GET /api/author_works?author_id=tlg0019 HTTP/1.1" 200 -
+2025-04-07 01:32:39,846 - DEBUG - Sending works response for author_id=tlg0019: [{"id": "tlg009", "title": "Frogs", "editor": null, "file_count": 1, "author_name": "Aristophanes", ...
+2025-04-07 01:32:39,846 - DEBUG - GET request for /api/author_works?author_id=tlg0020
+2025-04-07 01:32:39,847 - DEBUG - API request for author works: author_id=tlg0020
+2025-04-07 01:32:39,847 - DEBUG - Getting works for author ID: tlg0020
+2025-04-07 01:32:39,848 - DEBUG - Found 3 works for author ID: tlg0020
+2025-04-07 01:32:39,848 - INFO - 127.0.0.1 - "GET /api/author_works?author_id=tlg0020 HTTP/1.1" 200 -
+2025-04-07 01:32:39,848 - DEBUG - Sending works response for author_id=tlg0020: [{"id": "tlg001", "title": "Theogony", "editor": null, "file_count": 2, "author_name": "Hesiod", "fa...
+2025-04-07 01:32:39,848 - DEBUG - GET request for /api/author_works?author_id=tlg0031
+2025-04-07 01:32:39,848 - DEBUG - API request for author works: author_id=tlg0031
+2025-04-07 01:32:39,848 - DEBUG - Getting works for author ID: tlg0031
+2025-04-07 01:32:39,857 - DEBUG - Found 27 works for author ID: tlg0031
+2025-04-07 01:32:39,857 - INFO - 127.0.0.1 - "GET /api/author_works?author_id=tlg0031 HTTP/1.1" 200 -
+2025-04-07 01:32:39,857 - DEBUG - Sending works response for author_id=tlg0031: [{"id": "tlg009", "title": "Galatians", "editor": null, "file_count": 2, "author_name": "New Testame...
+2025-04-07 01:32:39,857 - DEBUG - GET request for /api/author_works?author_id=tlg0032
+2025-04-07 01:32:39,857 - DEBUG - API request for author works: author_id=tlg0032
+2025-04-07 01:32:39,858 - DEBUG - Getting works for author ID: tlg0032
+2025-04-07 01:32:39,860 - DEBUG - Found 14 works for author ID: tlg0032
+2025-04-07 01:32:39,860 - INFO - 127.0.0.1 - "GET /api/author_works?author_id=tlg0032 HTTP/1.1" 200 -
+2025-04-07 01:32:39,860 - DEBUG - Sending works response for author_id=tlg0032: [{"id": "tlg009", "title": "Agesilaus", "editor": null, "file_count": 2, "author_name": "Xenophon", ...
+2025-04-07 01:32:39,860 - DEBUG - GET request for /api/author_works?author_id=tlg0033
+2025-04-07 01:32:39,860 - DEBUG - API request for author works: author_id=tlg0033
+2025-04-07 01:32:39,860 - DEBUG - Getting works for author ID: tlg0033
+2025-04-07 01:32:39,861 - DEBUG - Found 4 works for author ID: tlg0033
+2025-04-07 01:32:39,861 - INFO - 127.0.0.1 - "GET /api/author_works?author_id=tlg0033 HTTP/1.1" 200 -
+2025-04-07 01:32:39,861 - DEBUG - Sending works response for author_id=tlg0033: [{"id": "tlg001", "title": "Olympian", "editor": "Sandys, John Edwin", "file_count": 2, "author_name...
+2025-04-07 01:32:39,861 - DEBUG - GET request for /api/author_works?author_id=tlg0057
+2025-04-07 01:32:39,861 - DEBUG - API request for author works: author_id=tlg0057
+2025-04-07 01:32:39,861 - DEBUG - Getting works for author ID: tlg0057
+2025-04-07 01:32:39,889 - DEBUG - Found 151 works for author ID: tlg0057
+2025-04-07 01:32:39,889 - INFO - 127.0.0.1 - "GET /api/author_works?author_id=tlg0057 HTTP/1.1" 200 -
+2025-04-07 01:32:39,889 - DEBUG - Sending works response for author_id=tlg0057: [{"id": "tlg077 2", "title": "tlg077 2", "editor": null, "file_count": 0, "author_name": "Galen", "f...
+2025-04-07 01:32:39,889 - DEBUG - GET request for /api/author_works?author_id=tlg0059
+2025-04-07 01:32:39,889 - DEBUG - API request for author works: author_id=tlg0059
+2025-04-07 01:32:39,889 - DEBUG - Getting works for author ID: tlg0059
+2025-04-07 01:32:39,912 - DEBUG - Found 37 works for author ID: tlg0059
+2025-04-07 01:32:39,912 - INFO - 127.0.0.1 - "GET /api/author_works?author_id=tlg0059 HTTP/1.1" 200 -
+2025-04-07 01:32:39,913 - DEBUG - Sending works response for author_id=tlg0059: [{"id": "tlg009", "title": "Parmenides", "editor": "Burnet, John", "file_count": 2, "author_name": "...
+2025-04-07 01:32:39,913 - DEBUG - GET request for /api/author_works?author_id=tlg0060
+2025-04-07 01:32:39,913 - DEBUG - API request for author works: author_id=tlg0060
+2025-04-07 01:32:39,913 - DEBUG - Getting works for author ID: tlg0060
+2025-04-07 01:32:39,915 - DEBUG - Found 2 works for author ID: tlg0060
+2025-04-07 01:32:39,915 - INFO - 127.0.0.1 - "GET /api/author_works?author_id=tlg0060 HTTP/1.1" 200 -
+2025-04-07 01:32:39,916 - DEBUG - Sending works response for author_id=tlg0060: [{"id": "tlg001", "title": "Historical Library", "editor": null, "file_count": 3, "author_name": "Di...
+2025-04-07 01:32:39,916 - DEBUG - GET request for /api/author_works?author_id=tlg0062
+2025-04-07 01:32:39,916 - DEBUG - API request for author works: author_id=tlg0062
+2025-04-07 01:32:39,916 - DEBUG - Getting works for author ID: tlg0062
+2025-04-07 01:32:39,936 - DEBUG - Found 71 works for author ID: tlg0062
+2025-04-07 01:32:39,936 - INFO - 127.0.0.1 - "GET /api/author_works?author_id=tlg0062 HTTP/1.1" 200 -
+2025-04-07 01:32:39,936 - DEBUG - Sending works response for author_id=tlg0062: [{"id": "tlg054", "title": "Dipsades", "editor": "Jacobitz, Karl", "file_count": 4, "author_name": "...
+2025-04-07 01:32:39,936 - DEBUG - GET request for /api/author_works?author_id=tlg0026
+2025-04-07 01:32:39,936 - DEBUG - API request for author works: author_id=tlg0026
+2025-04-07 01:32:39,937 - DEBUG - Getting works for author ID: tlg0026
+2025-04-07 01:32:39,937 - DEBUG - Found 4 works for author ID: tlg0026
+2025-04-07 01:32:39,937 - INFO - 127.0.0.1 - "GET /api/author_works?author_id=tlg0026 HTTP/1.1" 200 -
+2025-04-07 01:32:39,937 - DEBUG - Sending works response for author_id=tlg0026: [{"id": "tlg001", "title": "Against Timarchus", "editor": "Adams, Charles Darwin", "file_count": 2, ...
+2025-04-07 01:32:39,937 - DEBUG - GET request for /api/author_works?author_id=tlg0028
+2025-04-07 01:32:39,937 - DEBUG - API request for author works: author_id=tlg0028
+2025-04-07 01:32:39,938 - DEBUG - Getting works for author ID: tlg0028
+2025-04-07 01:32:39,939 - DEBUG - Found 6 works for author ID: tlg0028
+2025-04-07 01:32:39,939 - INFO - 127.0.0.1 - "GET /api/author_works?author_id=tlg0028 HTTP/1.1" 200 -
+2025-04-07 01:32:39,939 - DEBUG - Sending works response for author_id=tlg0028: [{"id": "tlg001", "title": "Against the Stepmother for Poisoning", "editor": "Maidment, Kenneth John...
+2025-04-07 01:32:39,939 - DEBUG - GET request for /api/author_works?author_id=tlg0086
+2025-04-07 01:32:39,940 - DEBUG - API request for author works: author_id=tlg0086
+2025-04-07 01:32:39,940 - DEBUG - Getting works for author ID: tlg0086
+2025-04-07 01:32:39,953 - DEBUG - Found 48 works for author ID: tlg0086
+2025-04-07 01:32:39,953 - INFO - 127.0.0.1 - "GET /api/author_works?author_id=tlg0086 HTTP/1.1" 200 -
+2025-04-07 01:32:39,953 - DEBUG - Sending works response for author_id=tlg0086: [{"id": "tlg054", "title": "Physica (textus alter)", "editor": null, "file_count": 1, "author_name":...
+2025-04-07 01:32:39,953 - DEBUG - GET request for /api/author_works?author_id=tlg0093
+2025-04-07 01:32:39,953 - DEBUG - API request for author works: author_id=tlg0093
+2025-04-07 01:32:39,953 - DEBUG - Getting works for author ID: tlg0093
+2025-04-07 01:32:39,957 - DEBUG - Found 21 works for author ID: tlg0093
+2025-04-07 01:32:39,957 - INFO - 127.0.0.1 - "GET /api/author_works?author_id=tlg0093 HTTP/1.1" 200 -
+2025-04-07 01:32:39,957 - DEBUG - Sending works response for author_id=tlg0093: [{"id": "tlg010x04", "title": "De Lassitudine", "editor": "Wimmer, Friedrich", "file_count": 1, "aut...
+2025-04-07 01:32:39,957 - DEBUG - GET request for /api/author_works?author_id=tlg0096
+2025-04-07 01:32:39,958 - DEBUG - API request for author works: author_id=tlg0096
+2025-04-07 01:32:39,958 - DEBUG - Getting works for author ID: tlg0096
+2025-04-07 01:32:39,958 - DEBUG - Found 2 works for author ID: tlg0096
+2025-04-07 01:32:39,958 - INFO - 127.0.0.1 - "GET /api/author_works?author_id=tlg0096 HTTP/1.1" 200 -
+2025-04-07 01:32:39,958 - DEBUG - Sending works response for author_id=tlg0096: [{"id": "tlg002 2", "title": "tlg002 2", "editor": null, "file_count": 0, "author_name": "Epicurus",...
+2025-04-07 01:32:39,959 - DEBUG - GET request for /api/author_works?author_id=tlg0527
+2025-04-07 01:32:39,959 - DEBUG - API request for author works: author_id=tlg0527
+2025-04-07 01:32:39,959 - DEBUG - Getting works for author ID: tlg0527
+2025-04-07 01:32:39,973 - DEBUG - Found 56 works for author ID: tlg0527
+2025-04-07 01:32:39,973 - INFO - 127.0.0.1 - "GET /api/author_works?author_id=tlg0527 HTTP/1.1" 200 -
+2025-04-07 01:32:39,973 - DEBUG - Sending works response for author_id=tlg0527: [{"id": "tlg054", "title": "Susanna (translatio Graeca)", "editor": null, "file_count": 1, "author_n...
+2025-04-07 01:32:39,974 - DEBUG - GET request for /api/author_works?author_id=tlg0530
+2025-04-07 01:32:39,974 - DEBUG - API request for author works: author_id=tlg0530
+2025-04-07 01:32:39,974 - DEBUG - Getting works for author ID: tlg0530
+2025-04-07 01:32:39,976 - DEBUG - Found 12 works for author ID: tlg0530
+2025-04-07 01:32:39,976 - INFO - 127.0.0.1 - "GET /api/author_works?author_id=tlg0530 HTTP/1.1" 200 -
+2025-04-07 01:32:39,976 - DEBUG - Sending works response for author_id=tlg0530: [{"id": "tlg012 2", "title": "tlg012 2", "editor": null, "file_count": 0, "author_name": "Stephanus ...
+2025-04-07 01:32:39,977 - DEBUG - GET request for /api/author_works?author_id=tlg0540
+2025-04-07 01:32:39,977 - DEBUG - API request for author works: author_id=tlg0540
+2025-04-07 01:32:39,977 - DEBUG - Getting works for author ID: tlg0540
+2025-04-07 01:32:39,984 - DEBUG - Found 34 works for author ID: tlg0540
+2025-04-07 01:32:39,984 - INFO - 127.0.0.1 - "GET /api/author_works?author_id=tlg0540 HTTP/1.1" 200 -
+2025-04-07 01:32:39,984 - DEBUG - Sending works response for author_id=tlg0540: [{"id": "tlg009", "title": "For The Soldier", "editor": null, "file_count": 2, "author_name": "Longi...
+2025-04-07 01:32:39,984 - DEBUG - GET request for /api/author_works?author_id=tlg0544
+2025-04-07 01:32:39,984 - DEBUG - API request for author works: author_id=tlg0544
+2025-04-07 01:32:39,984 - DEBUG - Getting works for author ID: tlg0544
+2025-04-07 01:32:39,985 - DEBUG - Found 4 works for author ID: tlg0544
+2025-04-07 01:32:39,985 - INFO - 127.0.0.1 - "GET /api/author_works?author_id=tlg0544 HTTP/1.1" 200 -
+2025-04-07 01:32:39,985 - DEBUG - Sending works response for author_id=tlg0544: [{"id": "tlg002 2", "title": "tlg002 2", "editor": null, "file_count": 0, "author_name": "Plotinus",...
+2025-04-07 01:32:39,985 - DEBUG - GET request for /api/author_works?author_id=tlg0557
+2025-04-07 01:32:39,985 - DEBUG - API request for author works: author_id=tlg0557
+2025-04-07 01:32:39,985 - DEBUG - Getting works for author ID: tlg0557
+2025-04-07 01:32:39,987 - DEBUG - Found 6 works for author ID: tlg0557
+2025-04-07 01:32:39,987 - INFO - 127.0.0.1 - "GET /api/author_works?author_id=tlg0557 HTTP/1.1" 200 -
+2025-04-07 01:32:39,989 - DEBUG - Sending works response for author_id=tlg0557: [{"id": "tlg001", "title": "Discourses", "editor": null, "file_count": 3, "author_name": "Porphyry",...
+2025-04-07 01:32:39,990 - DEBUG - GET request for /api/author_works?author_id=tlg0561
+2025-04-07 01:32:39,990 - DEBUG - API request for author works: author_id=tlg0561
+2025-04-07 01:32:39,990 - DEBUG - Getting works for author ID: tlg0561
+2025-04-07 01:32:39,991 - DEBUG - Found 2 works for author ID: tlg0561
+2025-04-07 01:32:39,991 - INFO - 127.0.0.1 - "GET /api/author_works?author_id=tlg0561 HTTP/1.1" 200 -
+2025-04-07 01:32:39,991 - DEBUG - Sending works response for author_id=tlg0561: [{"id": "tlg001", "title": "Daphnis and Chloe", "editor": "Hercher, Rudolph", "file_count": 1, "auth...
+2025-04-07 01:32:39,991 - DEBUG - GET request for /api/author_works?author_id=tlg0592
+2025-04-07 01:32:39,991 - DEBUG - API request for author works: author_id=tlg0592
+2025-04-07 01:32:39,991 - DEBUG - Getting works for author ID: tlg0592
+2025-04-07 01:32:39,993 - DEBUG - Found 10 works for author ID: tlg0592
+2025-04-07 01:32:39,993 - INFO - 127.0.0.1 - "GET /api/author_works?author_id=tlg0592 HTTP/1.1" 200 -
+2025-04-07 01:32:39,993 - DEBUG - Sending works response for author_id=tlg0592: [{"id": "tlg002 2", "title": "tlg002 2", "editor": null, "file_count": 0, "author_name": "Damascius"...
+2025-04-07 01:32:39,993 - DEBUG - GET request for /api/author_works?author_id=tlg0593
+2025-04-07 01:32:39,993 - DEBUG - API request for author works: author_id=tlg0593
+2025-04-07 01:32:39,993 - DEBUG - Getting works for author ID: tlg0593
+2025-04-07 01:32:39,994 - DEBUG - Found 4 works for author ID: tlg0593
+2025-04-07 01:32:39,994 - INFO - 127.0.0.1 - "GET /api/author_works?author_id=tlg0593 HTTP/1.1" 200 -
+2025-04-07 01:32:39,994 - DEBUG - Sending works response for author_id=tlg0593: [{"id": "1st1K002 2", "title": "1st1K002 2", "editor": null, "file_count": 0, "author_name": "Olympi...
+2025-04-07 01:32:39,994 - DEBUG - GET request for /api/author_works?author_id=tlg0594
+2025-04-07 01:32:39,994 - DEBUG - API request for author works: author_id=tlg0594
+2025-04-07 01:32:39,994 - DEBUG - Getting works for author ID: tlg0594
+2025-04-07 01:32:39,994 - DEBUG - Found 2 works for author ID: tlg0594
+2025-04-07 01:32:39,994 - INFO - 127.0.0.1 - "GET /api/author_works?author_id=tlg0594 HTTP/1.1" 200 -
+2025-04-07 01:32:39,994 - DEBUG - Sending works response for author_id=tlg0594: [{"id": "tlg002 2", "title": "tlg002 2", "editor": null, "file_count": 0, "author_name": "Simplicius...
+2025-04-07 01:32:39,995 - DEBUG - GET request for /api/author_works?author_id=tlg0612
+2025-04-07 01:32:39,995 - DEBUG - API request for author works: author_id=tlg0612
+2025-04-07 01:32:39,995 - DEBUG - Getting works for author ID: tlg0612
+2025-04-07 01:32:39,995 - DEBUG - Found 2 works for author ID: tlg0612
+2025-04-07 01:32:39,995 - INFO - 127.0.0.1 - "GET /api/author_works?author_id=tlg0612 HTTP/1.1" 200 -
+2025-04-07 01:32:39,996 - DEBUG - Sending works response for author_id=tlg0612: [{"id": "tlg001", "title": "Orationes", "editor": "Arnim, Hans Friedrich August von", "file_count": ...
+2025-04-07 01:32:39,996 - DEBUG - GET request for /api/author_works?author_id=tlg0627
+2025-04-07 01:32:39,996 - DEBUG - API request for author works: author_id=tlg0627
+2025-04-07 01:32:39,996 - DEBUG - Getting works for author ID: tlg0627
+2025-04-07 01:32:40,005 - DEBUG - Found 53 works for author ID: tlg0627
+2025-04-07 01:32:40,005 - INFO - 127.0.0.1 - "GET /api/author_works?author_id=tlg0627 HTTP/1.1" 200 -
+2025-04-07 01:32:40,005 - DEBUG - Sending works response for author_id=tlg0627: [{"id": "tlg053", "title": "De diebus criticis", "editor": "Littr\u00e9, \u00c9mile", "file_count": ...
+2025-04-07 01:32:40,007 - DEBUG - GET request for /api/author_works?author_id=tlg0638
+2025-04-07 01:32:40,007 - DEBUG - API request for author works: author_id=tlg0638
+2025-04-07 01:32:40,007 - DEBUG - Getting works for author ID: tlg0638
+2025-04-07 01:32:40,008 - DEBUG - Found 6 works for author ID: tlg0638
+2025-04-07 01:32:40,008 - INFO - 127.0.0.1 - "GET /api/author_works?author_id=tlg0638 HTTP/1.1" 200 -
+2025-04-07 01:32:40,008 - DEBUG - Sending works response for author_id=tlg0638: [{"id": "tlg007", "title": "De Gymnastica", "editor": "Kayser, Carl Ludwig", "file_count": 1, "autho...
+2025-04-07 01:32:40,008 - DEBUG - GET request for /api/author_works?author_id=tlg1205
+2025-04-07 01:32:40,009 - DEBUG - API request for author works: author_id=tlg1205
+2025-04-07 01:32:40,009 - DEBUG - Getting works for author ID: tlg1205
+2025-04-07 01:32:40,009 - DEBUG - Found 2 works for author ID: tlg1205
+2025-04-07 01:32:40,009 - INFO - 127.0.0.1 - "GET /api/author_works?author_id=tlg1205 HTTP/1.1" 200 -
+2025-04-07 01:32:40,009 - DEBUG - Sending works response for author_id=tlg1205: [{"id": "tlg001", "title": "Legatio sive Supplicatio pro Christianis", "editor": null, "file_count":...
+2025-04-07 01:32:40,010 - DEBUG - GET request for /api/author_works?author_id=tlg1216
+2025-04-07 01:32:40,010 - DEBUG - API request for author works: author_id=tlg1216
+2025-04-07 01:32:40,010 - DEBUG - Getting works for author ID: tlg1216
+2025-04-07 01:32:40,011 - DEBUG - Found 1 works for author ID: tlg1216
+2025-04-07 01:32:40,011 - INFO - 127.0.0.1 - "GET /api/author_works?author_id=tlg1216 HTTP/1.1" 200 -
+2025-04-07 01:32:40,011 - DEBUG - Sending works response for author_id=tlg1216: [{"id": "tlg001", "title": "The Epistle of Barnabas", "editor": null, "file_count": 3, "author_name"...
+2025-04-07 01:32:40,012 - DEBUG - GET request for /api/author_works?author_id=tlg1389
+2025-04-07 01:32:40,012 - DEBUG - API request for author works: author_id=tlg1389
+2025-04-07 01:32:40,012 - DEBUG - Getting works for author ID: tlg1389
+2025-04-07 01:32:40,012 - DEBUG - Found 1 works for author ID: tlg1389
+2025-04-07 01:32:40,012 - INFO - 127.0.0.1 - "GET /api/author_works?author_id=tlg1389 HTTP/1.1" 200 -
+2025-04-07 01:32:40,012 - DEBUG - Sending works response for author_id=tlg1389: [{"id": "tlg001", "title": "Lexicon in decem oratores Atticos", "editor": "Dindorf, Wilhelm", "file_...
+2025-04-07 01:32:40,013 - DEBUG - GET request for /api/author_works?author_id=tlg1443
+2025-04-07 01:32:40,013 - DEBUG - API request for author works: author_id=tlg1443
+2025-04-07 01:32:40,013 - DEBUG - Getting works for author ID: tlg1443
+2025-04-07 01:32:40,014 - DEBUG - Found 2 works for author ID: tlg1443
+2025-04-07 01:32:40,014 - INFO - 127.0.0.1 - "GET /api/author_works?author_id=tlg1443 HTTP/1.1" 200 -
+2025-04-07 01:32:40,014 - DEBUG - Sending works response for author_id=tlg1443: [{"id": "tlg001", "title": "Epistles", "editor": null, "file_count": 2, "author_name": "Asclepius", ...
+2025-04-07 01:32:40,015 - DEBUG - GET request for /api/author_works?author_id=tlg1552
+2025-04-07 01:32:40,015 - DEBUG - API request for author works: author_id=tlg1552
+2025-04-07 01:32:40,015 - DEBUG - Getting works for author ID: tlg1552
+2025-04-07 01:32:40,015 - DEBUG - Found 0 works for author ID: tlg1552
+2025-04-07 01:32:40,015 - INFO - 127.0.0.1 - "GET /api/author_works?author_id=tlg1552 HTTP/1.1" 200 -
+2025-04-07 01:32:40,015 - DEBUG - Sending works response for author_id=tlg1552: []...
+2025-04-07 01:32:40,016 - DEBUG - GET request for /api/author_works?author_id=tlg2001
+2025-04-07 01:32:40,016 - DEBUG - API request for author works: author_id=tlg2001
+2025-04-07 01:32:40,016 - DEBUG - Getting works for author ID: tlg2001
+2025-04-07 01:32:40,018 - DEBUG - Found 14 works for author ID: tlg2001
+2025-04-07 01:32:40,018 - INFO - 127.0.0.1 - "GET /api/author_works?author_id=tlg2001 HTTP/1.1" 200 -
+2025-04-07 01:32:40,018 - DEBUG - Sending works response for author_id=tlg2001: [{"id": "tlg039 2", "title": "tlg039 2", "editor": null, "file_count": 0, "author_name": "Clement of...
+2025-04-07 01:32:40,018 - DEBUG - GET request for /api/author_works?author_id=tlg2018
+2025-04-07 01:32:40,018 - DEBUG - API request for author works: author_id=tlg2018
+2025-04-07 01:32:40,018 - DEBUG - Getting works for author ID: tlg2018
+2025-04-07 01:32:40,021 - DEBUG - Found 13 works for author ID: tlg2018
+2025-04-07 01:32:40,021 - INFO - 127.0.0.1 - "GET /api/author_works?author_id=tlg2018 HTTP/1.1" 200 -
+2025-04-07 01:32:40,021 - DEBUG - Sending works response for author_id=tlg2018: [{"id": "tlg009", "title": "De Ecclesiastica Theologia", "editor": "Klostermann, Erich", "file_count...
+2025-04-07 01:32:40,022 - DEBUG - GET request for /api/author_works?author_id=tlg2034
+2025-04-07 01:32:40,022 - DEBUG - API request for author works: author_id=tlg2034
+2025-04-07 01:32:40,022 - DEBUG - Getting works for author ID: tlg2034
+2025-04-07 01:32:40,024 - DEBUG - Found 16 works for author ID: tlg2034
+2025-04-07 01:32:40,024 - INFO - 127.0.0.1 - "GET /api/author_works?author_id=tlg2034 HTTP/1.1" 200 -
+2025-04-07 01:32:40,024 - DEBUG - Sending works response for author_id=tlg2034: [{"id": "tlg027 2", "title": "tlg027 2", "editor": null, "file_count": 0, "author_name": "Philo Juda...
+2025-04-07 01:32:40,024 - DEBUG - GET request for /api/author_works?author_id=tlg2042
+2025-04-07 01:32:40,024 - DEBUG - API request for author works: author_id=tlg2042
+2025-04-07 01:32:40,024 - DEBUG - Getting works for author ID: tlg2042
+2025-04-07 01:32:40,032 - DEBUG - Found 94 works for author ID: tlg2042
+2025-04-07 01:32:40,032 - INFO - 127.0.0.1 - "GET /api/author_works?author_id=tlg2042 HTTP/1.1" 200 -
+2025-04-07 01:32:40,032 - DEBUG - Sending works response for author_id=tlg2042: [{"id": "tlg077 2", "title": "tlg077 2", "editor": null, "file_count": 0, "author_name": "Josephus",...
+2025-04-07 01:32:40,033 - DEBUG - GET request for /api/author_works?author_id=tlg2057
+2025-04-07 01:32:40,033 - DEBUG - API request for author works: author_id=tlg2057
+2025-04-07 01:32:40,033 - DEBUG - Getting works for author ID: tlg2057
+2025-04-07 01:32:40,033 - DEBUG - Found 2 works for author ID: tlg2057
+2025-04-07 01:32:40,033 - INFO - 127.0.0.1 - "GET /api/author_works?author_id=tlg2057 HTTP/1.1" 200 -
+2025-04-07 01:32:40,033 - DEBUG - Sending works response for author_id=tlg2057: [{"id": "tlg002 2", "title": "tlg002 2", "editor": null, "file_count": 0, "author_name": "Eusebius",...
+2025-04-07 01:32:40,034 - DEBUG - GET request for /api/author_works?author_id=tlg2062
+2025-04-07 01:32:40,034 - DEBUG - API request for author works: author_id=tlg2062
+2025-04-07 01:32:40,034 - DEBUG - Getting works for author ID: tlg2062
+2025-04-07 01:32:40,034 - DEBUG - Found 0 works for author ID: tlg2062
+2025-04-07 01:32:40,034 - INFO - 127.0.0.1 - "GET /api/author_works?author_id=tlg2062 HTTP/1.1" 200 -
+2025-04-07 01:32:40,034 - DEBUG - Sending works response for author_id=tlg2062: []...
+2025-04-07 01:32:40,034 - DEBUG - GET request for /api/author_works?author_id=tlg4015
+2025-04-07 01:32:40,034 - DEBUG - API request for author works: author_id=tlg4015
+2025-04-07 01:32:40,034 - DEBUG - Getting works for author ID: tlg4015
+2025-04-07 01:32:40,037 - DEBUG - Found 8 works for author ID: tlg4015
+2025-04-07 01:32:40,037 - INFO - 127.0.0.1 - "GET /api/author_works?author_id=tlg4015 HTTP/1.1" 200 -
+2025-04-07 01:32:40,037 - DEBUG - Sending works response for author_id=tlg4015: [{"id": "tlg009", "title": "In Aristotelis Physicorum Libros Commentaria", "editor": null, "file_cou...
+2025-04-07 01:32:40,037 - DEBUG - GET request for /api/author_works?author_id=tlg4016
+2025-04-07 01:32:40,038 - DEBUG - API request for author works: author_id=tlg4016
+2025-04-07 01:32:40,038 - DEBUG - Getting works for author ID: tlg4016
+2025-04-07 01:32:40,039 - DEBUG - Found 5 works for author ID: tlg4016
+2025-04-07 01:32:40,039 - INFO - 127.0.0.1 - "GET /api/author_works?author_id=tlg4016 HTTP/1.1" 200 -
+2025-04-07 01:32:40,039 - DEBUG - Sending works response for author_id=tlg4016: [{"id": "tlg001", "title": "In Porphyrii Isagogen Sive Quinque Voces", "editor": null, "file_count":...
+2025-04-07 01:32:40,040 - DEBUG - GET request for /api/author_works?author_id=tlg4017
+2025-04-07 01:32:40,040 - DEBUG - API request for author works: author_id=tlg4017
+2025-04-07 01:32:40,040 - DEBUG - Getting works for author ID: tlg4017
+2025-04-07 01:32:40,041 - DEBUG - Found 2 works for author ID: tlg4017
+2025-04-07 01:32:40,042 - INFO - 127.0.0.1 - "GET /api/author_works?author_id=tlg4017 HTTP/1.1" 200 -
+2025-04-07 01:32:40,042 - DEBUG - Sending works response for author_id=tlg4017: [{"id": "tlg001", "title": "In Aristotelis Metaphysica Commentaria", "editor": "Kroll, Wilhelm", "fi...
+2025-04-07 01:32:40,042 - DEBUG - GET request for /api/author_works?author_id=tlg4018
+2025-04-07 01:32:40,042 - DEBUG - API request for author works: author_id=tlg4018
+2025-04-07 01:32:40,043 - DEBUG - Getting works for author ID: tlg4018
+2025-04-07 01:32:40,043 - DEBUG - Found 1 works for author ID: tlg4018
+2025-04-07 01:32:40,043 - INFO - 127.0.0.1 - "GET /api/author_works?author_id=tlg4018 HTTP/1.1" 200 -
+2025-04-07 01:32:40,043 - DEBUG - Sending works response for author_id=tlg4018: [{"id": "tlg001", "title": "In Aristotelis Metaphysicorum Libros A-Z Commentaria", "editor": null, "...
+2025-04-07 01:32:40,043 - DEBUG - GET request for /api/author_works?author_id=tlg4019
+2025-04-07 01:32:40,043 - DEBUG - API request for author works: author_id=tlg4019
+2025-04-07 01:32:40,043 - DEBUG - Getting works for author ID: tlg4019
+2025-04-07 01:32:40,044 - DEBUG - Found 3 works for author ID: tlg4019
+2025-04-07 01:32:40,044 - INFO - 127.0.0.1 - "GET /api/author_works?author_id=tlg4019 HTTP/1.1" 200 -
+2025-04-07 01:32:40,044 - DEBUG - Sending works response for author_id=tlg4019: [{"id": "tlg001", "title": "Prolegomena", "editor": null, "file_count": 1, "author_name": "Panaetius...
+2025-04-07 01:32:40,044 - DEBUG - GET request for /api/author_works?author_id=tlg4020
+2025-04-07 01:32:40,044 - DEBUG - API request for author works: author_id=tlg4020
+2025-04-07 01:32:40,044 - DEBUG - Getting works for author ID: tlg4020
+2025-04-07 01:32:40,046 - DEBUG - Found 2 works for author ID: tlg4020
+2025-04-07 01:32:40,046 - INFO - 127.0.0.1 - "GET /api/author_works?author_id=tlg4020 HTTP/1.1" 200 -
+2025-04-07 01:32:40,046 - DEBUG - Sending works response for author_id=tlg4020: [{"id": "tlg001", "title": "In Porphyrii Isagogen", "editor": null, "file_count": 1, "author_name": ...
+2025-04-07 01:32:40,046 - DEBUG - GET request for /api/author_works?author_id=tlg4021
+2025-04-07 01:32:40,046 - DEBUG - API request for author works: author_id=tlg4021
+2025-04-07 01:32:40,046 - DEBUG - Getting works for author ID: tlg4021
+2025-04-07 01:32:40,047 - DEBUG - Found 2 works for author ID: tlg4021
+2025-04-07 01:32:40,047 - INFO - 127.0.0.1 - "GET /api/author_works?author_id=tlg4021 HTTP/1.1" 200 -
+2025-04-07 01:32:40,047 - DEBUG - Sending works response for author_id=tlg4021: [{"id": "tlg001", "title": "Prolegomena philosophiae", "editor": null, "file_count": 1, "author_name...
+2025-04-07 01:32:40,047 - DEBUG - GET request for /api/author_works?author_id=tlg4022
+2025-04-07 01:32:40,047 - DEBUG - API request for author works: author_id=tlg4022
+2025-04-07 01:32:40,047 - DEBUG - Getting works for author ID: tlg4022
+2025-04-07 01:32:40,047 - DEBUG - Found 0 works for author ID: tlg4022
+2025-04-07 01:32:40,047 - INFO - 127.0.0.1 - "GET /api/author_works?author_id=tlg4022 HTTP/1.1" 200 -
+2025-04-07 01:32:40,047 - DEBUG - Sending works response for author_id=tlg4022: []...
+2025-04-07 01:32:40,047 - DEBUG - GET request for /api/author_works?author_id=tlg4023
+2025-04-07 01:32:40,047 - DEBUG - API request for author works: author_id=tlg4023
+2025-04-07 01:32:40,048 - DEBUG - Getting works for author ID: tlg4023
+2025-04-07 01:32:40,048 - DEBUG - Found 0 works for author ID: tlg4023
+2025-04-07 01:32:40,048 - INFO - 127.0.0.1 - "GET /api/author_works?author_id=tlg4023 HTTP/1.1" 200 -
+2025-04-07 01:32:40,048 - DEBUG - Sending works response for author_id=tlg4023: []...

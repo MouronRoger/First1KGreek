@@ -605,9 +605,34 @@ class CustomHTTPRequestHandler(http.server.SimpleHTTPRequestHandler):
                 html = self.get_home_page()
                 self.send_html_response(html)
 
+            elif self.path == "/simple":
+                # Simple view page
+                try:
+                    with open("simple_view.html", "r", encoding="utf-8") as f:
+                        html = f.read()
+                    self.send_html_response(html)
+                except FileNotFoundError:
+                    self.send_error(404, "Simple view template not found")
+                except Exception as e:
+                    self.send_error(500, f"Error serving simple view: {str(e)}")
+
+            elif self.path == "/authors_data.json":
+                # Serve authors data JSON file
+                try:
+                    with open("authors_data.json", "r", encoding="utf-8") as f:
+                        data = f.read()
+                    self.send_response(200)
+                    self.send_header("Content-type", "application/json")
+                    self.end_headers()
+                    self.wfile.write(data.encode())
+                except FileNotFoundError:
+                    self.send_error(404, "Authors data file not found")
+                except Exception as e:
+                    self.send_error(500, f"Error serving authors data: {str(e)}")
+
             elif self.path == "/authors":
                 # Authors table page
-                html = self.get_authors_table_page()
+                html = self.get_authors_page()
                 self.send_html_response(html)
 
             elif self.path.startswith("/works?"):
@@ -812,142 +837,165 @@ class CustomHTTPRequestHandler(http.server.SimpleHTTPRequestHandler):
         self.end_headers()
         self.wfile.write(json.dumps({"success": True}).encode())
 
-    def get_authors_table_page(self):
-        """Generate the authors table page"""
-        # Load user preferences
-        try:
-            with open("user_preferences.json", "r") as f:
-                user_prefs = json.load(f)
-        except (FileNotFoundError, json.JSONDecodeError):
-            user_prefs = {"favorites": [], "archived": [], "deleted": []}
+    def get_authors_page(self):
+        """Generate the authors listing page."""
+        # Load authors data
+        authors_data = self.load_authors_data()
+        
+        # Sort authors by name
+        sorted_authors = sorted(
+            [(id, data) for id, data in authors_data.items()],
+            key=lambda x: x[1].get('name', '').lower()
+        )
 
-        # Load author data
-        try:
-            with open("authors_data.json", "r") as f:
-                authors_data = json.load(f)
-        except (FileNotFoundError, json.JSONDecodeError):
-            authors_data = {}
-
-        # HTML template with JavaScript and CSS includes
         html = f"""
         <!DOCTYPE html>
         <html>
         <head>
-            <title>Authors Table</title>
-            <link rel="stylesheet" href="/static/css/styles.css">
-            <script id="user-prefs" type="application/json">
-                {json.dumps(user_prefs)}
+            <title>Authors - First 1K Greek Texts</title>
+            <style>
+                {MAIN_STYLESHEET}
+
+                .authors-grid {{
+                    display: grid;
+                    grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+                    gap: 20px;
+                    margin-top: 20px;
+                }}
+
+                .author-card {{
+                    background-color: #252525;
+                    border-radius: 8px;
+                    padding: 20px;
+                    border-left: 4px solid #4299e1;
+                    transition: transform 0.2s;
+                }}
+
+                .author-card:hover {{
+                    transform: translateY(-3px);
+                    background-color: #333;
+                }}
+
+                .author-name {{
+                    font-size: 1.2em;
+                    margin-bottom: 10px;
+                }}
+
+                .author-name a {{
+                    text-decoration: none;
+                    color: #4299e1;
+                }}
+
+                .author-meta {{
+                    font-size: 0.9em;
+                    color: #888;
+                    margin-bottom: 5px;
+                }}
+
+                .author-works {{
+                    margin-top: 10px;
+                    padding-top: 10px;
+                    border-top: 1px solid #444;
+                }}
+
+                .filter-section {{
+                    margin: 20px 0;
+                    padding: 15px;
+                    background-color: #252525;
+                    border-radius: 8px;
+                }}
+
+                .filter-buttons {{
+                    display: flex;
+                    flex-wrap: wrap;
+                    gap: 10px;
+                    margin-top: 10px;
+                }}
+
+                .filter-btn {{
+                    padding: 5px 15px;
+                    background-color: #333;
+                    border: none;
+                    border-radius: 4px;
+                    color: #fff;
+                    cursor: pointer;
+                }}
+
+                .filter-btn:hover {{
+                    background-color: #444;
+                }}
+
+                .filter-btn.active {{
+                    background-color: #4299e1;
+                }}
+            </style>
+            <script>
+                function filterAuthors(century) {{
+                    const cards = document.querySelectorAll('.author-card');
+                    cards.forEach(card => {{
+                        if (century === 'all' || card.dataset.century === century) {{
+                            card.style.display = 'block';
+                        }} else {{
+                            card.style.display = 'none';
+                        }}
+                    }});
+
+                    // Update active button
+                    document.querySelectorAll('.filter-btn').forEach(btn => {{
+                        btn.classList.remove('active');
+                        if (btn.dataset.century === century) {{
+                            btn.classList.add('active');
+                        }}
+                    }});
+                }}
             </script>
-            <script src="/static/js/authors_table.js"></script>
         </head>
         <body>
             <div class="container">
-                <h1>Authors Table</h1>
+                <h1>First 1K Greek Texts</h1>
+                <p><a href="/">&laquo; Home</a></p>
 
-                <div class="filters">
-                    <div class="search-box">
-                        <input type="text" id="search-input" placeholder="Search authors...">
-                        <button id="search-btn">Search</button>
-                    </div>
+                <div class="filter-section">
+                    <h3>Filter by Century</h3>
+                    <div class="filter-buttons">
+                        <button class="filter-btn active" data-century="all" onclick="filterAuthors('all')">All</button>
+            """
 
-                    <div class="status-filters">
-                        <button class="active" data-filter="all">All</button>
-                        <button data-filter="favorites">Favorites</button>
-                        <button data-filter="archived">Archived</button>
-                        <button data-filter="normal">Normal</button>
-                    </div>
+        # Get unique centuries
+        centuries = sorted(set(data.get('century', 'Unknown') for _, data in sorted_authors))
+        for century in centuries:
+            html += f'<button class="filter-btn" data-century="{century}" onclick="filterAuthors(\'{century}\')">{century}</button>'
 
-                    <div class="century-filters">
-                        <button class="active" data-filter="all">All Centuries</button>
-                        <button data-filter="BCE">BCE</button>
-                        <button data-filter="CE-1-3">CE 1-3</button>
-                        <button data-filter="CE-4-6">CE 4-6</button>
+        html += """
                     </div>
                 </div>
 
-                <table id="authors-table" class="authors-table">
-                    <thead>
-                        <tr>
-                            <th data-sort="author_name">Author Name</th>
-                            <th data-sort="century">Century</th>
-                            <th data-sort="works">Works</th>
-                            <th data-sort="allegiance">Allegiance</th>
-                            <th>Actions</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                """
+                <div class="authors-grid">
+        """
 
-        # Add table rows
-        for author_id, author_data in authors_data.items():
-            if author_id in (user_prefs.get("deleted", []) or []):
-                continue
-
-            author_name = author_data.get("name", "")
-            century = author_data.get("century", "")
-            allegiance = author_data.get("allegiance", "")
-            works_count = len(self.get_author_works(author_id))
-
-            # Add icons for favorite/archived status
-            name_prefix = ""
-            if author_id in (user_prefs.get("favorites", []) or []):
-                name_prefix += '<span class="favorites-star">★</span> '
-            if author_id in (user_prefs.get("archived", []) or []):
-                name_prefix += '<span class="archived-icon">📦</span> '
-
+        for author_id, author_data in sorted_authors:
+            name = author_data.get('name', f'Author {author_id}')
+            century = author_data.get('century', 'Unknown')
+            allegiance = author_data.get('allegiance', 'Unknown')
+            
+            # Get works count
+            works = self.get_author_works(author_id)
+            works_count = len(works)
+            
             html += f"""
-                        <tr data-id="{author_id}">
-                            <td data-column="author_name">{name_prefix}{author_name}</td>
-                            <td data-column="century">{century}</td>
-                            <td data-column="works">{works_count}</td>
-                            <td data-column="allegiance">{allegiance}</td>
-                            <td class="actions">
-                                <button class="favorite-btn" data-author-id="{author_id}">
-                                    {'Unfavorite' if author_id in (user_prefs.get('favorites', []) or []) else 'Favorite'}
-                                </button>
-                                <button class="archive-btn" data-author-id="{author_id}">
-                                    {'Unarchive' if author_id in (user_prefs.get('archived', []) or []) else 'Archive'}
-                                </button>
-                                <button class="delete-btn" data-author-id="{author_id}">Delete</button>
-                                <button class="edit-btn"
-                                        data-author-id="{author_id}"
-                                        data-author-name="{author_name}"
-                                        data-century="{century}">
-                                    Edit Century
-                                </button>
-                                <button class="toggle-works-btn" data-author-id="{author_id}">
-                                    Show Works
-                                </button>
-                            </td>
-                        </tr>
-                        <tr class="works-row" data-author-id="{author_id}" style="display: none;">
-                            <td colspan="5" class="works-container">
-                                <div class="works-tree">
-                                    <div class="loading-indicator">Loading works...</div>
-                                </div>
-                            </td>
-                        </tr>
-                    """
+            <div class="author-card" data-century="{century}">
+                <div class="author-name">
+                    <a href="/works?author_id={author_id}">{name}</a>
+                </div>
+                <div class="author-meta">Century: {century}</div>
+                <div class="author-meta">Allegiance: {allegiance}</div>
+                <div class="author-works">
+                    {works_count} work{"s" if works_count != 1 else ""}
+                </div>
+            </div>
+            """
 
-        # Close table and add modal
         html += """
-                    </tbody>
-                </table>
-
-                <div class="pagination"></div>
-
-                <div id="century-modal" class="modal">
-                    <div class="modal-content">
-                        <span class="close-modal">&times;</span>
-                        <h2>Edit Century</h2>
-                        <p id="edit-author-name"></p>
-                        <input type="hidden" id="edit-author-id">
-                        <input type="text" id="edit-century" placeholder="Enter century (e.g., 2 BCE, 1 CE)">
-                        <div class="modal-buttons">
-                            <button class="cancel-btn">Cancel</button>
-                            <button class="save-btn">Save</button>
-                        </div>
-                    </div>
                 </div>
             </div>
         </body>
@@ -984,45 +1032,76 @@ class CustomHTTPRequestHandler(http.server.SimpleHTTPRequestHandler):
 
         return None
 
+    def load_authors_data(self):
+        """Load author metadata from authors_data.json."""
+        try:
+            with open('authors_data.json', 'r', encoding='utf-8') as f:
+                return json.load(f)
+        except Exception as e:
+            print(f"Error loading authors data: {str(e)}")
+            return {}
+
+    def get_author_metadata(self, author_id):
+        """Get metadata for a specific author."""
+        authors_data = self.load_authors_data()
+        return authors_data.get(author_id, {
+            'name': f'Author {author_id}',
+            'century': 'Unknown',
+            'allegiance': 'Unknown'
+        })
+
     def get_author_works(self, author_id):
-        """Get list of works for an author"""
+        """Get list of works for an author with metadata."""
         works = []
         author_dir = os.path.join("data", author_id)
-
-        logger.debug(f"Looking for works in directory: {author_dir}")
-
+        
+        # Get author metadata
+        author_metadata = self.get_author_metadata(author_id)
+        author_name = author_metadata.get('name', f'Author {author_id}')
+        
         if os.path.exists(author_dir):
-            try:
-                for item in os.listdir(author_dir):
-                    work_path = os.path.join(author_dir, item)
-
-                    # Skip hidden files and special directories
-                    if item.startswith(".") or item.startswith("__"):
-                        logger.debug(f"Skipping special item: {item}")
-                        continue
-
-                    if os.path.isdir(work_path):
-                        logger.debug(f"Found work directory: {item}")
-
-                        # Count number of files in the work directory
-                        file_count = 0
+            for work_id in os.listdir(author_dir):
+                work_path = os.path.join(author_dir, work_id)
+                
+                # Skip hidden files and special directories
+                if work_id.startswith(".") or work_id.startswith("__"):
+                    continue
+                    
+                if os.path.isdir(work_path):
+                    # Get work metadata from __cts__.xml
+                    work_title = work_id
+                    work_editor = None
+                    work_cts = os.path.join(work_path, "__cts__.xml")
+                    
+                    if os.path.exists(work_cts):
                         try:
-                            for root, dirs, files in os.walk(work_path):
-                                file_count += len(files)
-
-                            # Try to get editor information
-                            editor = self.get_work_editor(author_id, item)
-
-                            works.append({"id": item, "title": item, "file_count": file_count, "editor": editor})
-                            logger.debug(f"Added work: {item} with {file_count} files")
+                            with open(work_cts, 'r', encoding='utf-8') as f:
+                                content = f.read()
+                                # Get title
+                                title_match = re.search(r'<ti:title[^>]*>(.*?)</ti:title>', content)
+                                if title_match:
+                                    work_title = title_match.group(1).strip()
+                                # Get editor from description
+                                desc_match = re.search(r'<ti:description[^>]*>(.*?)</ti:description>', content)
+                                if desc_match:
+                                    desc = desc_match.group(1)
+                                    editor_match = re.search(r'([^.]+), editor\.', desc)
+                                    if editor_match:
+                                        work_editor = editor_match.group(1).strip()
                         except Exception as e:
-                            logger.error(f"Error processing work directory {item}: {str(e)}")
-            except Exception as e:
-                logger.error(f"Error listing author directory {author_id}: {str(e)}")
-        else:
-            logger.warning(f"Author directory does not exist: {author_dir}")
-
-        logger.debug(f"Total works found for {author_id}: {len(works)}")
+                            print(f"Error reading work metadata: {str(e)}")
+                    
+                    # Count XML files
+                    file_count = len([f for f in os.listdir(work_path) if f.endswith('.xml') and f != '__cts__.xml'])
+                    
+                    works.append({
+                        'id': work_id,
+                        'title': work_title,
+                        'editor': work_editor,
+                        'file_count': file_count,
+                        'author_name': author_name
+                    })
+        
         return works
 
     def handle_get_author_works(self, query_params):
@@ -1154,6 +1233,7 @@ class CustomHTTPRequestHandler(http.server.SimpleHTTPRequestHandler):
 
                 <h2>Navigation</h2>
                 <ul>
+                    <li><a href="/simple">Simple View</a> - Browse authors and works by century</li>
                     <li><a href="/authors">Authors Table</a> - Browse all authors</li>
                     <li><a href="/search">Search</a> - Search for specific texts</li>
                     <li><a href="/editors">About the Editors</a> - Information about the editors</li>
@@ -1165,17 +1245,18 @@ class CustomHTTPRequestHandler(http.server.SimpleHTTPRequestHandler):
         return html
 
     def get_works_page(self, query):
-        """Generate the works page for an author"""
+        """Generate the works page for an author."""
         query_params = urllib.parse.parse_qs(query)
         author_id = query_params.get("author_id", [""])[0]
 
         if not author_id:
             return self.get_error_page("Missing author_id parameter")
 
-        # Get author info
-        author_name = "Unknown Author"
-        if author_id in AUTHORS_DATA:
-            author_name = AUTHORS_DATA[author_id].get("name", "Unknown Author")
+        # Get author metadata
+        author_metadata = self.get_author_metadata(author_id)
+        author_name = author_metadata.get('name', f'Author {author_id}')
+        century = author_metadata.get('century', 'Unknown')
+        allegiance = author_metadata.get('allegiance', 'Unknown')
 
         # Get works for this author
         works = self.get_author_works(author_id)
@@ -1188,26 +1269,48 @@ class CustomHTTPRequestHandler(http.server.SimpleHTTPRequestHandler):
             <style>
                 {MAIN_STYLESHEET}
 
+                .author-info {{
+                    margin-bottom: 20px;
+                    padding: 15px;
+                    background-color: #252525;
+                    border-radius: 8px;
+                }}
+
                 .works-list {{
                     list-style-type: none;
                     padding: 0;
                 }}
 
-                .works-list li {{
-                    margin-bottom: 10px;
-                    padding: 10px;
+                .work-item {{
+                    margin-bottom: 15px;
+                    padding: 15px;
                     background-color: #333;
-                    border-radius: 5px;
+                    border-radius: 8px;
+                    border-left: 4px solid #4299e1;
                 }}
 
-                .works-list li:hover {{
+                .work-item:hover {{
                     background-color: #444;
                 }}
 
-                .works-list a {{
-                    display: block;
+                .work-title {{
+                    font-size: 1.2em;
+                    margin-bottom: 10px;
+                }}
+
+                .work-title a {{
                     text-decoration: none;
                     color: #4299e1;
+                }}
+
+                .work-meta {{
+                    font-size: 0.9em;
+                    color: #888;
+                }}
+
+                .editor-info {{
+                    margin-top: 5px;
+                    font-style: italic;
                 }}
             </style>
         </head>
@@ -1216,14 +1319,31 @@ class CustomHTTPRequestHandler(http.server.SimpleHTTPRequestHandler):
                 <h1>Works by {author_name}</h1>
                 <p><a href="/">&laquo; Home</a> | <a href="/authors">Authors Table</a></p>
 
+                <div class="author-info">
+                    <h3>{author_name}</h3>
+                    <p>Century: {century}</p>
+                    <p>Allegiance: {allegiance}</p>
+                </div>
+
                 <h2>Available Works</h2>
                 """
 
         if works:
-            html += '<ul class="works-list">'
+            html += '<div class="works-list">'
             for work in works:
-                html += f'<li><a href="/view?author_id={author_id}&work_id={work["id"]}">{work["title"]}</a></li>'
-            html += "</ul>"
+                editor_info = f'<div class="editor-info">Editor: {work["editor"]}</div>' if work["editor"] else ''
+                file_info = f'<div class="work-meta">{work["file_count"]} file{"s" if work["file_count"] != 1 else ""}</div>'
+                
+                html += f"""
+                <div class="work-item">
+                    <div class="work-title">
+                        <a href="/view?author_id={author_id}&work_id={work['id']}">{work['title']}</a>
+                    </div>
+                    {editor_info}
+                    {file_info}
+                </div>
+                """
+            html += "</div>"
         else:
             html += "<p>No works available for this author.</p>"
 
