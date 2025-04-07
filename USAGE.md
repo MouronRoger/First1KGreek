@@ -39,26 +39,7 @@ The browser provides several ways to access the texts:
 - **Browse Raw Files**: Access the raw, unprocessed files
 - **About**: Information about the First 1K Greek Project
 
-### Authors and Works Navigation
-
-The browser now features an enhanced authors table with expandable work listings:
-
-1. **Clickable Author Names**: Click on any author name to expand and view their works
-2. **Works Dropdown**: Each author's works appear in a dropdown with the following details:
-   - Work title
-   - Available file formats (e.g., perseus-grc2.xml)
-   - Action buttons (favorite, archive, delete) - same as for authors
-3. **Work Reference Format**: Works follow the format `tlg{author_id}.tlg{work_id}`
-   - Example: `tlg0004.tlg001` refers to the first work of Diogenes Laertius (tlg0004)
-4. **Multiple File Formats**: Each work may have multiple file formats indicated by extensions
-   - Example: `perseus-grc2.xml` for a specific Greek edition
-
 ### Viewing Texts
-
-When viewing a text, you'll now have two viewing options:
-
-1. **Human-Readable View**: Formatted for easy reading with proper Greek text rendering
-2. **Raw XML View**: Toggle to see the underlying XML structure
 
 When viewing a text, you'll see the XML content. The XML contains:
 
@@ -92,14 +73,6 @@ The texts use Canonical Text Services (CTS) URNs for identification:
   - `tlg2042`: The author ID (Origen)
   - `tlg001`: The work ID (Contra Celsum)
   - `perseus-grc1`: The specific edition
-
-## Troubleshooting
-
-If you encounter issues with the application:
-
-- **Works Not Showing**: Make sure the server is running and that you're using the correct port (check terminal output)
-- **Server Connection Issues**: Restart the browser and server, and clear your browser cache
-- **Missing Works for an Author**: Verify the author ID and check if the work directories exist in the data/{author_id}/ folder
 
 ## Contributing
 
