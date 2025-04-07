@@ -45,11 +45,11 @@ def parse_args():
 server_instance = None
 
 # Constants
-args = parse_args()
-PORT = args.port
+# Only define args when run as main module
+PORT = 8000  # Default port
 HOST = "localhost"
 SHUTDOWN_PATH = "/shutdown"
-DEBUG = args.debug
+DEBUG = False  # Default debug flag
 
 # Load author data
 try:
@@ -1092,7 +1092,15 @@ class CustomHTTPRequestHandler(http.server.SimpleHTTPRequestHandler):
         
         return html
 
-if __name__ == "__main__":
+def main():
+    """Main function to start the server"""
+    global server_instance, PORT, DEBUG
+    
+    # Parse command line arguments only when running as main
+    args = parse_args()
+    PORT = args.port
+    DEBUG = args.debug
+    
     try:
         # Make sure socket is properly released after previous runs
         socketserver.TCPServer.allow_reuse_address = True
@@ -1144,4 +1152,7 @@ if __name__ == "__main__":
         logger.info("Server has been shut down.")
     except Exception as e:
         logger.error(f"Error starting server: {str(e)}")
-        logger.error(traceback.format_exc()) 
+        logger.error(traceback.format_exc())
+
+if __name__ == "__main__":
+    main() 

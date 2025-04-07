@@ -1,12 +1,26 @@
-2025-04-07 01:37:21,413 - INFO - Loaded author data with 63 entries
-2025-04-07 01:37:21,413 - INFO - Starting First1KGreek Browser - Fixed Version 1.2.0
-2025-04-07 01:37:21,413 - INFO - With dark theme and improved editor detection
-2025-04-07 01:37:21,413 - INFO - Checking port 8000 availability...
-2025-04-07 01:37:21,414 - DEBUG - Port 8000 is in use
-2025-04-07 01:37:21,414 - WARNING - Port 8000 is already in use.
-2025-04-07 01:37:21,414 - DEBUG - Searching for available port starting from 8001
-2025-04-07 01:37:21,415 - DEBUG - Port 8001 is available
-2025-04-07 01:37:21,415 - DEBUG - Found available port: 8001
-2025-04-07 01:37:21,415 - INFO - Using alternative port 8001
-2025-04-07 01:37:21,415 - INFO - Starting server on port 8001...
-2025-04-07 01:37:21,415 - INFO - Server started at http://localhost:8001
+2025-04-07 03:09:05,827 - INFO - Loaded author data with 63 entries
+2025-04-07 03:09:05,827 - INFO - Starting First1KGreek Browser - Fixed Version 1.2.0
+2025-04-07 03:09:05,827 - INFO - With dark theme and improved editor detection
+2025-04-07 03:09:05,828 - INFO - Checking port 8000 availability...
+2025-04-07 03:09:05,830 - DEBUG - Port 8000 is available
+2025-04-07 03:09:05,830 - INFO - Starting server on port 8000...
+2025-04-07 03:09:05,830 - INFO - Server started at http://localhost:8000
+2025-04-07 03:09:14,069 - INFO - GET request for / from ('127.0.0.1', 64135)
+2025-04-07 03:09:14,070 - DEBUG - Serving home page
+2025-04-07 03:09:14,070 - DEBUG - Sending HTML response, length: 1464
+2025-04-07 03:09:14,070 - INFO - 127.0.0.1 - "GET / HTTP/1.1" 200 -
+2025-04-07 03:09:14,072 - DEBUG - Successfully sent 1464 bytes
+2025-04-07 03:09:18,244 - INFO - GET request for /static/index.html from ('127.0.0.1', 64136)
+2025-04-07 03:09:18,245 - DEBUG - Serving static file: /static/index.html
+2025-04-07 03:09:18,245 - INFO - 127.0.0.1 - "GET /static/index.html HTTP/1.1" 200 -
+2025-04-07 03:09:25,016 - INFO - GET request for /authors from ('127.0.0.1', 64154)
+2025-04-07 03:09:25,016 - DEBUG - Serving authors table page
+2025-04-07 03:09:25,037 - DEBUG - Sending HTML response, length: 81374
+2025-04-07 03:09:25,037 - INFO - 127.0.0.1 - "GET /authors HTTP/1.1" 200 -
+2025-04-07 03:09:25,038 - DEBUG - Successfully sent 81374 bytes
+2025-04-07 03:09:25,054 - INFO - GET request for /static/css/styles.css from ('127.0.0.1', 64155)
+2025-04-07 03:09:25,054 - DEBUG - Serving static file: /static/css/styles.css
+2025-04-07 03:09:25,055 - INFO - 127.0.0.1 - "GET /static/css/styles.css HTTP/1.1" 200 -
+2025-04-07 03:09:25,056 - INFO - GET request for /static/js/authors_table.js from ('127.0.0.1', 64156)
+2025-04-07 03:09:25,056 - DEBUG - Serving static file: /static/js/authors_table.js
+2025-04-07 03:09:25,056 - INFO - 127.0.0.1 - "GET /static/js/authors_table.js HTTP/1.1" 200 -
