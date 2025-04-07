@@ -1050,6 +1050,26 @@ class CustomHTTPRequestHandler(http.server.SimpleHTTPRequestHandler):
         self.request_start_time = None
         super().__init__(*args, **kwargs)
     
+    def get_user_prefs(self):
+        """Load user preferences from file."""
+        try:
+            logger.debug("Loading user preferences from file")
+            with open('user_preferences.json', 'r', encoding='utf-8') as f:
+                prefs = json.load(f)
+                logger.debug(f"Loaded user preferences with {sum(len(v) for v in prefs.values() if isinstance(v, list))} entries")
+                return prefs
+        except FileNotFoundError:
+            logger.warning("user_preferences.json not found - using empty defaults")
+            return {'favorites': [], 'archived': [], 'deleted': []}
+        except json.JSONDecodeError as e:
+            logger.error(f"Error parsing user_preferences.json: {str(e)}")
+            logger.error(f"At line {e.lineno}, column {e.colno}: {e.msg}")
+            return {'favorites': [], 'archived': [], 'deleted': []}
+        except Exception as e:
+            logger.error(f"Unexpected error loading user_preferences.json: {str(e)}")
+            logger.error(traceback.format_exc())
+            return {'favorites': [], 'archived': [], 'deleted': []}
+    
     def log_message(self, format, *args):
         """Override to use our logger"""
         logger.info("%s - %s" % (self.address_string(), format % args))
@@ -1164,12 +1184,8 @@ class CustomHTTPRequestHandler(http.server.SimpleHTTPRequestHandler):
             return
 
         try:
-            # Load current preferences
-            try:
-                with open('user_preferences.json', 'r') as f:
-                    prefs = json.load(f)
-            except (FileNotFoundError, json.JSONDecodeError):
-                prefs = {'favorites': [], 'archived': [], 'deleted': []}
+            # Load current preferences using the method
+            prefs = self.get_user_prefs()
 
             # Update preference
             if pref_type not in prefs:
@@ -1206,13 +1222,8 @@ class CustomHTTPRequestHandler(http.server.SimpleHTTPRequestHandler):
             return
 
         try:
-            # Load current preferences
-            try:
-                with open('user_preferences.json', 'r') as f:
-                    prefs = json.load(f)
-            except (FileNotFoundError, json.JSONDecodeError):
-                prefs = {'favorites': [], 'archived': [], 'deleted': [], 
-                         'work_favorites': [], 'work_archived': [], 'work_deleted': []}
+            # Load current preferences using the method
+            prefs = self.get_user_prefs()
 
             # Ensure work preference keys exist
             for key in ['work_favorites', 'work_archived', 'work_deleted']:
