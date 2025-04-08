@@ -1,0 +1,10 @@
+2025-04-08 23:26:27,627 - __main__ - INFO - Starting First1KGreek Browser 1.2.0 (Fixed Version)
+2025-04-08 23:26:27,627 - __main__ - INFO - Configuration: port=8801, host=localhost, debug=False, open_browser=False
+2025-04-08 23:26:27,627 - src.first1k.server.server - INFO - Starting First1KGreek Browser - Fixed Version 1.2.0
+2025-04-08 23:26:27,627 - src.first1k.server.server - INFO - With dark theme and improved editor detection
+2025-04-08 23:26:27,628 - src.first1k.server.server - INFO - Server running at http://localhost:8801/
+2025-04-08 23:26:29,575 - src.first1k.server.server - INFO - GET request: /
+2025-04-08 23:26:29,577 - src.first1k.server.server - INFO - GET request: /
+2025-04-08 23:26:29,578 - src.first1k.server.server - INFO - GET request: /browse/authors
+2025-04-08 23:26:29,612 - src.first1k.server.server - INFO - GET request: /search
+2025-04-08 23:26:29,612 - src.first1k.server.server - INFO - Received signal 15, initiating shutdown...

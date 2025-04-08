@@ -91,10 +91,20 @@ def get_works_by_author(author_id):
                         if editor_matches and len(editor_matches[0].strip()) > 0:
                             work_editor = editor_matches[0].strip()
                             
+                        # Determine language from filename
+                        file_language = None
+                        if 'perseus-eng' in file:
+                            file_language = 'eng'
+                        elif 'perseus-grc' in file:
+                            file_language = 'grc'
+
+                        # Use file language if found, otherwise use work language or default to Greek
+                        language = file_language or work_language or 'grc'
+                            
                         works.append({
                             'id': work_dir,
                             'title': work_title or f"Work {work_dir}",
-                            'language': work_language or 'grc',
+                            'language': language,
                             'editor': work_editor or 'Unknown',
                             'file_path': file_path
                         })
@@ -142,6 +152,47 @@ def get_works_by_editor(editor_name):
                     print(f"Error reading {file_path}: {str(e)}")
     
     return works
+
+def get_author_works_for_api(author_id):
+    """
+    Get works for an author formatted for the API response.
+    
+    Args:
+        author_id (str): The ID of the author
+        
+    Returns:
+        list: A list of work dictionaries formatted for the API
+    """
+    _, works_data = get_works_by_author(author_id)
+    api_works = []
+    
+    for work in works_data:
+        # Extract the file name from the path
+        file_name = os.path.basename(work['file_path'])
+        
+        # Convert language code to human-readable name
+        language_display = "Greek"  # Default
+        if 'language' in work:
+            if work['language'] == 'eng':
+                language_display = "English"
+            elif work['language'] == 'grc':
+                language_display = "Greek"
+            # Add more language mappings as needed
+        
+        # Format the work for API response
+        api_work = {
+            'id': work['id'],
+            'title': work['title'],
+            'language': language_display,
+            'files': [{
+                'name': file_name,
+                'type': file_name.split('.')[-1] if '.' in file_name else 'unknown'
+            }]
+        }
+        
+        api_works.append(api_work)
+    
+    return api_works
 
 def render_works_page(author_id):
     """Generate works listing page for an author."""

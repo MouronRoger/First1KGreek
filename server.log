@@ -1,6 +1,24 @@
-2025-04-08 16:54:38,770 - INFO - Successfully imported modular implementation
-2025-04-08 16:54:38,771 - INFO - Starting First1KGreek Browser using modular implementation
-2025-04-08 16:54:38,772 - INFO - Starting First1KGreek Browser with port=8000, debug=False
-2025-04-08 16:54:38,772 - INFO - Starting First1KGreek Browser - Fixed Version 1.2.0
-2025-04-08 16:54:38,772 - INFO - With dark theme and improved editor detection
-2025-04-08 16:54:38,773 - INFO - Server running at http://localhost:8000/
+2025-04-08 23:33:42,508 - INFO - Starting First1KGreek Browser...
+2025-04-08 23:33:42,508 - INFO - Server configuration:
+2025-04-08 23:33:42,508 - INFO -   Host: localhost
+2025-04-08 23:33:42,508 - INFO -   Port: 8000
+2025-04-08 23:33:42,508 - INFO -   Debug mode: False
+2025-04-08 23:33:42,508 - INFO -   Open browser: True
+2025-04-08 23:33:42,508 - INFO - Press Ctrl+C to stop the server
+2025-04-08 23:33:42,508 - INFO - Starting First1KGreek Browser - Fixed Version 1.2.0
+2025-04-08 23:33:42,508 - INFO - With dark theme and improved editor detection
+2025-04-08 23:33:42,509 - INFO - Server running at http://localhost:8000/
+2025-04-08 23:33:42,726 - INFO - GET request: /
+2025-04-08 23:33:42,828 - INFO - GET request: /static/css/main.css?v=1744151622
+2025-04-08 23:33:42,937 - INFO - GET request: /favicon.ico
+2025-04-08 23:33:55,671 - INFO - GET request: /browse/authors
+2025-04-08 23:33:55,882 - INFO - GET request: /static/css/main.css?v=1744151635
+2025-04-08 23:34:12,808 - INFO - GET request: /works?author=tlg0004
+2025-04-08 23:34:12,833 - INFO - GET request: /static/css/main.css?v=1744151652
+2025-04-08 23:34:12,834 - INFO - GET request: /static/css/authors-table.css?v=1744151652
+2025-04-08 23:34:20,777 - INFO - GET request: /reader?path=data/tlg0004/tlg001/tlg0004.tlg001.perseus-eng2.xml
+2025-04-08 23:34:20,811 - INFO - GET request: /static/css/main.css?v=1744151660
+2025-04-08 23:34:20,812 - INFO - GET request: /static/css/reader.css?v=1744151660
+2025-04-08 23:35:44,672 - INFO - GET request: /view?path=data/tlg0004/tlg001/tlg0004.tlg001.perseus-eng2.xml
+2025-04-08 23:35:44,746 - INFO - GET request: /static/css/main.css?v=1744151744
+2025-04-08 23:35:44,748 - INFO - GET request: /static/css/reader.css?v=1744151744

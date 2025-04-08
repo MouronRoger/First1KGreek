@@ -2,107 +2,125 @@
 
 # First1KGreek Browser
 
-A specialized tool for browsing, searching, and analyzing ancient Greek texts combining data from both the First Thousand Years Project and Canonical-GreekLit repositories. This hybrid collection provides a comprehensive corpus of ancient Greek texts through a lightweight, standalone web interface, making classical texts accessible without requiring specialized software or cloud dependencies.
-
-## Overview
-
-The First1KGreek Browser is designed for classical scholars, researchers, and students studying ancient Greek texts. This hybrid version combines:
-
-- Texts from the First Thousand Years Project (First1K)
-- Works from the Canonical-GreekLit repository
-- Integrated metadata and cross-references between collections
-
-The browser provides:
-- Local web-based access to a comprehensive corpus of ancient Greek texts
-- Simple, intuitive navigation through authors and works
-- XML and reader views with proper Greek text rendering
-- Dark theme for comfortable extended reading sessions
-- Import capabilities for texts from Scaife/Perseus
-- Unified metadata management for authors, editors, and works across both collections
-
-## Requirements
-
-- Python 3.6 or higher
-- No external dependencies (uses only Python standard library)
-- Sufficient disk space for text corpus (both First1K and Canonical-GreekLit collections)
-
-## Installation
-
-1. Clone the repository:
-```bash
-git clone https://github.com/OpenGreekAndLatin/First1KGreek.git
-cd First1KGreek
-```
-
-2. No additional installation steps required - the application runs using Python's standard library.
-
-## Usage
-
-1. Start the server from the project directory:
-```bash
-python browse_texts_fixed.py
-```
-
-2. Open your web browser and navigate to:
-```
-http://localhost:8000
-```
-
-The interface provides:
-- Author/Editor browsing across both collections
-- Full-text search capabilities in the combined corpus
-- XML source viewing
-- Reader mode with customizable display
-- Text import functionality from Scaife/Perseus
-- Integrated navigation between First1K and Canonical-GreekLit texts
-
-## Project Structure
-
-```
-First1KGreek/
-├── browse_texts_fixed.py     # Main application server
-├── src/                      # Source code directory
-├── data/                     # Combined text corpus storage
-├── raw_files/               # Original source files from both collections
-├── greek-texts-index/       # Unified text indexing information
-└── requirements.txt         # (Empty - no external dependencies)
-```
+A specialized tool for browsing, searching, and analyzing ancient Greek texts from the First Thousand Years of Greek project.
 
 ## Features
 
-### Core Functionality
-- Browse texts by author or editor across both collections
-- Search through the entire combined corpus
-- View texts in XML format or reader mode
-- Import new texts from Scaife/Perseus
-- Dark theme for comfortable reading
-- Unified metadata management and display
-- Cross-references between First1K and Canonical-GreekLit texts
+- Browse authors by name, century, and type
+- View works by author
+- Read texts in both readable and raw XML formats
+- Search functionality across the corpus
+- User preferences (favorites, archived, deleted)
+- Dark theme UI for better readability
 
-### Text Processing
-- TEI XML parsing and rendering
-- Proper Greek text display
-- Metadata extraction and management
-- Import workflow with validation
-- Unified handling of both collections' XML formats
+## Installation
+
+### Prerequisites
+
+- Python 3.6 or higher
+
+### Setup
+
+1. Clone the repository:
+   ```
+   git clone https://github.com/yourusername/First1KGreek.git
+   cd First1KGreek
+   ```
+
+2. Install dependencies (minimal, uses standard library):
+   ```
+   pip install -e .
+   ```
+
+## Usage
+
+There are multiple ways to run the First1KGreek Browser:
+
+### 1. Using the run_server.py script (recommended)
+
+This is the simplest way to run the application:
+
+```bash
+python run_server.py
+```
+
+Options:
+- `--port PORT`: Specify the port to run on (default: 8000)
+- `--debug`: Enable debug mode with verbose logging
+- `--version`: Show version information and exit
+- `--no-browser`: Don't automatically open a browser window
+- `--host HOST`: Host to bind to (use 0.0.0.0 for network access)
+
+Example:
+```bash
+python run_server.py --port 8080 --debug
+```
+
+### 2. Using the modular package directly
+
+Run as a Python module:
+
+```bash
+python -m src.first1k
+```
+
+Options are the same as above.
+
+### 3. Using the package entry point (if installed)
+
+If you've installed the package, you can use:
+
+```bash
+first1k
+```
+
+## Performance Testing
+
+To run performance tests:
+
+```bash
+python tests/run_tests.py --performance
+```
+
+This tests various aspects of the application including:
+- HTTP server response times
+- XML processing performance
+- Search functionality speed
+
+## Project Structure
+
+The application uses a modular architecture:
+
+```
+src/first1k/
+├── __init__.py           # Package initialization
+├── __main__.py           # Entry point when run as a module
+├── config.py             # Configuration settings
+├── handlers/             # Request handlers for different routes
+├── server/               # HTTP server implementation
+├── utils/                # Utility functions
+├── xml_utils/            # XML processing utilities
+├── search/               # Search functionality
+├── import_export/        # Import/export functionality
+└── editor/               # Editor management
+```
 
 ## Contributing
 
-This is an open-source project maintained by the Open Greek and Latin Project. Contributions are welcome:
-
 1. Fork the repository
-2. Create your feature branch
-3. Commit your changes
-4. Push to your branch
-5. Create a Pull Request
+2. Create a feature branch: `git checkout -b feature-name`
+3. Commit your changes: `git commit -am 'Add some feature'`
+4. Push to the branch: `git push origin feature-name`
+5. Submit a pull request
 
 ## License
 
-This project is licensed under the MIT License - see the [license.md](license.md) file for details.
+This project is licensed under the MIT License - see the LICENSE file for details.
 
-## Credits
+## Acknowledgments
 
-See [CREDITS.md](CREDITS.md) for acknowledgments and contributors.
+- The First Thousand Years of Greek Project
+- Canonical-GreekLit repository for source data
 
 ## Documentation
 
