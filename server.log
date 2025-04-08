@@ -1,8 +1,6 @@
-2025-04-08 00:53:17,999 - INFO - Successfully imported modular implementation
-2025-04-08 00:53:17,999 - INFO - Starting First1KGreek Browser using modular implementation
-2025-04-08 00:53:18,001 - INFO - Starting First1KGreek Browser with port=8000, debug=False
-2025-04-08 00:53:18,001 - INFO - Starting First1KGreek Browser - Fixed Version 1.2.0
-2025-04-08 00:53:18,001 - INFO - With dark theme and improved editor detection
-2025-04-08 00:53:18,004 - INFO - Server running at http://localhost:8001/
-2025-04-08 00:59:06,938 - INFO - Gathering editor data...
-2025-04-08 00:59:10,013 - INFO - Found 438 editors
+2025-04-08 16:54:38,770 - INFO - Successfully imported modular implementation
+2025-04-08 16:54:38,771 - INFO - Starting First1KGreek Browser using modular implementation
+2025-04-08 16:54:38,772 - INFO - Starting First1KGreek Browser with port=8000, debug=False
+2025-04-08 16:54:38,772 - INFO - Starting First1KGreek Browser - Fixed Version 1.2.0
+2025-04-08 16:54:38,772 - INFO - With dark theme and improved editor detection
+2025-04-08 16:54:38,773 - INFO - Server running at http://localhost:8000/
