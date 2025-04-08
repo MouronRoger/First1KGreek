@@ -2,8 +2,8 @@
 """
 Identify true duplicate XML files based on specific criteria.
 
-This script finds XML files with " 2.xml" in their names and checks if they are
-true duplicates of corresponding files without the " 2" suffix by comparing:
+This script finds XML files with " 2.xml" or " 3.xml" in their names and checks if they are
+true duplicates of corresponding files without the " 2" or " 3" suffix by comparing:
 1. File existence in same directory
 2. File size
 3. File modification date
@@ -20,13 +20,13 @@ from collections import defaultdict
 from datetime import datetime
 
 
-def find_true_duplicates(root_dir, pattern=r'(.*)\s+2(\.xml)$'):
+def find_true_duplicates(root_dir, pattern=r'(.*)\s+([23])(\.xml)$'):
     """
     Find true duplicate XML files based on specific criteria.
 
     Args:
         root_dir: Root directory to search in
-        pattern: Regex pattern to match files with " 2.xml" suffix
+        pattern: Regex pattern to match files with " 2.xml" or " 3.xml" suffix
 
     Returns:
         Dictionary of true duplicates with verification info
@@ -40,8 +40,8 @@ def find_true_duplicates(root_dir, pattern=r'(.*)\s+2(\.xml)$'):
         for filename in filenames:
             match = pattern_re.match(filename)
             if match:
-                # Extract the base name without " 2" suffix
-                base_name = match.group(1) + match.group(2)
+                # Extract the base name without " 2" or " 3" suffix
+                base_name = match.group(1) + match.group(3)
                 duplicate_path = os.path.join(dirpath, filename)
                 original_path = os.path.join(dirpath, base_name)
                 
@@ -155,7 +155,7 @@ def main():
     )
     parser.add_argument(
         '--pattern', 
-        default=r'(.*)\s+2(\.xml)$',
+        default=r'(.*)\s+([23])(\.xml)$',
         help='Regex pattern to match duplicate files'
     )
     
