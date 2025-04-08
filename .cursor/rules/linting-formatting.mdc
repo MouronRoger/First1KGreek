@@ -1,0 +1,26 @@
+---
+description: 
+globs: 
+alwaysApply: true
+---
+Context: This repo was inherited with no attention to linting or formatting. A full automatic linting pass broke functional code, so formatting and docstring fixes must be done incrementally and safely.
+
+Rule:
+
+For all new or modified code, follow these standards:
+
+Format using Black
+
+Lint using flake8
+
+Ensure top-level docstrings per pydocstyle D100 series (i.e., public modules, classes, methods, and functions must be documented)
+
+Use consistent 4-space indentation
+
+Do not leave functions undocumented
+
+❌ Do NOT run auto-formatters or linters repo-wide because they might break existing code.
+🛠️ Fix only what you touch — or what you can clearly see in the local context of the change.
+
+Goal: Gradual convergence toward a clean, stable codebase without compromising working logic.
+

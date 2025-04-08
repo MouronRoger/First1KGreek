@@ -10,8 +10,9 @@ import os
 import json
 import signal
 import sys
+import logging
 from urllib.parse import urlparse, parse_qs, unquote
-from ..config import PORT, BACKUP_FILE
+from ..config import BACKUP_FILE
 from ..utils.network import is_port_in_use, find_available_port
 from ..handlers.ui import render_main_page
 from ..handlers.browse import render_authors_page, render_editors_page
@@ -27,6 +28,7 @@ from ..handlers.works import render_works_page, render_editor_works_page
 
 # Global reference to the server
 server_instance = None
+logger = logging.getLogger(__name__)
 
 class CustomHTTPRequestHandler(http.server.SimpleHTTPRequestHandler):
     """Custom HTTP server handler for browsing and viewing texts."""
@@ -107,7 +109,7 @@ class CustomHTTPRequestHandler(http.server.SimpleHTTPRequestHandler):
                 super().do_GET()
             except Exception as e:
                 self.send_error(404, f"File not found: {self.path}")
-                print(f"Error serving {self.path}: {str(e)}")
+                logger.error(f"Error serving {self.path}: {str(e)}")
 
     def do_POST(self):
         """Handle POST requests."""
@@ -159,13 +161,13 @@ class CustomHTTPRequestHandler(http.server.SimpleHTTPRequestHandler):
         time.sleep(1)
         global server_instance
         if server_instance:
-            print("Server stopping...")
+            logger.info("Server stopping...")
             # Force the socket to close with a timeout
             server_instance.socket.close()
             server_instance.server_close()
             server_instance.shutdown()
             server_instance = None
-            print("Server closed successfully")
+            logger.info("Server closed successfully")
 
 def handle_shutdown(sig, frame):
     """
@@ -175,62 +177,76 @@ def handle_shutdown(sig, frame):
         sig: Signal number
         frame: Current stack frame
     """
-    print(f"Received signal {sig}, initiating shutdown...")
+    logger.info(f"Received signal {sig}, initiating shutdown...")
     if server_instance:
         try:
             server_instance.shutdown()
-            print("Server has been shut down via signal handler")
+            logger.info("Server has been shut down via signal handler")
             # Force exit after a short delay
             threading.Timer(1.0, lambda: os.kill(os.getpid(), signal.SIGKILL)).start()
         except Exception as e:
-            print(f"Error during signal-triggered shutdown: {str(e)}")
+            logger.error(f"Error during signal-triggered shutdown: {str(e)}")
             # Force exit even if shutdown failed
             threading.Timer(1.0, lambda: os.kill(os.getpid(), signal.SIGKILL)).start()
 
-def run_server():
-    """Run the HTTP server."""
-    global server_instance, PORT
+def run_server(port=None, debug=False):
+    """
+    Run the HTTP server.
+    
+    Args:
+        port (int, optional): Port to run the server on. If None or already in use,
+                             an available port will be found. Defaults to None.
+        debug (bool, optional): Whether to run in debug mode. Defaults to False.
+    """
+    global server_instance
+    
+    # Use the provided port or find an available one
+    if port is None:
+        port = 8000  # Default port
     
     # Create a backup of the file if it doesn't exist already
     if not os.path.exists(BACKUP_FILE):
         shutil.copy('browse_texts.py', BACKUP_FILE)
     
     # Print version info when starting
-    print("Starting First1KGreek Browser - Fixed Version 1.2.0")
-    print("With dark theme and improved editor detection")
+    logger.info("Starting First1KGreek Browser - Fixed Version 1.2.0")
+    logger.info("With dark theme and improved editor detection")
+    
+    if debug:
+        logger.info("Running in debug mode")
     
     # Find an available port
-    if is_port_in_use(PORT):
-        PORT = find_available_port(PORT)
+    if is_port_in_use(port):
+        port = find_available_port(port)
     
     # Create and start the server
     handler = CustomHTTPRequestHandler
     # Enable socket reuse to avoid "address already in use" errors
     socketserver.TCPServer.allow_reuse_address = True
-    server_instance = socketserver.TCPServer(("", PORT), handler)
+    server_instance = socketserver.TCPServer(("", port), handler)
     
-    print(f"Server running at http://localhost:{PORT}/")
+    logger.info(f"Server running at http://localhost:{port}/")
     
     # Register signal handlers
     signal.signal(signal.SIGINT, handle_shutdown)
     signal.signal(signal.SIGTERM, handle_shutdown)
     
     # Open the browser
-    webbrowser.open(f"http://localhost:{PORT}/")
+    webbrowser.open(f"http://localhost:{port}/")
     
     try:
         # Run the server until interrupted
         server_instance.serve_forever()
     except KeyboardInterrupt:
-        print("Server stopped by user via keyboard interrupt")
+        logger.info("Server stopped by user via keyboard interrupt")
         if server_instance:
             server_instance.socket.close()
             server_instance.server_close()
             server_instance.shutdown()
             server_instance = None
-        print("Server closed")
+        logger.info("Server closed")
     except Exception as e:
-        print(f"Server error: {str(e)}")
+        logger.error(f"Server error: {str(e)}")
         if server_instance:
             server_instance.socket.close()
             server_instance.server_close()

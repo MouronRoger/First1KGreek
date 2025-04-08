@@ -3,7 +3,10 @@
 import os
 import re
 import time
+import logging
 from ..config import CSS_DIR
+
+logger = logging.getLogger(__name__)
 
 def get_author_name_from_files(author_id):
     """Attempt to find an author name from XML files."""
@@ -129,7 +132,7 @@ def get_editors_data():
     """Gather data about editors from the XML files."""
     editors = {}
     
-    print("Gathering editor data...")
+    logger.info("Gathering editor data...")
     
     for root, dirs, files in os.walk('data'):
         for file in files:
@@ -195,14 +198,14 @@ def get_editors_data():
                             else:
                                 editors[editor] = 1
                 except Exception as e:
-                    print(f"Error reading {file_path}: {str(e)}")
+                    logger.error(f"Error reading {file_path}: {str(e)}")
     
     # Convert to list format
     result = []
     for name, count in editors.items():
         result.append({"name": name, "count": count})
     
-    print(f"Found {len(result)} editors")
+    logger.info(f"Found {len(result)} editors")
     
     # Special case: ensure von Arnim is added
     has_von_arnim = False
@@ -214,7 +217,7 @@ def get_editors_data():
             
     if not has_von_arnim:
         result.append({"name": "Hans Friedrich August von Arnim", "count": 9})
-        print("Added Hans Friedrich August von Arnim manually")
+        logger.info("Added Hans Friedrich August von Arnim manually")
         
     return result
 
