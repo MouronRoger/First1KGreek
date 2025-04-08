@@ -3,10 +3,7 @@
 disable=
     C0103, # invalid-name
     C0111, # missing-docstring (handled by pydocstyle)
-    C0330, # bad-continuation (conflicts with black)
-    C0326, # bad-whitespace (conflicts with black)
     W0311, # bad-indentation (conflicts with black)
-    W0312, # mixed-indentation (conflicts with black)
     E1101, # no-member (can be noisy)
     R0903, # too-few-public-methods
     R0913, # too-many-arguments

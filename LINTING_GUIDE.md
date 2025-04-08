@@ -6,6 +6,21 @@ This repository uses an **advisory linting** approach to gradually improve code 
 
 **Important:** Linting issues never block commits. This is by design to ensure that development can continue without interruption.
 
+## XML File Exclusion Policy
+
+**⚠️ CRITICAL: XML files are NEVER to be linted, formatted, or modified by automatic tools.**
+
+The repository contains valuable XML data files (in `/volume_xml/` and other directories) that:
+- Contain critical Greek text data in specific formats
+- Must maintain their exact formatting and structure
+- Should only be modified manually after careful review
+- Are automatically excluded from all linting processes
+
+All linting tools in this repository are configured to:
+1. Only process Python (.py) files
+2. Explicitly skip XML files with a warning message
+3. Require file extensions to match exactly (.py)
+
 ## Linting Standards
 
 For all new or modified code, follow these standards:
@@ -36,6 +51,8 @@ python lint_advisory.py path/to/file.py --error-only
 # Update the code quality tracking file
 python lint_advisory.py path/to/file.py --update-tracker
 ```
+
+Note: The linting tool will only process Python (.py) files and will skip any other file types with a warning message.
 
 ## Code Quality Tracking
 
@@ -69,7 +86,7 @@ When applying linting recommendations:
 
 ## Configuration
 
-The repository includes a `.pylintrc` configuration file that has been adjusted to be compatible with Black formatting and the repository's other linting rules.
+The repository includes a `.pylintrc` configuration file that has been adjusted to be compatible with Black formatting and the repository's other linting rules. Outdated pylint options have been removed to ensure compatibility with the current version of pylint.
 
 ### Important Notes
 
@@ -77,6 +94,7 @@ The repository includes a `.pylintrc` configuration file that has been adjusted 
 - Some pylint messages may conflict with Black's formatting style; in these cases, **Black's formatting takes precedence**.
 - Focus on improving **one file at a time** rather than attempting to fix everything at once.
 - Linting issues **never block commits** - they are purely informational.
+- XML files and non-Python files are **never processed** by any linting tools.
 
 ## Linting Category Priorities
 
@@ -87,30 +105,21 @@ Address linting issues in this order of priority:
 3. **Convention (C)**: Style issues that can be improved
 4. **Refactor (R)**: Code that could be refactored for better quality
 
-## Pre-Commit Hook (Optional)
+## Pre-Commit Hook (Installed and Non-Blocking)
 
-For developers who want linting feedback before committing, but without blocking commits, you can set up an optional pre-commit hook:
+The repository includes a non-blocking pre-commit hook that provides advisory linting feedback before committing without ever preventing commits from proceeding.
+
+The pre-commit hook will:
+1. Check Python syntax (advisory only)
+2. Look for critical issues using pylint (advisory only)
+3. Always return exit code 0 (success) to allow the commit to proceed
+4. Only process Python (.py) files, never XML or other file types
+
+If you want to customize the pre-commit hook, it's located at `.git/hooks/pre-commit`.
+
+If you accidentally disable or modify the hook, you can restore a non-blocking version from our template:
 
 ```bash
-#!/bin/sh
-# Optional pre-commit hook that runs linting without blocking
-
-# Get list of staged Python files
-FILES=$(git diff --cached --name-only --diff-filter=ACM | grep '\.py$')
-
-if [ -n "$FILES" ]; then
-  echo "Running linting checks on staged Python files..."
-  python lint_advisory.py $FILES --summary
-  
-  # Optionally update the quality tracker
-  # python lint_advisory.py $FILES --update-tracker
-fi
-
-# Always exit with success (never block a commit)
-exit 0
-```
-
-Save this as `.git/hooks/pre-commit` and make it executable:
-```bash
+cp pre-commit-hook-example.sh .git/hooks/pre-commit
 chmod +x .git/hooks/pre-commit
 ``` 

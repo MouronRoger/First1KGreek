@@ -29,6 +29,18 @@ def run_pylint(target_files, error_only=False, summary=False):
     results = defaultdict(list)
     
     for file_path in target_files:
+        # Skip XML files with a special warning
+        if file_path.lower().endswith('.xml'):
+            print(f"⚠️  WARNING: XML file detected: {file_path}")
+            print("    XML files must NEVER be linted or modified by automated tools.")
+            print("    These files contain critical data and must maintain exact formatting.")
+            continue
+            
+        # Skip non-Python files
+        if not file_path.endswith('.py'):
+            print(f"Skipping non-Python file: {file_path}")
+            continue
+
         if not os.path.exists(file_path):
             print(f"Error: File {file_path} does not exist")
             continue
@@ -217,7 +229,7 @@ def main():
     parser.add_argument(
         'files',
         nargs='+',
-        help='Files to lint'
+        help='Files to lint (only Python .py files will be processed)'
     )
     parser.add_argument(
         '--error-only',
@@ -242,9 +254,31 @@ def main():
     
     args = parser.parse_args()
     
-    results = run_pylint(args.files, args.error_only, args.summary)
+    # Check for XML files first with a special warning
+    xml_files = [f for f in args.files if f.lower().endswith('.xml')]
+    if xml_files:
+        print("\n⚠️  WARNING: XML FILES DETECTED ⚠️")
+        print("The following XML files will be skipped and NOT linted:")
+        for xml_file in xml_files:
+            print(f"  - {xml_file}")
+        print("\nXML files contain critical data and must never be processed by linting tools.")
+        print("====================================================================\n")
     
-    if args.summary or len(args.files) > 1:
+    # Filter out non-Python files with a warning
+    python_files = []
+    for file_path in args.files:
+        if file_path.endswith('.py'):
+            python_files.append(file_path)
+        elif not file_path.lower().endswith('.xml'):  # XML files already warned about
+            print(f"Skipping non-Python file: {file_path}")
+    
+    if not python_files:
+        print("No Python files to lint. Exiting.")
+        return 0
+    
+    results = run_pylint(python_files, args.error_only, args.summary)
+    
+    if args.summary or len(python_files) > 1:
         generate_summary(results)
     
     if args.update_tracker:
