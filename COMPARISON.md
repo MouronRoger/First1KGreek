@@ -1,106 +1,97 @@
-# Original vs. Fixed Version Comparison
+# First1KGreek Browser Evolution
 
-This document outlines the key differences between the original `browse_texts.py` and the improved `browse_texts_fixed.py` versions.
+This document outlines the evolution of the First1KGreek Browser application from its original monolithic structure to the current modular architecture.
 
-## Running the Different Versions
+## Development Versions
 
-### Original Version
+### Original Version (Deprecated)
 ```bash
 python3 browse_texts.py
 ```
 
-### Fixed Version
+### Intermediate Fixed Version (Deprecated)
 ```bash
 python3 browse_texts_fixed.py
 ```
 
-## Key Improvements in the Fixed Version
-
-### 1. Fixed Deprecation Warnings
-
-The original code contained ElementTree operations that triggered deprecation warnings:
-
-**Original (problematic):**
-```python
-revision_desc = root.find('.//revisionDesc') or root.find('.//tei_revisionDesc')
-if revision_desc is not None:
-    # ... code ...
-    for change in revision_desc.findall('.//change') or revision_desc.findall('.//tei_change'):
-        # ... code ...
+### Current Modular Version (Recommended)
+```bash
+python run_server.py
+# or
+python -m src.first1k
 ```
 
-**Fixed:**
-```python
-revision_desc = root.find('.//revisionDesc')
-if revision_desc is None:
-    revision_desc = root.find('.//tei_revisionDesc')
-    
-if revision_desc is not None:
-    # ... code ...
-    changes = revision_desc.findall('.//change')
-    if not changes:
-        changes = revision_desc.findall('.//tei_change')
-        
-    for change in changes:
-        # ... code ...
+## Architecture Evolution
+
+### 1. Original Monolithic Design
+The original `browse_texts.py` was a single-file application with all functionality in one place:
+- HTTP server and request handling
+- HTML page generation
+- XML processing logic
+- File system operations
+- All configuration in a single file
+
+This approach made the code difficult to maintain, test, and extend.
+
+### 2. Fixed Version Improvements
+The intermediate `browse_texts_fixed.py` version kept the monolithic structure but made several improvements:
+- Fixed ElementTree deprecation warnings
+- Improved error handling
+- Better code organization within the single file
+- Added smarter port selection
+- Improved XML processing
+- External CSS files
+
+### 3. Current Modular Architecture
+The application has now been completely refactored into a modular package structure:
+- Proper Python package (`src/first1k/`)
+- Separation of concerns into modules
+- Configuration moved to dedicated config module
+- Multiple entry points for different use cases
+- Improved test coverage
+- Better documentation
+- Consistent error handling across modules
+
+## Key Benefits of the Current Architecture
+
+1. **Maintainability**: Each module has a clear responsibility
+2. **Testability**: Components can be tested in isolation
+3. **Extensibility**: New features can be added without modifying existing code
+4. **Readability**: Cleaner code organization makes it easier to understand
+5. **Reusability**: Components can be reused across the application
+
+## Module Structure
+
+The current architecture organizes code into logical modules:
+
+```
+src/first1k/
+├── __init__.py           # Package initialization
+├── __main__.py           # Entry point when run as a module
+├── config.py             # Configuration settings
+├── handlers/             # Request handlers for different routes
+├── server/               # HTTP server implementation
+├── utils/                # Utility functions
+├── xml_utils/            # XML processing utilities
+├── search/               # Search functionality
+├── import_export/        # Import/export functionality
+└── editor/               # Editor management
 ```
 
-### 2. Improved Error Handling
+## Backward Compatibility
 
-**Original:**
-Limited error handling with basic try/except blocks.
+For backward compatibility, `browse_texts_fixed.py` has been retained as a thin wrapper that imports and calls the modular implementation. This allows existing scripts and documentation to continue working while encouraging migration to the new structure.
 
-**Fixed:**
-More comprehensive error handling with detailed error messages and traceback information:
+## Recommended Usage
 
-```python
-try:
-    # ... code ...
-except Exception as e:
-    import traceback
-    print(f"Error processing XML: {str(e)}")
-    print(traceback.format_exc())
-    return self.fallback_xml_rendering(xml_content)
-```
-
-### 3. Improved Code Organization
-
-- Better function and method naming
-- More consistent code formatting
-- Better handling of backup file creation
-- More modular approach to XML processing
-
-### 4. Smarter Port Selection
-
-The fixed version includes improved port selection that automatically finds an available port if the default port is in use:
+New development should use the modular implementation:
 
 ```python
-def find_available_port(start_port=8000, max_attempts=10):
-    """Find an available port starting from start_port"""
-    for port in range(start_port, start_port + max_attempts):
-        if not is_port_in_use(port):
-            return port
-    return start_port  # Fallback to the original port if none found
+from src.first1k.server import run_server
+from src.first1k.config import PORT, DEBUG
+
+# Example: Running the server with custom configuration
+run_server(port=9000, debug=True, host='localhost', open_browser=True)
 ```
 
-### 5. Better XML Processing
-
-- More robust XML parsing
-- Improved handling of XML namespaces
-- Better fallback rendering when XML parsing fails
-
-## Visual Differences
-
-When running both versions:
-
-1. The fixed version won't show ElementTree deprecation warnings in the terminal
-2. The web interface functionality is the same, but the fixed version has more reliable XML parsing
-3. The fixed version handles edge cases better, such as malformed XML or network connection issues
-
-## Recommended Version
-
-The `browse_texts_fixed.py` version is recommended for general use as it:
-- Eliminates deprecation warnings
-- Has better error handling
-- Is more maintainable
-- Has the same functionality as the original 
+For general use, the `run_server.py` script provides the best balance of simplicity and configuration options. 

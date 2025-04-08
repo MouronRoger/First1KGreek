@@ -33,3 +33,14 @@
 2025-04-08 23:39:34,140 - INFO - GET request: /view?path=data/tlg1264/tlg002/tlg1264.tlg002.1st1K-grc1.xml
 2025-04-08 23:39:34,193 - INFO - GET request: /static/css/main.css?v=1744151974
 2025-04-08 23:39:34,194 - INFO - GET request: /static/css/reader.css?v=1744151974
+2025-04-08 23:45:05,447 - INFO - GET request: /reader?path=data/tlg1264/tlg002/tlg1264.tlg002.1st1K-grc1.xml
+2025-04-08 23:45:05,474 - INFO - GET request: /static/css/main.css?v=1744152305
+2025-04-08 23:45:05,475 - INFO - GET request: /static/css/reader.css?v=1744152305
+2025-04-08 23:45:07,772 - INFO - GET request: /browse/authors
+2025-04-08 23:45:07,978 - INFO - GET request: /static/css/main.css?v=1744152307
+2025-04-08 23:48:45,906 - INFO - GET request: /works?author=tlg0053
+2025-04-08 23:48:45,936 - INFO - GET request: /static/css/main.css?v=1744152525
+2025-04-08 23:48:45,945 - INFO - GET request: /static/css/authors-table.css?v=1744152525
+2025-04-08 23:49:49,280 - INFO - GET request: /works?author=tlg0062
+2025-04-08 23:49:49,388 - INFO - GET request: /static/css/main.css?v=1744152589
+2025-04-08 23:49:49,391 - INFO - GET request: /static/css/authors-table.css?v=1744152589
