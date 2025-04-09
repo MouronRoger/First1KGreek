@@ -278,61 +278,78 @@ def run_server(port=None, debug=False, host='localhost', open_browser=True):
     if debug:
         logger.info("Running in debug mode")
     
-    # Find an available port
-    if is_port_in_use(port):
-        port = find_available_port(port)
-    
+    # Ensure we have an available port
+    original_port = port
+    max_attempts = 20  # Try up to 20 different ports
+    attempt = 0
+
     # Create and start the server
     handler = CustomHTTPRequestHandler
     # Enable socket reuse to avoid "address already in use" errors
     socketserver.TCPServer.allow_reuse_address = True
     
-    try:
-        server_instance = socketserver.TCPServer((host, port), handler)
-        
-        # Log server URL based on host binding
-        if host == '0.0.0.0' or host == '':
-            import socket
-            hostname = socket.gethostname()
-            ip = socket.gethostbyname(hostname)
-            logger.info(f"Server running at:")
-            logger.info(f"  http://localhost:{port}/ (local access)")
-            logger.info(f"  http://{ip}:{port}/ (network access)")
-        else:
-            logger.info(f"Server running at http://{host}:{port}/")
-        
-        # Register signal handlers
-        signal.signal(signal.SIGINT, handle_shutdown)
-        signal.signal(signal.SIGTERM, handle_shutdown)
-        
-        # Open the browser if requested
-        if open_browser:
-            webbrowser.open(f"http://localhost:{port}/")
-        
-        # Run the server until interrupted
-        server_instance.serve_forever()
+    while attempt < max_attempts:
+        try:
+            # Check if port is in use before trying to bind
+            if is_port_in_use(port):
+                logger.warning(f"Port {port} is already in use, trying another port")
+                port = find_available_port(port + 1, max_attempts=5)
+                continue  # Try with the new port
+            
+            server_instance = socketserver.TCPServer((host, port), handler)
+            
+            # Log server URL based on host binding
+            if host == '0.0.0.0' or host == '':
+                import socket
+                hostname = socket.gethostname()
+                ip = socket.gethostbyname(hostname)
+                logger.info(f"Server running at:")
+                logger.info(f"  http://localhost:{port}/ (local access)")
+                logger.info(f"  http://{ip}:{port}/ (network access)")
+            else:
+                logger.info(f"Server running at http://{host}:{port}/")
+            
+            # Register signal handlers
+            signal.signal(signal.SIGINT, handle_shutdown)
+            signal.signal(signal.SIGTERM, handle_shutdown)
+            
+            # Open the browser if requested
+            if open_browser:
+                webbrowser.open(f"http://localhost:{port}/")
+            
+            # Run the server until interrupted
+            server_instance.serve_forever()
+            
+            # If we get here, server was shut down normally
+            break
+            
+        except OSError as e:
+            attempt += 1
+            if attempt >= max_attempts:
+                logger.error(f"Failed to bind to a port after {max_attempts} attempts")
+                logger.error(f"Last error: {str(e)}")
+                raise
+                
+            # Try the next port
+            logger.warning(f"Error binding to port {port}: {str(e)}")
+            port = find_available_port(port + 1, max_attempts=5)
+            logger.info(f"Trying port {port} instead...")
     
-    except OSError as e:
-        logger.error(f"Error starting server: {str(e)}")
-        if host != 'localhost' and host != '127.0.0.1':
-            logger.error("If binding to a network interface, you may need root privileges.")
-            logger.error("Try using --host=localhost for local-only access.")
-        raise
-    
-    except KeyboardInterrupt:
-        logger.info("Server stopped by user via keyboard interrupt")
-        if server_instance:
-            server_instance.socket.close()
-            server_instance.server_close()
-            server_instance.shutdown()
-            server_instance = None
-        logger.info("Server closed")
-    
-    except Exception as e:
-        logger.error(f"Server error: {str(e)}")
-        if server_instance:
-            server_instance.socket.close()
-            server_instance.server_close()
-            server_instance.shutdown()
-            server_instance = None
-        raise 
+        except KeyboardInterrupt:
+            logger.info("Server stopped by user via keyboard interrupt")
+            if server_instance:
+                server_instance.socket.close()
+                server_instance.server_close()
+                server_instance.shutdown()
+                server_instance = None
+            logger.info("Server closed")
+            break
+        
+        except Exception as e:
+            logger.error(f"Server error: {str(e)}")
+            if server_instance:
+                server_instance.socket.close()
+                server_instance.server_close()
+                server_instance.shutdown()
+                server_instance = None
+            raise 

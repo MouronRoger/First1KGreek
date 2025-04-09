@@ -98,7 +98,7 @@ def main():
         # Log configuration
         logger.info(f"Server configuration:")
         logger.info(f"  Host: {host}")
-        logger.info(f"  Port: {port}")
+        logger.info(f"  Port: {port} (will try other ports if busy)")
         logger.info(f"  Debug mode: {args.debug}")
         logger.info(f"  Open browser: {open_browser}")
         

@@ -1,32 +1,43 @@
-2025-04-09 20:39:18,422 - INFO - Starting First1KGreek Browser...
-2025-04-09 20:39:18,422 - INFO - Server configuration:
-2025-04-09 20:39:18,422 - INFO -   Host: localhost
-2025-04-09 20:39:18,422 - INFO -   Port: 8000
-2025-04-09 20:39:18,422 - INFO -   Debug mode: False
-2025-04-09 20:39:18,422 - INFO -   Open browser: True
-2025-04-09 20:39:18,422 - INFO - Press Ctrl+C to stop the server
-2025-04-09 20:39:18,422 - INFO - Starting First1KGreek Browser - Fixed Version 1.2.0
-2025-04-09 20:39:18,422 - INFO - With dark theme and improved editor detection
-2025-04-09 20:39:26,219 - ERROR - Error starting server: [Errno 48] Address already in use
-2025-04-09 20:39:26,220 - ERROR - Error running server: [Errno 48] Address already in use
-2025-04-09 20:39:26,232 - ERROR - Traceback (most recent call last):
-  File "/Users/james/Documents/GitHub/First1KGreek/run_server.py", line 109, in main
-    run_server(
-    ~~~~~~~~~~^
-        port=port,
-        ^^^^^^^^^^
-    ...<2 lines>...
-        open_browser=open_browser
-        ^^^^^^^^^^^^^^^^^^^^^^^^^
-    )
-    ^
-  File "/Users/james/Documents/GitHub/First1KGreek/src/first1k/server/server.py", line 291, in run_server
-    server_instance = socketserver.TCPServer((host, port), handler)
-  File "/opt/homebrew/Cellar/python@3.13/3.13.2/Frameworks/Python.framework/Versions/3.13/lib/python3.13/socketserver.py", line 457, in __init__
-    self.server_bind()
-    ~~~~~~~~~~~~~~~~^^
-  File "/opt/homebrew/Cellar/python@3.13/3.13.2/Frameworks/Python.framework/Versions/3.13/lib/python3.13/socketserver.py", line 478, in server_bind
-    self.socket.bind(self.server_address)
-    ~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^
-OSError: [Errno 48] Address already in use
-
+2025-04-09 20:49:46,494 - INFO - Starting First1KGreek Browser...
+2025-04-09 20:49:46,494 - INFO - Server configuration:
+2025-04-09 20:49:46,494 - INFO -   Host: localhost
+2025-04-09 20:49:46,494 - INFO -   Port: 8000 (will try other ports if busy)
+2025-04-09 20:49:46,494 - INFO -   Debug mode: False
+2025-04-09 20:49:46,495 - INFO -   Open browser: True
+2025-04-09 20:49:46,495 - INFO - Press Ctrl+C to stop the server
+2025-04-09 20:49:46,495 - INFO - Starting First1KGreek Browser - Fixed Version 1.2.0
+2025-04-09 20:49:46,495 - INFO - With dark theme and improved editor detection
+2025-04-09 20:49:54,293 - WARNING - Error binding to port 8000: [Errno 48] Address already in use
+2025-04-09 20:49:54,295 - INFO - Trying port 8001 instead...
+2025-04-09 20:49:54,296 - INFO - Server running at http://localhost:8001/
+2025-04-09 20:49:54,532 - INFO - GET request: /
+2025-04-09 20:49:54,683 - INFO - GET request: /static/css/main.css?v=1744228194
+2025-04-09 20:49:54,697 - INFO - GET request: /static/css/dark-theme.css?v=1744228194
+2025-04-09 20:49:54,698 - INFO - GET request: /static/css/editors-page.css?v=1744228194
+2025-04-09 20:49:54,699 - INFO - GET request: /static/js/quit.js?v=1744228194
+2025-04-09 20:49:54,777 - INFO - GET request: /favicon.ico
+2025-04-09 20:50:25,512 - INFO - GET request: /browse/authors
+2025-04-09 20:50:25,595 - INFO - Generated enhanced authors page with tabular format and filtering
+2025-04-09 20:50:25,626 - INFO - GET request: /static/css/main.css?v=1744228225
+2025-04-09 20:50:25,628 - INFO - GET request: /static/css/styles.css?v=1744228225
+2025-04-09 20:50:25,629 - INFO - GET request: /static/css/authors-table.css?v=1744228225
+2025-04-09 20:50:25,630 - INFO - GET request: /static/css/dark-theme.css?v=1744228225
+2025-04-09 20:50:25,630 - INFO - GET request: /static/css/authors-page.css?v=1744228225
+2025-04-09 20:50:25,633 - INFO - GET request: /static/css/editors-page.css?v=1744228225
+2025-04-09 20:50:25,636 - INFO - GET request: /static/js/authors.js?v=1744228225
+2025-04-09 20:50:25,641 - INFO - GET request: /static/js/quit.js?v=1744228225
+2025-04-09 20:50:25,642 - INFO - GET request: /static/js/authors.js?v={int(time.time())}
+2025-04-09 20:50:27,547 - INFO - GET request: /get_author_works?author_id=tlg4084
+2025-04-09 20:50:27,548 - INFO - Handling /get_author_works request for author_id: tlg4084
+2025-04-09 20:50:27,548 - INFO - Retrieving works for author: tlg4084
+2025-04-09 20:50:27,549 - INFO - Found 1 potential work directories for author tlg4084
+2025-04-09 20:50:27,553 - INFO - Found 1 works for author tlg4084
+2025-04-09 20:50:27,553 - INFO - Successfully retrieved 1 works for author tlg4084
+2025-04-09 20:50:32,275 - INFO - GET request: /view?path=data/tlg4084/tlg001/tlg4084.tlg001.1st1K-grc1.xml
+2025-04-09 20:50:32,311 - INFO - GET request: /static/css/main.css?v=1744228232
+2025-04-09 20:50:32,312 - INFO - GET request: /static/css/reader.css?v=1744228232
+2025-04-09 20:50:32,315 - INFO - GET request: /static/css/dark-theme.css?v=1744228232
+2025-04-09 20:50:36,895 - INFO - GET request: /reader?path=data/tlg4084/tlg001/tlg4084.tlg001.1st1K-grc1.xml
+2025-04-09 20:50:36,924 - INFO - GET request: /static/css/main.css?v=1744228236
+2025-04-09 20:50:36,929 - INFO - GET request: /static/css/reader.css?v=1744228236
+2025-04-09 20:50:36,929 - INFO - GET request: /static/css/dark-theme.css?v=1744228236

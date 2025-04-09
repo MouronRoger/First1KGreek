@@ -13,6 +13,8 @@ def render_main_page():
     <title>First1KGreek Browser</title>
     <link rel="stylesheet" href="/static/css/main.css?v={int(time.time())}">
     <link rel="stylesheet" href="/static/css/dark-theme.css?v={int(time.time())}">
+    <link rel="stylesheet" href="/static/css/editors-page.css?v={int(time.time())}">
+    <script src="/static/js/quit.js?v={int(time.time())}"></script>
     <style>
         .nav-links {{
             display: flex;
@@ -51,6 +53,8 @@ def render_main_page():
 </head>
 <body>
     <div class="container">
+        <button class="quit-button" onclick="quitApplication()">Quit</button>
+        
         <h1>First1KGreek Browser</h1>
         
         <div class="nav-links">

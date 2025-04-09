@@ -1,0 +1,49 @@
+---
+description: 
+globs: 
+alwaysApply: true
+---
+When generating or modifying code for the First1KGreek project, strictly adhere to the established modular architecture. Follow these guidelines:
+
+1. Module Responsibility Boundaries:
+   - Configuration settings MUST be in config.py
+   - Server implementation MUST be in server/
+   - Request handlers MUST be in handlers/
+   - Utility functions MUST be in utils/
+   - XML processing MUST be in xml_utils/
+   - Search functionality MUST be in search/
+   - Import/export functionality MUST be in import_export/
+   - Editor management MUST be in editor/
+
+2. Separation of Concerns:
+   - NEVER mix responsibilities across module boundaries
+   - NEVER implement handler logic in server code
+   - NEVER put configuration values in implementation modules
+   - NEVER implement utility functions in domain-specific modules
+
+3. Module Interface Guidelines:
+   - ALWAYS update __init__.py files when adding new functionality
+   - ALWAYS document public interfaces with proper docstrings
+   - ALWAYS use relative imports for intra-package dependencies
+   - ALWAYS make cross-module dependencies explicit through imports
+
+4. Frontend/Backend Separation:
+   - ALWAYS place CSS in static/css/
+   - ALWAYS place JavaScript in static/js/
+   - NEVER embed CSS or JavaScript directly in Python files
+
+5. Backward Compatibility:
+   - ALWAYS maintain compatibility with existing entry points
+   - NEVER break existing API contracts
+   - ALWAYS implement enhancements incrementally
+
+6. XML Data Integrity:
+   - ALWAYS treat XML files as the source of truth
+   - NEVER modify XML processing without thorough testing
+
+7. Code Organization:
+   - Each file SHOULD have a single responsibility
+   - Each function SHOULD do one thing well
+   - Import order SHOULD be: standard library, third-party, local
+
+These guidelines ensure maintainability, testability, and extensibility of the codebase while preserving the refactoring work that has been completed.

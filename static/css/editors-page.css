@@ -2,6 +2,26 @@
  * CSS for the editors page layout and components
  */
 
+/* Quit button styling */
+.quit-button {
+    position: fixed;
+    top: 10px;
+    right: 10px;
+    background-color: #e53e3e;
+    color: white;
+    border: none;
+    border-radius: 4px;
+    padding: 8px 16px;
+    font-size: 14px;
+    cursor: pointer;
+    z-index: 1000;
+    transition: background-color 0.2s;
+}
+
+.quit-button:hover {
+    background-color: #c53030;
+}
+
 .editors-grid {
     display: grid;
     grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));

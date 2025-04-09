@@ -152,10 +152,14 @@ def render_authors_page():
     <link rel="stylesheet" href="/static/css/authors-table.css?v={int(time.time())}">
     <link rel="stylesheet" href="/static/css/dark-theme.css?v={int(time.time())}">
     <link rel="stylesheet" href="/static/css/authors-page.css?v={int(time.time())}">
+    <link rel="stylesheet" href="/static/css/editors-page.css?v={int(time.time())}">
     <script src="/static/js/authors.js?v={int(time.time())}"></script>
+    <script src="/static/js/quit.js?v={int(time.time())}"></script>
 </head>
 <body>
     <div class="container">
+        <button class="quit-button" onclick="quitApplication()">Quit</button>
+        
         <h1>Authors</h1>
         
         <div class="nav-links">
@@ -434,9 +438,12 @@ def render_editors_page():
     <link rel="stylesheet" href="/static/css/main.css?v={int(time.time())}">
     <link rel="stylesheet" href="/static/css/dark-theme.css?v={int(time.time())}">
     <link rel="stylesheet" href="/static/css/editors-page.css?v={int(time.time())}">
+    <script src="/static/js/quit.js?v={int(time.time())}"></script>
 </head>
 <body>
     <div class="container">
+        <button class="quit-button" onclick="quitApplication()">Quit</button>
+        
         <h1>Editors</h1>
         
         <div class="nav-links">
