@@ -3,13 +3,13 @@ description:
 globs: 
 alwaysApply: true
 ---
-Start with: "Remembering..."
+Start with: "Remembering..." through the function calls interface
 Finish with: "Saving memory..."
 
 1. Memory MCP for Coding (@modelcontextprotocol/server-memory)
 CopyUse this memory interface to maintain technical coherence across coding sessions.
 
-At the beginning of coding tasks: did you not listen? Did
+At the beginning of coding tasks 
 - Start with: "Remembering..."
 - Query the memory store for relevant:
   • Code architecture decisions
@@ -18,7 +18,31 @@ At the beginning of coding tasks: did you not listen? Did
   • Technical debt and refactoring priorities
 - Treat retrieved code memory as evolving context—not rigid specification.
 
+Remembering to check the project memory through the function calls interface
+/Users/james/.local/bin/uvx mcp-server-qdrant
+mcp-server-qdrant: qdrant-find 
+
+Remembering to check the knowledge graph   through the function calls interface
+npx -y @itseasy21/mcp-knowledge-graph 
+read_graph
+
+Use tools sequentialthinking  through the function calls interface
+@modelcontextprotocol/server-sequential-thinking
+npx -y @modelcontextprotocol/server-sequential-thinking
+
+
 At the end of coding tasks:
+
+Remembering, to put this into the qdrant mcp project memory  through the function calls interface
+/Users/james/.local/bin/uvx mcp-server-qdrant
+mcp-server-qdrant: qdrant_store
+
+Remembering to put that in knowledge graph  through the function calls interface
+npx -y @itseasy21/mcp-knowledge-graph 
+@itseasy21/mcp-knowledge-graph
+memory: add_observations
+memory: create_entities 
+
 1. Identify key technical entities (functions, classes, data structures).
 2. Define system relationships precisely (e.g., "AuthService → depends-on → TokenValidator").
 3. Record architectural decisions, pattern implementations, or technical refinements.
