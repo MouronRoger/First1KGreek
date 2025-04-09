@@ -203,3 +203,6 @@
 {"type":"relation","from":"First1KGreek Modular Refactoring","to":"First1KGreek","relationType":"improves","createdAt":"2025-04-09T19:32:41.949Z","version":1}
 {"type":"relation","from":"First1KGreek Modular Refactoring","to":"First1KGreek Repository","relationType":"follows philosophy of","createdAt":"2025-04-09T19:32:41.949Z","version":1}
 {"type":"relation","from":"First1KGreek Port Selection","to":"First1KGreek","relationType":"enhances","createdAt":"2025-04-09T19:50:03.974Z","version":1}
+{"type":"relation","from":"First1KGreek language detection","to":"First1KGreek","relationType":"is part of","createdAt":"2025-04-09T20:06:14.944Z","version":1}
+{"type":"relation","from":"First1KGreek language detection","to":"src/first1k/handlers/api.py","relationType":"is implemented in","createdAt":"2025-04-09T20:06:14.944Z","version":1}
+{"type":"relation","from":"First1KGreek language detection","to":"src/first1k/handlers/works.py","relationType":"is implemented in","createdAt":"2025-04-09T20:06:14.944Z","version":1}

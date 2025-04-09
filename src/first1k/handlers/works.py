@@ -91,12 +91,15 @@ def get_works_by_author(author_id):
                         if editor_matches and len(editor_matches[0].strip()) > 0:
                             work_editor = editor_matches[0].strip()
                             
-                        # Determine language from filename
-                        file_language = None
+                        # Always determine language from filename for Perseus texts
+                        # This takes precedence since the pattern is universal and infallible
                         if 'perseus-eng' in file:
                             file_language = 'eng'
                         elif 'perseus-grc' in file:
                             file_language = 'grc'
+                        else:
+                            # Only use work_language or default if not a Perseus text
+                            file_language = None
 
                         # Use file language if found, otherwise use work language or default to Greek
                         language = file_language or work_language or 'grc'

@@ -91,15 +91,16 @@ def get_author_works_for_api(author_id):
                         if title_matches:
                             work_title = title_matches[0].strip()
                     
-                    # Determine language from filename if not found in metadata
-                    if not work_language:
-                        if 'perseus-eng' in xml_file:
-                            work_language = 'eng'
-                        elif 'perseus-grc' in xml_file:
-                            work_language = 'grc'
-                        else:
-                            # Default to Greek
-                            work_language = 'grc'
+                    # Always determine language from filename for Perseus texts
+                    # This takes precedence over metadata since the pattern is universal
+                    if 'perseus-eng' in xml_file:
+                        work_language = 'eng'
+                    elif 'perseus-grc' in xml_file:
+                        work_language = 'grc'
+                    # Only use metadata or default if not a Perseus text
+                    elif not work_language:
+                        # Default to Greek if no other language info available
+                        work_language = 'grc'
                 
                 # Format language for display
                 language_display = "English" if work_language == "eng" else "Greek"
