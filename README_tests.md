@@ -4,16 +4,25 @@ This directory contains the test suite for the First1KGreek Browser application.
 
 ## Test Structure
 
-The test suite is organized into the following files:
+The test suite is organized into the following directories:
 
-- `tests/__init__.py` - Makes tests a proper package
-- `tests/test_base.py` - Base test class with common utilities and fixtures
-- `tests/test_server.py` - Tests for server initialization and port handling
-- `tests/test_http_handler.py` - Tests for the HTTP request handler
-- `tests/test_page_generation.py` - Tests for HTML content generation
-- `tests/test_utils.py` - Tests for utility functions
-- `tests/conftest.py` - Configuration and fixtures for pytest integration
-- `tests/test_pytest_sample.py` - Example of pure pytest-style tests
+- `tests/core/` - Core test files and utilities
+  - `__init__.py` - Makes tests a proper package
+  - `test_base.py` - Base test class with common utilities and fixtures
+  - `test_server.py` - Tests for server initialization and port handling
+  - `test_http_handler.py` - Tests for the HTTP request handler
+  - `test_page_generation.py` - Tests for HTML content generation
+  - `test_utils.py` - Tests for utility functions
+  - `conftest.py` - Configuration and fixtures for pytest integration
+  - `test_pytest_sample.py` - Example of pure pytest-style tests
+
+- `tests/unit/` - Unit tests for specific components
+- `tests/integration/` - Integration tests for combined functionality
+- `tests/performance/` - Performance tests for system evaluation
+
+- `tests/runners/` - Test runner scripts
+  - `run_tests.py` - Runner for unittest-based tests
+  - `run_pytest.py` - Runner for pytest-based tests
 
 ## Testing Frameworks
 
@@ -60,15 +69,24 @@ pytest -m unit
 pytest -m integration
 pytest -m performance
 
+# Run tests by directory
+pytest tests/core/
+pytest tests/unit/
+pytest tests/integration/
+pytest tests/performance/
+
 # Run a specific test file
-pytest tests/test_server.py
+pytest tests/core/test_server.py
 
 # Run a specific test function
-pytest tests/test_server.py::test_is_port_in_use_pytest_style
+pytest tests/core/test_server.py::test_is_port_in_use_pytest_style
 
 # Using the pytest runner script
-python run_pytest.py --unit
-python run_pytest.py --all --coverage
+python tests/runners/run_pytest.py --unit
+python tests/runners/run_pytest.py --integration
+python tests/runners/run_pytest.py --performance
+python tests/runners/run_pytest.py --core
+python tests/runners/run_pytest.py --all --coverage
 ```
 
 ### Using unittest
@@ -77,14 +95,27 @@ python run_pytest.py --all --coverage
 # Run all tests
 python -m unittest discover -s tests
 
+# Run specific test directories
+python -m unittest discover -s tests/core
+python -m unittest discover -s tests/unit
+python -m unittest discover -s tests/integration
+python -m unittest discover -s tests/performance
+
 # Run a specific test file
-python -m unittest tests.test_server
-python -m unittest tests.test_http_handler
-python -m unittest tests.test_page_generation
-python -m unittest tests.test_utils
+python -m unittest tests.core.test_server
+python -m unittest tests.core.test_http_handler
+python -m unittest tests.core.test_page_generation
+python -m unittest tests.core.test_utils
 
 # Run a specific test case
-python -m unittest tests.test_server.ServerTests
+python -m unittest tests.core.test_server.ServerTests
+
+# Using the test runner script
+python tests/runners/run_tests.py --unit
+python tests/runners/run_tests.py --integration
+python tests/runners/run_tests.py --performance
+python tests/runners/run_tests.py --core
+python tests/runners/run_tests.py --all
 ```
 
 ## Test Coverage
