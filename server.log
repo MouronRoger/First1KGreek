@@ -1,10 +1,32 @@
-2025-04-09 20:32:29,039 - INFO - Starting First1KGreek Browser...
-2025-04-09 20:32:29,039 - INFO - Server configuration:
-2025-04-09 20:32:29,039 - INFO -   Host: localhost
-2025-04-09 20:32:29,039 - INFO -   Port: 8888
-2025-04-09 20:32:29,039 - INFO -   Debug mode: False
-2025-04-09 20:32:29,039 - INFO -   Open browser: False
-2025-04-09 20:32:29,039 - INFO - Press Ctrl+C to stop the server
-2025-04-09 20:32:29,039 - INFO - Starting First1KGreek Browser - Fixed Version 1.2.0
-2025-04-09 20:32:29,039 - INFO - With dark theme and improved editor detection
-2025-04-09 20:32:29,041 - INFO - Server running at http://localhost:8888/
+2025-04-09 20:39:18,422 - INFO - Starting First1KGreek Browser...
+2025-04-09 20:39:18,422 - INFO - Server configuration:
+2025-04-09 20:39:18,422 - INFO -   Host: localhost
+2025-04-09 20:39:18,422 - INFO -   Port: 8000
+2025-04-09 20:39:18,422 - INFO -   Debug mode: False
+2025-04-09 20:39:18,422 - INFO -   Open browser: True
+2025-04-09 20:39:18,422 - INFO - Press Ctrl+C to stop the server
+2025-04-09 20:39:18,422 - INFO - Starting First1KGreek Browser - Fixed Version 1.2.0
+2025-04-09 20:39:18,422 - INFO - With dark theme and improved editor detection
+2025-04-09 20:39:26,219 - ERROR - Error starting server: [Errno 48] Address already in use
+2025-04-09 20:39:26,220 - ERROR - Error running server: [Errno 48] Address already in use
+2025-04-09 20:39:26,232 - ERROR - Traceback (most recent call last):
+  File "/Users/james/Documents/GitHub/First1KGreek/run_server.py", line 109, in main
+    run_server(
+    ~~~~~~~~~~^
+        port=port,
+        ^^^^^^^^^^
+    ...<2 lines>...
+        open_browser=open_browser
+        ^^^^^^^^^^^^^^^^^^^^^^^^^
+    )
+    ^
+  File "/Users/james/Documents/GitHub/First1KGreek/src/first1k/server/server.py", line 291, in run_server
+    server_instance = socketserver.TCPServer((host, port), handler)
+  File "/opt/homebrew/Cellar/python@3.13/3.13.2/Frameworks/Python.framework/Versions/3.13/lib/python3.13/socketserver.py", line 457, in __init__
+    self.server_bind()
+    ~~~~~~~~~~~~~~~~^^
+  File "/opt/homebrew/Cellar/python@3.13/3.13.2/Frameworks/Python.framework/Versions/3.13/lib/python3.13/socketserver.py", line 478, in server_bind
+    self.socket.bind(self.server_address)
+    ~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^
+OSError: [Errno 48] Address already in use
+

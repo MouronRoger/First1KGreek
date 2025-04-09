@@ -44,3 +44,9 @@ manifest.txt
 results.json
 data/TEItoCEX
 data/catalog.json
+
+# Log files
+*.log
+server.log
+verification.log
+logs/
