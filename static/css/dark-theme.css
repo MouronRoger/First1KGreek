@@ -1,0 +1,255 @@
+/* Dark theme for First1KGreek Browser */
+
+:root {
+    /* Main colors */
+    --bg-primary: #121212;
+    --bg-secondary: #1e1e1e;
+    --bg-tertiary: #2d2d2d;
+    --bg-element: #333333;
+    --bg-element-hover: #444444;
+
+    /* Text colors */
+    --text-primary: #ffffff;
+    --text-secondary: #dddddd;
+    --text-muted: #aaaaaa;
+
+    /* Accent colors */
+    --accent-primary: #4299e1;
+    --accent-secondary: #3182ce;
+    --accent-hover: #2c5282;
+
+    /* UI element colors */
+    --favorite-color: #f6ad55;
+    --favorite-hover: #ed8936;
+    --archive-color: #68d391;
+    --archive-hover: #48bb78;
+    --delete-color: #fc8181;
+    --delete-hover: #f56565;
+
+    /* Border colors */
+    --border-color: #444444;
+    --border-focus: #4299e1;
+}
+
+body {
+    background-color: var(--bg-primary);
+    color: var(--text-primary);
+}
+
+.container {
+    background-color: var(--bg-primary);
+}
+
+/* Header and navigation */
+h1,
+h2,
+h3,
+h4,
+h5,
+h6 {
+    color: var(--text-primary);
+}
+
+a {
+    color: var(--accent-primary);
+}
+
+a:hover {
+    color: var(--accent-secondary);
+}
+
+.nav-links a,
+.button {
+    background-color: var(--accent-primary);
+    color: var(--text-primary);
+}
+
+.nav-links a:hover,
+.button:hover {
+    background-color: var(--accent-secondary);
+}
+
+/* Authors table */
+.authors-table {
+    background-color: var(--bg-secondary);
+    border: 1px solid var(--border-color);
+}
+
+.authors-table th {
+    background-color: var(--bg-tertiary);
+    color: var(--text-primary);
+    border-bottom: 1px solid var(--border-color);
+}
+
+.authors-table td {
+    border-bottom: 1px solid var(--border-color);
+    color: var(--text-primary);
+}
+
+.authors-table tr:hover {
+    background-color: var(--bg-element-hover);
+}
+
+.author-type {
+    color: var(--text-muted);
+}
+
+/* Filters */
+.filter-container {
+    background-color: var(--bg-secondary);
+    padding: 15px;
+    border-radius: 5px;
+    margin-bottom: 20px;
+}
+
+.filter-label {
+    color: var(--text-primary);
+}
+
+.status-filters button,
+.century-filters button {
+    background-color: var(--bg-element);
+    color: var(--text-primary);
+}
+
+.status-filters button:hover,
+.century-filters button:hover {
+    background-color: var(--bg-element-hover);
+}
+
+.status-filters button.active,
+.century-filters button.active {
+    background-color: var(--accent-primary);
+}
+
+.type-filter {
+    background-color: var(--bg-element);
+    color: var(--text-primary);
+    border: 1px solid var(--border-color);
+}
+
+/* Search box */
+.search-box input {
+    background-color: var(--bg-element);
+    color: var(--text-primary);
+    border: 1px solid var(--border-color);
+    padding: 8px;
+}
+
+.search-box button {
+    background-color: var(--accent-primary);
+    color: var(--text-primary);
+}
+
+.search-box button:hover {
+    background-color: var(--accent-secondary);
+}
+
+/* Action buttons */
+.favorite-btn {
+    background-color: var(--favorite-color);
+    color: var(--text-primary);
+}
+
+.favorite-btn:hover {
+    background-color: var(--favorite-hover);
+}
+
+.archive-btn {
+    background-color: var(--archive-color);
+    color: var(--text-primary);
+}
+
+.archive-btn:hover {
+    background-color: var(--archive-hover);
+}
+
+.delete-btn {
+    background-color: var(--delete-color);
+    color: var(--text-primary);
+}
+
+.delete-btn:hover {
+    background-color: var(--delete-hover);
+}
+
+/* Works container */
+.works-container {
+    background-color: var(--bg-tertiary);
+    border-left: 3px solid var(--accent-primary);
+}
+
+.works-list {
+    gap: 15px;
+}
+
+.work-item {
+    background-color: var(--bg-element);
+    padding: 15px;
+    border-radius: 5px;
+}
+
+.work-item:hover {
+    background-color: var(--bg-element-hover);
+}
+
+.work-title {
+    color: var(--text-primary);
+    font-weight: bold;
+}
+
+.work-info {
+    color: var(--text-muted);
+}
+
+.works-error {
+    color: var(--delete-color);
+}
+
+/* Pagination */
+.pagination {
+    margin-top: 20px;
+}
+
+.pagination button {
+    background-color: var(--bg-element);
+    color: var(--text-primary);
+    border: none;
+    padding: 8px 15px;
+    margin: 0 5px;
+    border-radius: 4px;
+}
+
+.pagination button:hover:not([disabled]) {
+    background-color: var(--bg-element-hover);
+}
+
+.pagination button[disabled] {
+    background-color: var(--bg-tertiary);
+    color: var(--text-muted);
+    cursor: not-allowed;
+}
+
+/* Toggle works button */
+.toggle-works {
+    color: var(--accent-primary);
+}
+
+.toggle-works:hover {
+    color: var(--accent-secondary);
+}
+
+/* Loaders and indicators */
+.loader {
+    border: 2px solid var(--bg-element-hover);
+    border-top: 2px solid var(--accent-primary);
+}
+
+.loading-works {
+    color: var(--text-muted);
+}
+
+/* Rows with special state */
+tr.favorite td:first-child {
+    border-left: 3px solid var(--favorite-color);
+}

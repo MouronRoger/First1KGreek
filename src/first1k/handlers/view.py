@@ -38,6 +38,7 @@ def render_xml_view_page(file_path):
     <meta charset="UTF-8">
     <link rel="stylesheet" href="/static/css/main.css?v={int(time.time())}">
     <link rel="stylesheet" href="/static/css/reader.css?v={int(time.time())}">
+    <link rel="stylesheet" href="/static/css/dark-theme.css?v={int(time.time())}">
     <style>
         .xml-container {{
             background: #1a1a1a;
@@ -112,6 +113,7 @@ def render_xml_view_page(file_path):
 <head>
     <title>Error</title>
     <link rel="stylesheet" href="/static/css/main.css?v={int(time.time())}">
+    <link rel="stylesheet" href="/static/css/dark-theme.css?v={int(time.time())}">
 </head>
 <body>
     <div class="container">
@@ -152,6 +154,7 @@ def render_reader_view_page(file_path):
     <meta charset="UTF-8">
     <link rel="stylesheet" href="/static/css/main.css?v={int(time.time())}">
     <link rel="stylesheet" href="/static/css/reader.css?v={int(time.time())}">
+    <link rel="stylesheet" href="/static/css/dark-theme.css?v={int(time.time())}">
     <style>
         .reader-container {{
             max-width: 800px;
@@ -267,6 +270,7 @@ def render_reader_view_page(file_path):
 <head>
     <title>Error</title>
     <link rel="stylesheet" href="/static/css/main.css?v={int(time.time())}">
+    <link rel="stylesheet" href="/static/css/dark-theme.css?v={int(time.time())}">
 </head>
 <body>
     <div class="container">

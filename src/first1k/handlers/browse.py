@@ -120,6 +120,7 @@ def render_authors_page():
     <link rel="stylesheet" href="/static/css/main.css?v={int(time.time())}">
     <link rel="stylesheet" href="/static/css/styles.css?v={int(time.time())}">
     <link rel="stylesheet" href="/static/css/authors-table.css?v={int(time.time())}">
+    <link rel="stylesheet" href="/static/css/dark-theme.css?v={int(time.time())}">
     <style>
         .filter-container {{
             display: flex;
@@ -997,6 +998,7 @@ def render_editors_page():
     <title>First1K Greek - Editors</title>
     <meta charset="UTF-8">
     <link rel="stylesheet" href="/static/css/main.css?v={int(time.time())}">
+    <link rel="stylesheet" href="/static/css/dark-theme.css?v={int(time.time())}">
     <style>
         .editors-grid {{
             display: grid;

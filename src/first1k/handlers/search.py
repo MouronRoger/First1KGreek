@@ -111,6 +111,7 @@ def render_search_page(search_term=None):
     <meta charset="UTF-8">
     <link rel="stylesheet" href="/static/css/main.css?v={int(time.time())}">
     <link rel="stylesheet" href="/static/css/styles.css?v={int(time.time())}">
+    <link rel="stylesheet" href="/static/css/dark-theme.css?v={int(time.time())}">
     <style>
         .search-box {{
             margin: 30px 0;

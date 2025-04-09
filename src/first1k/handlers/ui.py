@@ -12,6 +12,7 @@ def render_main_page():
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>First1KGreek Browser</title>
     <link rel="stylesheet" href="/static/css/main.css?v={int(time.time())}">
+    <link rel="stylesheet" href="/static/css/dark-theme.css?v={int(time.time())}">
     <style>
         .nav-links {{
             display: flex;
