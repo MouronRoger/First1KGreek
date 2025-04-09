@@ -27,6 +27,12 @@ from .view import render_xml_view_page, render_reader_view_page
 # Works handlers
 from .works import render_works_page, render_editor_works_page
 
+# API handlers
+from .api import handle_get_author_works, get_author_works_for_api
+
+# Preferences handlers
+from .preferences import handle_update_work_preference, handle_bulk_update_preferences, get_user_preferences, update_user_preferences
+
 __all__ = [
     # UI
     'render_main_page',
@@ -51,4 +57,14 @@ __all__ = [
     # Works
     'render_works_page',
     'render_editor_works_page',
+    
+    # API
+    'handle_get_author_works',
+    'get_author_works_for_api',
+    
+    # Preferences
+    'handle_update_work_preference',
+    'handle_bulk_update_preferences',
+    'get_user_preferences',
+    'update_user_preferences',
 ]

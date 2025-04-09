@@ -24,7 +24,9 @@ from ..handlers.import_text import (
     import_text_from_scaife
 )
 from ..handlers.view import render_xml_view_page, render_reader_view_page
-from ..handlers.works import render_works_page, render_editor_works_page, get_author_works_for_api
+from ..handlers.works import render_works_page, render_editor_works_page
+from ..handlers.api import handle_get_author_works
+from ..handlers.preferences import handle_update_work_preference, handle_bulk_update_preferences
 
 # Global reference to the server
 server_instance = None
@@ -110,16 +112,11 @@ class CustomHTTPRequestHandler(http.server.SimpleHTTPRequestHandler):
                 self.send_html_response(render_reader_view_page(unquote(file_path)))
                 
             elif path == '/get_author_works':
-                author_id = query_params.get('author_id', [''])[0]
-                if not author_id:
-                    self.send_error(400, "Missing author_id parameter")
-                    return
-                try:
-                    works = get_author_works_for_api(author_id)
-                    self.send_json_response(works)
-                except Exception as e:
-                    logger.error(f"Error getting works for {author_id}: {str(e)}")
-                    self.send_error(500, f"Error retrieving works: {str(e)}")
+                status_code, content_type, response_data = handle_get_author_works(query_params)
+                self.send_response(status_code)
+                self.send_header('Content-type', content_type)
+                self.end_headers()
+                self.wfile.write(response_data.encode('utf-8'))
                 
             elif path == '/shutdown':
                 self.send_html_response("<h1>Server shutting down...</h1>")
@@ -145,6 +142,7 @@ class CustomHTTPRequestHandler(http.server.SimpleHTTPRequestHandler):
         try:
             parsed_url = urlparse(self.path)
             path = parsed_url.path
+            query_params = parse_qs(parsed_url.query)
             
             logger.info(f"POST request: {self.path}")
             
@@ -184,6 +182,24 @@ class CustomHTTPRequestHandler(http.server.SimpleHTTPRequestHandler):
                         
                 except Exception as e:
                     self.send_html_response(render_import_error_page(str(e)))
+                
+            elif path == '/update_work_preference':
+                content_length = int(self.headers['Content-Length'])
+                post_data = self.rfile.read(content_length).decode('utf-8')
+                status_code, content_type, response_data = handle_update_work_preference(query_params, post_data)
+                self.send_response(status_code)
+                self.send_header('Content-type', content_type)
+                self.end_headers()
+                self.wfile.write(response_data.encode('utf-8'))
+                
+            elif path == '/update_preferences':
+                content_length = int(self.headers['Content-Length'])
+                post_data = self.rfile.read(content_length).decode('utf-8')
+                status_code, content_type, response_data = handle_bulk_update_preferences(query_params, post_data)
+                self.send_response(status_code)
+                self.send_header('Content-type', content_type)
+                self.end_headers()
+                self.wfile.write(response_data.encode('utf-8'))
                 
             else:
                 self.send_error(404, "Not Found")

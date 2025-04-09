@@ -1,0 +1,160 @@
+"""API handler for author works data in First1KGreek Browser.
+
+This module provides API endpoints for retrieving works data for a specific author.
+"""
+
+import os
+import re
+import json
+import logging
+from pathlib import Path
+
+logger = logging.getLogger(__name__)
+
+
+def get_author_works_for_api(author_id):
+    """
+    Get works for an author formatted for the API response.
+    
+    Args:
+        author_id (str): The ID of the author
+        
+    Returns:
+        list: A list of work dictionaries formatted for the API
+    """
+    works_data = []
+    author_dir = os.path.join('data', author_id)
+    
+    if not os.path.exists(author_dir):
+        logger.warning(f"Author directory not found: {author_dir}")
+        return works_data
+    
+    logger.info(f"Retrieving works for author: {author_id}")
+    
+    # Get user preferences for works
+    user_prefs = get_user_preferences()
+    favorites = user_prefs.get("favorites", [])
+    archived = user_prefs.get("archived", [])
+    
+    # Process each work directory
+    for work_dir_name in os.listdir(author_dir):
+        work_dir_path = os.path.join(author_dir, work_dir_name)
+        if not os.path.isdir(work_dir_path):
+            continue
+            
+        # Create work ID
+        work_id = f"{author_id}.{work_dir_name}"
+        
+        # Skip if there are no XML files
+        xml_files = [f for f in os.listdir(work_dir_path) if f.endswith('.xml') and f != '__cts__.xml']
+        if not xml_files:
+            continue
+        
+        # Get work metadata
+        work_title = None
+        work_language = None
+        
+        # Try to get metadata from work's __cts__.xml
+        work_cts_path = os.path.join(work_dir_path, '__cts__.xml')
+        if os.path.exists(work_cts_path):
+            try:
+                with open(work_cts_path, 'r', encoding='utf-8') as f:
+                    content = f.read()
+                    title_match = re.search(r'<ti:title[^>]*>(.*?)</ti:title>', content)
+                    if title_match:
+                        work_title = title_match.group(1).strip()
+                    lang_match = re.search(r'xml:lang="([^"]+)"', content)
+                    if lang_match:
+                        work_language = lang_match.group(1)
+            except Exception as e:
+                logger.error(f"Error reading work metadata for {work_id}: {str(e)}")
+        
+        # Process each XML file
+        for xml_file in xml_files:
+            file_path = os.path.join(work_dir_path, xml_file)
+            
+            try:
+                # Extract information from file if not found in metadata
+                if not work_title or not work_language:
+                    with open(file_path, 'r', encoding='utf-8') as f:
+                        content = f.read(10000)  # Read beginning where metadata usually is
+                        
+                    # Get title if not found in metadata
+                    if not work_title:
+                        title_matches = re.findall(r'<title[^>]*>(.*?)</title>', content)
+                        if title_matches:
+                            work_title = title_matches[0].strip()
+                    
+                    # Determine language from filename if not found in metadata
+                    if not work_language:
+                        if 'perseus-eng' in xml_file:
+                            work_language = 'eng'
+                        elif 'perseus-grc' in xml_file:
+                            work_language = 'grc'
+                        else:
+                            # Default to Greek
+                            work_language = 'grc'
+                
+                # Format language for display
+                language_display = "English" if work_language == "eng" else "Greek"
+                
+                # Create work data object
+                work_data = {
+                    "id": work_id,
+                    "title": work_title or f"Work {work_dir_name}",
+                    "language": language_display,
+                    "file_path": file_path,
+                    "is_favorite": work_id in favorites,
+                    "is_archived": work_id in archived
+                }
+                
+                works_data.append(work_data)
+                
+            except Exception as e:
+                logger.error(f"Error processing {file_path}: {str(e)}")
+    
+    logger.info(f"Found {len(works_data)} works for author {author_id}")
+    return works_data
+
+
+def get_user_preferences():
+    """
+    Get user preferences from JSON file.
+    
+    Returns:
+        dict: User preferences for favorites and archived items.
+    """
+    prefs_file = Path("user_preferences.json")
+    if prefs_file.exists():
+        try:
+            with open(prefs_file, 'r', encoding='utf-8') as f:
+                return json.load(f)
+        except Exception as e:
+            logger.error(f"Error reading user preferences: {str(e)}")
+    
+    # Default empty preferences
+    return {"favorites": [], "archived": []}
+
+
+def handle_get_author_works(query_params):
+    """
+    Handle API request for author works.
+    
+    Args:
+        query_params (dict): Query parameters from the request
+        
+    Returns:
+        tuple: (status_code, content_type, response_data)
+    """
+    author_id = query_params.get('author_id', [''])[0]
+    
+    if not author_id:
+        logger.error("Missing author_id parameter in request")
+        return 400, 'application/json', json.dumps({"error": "Missing author_id parameter"})
+    
+    try:
+        works = get_author_works_for_api(author_id)
+        return 200, 'application/json', json.dumps(works)
+    except Exception as e:
+        logger.error(f"Error retrieving works for {author_id}: {str(e)}")
+        return 500, 'application/json', json.dumps({"error": f"Error retrieving works: {str(e)}"}) 
