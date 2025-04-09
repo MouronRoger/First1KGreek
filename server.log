@@ -1,21 +1,10 @@
-2025-04-09 17:22:04,398 - INFO - Starting First1KGreek Browser...
-2025-04-09 17:22:04,398 - INFO - Server configuration:
-2025-04-09 17:22:04,398 - INFO -   Host: localhost
-2025-04-09 17:22:04,398 - INFO -   Port: 8000
-2025-04-09 17:22:04,398 - INFO -   Debug mode: False
-2025-04-09 17:22:04,398 - INFO -   Open browser: True
-2025-04-09 17:22:04,398 - INFO - Press Ctrl+C to stop the server
-2025-04-09 17:22:04,399 - INFO - Starting First1KGreek Browser - Fixed Version 1.2.0
-2025-04-09 17:22:04,399 - INFO - With dark theme and improved editor detection
-2025-04-09 17:22:04,400 - INFO - Server running at http://localhost:8000/
-2025-04-09 17:22:04,642 - INFO - GET request: /
-2025-04-09 17:22:04,699 - INFO - GET request: /static/css/main.css?v=1744215724
-2025-04-09 17:22:04,733 - INFO - GET request: /favicon.ico
-2025-04-09 17:22:07,092 - INFO - GET request: /browse/authors
-2025-04-09 17:22:07,097 - INFO - Generated enhanced authors page with tabular format and filtering
-2025-04-09 17:22:07,120 - INFO - GET request: /static/css/main.css?v=1744215727
-2025-04-09 17:22:07,123 - INFO - GET request: /static/css/styles.css?v=1744215727
-2025-04-09 17:22:07,124 - INFO - GET request: /static/css/authors-table.css?v=1744215727
-2025-04-09 17:22:14,442 - INFO - GET request: /get_author_works?author_id=tlg4084
-2025-04-09 17:22:14,443 - INFO - Retrieving works for author: tlg4084
-2025-04-09 17:22:14,445 - INFO - Found 1 works for author tlg4084
+2025-04-09 20:32:29,039 - INFO - Starting First1KGreek Browser...
+2025-04-09 20:32:29,039 - INFO - Server configuration:
+2025-04-09 20:32:29,039 - INFO -   Host: localhost
+2025-04-09 20:32:29,039 - INFO -   Port: 8888
+2025-04-09 20:32:29,039 - INFO -   Debug mode: False
+2025-04-09 20:32:29,039 - INFO -   Open browser: False
+2025-04-09 20:32:29,039 - INFO - Press Ctrl+C to stop the server
+2025-04-09 20:32:29,039 - INFO - Starting First1KGreek Browser - Fixed Version 1.2.0
+2025-04-09 20:32:29,039 - INFO - With dark theme and improved editor detection
+2025-04-09 20:32:29,041 - INFO - Server running at http://localhost:8888/

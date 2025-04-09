@@ -1,0 +1,42 @@
+2025-04-09 20:14:33,909 - __main__ - INFO - Starting First1KGreek Browser 1.2.0 (Fixed Version)
+2025-04-09 20:14:33,909 - __main__ - INFO - Configuration: port=8000, host=localhost, debug=False, open_browser=True
+2025-04-09 20:14:33,909 - src.first1k.server.server - INFO - Starting First1KGreek Browser - Fixed Version 1.2.0
+2025-04-09 20:14:33,909 - src.first1k.server.server - INFO - With dark theme and improved editor detection
+2025-04-09 20:14:33,910 - src.first1k.server.server - INFO - Server running at http://localhost:8000/
+2025-04-09 20:14:34,161 - src.first1k.server.server - INFO - GET request: /
+2025-04-09 20:14:34,225 - src.first1k.server.server - INFO - GET request: /static/css/main.css?v=1744226074
+2025-04-09 20:14:34,232 - src.first1k.server.server - INFO - GET request: /static/css/dark-theme.css?v=1744226074
+2025-04-09 20:14:36,180 - src.first1k.server.server - INFO - GET request: /browse/authors
+2025-04-09 20:14:36,185 - src.first1k.handlers.browse - INFO - Generated enhanced authors page with tabular format and filtering
+2025-04-09 20:14:36,206 - src.first1k.server.server - INFO - GET request: /static/css/main.css?v=1744226076
+2025-04-09 20:14:36,209 - src.first1k.server.server - INFO - GET request: /static/css/styles.css?v=1744226076
+2025-04-09 20:14:36,210 - src.first1k.server.server - INFO - GET request: /static/css/authors-table.css?v=1744226076
+2025-04-09 20:14:36,211 - src.first1k.server.server - INFO - GET request: /static/css/dark-theme.css?v=1744226076
+2025-04-09 20:14:38,906 - src.first1k.server.server - INFO - GET request: /get_author_works?author_id=tlg4084
+2025-04-09 20:14:38,906 - src.first1k.handlers.api - INFO - Retrieving works for author: tlg4084
+2025-04-09 20:14:38,911 - src.first1k.handlers.api - INFO - Found 1 works for author tlg4084
+2025-04-09 20:15:05,836 - src.first1k.server.server - INFO - GET request: /get_author_works?author_id=tlg1264
+2025-04-09 20:15:05,837 - src.first1k.handlers.api - INFO - Retrieving works for author: tlg1264
+2025-04-09 20:15:05,841 - src.first1k.handlers.api - INFO - Found 4 works for author tlg1264
+2025-04-09 20:15:18,411 - src.first1k.server.server - INFO - GET request: /get_author_works?author_id=tlg0012
+2025-04-09 20:15:18,411 - src.first1k.handlers.api - INFO - Retrieving works for author: tlg0012
+2025-04-09 20:15:18,414 - src.first1k.handlers.api - INFO - Found 8 works for author tlg0012
+2025-04-09 20:15:46,537 - src.first1k.server.server - INFO - GET request: /get_author_works?author_id=tlg0634
+2025-04-09 20:15:46,537 - src.first1k.handlers.api - INFO - Retrieving works for author: tlg0634
+2025-04-09 20:15:46,538 - src.first1k.handlers.api - INFO - Found 1 works for author tlg0634
+2025-04-09 20:15:54,096 - src.first1k.server.server - INFO - GET request: /get_author_works?author_id=tlg0541
+2025-04-09 20:15:54,096 - src.first1k.handlers.api - INFO - Retrieving works for author: tlg0541
+2025-04-09 20:15:54,097 - src.first1k.handlers.api - INFO - Found 3 works for author tlg0541
+2025-04-09 20:15:56,264 - src.first1k.server.server - INFO - GET request: /get_author_works?author_id=tlg0639
+2025-04-09 20:15:56,264 - src.first1k.handlers.api - INFO - Retrieving works for author: tlg0639
+2025-04-09 20:15:56,265 - src.first1k.handlers.api - INFO - Found 1 works for author tlg0639
+2025-04-09 20:15:57,665 - src.first1k.server.server - INFO - GET request: /get_author_works?author_id=tlg1553
+2025-04-09 20:15:57,665 - src.first1k.handlers.api - INFO - Retrieving works for author: tlg1553
+2025-04-09 20:15:57,665 - src.first1k.handlers.api - INFO - Found 2 works for author tlg1553
+2025-04-09 20:15:59,045 - src.first1k.server.server - INFO - GET request: /get_author_works?author_id=tlg0053
+2025-04-09 20:15:59,046 - src.first1k.handlers.api - INFO - Retrieving works for author: tlg0053
+2025-04-09 20:15:59,047 - src.first1k.handlers.api - INFO - Found 1 works for author tlg0053
+2025-04-09 20:21:29,043 - src.first1k.server.server - INFO - GET request: /get_author_works?author_id=tlg0555
+2025-04-09 20:21:29,044 - src.first1k.handlers.api - INFO - Retrieving works for author: tlg0555
+2025-04-09 20:21:29,048 - src.first1k.handlers.api - INFO - Found 9 works for author tlg0555
+2025-04-09 20:35:18,715 - src.first1k.server.server - INFO - Received signal 2, initiating shutdown...

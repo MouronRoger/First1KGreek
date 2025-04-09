@@ -115,6 +115,10 @@ class CustomHTTPRequestHandler(http.server.SimpleHTTPRequestHandler):
                 status_code, content_type, response_data = handle_get_author_works(query_params)
                 self.send_response(status_code)
                 self.send_header('Content-type', content_type)
+                self.send_header('Access-Control-Allow-Origin', '*')
+                self.send_header('Access-Control-Allow-Methods', 'GET, OPTIONS')
+                self.send_header('Access-Control-Allow-Headers', 'Content-Type')
+                self.send_header('Cache-Control', 'no-cache, no-store, must-revalidate')
                 self.end_headers()
                 self.wfile.write(response_data.encode('utf-8'))
                 

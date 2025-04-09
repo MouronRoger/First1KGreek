@@ -37,18 +37,24 @@ def get_author_works_for_api(author_id):
     archived = user_prefs.get("archived", [])
     
     # Process each work directory
-    for work_dir_name in os.listdir(author_dir):
+    work_dirs = [d for d in os.listdir(author_dir) if os.path.isdir(os.path.join(author_dir, d))]
+    logger.info(f"Found {len(work_dirs)} potential work directories for author {author_id}")
+    
+    for work_dir_name in work_dirs:
         work_dir_path = os.path.join(author_dir, work_dir_name)
-        if not os.path.isdir(work_dir_path):
-            continue
-            
+        
         # Create work ID
         work_id = f"{author_id}.{work_dir_name}"
         
-        # Skip if there are no XML files
+        # Get XML files in this directory
         xml_files = [f for f in os.listdir(work_dir_path) if f.endswith('.xml') and f != '__cts__.xml']
+        
+        # Skip if there are no XML files
         if not xml_files:
+            logger.debug(f"Skipping {work_dir_name} - no XML files found")
             continue
+        
+        logger.debug(f"Processing work {work_id} with {len(xml_files)} XML files")
         
         # Get work metadata
         work_title = None
@@ -152,9 +158,24 @@ def handle_get_author_works(query_params):
         logger.error("Missing author_id parameter in request")
         return 400, 'application/json', json.dumps({"error": "Missing author_id parameter"})
     
+    logger.info(f"Handling /get_author_works request for author_id: {author_id}")
+    
     try:
+        # Check if author directory exists
+        author_dir = os.path.join('data', author_id)
+        if not os.path.exists(author_dir):
+            logger.warning(f"Author directory not found: {author_dir}")
+            return 404, 'application/json', json.dumps({"error": f"Author {author_id} not found"})
+            
+        # Get author works
         works = get_author_works_for_api(author_id)
+        
+        if not works:
+            logger.warning(f"No works found for author: {author_id}")
+            return 200, 'application/json', json.dumps([])
+            
+        logger.info(f"Successfully retrieved {len(works)} works for author {author_id}")
         return 200, 'application/json', json.dumps(works)
     except Exception as e:
-        logger.error(f"Error retrieving works for {author_id}: {str(e)}")
+        logger.error(f"Error retrieving works for {author_id}: {str(e)}", exc_info=True)
         return 500, 'application/json', json.dumps({"error": f"Error retrieving works: {str(e)}"}) 
