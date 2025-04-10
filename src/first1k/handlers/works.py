@@ -49,106 +49,93 @@ def get_works_by_author(author_id):
     if not author_name:
         author_name = f"Author {author_id}"
     
-    # Get works
+    # Get works directly from the XML files
     for work_dir in os.listdir(author_dir):
         work_path = os.path.join(author_dir, work_dir)
         if os.path.isdir(work_path):
-            work_title = None
-            work_language = None
             work_editor = None
             
-            # Try to get metadata from work's __cts__.xml
+            # Load titles from __cts__.xml if available
+            title_map = {}  # Maps language code to title
             work_cts_path = os.path.join(work_path, '__cts__.xml')
+            
             if os.path.exists(work_cts_path):
                 try:
                     with open(work_cts_path, 'r', encoding='utf-8') as f:
                         content = f.read()
-                        
-                        # Find all editions and translations
-                        editions = re.findall(r'<ti:edition[^>]*>(.*?)</ti:edition>', content, re.DOTALL)
-                        translations = re.findall(r'<ti:translation[^>]*>(.*?)</ti:translation>', content, re.DOTALL)
-                        
-                        # Process all versions (editions and translations)
-                        versions = editions + translations
-                        
-                        if versions:
-                            # Use first version's details as fallback for files without specific language matches
-                            first_version = versions[0]
-                            
-                            # First priority: Look for language identifier in the URN (perseus-grc, perseus-eng)
-                            urn_match = re.search(r'urn="([^"]+)"', first_version)
-                            if urn_match:
-                                urn = urn_match.group(1)
-                                if 'perseus-grc' in urn:
-                                    work_language = 'grc'
-                                elif 'perseus-eng' in urn:
-                                    work_language = 'eng'
-                            
-                            # Second priority: Extract language from the edition/translation tag
-                            if not work_language:
-                                lang_match = re.search(r'xml:lang="([^"]+)"', first_version)
-                                if lang_match:
-                                    work_language = lang_match.group(1)
-                            
-                            # Extract label (title) from the label tag
-                            label_match = re.search(r'<ti:label[^>]*>(.*?)</ti:label>', first_version)
-                            if label_match:
-                                work_title = label_match.group(1).strip()
-                        
-                        # Fallback to work-level title if no versions found
-                        if not work_title:
-                            title_match = re.search(r'<ti:title[^>]*>(.*?)</ti:title>', content)
-                            if title_match:
-                                work_title = title_match.group(1).strip()
-                            
-                            # Also get language from work level as fallback
-                            if not work_language:
-                                lang_match = re.search(r'xml:lang="([^"]+)"', content)
-                                if lang_match:
-                                    work_language = lang_match.group(1)
+                    
+                    # Find edition (Greek) title
+                    edition_match = re.search(r'<ti:edition[^>]*xml:lang="grc"[^>]*>.*?<ti:label[^>]*>(.*?)</ti:label>', content, re.DOTALL)
+                    if edition_match:
+                        title_map['grc'] = edition_match.group(1).strip()
+                    
+                    # Find translation (English) title
+                    translation_match = re.search(r'<ti:translation[^>]*xml:lang="eng"[^>]*>.*?<ti:label[^>]*>(.*?)</ti:label>', content, re.DOTALL)
+                    if translation_match:
+                        title_map['eng'] = translation_match.group(1).strip()
+                    
+                    # If we can't find specific language titles, use the work title as fallback
+                    if not title_map:
+                        work_title_match = re.search(r'<ti:title[^>]*>(.*?)</ti:title>', content)
+                        if work_title_match:
+                            title_map['default'] = work_title_match.group(1).strip()
                 except Exception as e:
                     print(f"Error reading work metadata: {str(e)}")
             
-            # Get XML files in work directory
+            # Process each XML file directly
             for file in os.listdir(work_path):
                 if file.endswith('.xml') and not file == '__cts__.xml':
                     file_path = os.path.join(work_path, file)
+                    
                     try:
-                        with open(file_path, 'r', encoding='utf-8') as f:
-                            content = f.read(10000)
-                            
-                        # Get title if not found in metadata
-                        if not work_title:
-                            title_matches = re.findall(r'<title[^>]*>(.*?)</title>', content)
-                            if title_matches:
-                                work_title = title_matches[0].strip()
-                                
-                        # Get editor
-                        editor_matches = re.findall(r'<editor[^>]*>(.*?)</editor>', content)
-                        if editor_matches and len(editor_matches[0].strip()) > 0:
-                            work_editor = editor_matches[0].strip()
-                            
-                        # Always determine language from filename for Perseus texts
-                        # This takes precedence since the pattern is universal and infallible
+                        # Get editor from file content if needed
+                        if not work_editor:
+                            with open(file_path, 'r', encoding='utf-8') as f:
+                                content = f.read(10000)
+                                editor_matches = re.findall(r'<editor[^>]*>(.*?)</editor>', content)
+                                if editor_matches and len(editor_matches[0].strip()) > 0:
+                                    work_editor = editor_matches[0].strip()
+                        
+                        # Determine language directly from filename
+                        language = 'grc'  # Default to Greek
+                        language_code = 'grc'
+                        
                         if 'perseus-eng' in file:
-                            file_language = 'eng'
+                            language = "English"
+                            language_code = 'eng'
                         elif 'perseus-grc' in file:
-                            file_language = 'grc'
+                            language = "Greek"
+                            language_code = 'grc'
                         else:
-                            # Check if the filename contains a language identifier in any other form
-                            file_lang_match = re.search(r'\.([a-z]{3})\d*\.', file)
-                            if file_lang_match and file_lang_match.group(1) in ['eng', 'grc', 'lat']:
-                                file_language = file_lang_match.group(1)
+                            # Try to extract language from file name patterns
+                            if '.eng' in file:
+                                language = "English"
+                                language_code = 'eng'
                             else:
-                                # Only use work_language or default if not a Perseus text
-                                file_language = None
-
-                        # Use file language if found, otherwise use work language or default to Greek
-                        language = file_language or work_language or 'grc'
-                            
+                                language = "Greek"
+                                language_code = 'grc'
+                        
+                        # Use appropriate title based on language
+                        if language_code in title_map:
+                            title = title_map[language_code]
+                        elif 'default' in title_map:
+                            title = title_map['default']
+                        else:
+                            # Extract title from file if necessary
+                            with open(file_path, 'r', encoding='utf-8') as f:
+                                content = f.read(10000)
+                                title_matches = re.findall(r'<title[^>]*>(.*?)</title>', content)
+                                if title_matches:
+                                    title = title_matches[0].strip()
+                                else:
+                                    title = f"Work {work_dir}"
+                        
+                        # Create an ID that includes the language
+                        work_id = f"{work_dir}.{language_code}"
+                        
                         works.append({
-                            'id': work_dir,
-                            'title': work_title or f"Work {work_dir}",
+                            'id': work_id,
+                            'title': title,
                             'language': language,
                             'editor': work_editor or 'Unknown',
                             'file_path': file_path

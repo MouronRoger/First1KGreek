@@ -1,32 +1,44 @@
-2025-04-10 02:17:30,514 - INFO - Starting First1KGreek Browser...
-2025-04-10 02:17:30,514 - INFO - Server configuration:
-2025-04-10 02:17:30,514 - INFO -   Host: localhost
-2025-04-10 02:17:30,514 - INFO -   Port: 8000 (will try other ports if busy)
-2025-04-10 02:17:30,514 - INFO -   Debug mode: False
-2025-04-10 02:17:30,515 - INFO -   Open browser: True
-2025-04-10 02:17:30,515 - INFO - Press Ctrl+C to stop the server
-2025-04-10 02:17:30,515 - INFO - Starting First1KGreek Browser - Fixed Version 1.2.0
-2025-04-10 02:17:30,515 - INFO - With dark theme and improved editor detection
-2025-04-10 02:17:30,516 - WARNING - Port 8000 is already in use, trying another port
-2025-04-10 02:17:30,516 - INFO - Server running at http://localhost:8001/
-2025-04-10 02:17:30,691 - INFO - GET request: /
-2025-04-10 02:17:30,722 - INFO - GET request: /static/css/main.css?v=1744247850
-2025-04-10 02:17:30,732 - INFO - GET request: /static/css/dark-theme.css?v=1744247850
-2025-04-10 02:17:30,733 - INFO - GET request: /static/css/editors-page.css?v=1744247850
-2025-04-10 02:17:30,733 - INFO - GET request: /static/js/quit.js?v=1744247850
-2025-04-10 02:17:33,192 - INFO - GET request: /browse/authors
-2025-04-10 02:17:33,262 - INFO - Generated enhanced authors page with tabular format and filtering
-2025-04-10 02:17:33,286 - INFO - GET request: /static/css/main.css?v=1744247853
-2025-04-10 02:17:33,288 - INFO - GET request: /static/css/styles.css?v=1744247853
-2025-04-10 02:17:33,289 - INFO - GET request: /static/css/authors-table.css?v=1744247853
-2025-04-10 02:17:33,289 - INFO - GET request: /static/css/dark-theme.css?v=1744247853
-2025-04-10 02:17:33,290 - INFO - GET request: /static/css/authors-page.css?v=1744247853
-2025-04-10 02:17:33,290 - INFO - GET request: /static/css/editors-page.css?v=1744247853
-2025-04-10 02:17:33,291 - INFO - GET request: /static/js/authors.js?v=1744247853
-2025-04-10 02:17:33,291 - INFO - GET request: /static/js/quit.js?v=1744247853
-2025-04-10 02:17:43,778 - INFO - GET request: /get_author_works?author_id=tlg0004
-2025-04-10 02:17:43,779 - INFO - Handling /get_author_works request for author_id: tlg0004
-2025-04-10 02:17:43,780 - INFO - Retrieving works for author: tlg0004
-2025-04-10 02:17:43,780 - INFO - Found 1 potential work directories for author tlg0004
-2025-04-10 02:17:43,782 - INFO - Found 2 works for author tlg0004
-2025-04-10 02:17:43,782 - INFO - Successfully retrieved 2 works for author tlg0004
+2025-04-10 02:34:19,080 - INFO - Starting First1KGreek Browser...
+2025-04-10 02:34:19,080 - INFO - Server configuration:
+2025-04-10 02:34:19,080 - INFO -   Host: localhost
+2025-04-10 02:34:19,080 - INFO -   Port: 8000 (will try other ports if busy)
+2025-04-10 02:34:19,080 - INFO -   Debug mode: False
+2025-04-10 02:34:19,080 - INFO -   Open browser: True
+2025-04-10 02:34:19,080 - INFO - Press Ctrl+C to stop the server
+2025-04-10 02:34:19,080 - INFO - Starting First1KGreek Browser - Fixed Version 1.2.0
+2025-04-10 02:34:19,080 - INFO - With dark theme and improved editor detection
+2025-04-10 02:34:19,081 - WARNING - Port 8000 is already in use, trying another port
+2025-04-10 02:34:19,084 - INFO - Server running at http://localhost:8002/
+2025-04-10 02:34:19,295 - INFO - GET request: /
+2025-04-10 02:34:19,338 - INFO - GET request: /static/css/main.css?v=1744248859
+2025-04-10 02:34:19,345 - INFO - GET request: /static/css/dark-theme.css?v=1744248859
+2025-04-10 02:34:19,365 - INFO - GET request: /static/css/editors-page.css?v=1744248859
+2025-04-10 02:34:19,370 - INFO - GET request: /static/js/quit.js?v=1744248859
+2025-04-10 02:34:21,926 - INFO - GET request: /browse/authors
+2025-04-10 02:34:21,984 - INFO - Generated enhanced authors page with tabular format and filtering
+2025-04-10 02:34:22,002 - INFO - GET request: /static/css/main.css?v=1744248861
+2025-04-10 02:34:22,004 - INFO - GET request: /static/css/styles.css?v=1744248861
+2025-04-10 02:34:22,007 - INFO - GET request: /static/css/authors-table.css?v=1744248861
+2025-04-10 02:34:22,008 - INFO - GET request: /static/css/dark-theme.css?v=1744248861
+2025-04-10 02:34:22,008 - INFO - GET request: /static/css/authors-page.css?v=1744248861
+2025-04-10 02:34:22,009 - INFO - GET request: /static/css/editors-page.css?v=1744248861
+2025-04-10 02:34:22,009 - INFO - GET request: /static/js/authors.js?v=1744248861
+2025-04-10 02:34:22,010 - INFO - GET request: /static/js/quit.js?v=1744248861
+2025-04-10 02:34:32,260 - INFO - GET request: /get_author_works?author_id=tlg0004
+2025-04-10 02:34:32,261 - INFO - Handling /get_author_works request for author_id: tlg0004
+2025-04-10 02:34:32,261 - INFO - Retrieving works for author: tlg0004
+2025-04-10 02:34:32,261 - INFO - Found 1 potential work directories for author tlg0004
+2025-04-10 02:34:32,262 - INFO - Found 2 works for author tlg0004
+2025-04-10 02:34:32,262 - INFO - Successfully retrieved 2 works for author tlg0004
+2025-04-10 02:34:38,015 - INFO - GET request: /get_author_works?author_id=tlg1319
+2025-04-10 02:34:38,015 - INFO - Handling /get_author_works request for author_id: tlg1319
+2025-04-10 02:34:38,016 - INFO - Retrieving works for author: tlg1319
+2025-04-10 02:34:38,016 - INFO - Found 1 potential work directories for author tlg1319
+2025-04-10 02:34:38,016 - INFO - Found 1 works for author tlg1319
+2025-04-10 02:34:38,017 - INFO - Successfully retrieved 1 works for author tlg1319
+2025-04-10 02:34:46,763 - INFO - GET request: /get_author_works?author_id=tlg1325
+2025-04-10 02:34:46,763 - INFO - Handling /get_author_works request for author_id: tlg1325
+2025-04-10 02:34:46,764 - INFO - Retrieving works for author: tlg1325
+2025-04-10 02:34:46,764 - INFO - Found 1 potential work directories for author tlg1325
+2025-04-10 02:34:46,764 - INFO - Found 1 works for author tlg1325
+2025-04-10 02:34:46,764 - INFO - Successfully retrieved 1 works for author tlg1325
