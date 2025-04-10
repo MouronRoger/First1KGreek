@@ -274,8 +274,10 @@ function renderWorks(authorId, works) {
         }
 
         workItem.innerHTML = `
-            <div class="work-title">${work.title || 'Untitled Work'}</div>
-            <div class="work-info">Language: ${work.language || 'Unknown'}</div>
+            <div class="work-content">
+                <div class="work-title">${work.title || 'Untitled Work'}</div>
+                <div class="work-info">Language: ${work.language || 'Unknown'}</div>
+            </div>
             <div class="work-actions">
                 <button class="action-btn favorite-btn ${isFavorite ? 'active' : ''}" 
                         onclick="toggleWorkFavorite('${work.id}')">

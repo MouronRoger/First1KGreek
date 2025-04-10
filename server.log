@@ -1,44 +1,41 @@
-2025-04-10 02:34:19,080 - INFO - Starting First1KGreek Browser...
-2025-04-10 02:34:19,080 - INFO - Server configuration:
-2025-04-10 02:34:19,080 - INFO -   Host: localhost
-2025-04-10 02:34:19,080 - INFO -   Port: 8000 (will try other ports if busy)
-2025-04-10 02:34:19,080 - INFO -   Debug mode: False
-2025-04-10 02:34:19,080 - INFO -   Open browser: True
-2025-04-10 02:34:19,080 - INFO - Press Ctrl+C to stop the server
-2025-04-10 02:34:19,080 - INFO - Starting First1KGreek Browser - Fixed Version 1.2.0
-2025-04-10 02:34:19,080 - INFO - With dark theme and improved editor detection
-2025-04-10 02:34:19,081 - WARNING - Port 8000 is already in use, trying another port
-2025-04-10 02:34:19,084 - INFO - Server running at http://localhost:8002/
-2025-04-10 02:34:19,295 - INFO - GET request: /
-2025-04-10 02:34:19,338 - INFO - GET request: /static/css/main.css?v=1744248859
-2025-04-10 02:34:19,345 - INFO - GET request: /static/css/dark-theme.css?v=1744248859
-2025-04-10 02:34:19,365 - INFO - GET request: /static/css/editors-page.css?v=1744248859
-2025-04-10 02:34:19,370 - INFO - GET request: /static/js/quit.js?v=1744248859
-2025-04-10 02:34:21,926 - INFO - GET request: /browse/authors
-2025-04-10 02:34:21,984 - INFO - Generated enhanced authors page with tabular format and filtering
-2025-04-10 02:34:22,002 - INFO - GET request: /static/css/main.css?v=1744248861
-2025-04-10 02:34:22,004 - INFO - GET request: /static/css/styles.css?v=1744248861
-2025-04-10 02:34:22,007 - INFO - GET request: /static/css/authors-table.css?v=1744248861
-2025-04-10 02:34:22,008 - INFO - GET request: /static/css/dark-theme.css?v=1744248861
-2025-04-10 02:34:22,008 - INFO - GET request: /static/css/authors-page.css?v=1744248861
-2025-04-10 02:34:22,009 - INFO - GET request: /static/css/editors-page.css?v=1744248861
-2025-04-10 02:34:22,009 - INFO - GET request: /static/js/authors.js?v=1744248861
-2025-04-10 02:34:22,010 - INFO - GET request: /static/js/quit.js?v=1744248861
-2025-04-10 02:34:32,260 - INFO - GET request: /get_author_works?author_id=tlg0004
-2025-04-10 02:34:32,261 - INFO - Handling /get_author_works request for author_id: tlg0004
-2025-04-10 02:34:32,261 - INFO - Retrieving works for author: tlg0004
-2025-04-10 02:34:32,261 - INFO - Found 1 potential work directories for author tlg0004
-2025-04-10 02:34:32,262 - INFO - Found 2 works for author tlg0004
-2025-04-10 02:34:32,262 - INFO - Successfully retrieved 2 works for author tlg0004
-2025-04-10 02:34:38,015 - INFO - GET request: /get_author_works?author_id=tlg1319
-2025-04-10 02:34:38,015 - INFO - Handling /get_author_works request for author_id: tlg1319
-2025-04-10 02:34:38,016 - INFO - Retrieving works for author: tlg1319
-2025-04-10 02:34:38,016 - INFO - Found 1 potential work directories for author tlg1319
-2025-04-10 02:34:38,016 - INFO - Found 1 works for author tlg1319
-2025-04-10 02:34:38,017 - INFO - Successfully retrieved 1 works for author tlg1319
-2025-04-10 02:34:46,763 - INFO - GET request: /get_author_works?author_id=tlg1325
-2025-04-10 02:34:46,763 - INFO - Handling /get_author_works request for author_id: tlg1325
-2025-04-10 02:34:46,764 - INFO - Retrieving works for author: tlg1325
-2025-04-10 02:34:46,764 - INFO - Found 1 potential work directories for author tlg1325
-2025-04-10 02:34:46,764 - INFO - Found 1 works for author tlg1325
-2025-04-10 02:34:46,764 - INFO - Successfully retrieved 1 works for author tlg1325
+2025-04-10 02:45:34,435 - INFO - Starting First1KGreek Browser...
+2025-04-10 02:45:34,435 - INFO - Server configuration:
+2025-04-10 02:45:34,435 - INFO -   Host: localhost
+2025-04-10 02:45:34,435 - INFO -   Port: 8000 (will try other ports if busy)
+2025-04-10 02:45:34,435 - INFO -   Debug mode: False
+2025-04-10 02:45:34,435 - INFO -   Open browser: True
+2025-04-10 02:45:34,435 - INFO - Press Ctrl+C to stop the server
+2025-04-10 02:45:34,435 - INFO - Starting First1KGreek Browser - Fixed Version 1.2.0
+2025-04-10 02:45:34,435 - INFO - With dark theme and improved editor detection
+2025-04-10 02:45:34,437 - WARNING - Port 8000 is already in use, trying another port
+2025-04-10 02:45:34,438 - INFO - Server running at http://localhost:8002/
+2025-04-10 02:45:34,561 - INFO - GET request: /
+2025-04-10 02:45:34,574 - INFO - GET request: /static/css/main.css?v=1744249534
+2025-04-10 02:45:34,580 - INFO - GET request: /static/css/dark-theme.css?v=1744249534
+2025-04-10 02:45:34,582 - INFO - GET request: /static/css/editors-page.css?v=1744249534
+2025-04-10 02:45:34,584 - INFO - GET request: /static/js/quit.js?v=1744249534
+2025-04-10 02:45:50,322 - INFO - GET request: /browse/editors
+2025-04-10 02:45:50,322 - INFO - Gathering editor data...
+2025-04-10 02:45:53,640 - INFO - Found 438 editors
+2025-04-10 02:45:53,641 - ERROR - Error handling request: [Errno 32] Broken pipe
+2025-04-10 02:45:53,647 - INFO - GET request: /browse/editors
+2025-04-10 02:45:53,647 - INFO - Gathering editor data...
+2025-04-10 02:45:56,239 - INFO - Found 438 editors
+2025-04-10 02:45:56,240 - ERROR - Error handling request: [Errno 32] Broken pipe
+2025-04-10 02:45:56,241 - INFO - GET request: /browse/authors
+2025-04-10 02:45:56,273 - INFO - Generated enhanced authors page with tabular format and filtering
+2025-04-10 02:45:56,296 - INFO - GET request: /static/css/main.css?v=1744249556
+2025-04-10 02:45:56,299 - INFO - GET request: /static/css/styles.css?v=1744249556
+2025-04-10 02:45:56,300 - INFO - GET request: /static/css/authors-table.css?v=1744249556
+2025-04-10 02:45:56,301 - INFO - GET request: /static/css/dark-theme.css?v=1744249556
+2025-04-10 02:45:56,302 - INFO - GET request: /static/css/authors-page.css?v=1744249556
+2025-04-10 02:45:56,302 - INFO - GET request: /static/css/editors-page.css?v=1744249556
+2025-04-10 02:45:56,303 - INFO - GET request: /static/js/authors.js?v=1744249556
+2025-04-10 02:45:56,304 - INFO - GET request: /static/js/quit.js?v=1744249556
+2025-04-10 02:45:58,052 - INFO - GET request: /browse/editors
+2025-04-10 02:45:58,052 - INFO - Gathering editor data...
+2025-04-10 02:46:00,536 - INFO - Found 438 editors
+2025-04-10 02:46:00,561 - INFO - GET request: /static/css/main.css?v=1744249560
+2025-04-10 02:46:00,562 - INFO - GET request: /static/css/dark-theme.css?v=1744249560
+2025-04-10 02:46:00,563 - INFO - GET request: /static/css/editors-page.css?v=1744249560
+2025-04-10 02:46:00,564 - INFO - GET request: /static/js/quit.js?v=1744249560
