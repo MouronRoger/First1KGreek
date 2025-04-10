@@ -23,6 +23,13 @@ def render_xml_view_page(file_path):
         if title_matches:
             work_title = title_matches[0]
             
+        # Determine language from filename for Perseus texts
+        language = "Greek"  # Default
+        if 'perseus-eng' in file_path:
+            language = "English"
+        elif 'perseus-grc' in file_path:
+            language = "Greek"
+            
         # Escape XML for display
         xml_display = escape(xml_content)
         
@@ -96,6 +103,7 @@ def render_xml_view_page(file_path):
         <div class="metadata">
             <p><strong>Author:</strong> {author_name}</p>
             <p><strong>Work:</strong> {work_title}</p>
+            <p><strong>Language:</strong> {language}</p>
             <p><strong>File:</strong> {file_path}</p>
         </div>
         
@@ -140,6 +148,13 @@ def render_reader_view_page(file_path):
         title_matches = re.findall(r'<title.*?>(.*?)</title>', xml_content)
         if title_matches:
             work_title = title_matches[0]
+            
+        # Determine language from filename for Perseus texts
+        language = "Greek"  # Default
+        if 'perseus-eng' in file_path:
+            language = "English"
+        elif 'perseus-grc' in file_path:
+            language = "Greek"
             
         # Extract text content
         # Remove XML tags but preserve line breaks
@@ -247,6 +262,7 @@ def render_reader_view_page(file_path):
         <div class="metadata">
             <p><strong>Author:</strong> {author_name}</p>
             <p><strong>Work:</strong> {work_title}</p>
+            <p><strong>Language:</strong> {language}</p>
         </div>
         
         <div class="reader-container">

@@ -73,8 +73,14 @@ def render_main_page():
 
         <div class="card">
             <h2>About</h2>
-            <p>Browse and search through Greek texts from the First Thousand Years Project. 
-            Features include browsing by author or editor, full-text search, and importing texts from Scaife/Perseus.</p>
+            <p>Browse and search through Greek texts collected from the First Thousand Years Project and the Perseus Digital Library.</p> 
+           <p> Features include browsing by author or editor, full-text search, and importing texts from Scaife/Perseus.</p>
+           <p> </p>
+<a href="https://www.livingstoicism.com" target="_blank">
+  <h2>A Living Stoicism Project</h2>
+</a>
+           
+           
         </div>
     </div>
 </body>
