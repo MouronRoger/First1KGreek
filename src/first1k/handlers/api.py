@@ -27,11 +27,14 @@ def get_author_works_for_api(author_id):
     works_data = []
     author_dir = os.path.join(DATA_DIR, author_id)
     
+    logger.info(f"API - Retrieving works for author: {author_id}")
+    logger.info(f"API - Looking in directory: {author_dir}")
+    
     if not os.path.exists(author_dir):
-        logger.warning(f"Author directory not found: {author_dir}")
+        logger.warning(f"API - Author directory not found: {author_dir}")
         return works_data
     
-    logger.info(f"Retrieving works for author: {author_id} from {author_dir}")
+    logger.info(f"API - Successfully found author directory at: {author_dir}")
     
     # Get user preferences for works
     user_prefs = get_user_preferences()
@@ -40,7 +43,10 @@ def get_author_works_for_api(author_id):
     
     # Process each work directory
     work_dirs = [d for d in os.listdir(author_dir) if os.path.isdir(os.path.join(author_dir, d))]
-    logger.info(f"Found {len(work_dirs)} potential work directories for author {author_id}")
+    logger.info(f"API - Found {len(work_dirs)} potential work directories for author {author_id}")
+    
+    # Log the work directories to help with debugging
+    logger.debug(f"API - Work directories: {work_dirs}")
     
     for work_dir_name in work_dirs:
         work_dir_path = os.path.join(author_dir, work_dir_name)
@@ -53,10 +59,10 @@ def get_author_works_for_api(author_id):
         
         # Skip if there are no XML files
         if not xml_files:
-            logger.debug(f"Skipping {work_dir_name} - no XML files found")
+            logger.debug(f"API - Skipping {work_dir_name} - no XML files found")
             continue
         
-        logger.debug(f"Processing work {work_id_base} with {len(xml_files)} XML files")
+        logger.debug(f"API - Processing work {work_id_base} with {len(xml_files)} XML files")
         
         # Load titles from __cts__.xml if available
         title_map = {}  # Maps language code to title
@@ -84,11 +90,15 @@ def get_author_works_for_api(author_id):
                         title_map['default'] = work_title_match.group(1).strip()
             
             except Exception as e:
-                logger.error(f"Error reading work metadata: {str(e)}")
+                logger.error(f"API - Error reading work metadata: {str(e)}")
         
         # Process each XML file directly
         for xml_file in xml_files:
             file_path = os.path.join(work_dir_path, xml_file)
+            
+            # Create a relative path that will work in both HTTP and FastAPI modes
+            # This is crucial for web links to work properly
+            relative_path = os.path.join("data", author_id, work_dir_name, xml_file)
             
             # Determine language directly from filename
             language = 'grc'  # Default to Greek
@@ -122,7 +132,7 @@ def get_author_works_for_api(author_id):
                         else:
                             title = f"Work {work_dir_name}"
                 except Exception as e:
-                    logger.error(f"Error reading file {file_path}: {str(e)}")
+                    logger.error(f"API - Error reading file {file_path}: {str(e)}")
                     title = f"Work {work_dir_name}"
             
             # Create a unique work ID that includes the language
@@ -133,14 +143,27 @@ def get_author_works_for_api(author_id):
                 "id": unique_work_id,
                 "title": title,
                 "language": language_display,
-                "file_path": file_path,
+                "file_path": relative_path,
+                "author_id": author_id,
                 "is_favorite": unique_work_id in favorites,
-                "is_archived": unique_work_id in archived
+                "is_archived": unique_work_id in archived,
+                # Add files array that the frontend expects
+                "files": [{
+                    "name": xml_file,
+                    "type": "xml",
+                    "path": relative_path
+                }]
             }
             
             works_data.append(work_data)
     
-    logger.info(f"Found {len(works_data)} works for author {author_id}")
+    # Log the final works data structure
+    logger.info(f"API - Final works_data has {len(works_data)} items")
+    if works_data:
+        # Log the structure of the first work to understand its format
+        logger.debug(f"API - First work data structure: {list(works_data[0].keys())}")
+        logger.debug(f"API - Sample work data: {works_data[0]}")
+    
     return works_data
 
 

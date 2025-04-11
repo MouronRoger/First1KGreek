@@ -18,6 +18,8 @@ The actual functionality is in the src/first1k/ package.
 
 import sys
 import logging
+import json
+from http.server import SimpleHTTPRequestHandler
 
 # Add the current directory to the Python path
 sys.path.insert(0, '.')
@@ -36,7 +38,27 @@ logger = logging.getLogger(__name__)
 try:
     # Import the modular implementation
     from src.first1k.__main__ import main
+    from src.first1k.config import AUTHORS_DATA_FILE, PORT, HOST
+    from src.first1k.server.server import CustomHTTPRequestHandler as RealCustomHTTPRequestHandler
+    from src.first1k.utils.network import is_port_in_use, find_available_port
     logger.info("Successfully imported modular implementation")
+    
+    # Import authors data for backward compatibility with tests
+    try:
+        with open(AUTHORS_DATA_FILE, 'r', encoding='utf-8') as f:
+            AUTHORS_DATA = json.load(f)
+    except Exception as e:
+        logger.error(f"Error loading authors data: {e}")
+        AUTHORS_DATA = {}
+        
+    # Define variables for backward compatibility with tests
+    DEBUG = False
+    
+    # Define CustomHTTPRequestHandler for backward compatibility with tests
+    class CustomHTTPRequestHandler(RealCustomHTTPRequestHandler):
+        """Wrapper around the real CustomHTTPRequestHandler for backward compatibility."""
+        pass
+        
 except ImportError as e:
     logger.error(f"Error importing modular implementation: {e}")
     logger.error("Please make sure the src/first1k package is installed")

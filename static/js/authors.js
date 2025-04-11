@@ -224,17 +224,87 @@ function fetchAuthorWorks(authorId) {
     loading.style.display = 'flex';
     worksList.style.display = 'none';
 
+    console.log(`Fetching works for author: ${authorId}`);
+
+    // Check if API adapter is available (for FastAPI compatibility)
+    if (window.First1KAdapters && typeof window.First1KAdapters.loadAuthorWorks === 'function') {
+        console.log('Using API adapter to fetch works');
+
+        // Use the adapter function which handles both legacy and API endpoints
+        window.First1KAdapters.loadAuthorWorks(
+            authorId,
+            // Success callback
+            (data) => {
+                console.log(`Works data received through adapter:`, data);
+
+                // Validate that data is an array
+                if (!Array.isArray(data)) {
+                    console.error('Data is not an array:', data);
+                    worksList.innerHTML = `<div class="works-error">Error: Expected an array of works but received: ${typeof data}</div>`;
+                    loading.style.display = 'none';
+                    worksList.style.display = 'grid';
+                    return;
+                }
+
+                renderWorks(authorId, data);
+                loading.style.display = 'none';
+                worksList.style.display = 'grid';
+            },
+            // Error callback
+            (error) => {
+                console.error('Error fetching works:', error);
+                worksList.innerHTML = `<div class="works-error">Error loading works: ${error.message}</div>`;
+                loading.style.display = 'none';
+                worksList.style.display = 'grid';
+            }
+        );
+        return;
+    }
+
+    // Fallback to direct fetch if adapter is not available
+    console.log('Fallback: Using direct fetch for works');
+
     // Fetch works data from API
     fetch(`/get_author_works?author_id=${authorId}`)
         .then(response => {
+            console.log(`Response status: ${response.status} ${response.statusText}`);
+            console.log(`Response content type: ${response.headers.get('content-type')}`);
+
             if (!response.ok) {
-                throw new Error('Network response was not ok');
+                throw new Error(`Network response error: ${response.status} ${response.statusText}`);
             }
-            return response.json();
+
+            // First check content type to handle appropriately
+            const contentType = response.headers.get('content-type');
+            if (contentType && contentType.includes('application/json')) {
+                return response.json().catch(error => {
+                    console.error('JSON parsing error:', error);
+                    console.log('Response text:', response.text());
+                    throw new Error('Invalid JSON in response');
+                });
+            } else {
+                // If not JSON, get as text and try to parse
+                return response.text().then(text => {
+                    console.log('Received non-JSON response:', text);
+                    try {
+                        return JSON.parse(text);
+                    } catch (error) {
+                        console.error('Failed to parse response as JSON:', error);
+                        throw new Error('Response was not JSON');
+                    }
+                });
+            }
         })
         .then(data => {
+            console.log(`Works data received:`, data);
+
+            // Validate that data is an array
+            if (!Array.isArray(data)) {
+                console.error('Data is not an array:', data);
+                throw new Error('Expected an array of works but received: ' + typeof data);
+            }
+
             renderWorks(authorId, data);
-            // Work count is now pre-loaded, no need to update it here
         })
         .catch(error => {
             console.error('Error fetching works:', error);

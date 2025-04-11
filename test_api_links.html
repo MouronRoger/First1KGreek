@@ -1,0 +1,296 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>First1KGreek API Test Links</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 20px;
+            background-color: #121212;
+            color: #fff;
+        }
+
+        h1,
+        h2 {
+            color: #4299e1;
+        }
+
+        a {
+            color: #63b3ed;
+            display: block;
+            margin: 10px 0;
+            text-decoration: none;
+        }
+
+        a:hover {
+            text-decoration: underline;
+        }
+
+        .section {
+            margin-bottom: 30px;
+            padding: 15px;
+            background-color: #1a1a1a;
+            border-radius: 5px;
+        }
+
+        .description {
+            margin-top: 5px;
+            font-size: 0.9em;
+            color: #ccc;
+        }
+
+        .button {
+            display: inline-block;
+            padding: 8px 16px;
+            background-color: #3182ce;
+            color: white;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            margin-right: 10px;
+        }
+
+        .button:hover {
+            background-color: #2c5282;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 20px;
+        }
+
+        th,
+        td {
+            padding: 8px;
+            text-align: left;
+            border-bottom: 1px solid #333;
+        }
+
+        th {
+            background-color: #2d3748;
+        }
+
+        tr:hover {
+            background-color: #2d3748;
+        }
+
+        .loading {
+            display: none;
+            margin: 20px 0;
+            color: #a0aec0;
+        }
+
+        .error {
+            color: #f56565;
+            margin: 10px 0;
+        }
+    </style>
+</head>
+
+<body>
+    <h1>First1KGreek FastAPI Test Links</h1>
+    <p>Use these links to test the FastAPI implementation</p>
+
+    <div class="section">
+        <h2>XML View Tests</h2>
+        <p>Testing different ways to reference XML files:</p>
+
+        <a href="http://localhost:8001/xml?path=data/tlg0032/tlg006/tlg0032.tlg006.perseus-eng2.xml">Relative path -
+            English</a>
+        <div class="description">Using a path relative to the project root</div>
+
+        <a href="http://localhost:8001/xml?path=data/tlg0032/tlg006/tlg0032.tlg006.perseus-grc2.xml">Relative path -
+            Greek</a>
+        <div class="description">Using a path relative to the project root</div>
+
+        <a
+            href="http://localhost:8001/xml?path=/Users/james/Documents/GitHub/First1KGreek/data/tlg0032/tlg006/tlg0032.tlg006.perseus-eng2.xml">Absolute
+            path - English</a>
+        <div class="description">Using an absolute path to the file</div>
+
+        <a
+            href="http://localhost:8001/xml?path=/Users/james/Documents/GitHub/First1KGreek/data/tlg0032/tlg006/tlg0032.tlg006.perseus-grc2.xml">Absolute
+            path - Greek</a>
+        <div class="description">Using an absolute path to the file</div>
+
+        <a href="http://localhost:8001/xml?path=tlg0032/tlg006/tlg0032.tlg006.perseus-eng2.xml">Short path - English</a>
+        <div class="description">Using a short path without the data/ prefix</div>
+
+        <a href="http://localhost:8001/xml?path=tlg0032/tlg006/tlg0032.tlg006.perseus-grc2.xml">Short path - Greek</a>
+        <div class="description">Using a short path without the data/ prefix</div>
+    </div>
+
+    <div class="section">
+        <h2>Reader View Tests</h2>
+        <p>Testing the reader view functionality:</p>
+
+        <a href="http://localhost:8001/reader?path=data/tlg0032/tlg006/tlg0032.tlg006.perseus-eng2.xml">Reader -
+            English</a>
+        <div class="description">Reader view for English text</div>
+
+        <a href="http://localhost:8001/reader?path=data/tlg0032/tlg006/tlg0032.tlg006.perseus-grc2.xml">Reader -
+            Greek</a>
+        <div class="description">Reader view for Greek text</div>
+    </div>
+
+    <div class="section">
+        <h2>Author Works API</h2>
+        <p>Testing the author works API:</p>
+
+        <a href="http://localhost:8001/get_author_works?author_id=tlg0032">Author Works (tlg0032)</a>
+        <div class="description">Get works for author tlg0032 (Xenophon)</div>
+
+        <a href="http://localhost:8001/get_author_works?author_id=tlg0004">Author Works (tlg0004)</a>
+        <div class="description">Get works for author tlg0004 (Diogenes Laertius)</div>
+
+        <a href="http://localhost:8001/api/authors/tlg0032/works">FastAPI Author Works (tlg0032)</a>
+        <div class="description">Modern API endpoint for author works</div>
+
+        <a href="http://localhost:8001/api/authors/tlg0004/works">FastAPI Author Works (tlg0004)</a>
+        <div class="description">Modern API endpoint for author works</div>
+    </div>
+
+    <div class="section">
+        <h2>Author Works - Live Demo</h2>
+        <p>Fetch and display works from the API (tests our fix):</p>
+
+        <div>
+            <button class="button" onclick="fetchWorks('tlg0032')">Load Xenophon (tlg0032)</button>
+            <button class="button" onclick="fetchWorks('tlg0004')">Load Diogenes (tlg0004)</button>
+            <button class="button" onclick="fetchWorks('tlg0007')">Load Aristotle (tlg0007)</button>
+            <button class="button" onclick="fetchWorks('tlg0059')">Load Plato (tlg0059)</button>
+        </div>
+
+        <div id="loading" class="loading">Loading works data...</div>
+        <div id="error" class="error"></div>
+
+        <table id="works-table">
+            <thead>
+                <tr>
+                    <th>Title</th>
+                    <th>Language</th>
+                    <th>File</th>
+                    <th>Actions</th>
+                </tr>
+            </thead>
+            <tbody id="works-list">
+                <tr>
+                    <td colspan="4">Click a button above to load author works</td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+
+    <script>
+        function fetchWorks(authorId) {
+            const loadingElement = document.getElementById('loading');
+            const errorElement = document.getElementById('error');
+            const worksList = document.getElementById('works-list');
+
+            // Clear previous content
+            errorElement.textContent = '';
+            worksList.innerHTML = '';
+            loadingElement.style.display = 'block';
+
+            // Fetch works data
+            fetch(`/get_author_works?author_id=${authorId}`)
+                .then(response => {
+                    if (!response.ok) {
+                        throw new Error(`HTTP error! Status: ${response.status}`);
+                    }
+
+                    console.log('Response headers:', response.headers);
+                    const contentType = response.headers.get('content-type');
+                    console.log('Content type:', contentType);
+
+                    if (contentType && contentType.includes('application/json')) {
+                        return response.json();
+                    } else {
+                        // If not JSON, try to parse it
+                        return response.text().then(text => {
+                            console.log('Raw response:', text);
+                            try {
+                                return JSON.parse(text);
+                            } catch (e) {
+                                throw new Error('Response is not valid JSON: ' + e.message);
+                            }
+                        });
+                    }
+                })
+                .then(works => {
+                    console.log('Works data:', works);
+
+                    // Validate works is an array
+                    if (!Array.isArray(works)) {
+                        throw new Error('Expected an array of works but received: ' + typeof works);
+                    }
+
+                    // Display works
+                    if (works.length === 0) {
+                        worksList.innerHTML = '<tr><td colspan="4">No works found for this author</td></tr>';
+                    } else {
+                        works.forEach(work => {
+                            const row = document.createElement('tr');
+
+                            // Title cell
+                            const titleCell = document.createElement('td');
+                            titleCell.textContent = work.title || 'Untitled';
+                            row.appendChild(titleCell);
+
+                            // Language cell
+                            const langCell = document.createElement('td');
+                            langCell.textContent = work.language || 'Unknown';
+                            row.appendChild(langCell);
+
+                            // File cell
+                            const fileCell = document.createElement('td');
+                            if (work.files && work.files.length > 0) {
+                                fileCell.textContent = work.files[0].name || 'No file';
+                            } else {
+                                fileCell.textContent = 'No files';
+                            }
+                            row.appendChild(fileCell);
+
+                            // Actions cell
+                            const actionsCell = document.createElement('td');
+
+                            // View link
+                            if (work.file_path) {
+                                const viewLink = document.createElement('a');
+                                viewLink.href = `/xml?path=${work.file_path}`;
+                                viewLink.textContent = 'View XML';
+                                viewLink.style.display = 'inline-block';
+                                viewLink.style.marginRight = '10px';
+                                actionsCell.appendChild(viewLink);
+
+                                const readerLink = document.createElement('a');
+                                readerLink.href = `/reader?path=${work.file_path}`;
+                                readerLink.textContent = 'Reader';
+                                readerLink.style.display = 'inline-block';
+                                actionsCell.appendChild(readerLink);
+                            }
+
+                            row.appendChild(actionsCell);
+                            worksList.appendChild(row);
+                        });
+                    }
+                })
+                .catch(error => {
+                    console.error('Error fetching works:', error);
+                    errorElement.textContent = `Error: ${error.message}`;
+                    worksList.innerHTML = '<tr><td colspan="4">Failed to load works data</td></tr>';
+                })
+                .finally(() => {
+                    loadingElement.style.display = 'none';
+                });
+        }
+    </script>
+</body>
+
+</html>

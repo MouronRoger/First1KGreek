@@ -13,7 +13,7 @@ from fastapi.middleware.cors import CORSMiddleware
 from fastapi.responses import HTMLResponse, RedirectResponse, JSONResponse
 from fastapi.openapi.utils import get_openapi
 
-from .config import VERSION, VERSION_NAME
+from .config import VERSION, VERSION_NAME, DATA_DIR, BASE_DIR
 from .routers import authors, preferences, search, view
 from .handlers import browse, ui, works, view as view_handler, search as search_handler
 from .handlers import api as api_handler
@@ -21,6 +21,11 @@ from .handlers import api as api_handler
 # Setup logging
 logging.basicConfig(level=logging.INFO)
 logger = logging.getLogger(__name__)
+
+# Log critical path information for debugging
+logger.info(f"BASE_DIR: {BASE_DIR}")
+logger.info(f"DATA_DIR: {DATA_DIR}")
+logger.info(f"Current working directory: {os.getcwd()}")
 
 # Create FastAPI application
 app = FastAPI(
@@ -40,8 +45,20 @@ app.add_middleware(
     allow_headers=["*"],
 )
 
-# Mount static files directory
-app.mount("/static", StaticFiles(directory="static"), name="static")
+# Mount static files directory with absolute path
+static_dir = os.path.join(BASE_DIR, "static")
+logger.info(f"Mounting static files directory: {static_dir}")
+if os.path.exists(static_dir):
+    app.mount("/static", StaticFiles(directory=static_dir), name="static")
+else:
+    logger.warning(f"Static directory not found at {static_dir}")
+    # Create the directory to avoid startup errors
+    try:
+        os.makedirs(static_dir, exist_ok=True)
+        logger.info(f"Created static directory at {static_dir}")
+        app.mount("/static", StaticFiles(directory=static_dir), name="static")
+    except Exception as e:
+        logger.error(f"Failed to create static directory: {e}")
 
 # Include API routers
 app.include_router(authors.router)
@@ -84,15 +101,47 @@ async def author_works(author_id: str):
 
 @app.get("/xml", response_class=HTMLResponse)
 async def xml_view(path: str):
-    """Render the XML view page."""
+    """Render the XML view page.
+    
+    Args:
+        path (str): Path to the XML file
+        
+    Returns:
+        HTMLResponse: The HTML content
+    """
+    logger.info(f"XML View requested for path: {path}")
+    
+    # Handle the request using the updated view handler
     status_code, content_type, html = await view_handler.async_handle_view_xml({"path": path})
-    return HTMLResponse(content=html)
+    
+    # If error, log it
+    if status_code != 200:
+        logger.error(f"Error rendering XML view: {status_code}")
+        
+    # Return the HTML response with appropriate status code
+    return HTMLResponse(content=html, status_code=status_code)
 
 @app.get("/reader", response_class=HTMLResponse)
 async def reader_view(path: str):
-    """Render the reader view page."""
+    """Render the reader view page.
+    
+    Args:
+        path (str): Path to the XML file
+        
+    Returns:
+        HTMLResponse: The HTML content
+    """
+    logger.info(f"Reader View requested for path: {path}")
+    
+    # Handle the request using the updated view handler
     status_code, content_type, html = await view_handler.async_handle_view_reader({"path": path})
-    return HTMLResponse(content=html)
+    
+    # If error, log it
+    if status_code != 200:
+        logger.error(f"Error rendering reader view: {status_code}")
+        
+    # Return the HTML response with appropriate status code
+    return HTMLResponse(content=html, status_code=status_code)
 
 @app.get("/search", response_class=HTMLResponse)
 async def search_page(q: str = None):
@@ -114,13 +163,38 @@ async def get_author_works(author_id: str):
     Returns:
         JSONResponse: List of author's works
     """
-    status_code, content_type, response_data = api_handler.handle_get_author_works({"author_id": author_id})
+    logger.info(f"Handling /get_author_works request for author_id: {author_id}")
     
-    # Parse the JSON string if it's not already a dict/list
-    if isinstance(response_data, str):
-        response_data = json.loads(response_data)
+    try:
+        # Check if author directory exists
+        author_dir = os.path.join(DATA_DIR, author_id)
+        logger.info(f"Looking for author directory at: {author_dir}")
         
-    return JSONResponse(content=response_data)
+        if not os.path.exists(author_dir):
+            logger.warning(f"Author directory not found: {author_dir}")
+            return JSONResponse(
+                status_code=404,
+                content={"error": f"Author {author_id} not found"}
+            )
+            
+        # Get author works directly from the handler function
+        works = api_handler.get_author_works_for_api(author_id)
+        
+        if not works:
+            logger.warning(f"No works found for author: {author_id}")
+            return JSONResponse(content=[])
+            
+        logger.info(f"Successfully retrieved {len(works)} works for author {author_id}")
+        logger.debug(f"Works data: {works}")
+        
+        # Return works directly as JSON content
+        return JSONResponse(content=works)
+    except Exception as e:
+        logger.error(f"Error retrieving works for {author_id}: {str(e)}", exc_info=True)
+        return JSONResponse(
+            status_code=500,
+            content={"error": f"Error retrieving works: {str(e)}"}
+        )
 
 @app.post("/update_work_preference")
 async def update_work_preference(request: Request):

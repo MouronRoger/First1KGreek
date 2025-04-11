@@ -4,12 +4,15 @@ This module implements API endpoints for accessing author data in the First1KGre
 """
 
 import logging
+import os
 from typing import List, Dict, Optional
 from fastapi import APIRouter, HTTPException, Query, Path, Depends
 from pydantic import BaseModel
 
-from ..models import Author, Work, APIResponse
+from ..models import Author, Work, APIResponse, WorkFile
 from ..data import authors as authors_dao
+from ..utils import api_handler
+from ..config import DATA_DIR
 
 # Setup logging
 logger = logging.getLogger(__name__)
@@ -117,32 +120,34 @@ async def get_author_works(
     Raises:
         HTTPException: If author is not found
     """
-    logger.info(f"Getting works for author {author_id}")
+    logger.info(f"API Router - Getting works for author {author_id}")
     
     try:
-        # Check if author exists
-        author_exists = await authors_dao.async_author_exists(author_id)
-        if not author_exists:
+        # Check if author exists by directly checking the directory
+        author_dir = os.path.join(DATA_DIR, author_id)
+        if not os.path.exists(author_dir) or not os.path.isdir(author_dir):
+            logger.warning(f"API Router - Author {author_id} directory not found at {author_dir}")
             raise HTTPException(status_code=404, detail=f"Author {author_id} not found")
         
-        # Get works for the author
-        works = await authors_dao.async_get_author_works(author_id)
+        # Get works directly using the handler function
+        works = api_handler.get_author_works_for_api(author_id)
         
         # Convert to Pydantic models
         return [
             Work(
                 id=work["id"],
                 title=work["title"],
-                author_id=work["author_id"],
+                author_id=work.get("author_id", author_id),
                 language=work["language"],
                 file_path=work["file_path"],
                 is_favorite=work.get("is_favorite", False),
                 is_archived=work.get("is_archived", False),
+                files=[WorkFile(**file) for file in work.get("files", [])]
             )
             for work in works
         ]
     except HTTPException:
         raise
     except Exception as e:
-        logger.error(f"Error getting works for author {author_id}: {e}")
+        logger.error(f"API Router - Error getting works for author {author_id}: {e}")
         raise HTTPException(status_code=500, detail=f"Error getting author works: {str(e)}") 

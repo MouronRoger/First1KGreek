@@ -6,6 +6,10 @@ Models are used for data validation, serialization, and documentation generation
 
 from typing import List, Dict, Optional, Union, Any
 from pydantic import BaseModel, Field
+import logging
+
+# Set up logging
+logger = logging.getLogger(__name__)
 
 
 class Author(BaseModel):
@@ -43,19 +47,10 @@ class Work(BaseModel):
 
 
 class WorkFile(BaseModel):
-    """Model representing a specific file of a work.
-    
-    Attributes:
-        work_id: ID of the work
-        file_path: Path to the file
-        format: File format (e.g., 'xml', 'txt')
-        language: Language of the file content
-    """
-    
-    work_id: str = Field(..., description="Work identifier")
-    file_path: str = Field(..., description="Path to the file")
-    format: str = Field(..., description="File format (xml, txt, etc.)")
-    language: str = Field("grc", description="Language code ('grc' for Greek, 'eng' for English)")
+    """Model for a work file."""
+    name: str = Field(..., description="File name")
+    type: str = Field(..., description="File type (e.g., 'xml')")
+    path: str = Field(..., description="File path")
 
 
 class UserPreference(BaseModel):
@@ -145,4 +140,16 @@ class APIResponse(BaseModel):
     
     success: bool = Field(..., description="Success status")
     message: str = Field(..., description="Response message")
-    data: Optional[Any] = Field(None, description="Response data") 
+    data: Optional[Any] = Field(None, description="Response data")
+
+
+class Work(BaseModel):
+    """Model for a work."""
+    id: str = Field(..., description="Work ID")
+    title: str = Field(..., description="Work title")
+    author_id: str = Field(..., description="Author ID")
+    language: str = Field(..., description="Work language")
+    file_path: str = Field(..., description="Path to the work file")
+    is_favorite: bool = Field(False, description="Whether the work is favorited")
+    is_archived: bool = Field(False, description="Whether the work is archived")
+    files: Optional[List[WorkFile]] = Field(None, description="List of files associated with the work") 
