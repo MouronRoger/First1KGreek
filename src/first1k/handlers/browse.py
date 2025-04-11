@@ -142,167 +142,38 @@ def render_authors_page():
     
     # Create the HTML structure
     html = f"""<!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
-    <title>First1K Greek - Authors</title>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>First1K Greek Browser - Authors</title>
     <link rel="stylesheet" href="/static/css/main.css?v={int(time.time())}">
-    <link rel="stylesheet" href="/static/css/styles.css?v={int(time.time())}">
-    <link rel="stylesheet" href="/static/css/authors-table.css?v={int(time.time())}">
-    <link rel="stylesheet" href="/static/css/dark-theme.css?v={int(time.time())}">
     <link rel="stylesheet" href="/static/css/authors-page.css?v={int(time.time())}">
-    <link rel="stylesheet" href="/static/css/editors-page.css?v={int(time.time())}">
     <script src="/static/js/authors.js?v={int(time.time())}"></script>
-    <script src="/static/js/quit.js?v={int(time.time())}"></script>
+    <script src="/static/js/api-adapters.js?v={int(time.time())}"></script>
 </head>
 <body>
     <div class="container">
-        <button class="quit-button" onclick="quitApplication()">Quit</button>
+        <header>
+            <div class="logo">First1K Greek Browser</div>
+            <nav>
+                <a href="/" class="active">Browse</a>
+                <a href="/search">Search</a>
+                <a href="/browse/editors">Editors</a>
+            </nav>
+        </header>
         
-        <h1>Authors</h1>
-        
-        <div class="nav-links">
-            <a href="/" class="button">Home</a>
-            <a href="/browse/editors" class="button">Browse Editors</a>
-            <a href="/search" class="button">Search</a>
-        </div>
-        
-        <!-- Search and filters -->
-        <div class="filter-container">
-            <div class="search-box">
-                <input type="text" id="author-search" placeholder="Search authors...">
-                <button onclick="searchAuthors()">Search</button>
-            </div>
-            
-            <div class="filter-section">
-                <span class="filter-label">View:</span>
-                <div class="status-filters">
-                    <button class="active" data-filter="all">All</button>
-                    <button data-filter="favorites">Favorites</button>
-                    <button data-filter="archived">Archived</button>
-                </div>
-            </div>
-            
-            <div class="filter-section">
-                <span class="filter-label">Century:</span>
-                <div class="century-filters">
-                    <button class="active" data-filter="all">All</button>
-"""
-
-    # Add century filter buttons
-    for century in centuries:
-        century_label = f"{abs(century)}{' BCE' if century < 0 else ' CE'}"
-        html += f'                    <button data-filter="{century}">{century_label}</button>\n'
-
-    html += """
-                </div>
-            </div>
-            
-            <div class="filter-section">
-                <span class="filter-label">Type:</span>
-                <select id="type-filter" class="type-filter" onchange="filterByType()">
-                    <option value="all">All Types</option>
-"""
-
-    # Add author type options
-    for author_type in author_types:
-        html += f'                    <option value="{author_type}">{author_type}</option>\n'
-
-    html += """
-                </select>
-            </div>
-        </div>
-        
-        <!-- Authors table -->
-        <table class="authors-table" id="authors-table">
-            <thead>
-                <tr>
-                    <th data-sort="author_name">Author <span class="sort-icon">&#9660;</span></th>
-                    <th data-sort="century">Century <span class="sort-icon"></span></th>
-                    <th data-sort="works">Works <span class="sort-icon"></span></th>
-                    <th data-sort="allegiance">Type <span class="sort-icon"></span></th>
-                    <th>Actions</th>
-                </tr>
-            </thead>
-            <tbody>
-"""
-
-    # Add author rows
-    for author in authors_data:
-        author_id = author.get("id", "")
-        author_name = author.get("name", author_id)
-        century = author.get("century", 0)
-        author_type = author.get("type", "Unknown")
-        
-        # Get works count for this author
-        works_count = get_author_works_count(author_id)
-        
-        # Format century for display
-        century_display = f"{abs(century)}{' BCE' if century < 0 else ' CE'}" if century != 0 else "Unknown"
-        
-        # Check if author is favorited or archived
-        is_favorite = author_id in favorites
-        is_archived = author_id in archived
-        
-        # Skip archived authors when rendering initially (they'll be shown with filtering)
-        if is_archived:
-            continue
-            
-        # Add author row
-        html += f"""
-                <tr data-author-id="{author_id}" data-century="{century}" data-type="{author_type}" class="{'favorite' if is_favorite else ''}">
-                    <td data-column="author_name">
-                        {author_name}
-                        <div class="author-type">{author_type}</div>
-                        <button class="toggle-works" onclick="toggleWorks('{author_id}')">Show works</button>
-                    </td>
-                    <td data-column="century">{century_display}</td>
-                    <td data-column="works">{works_count}</td>
-                    <td data-column="allegiance">{author_type}</td>
-                    <td>
-                        <div class="actions">
-                            <button class="favorite-btn {'active' if is_favorite else ''}" onclick="toggleFavorite('{author_id}')">
-                                {'★' if is_favorite else '☆'}
-                            </button>
-                            <button class="archive-btn" onclick="toggleArchive('{author_id}')">
-                                Archive
-                            </button>
-                            <button class="delete-btn" onclick="deleteAuthor('{author_id}')">
-                                Delete
-                            </button>
-                        </div>
-                    </td>
-                </tr>
-                <tr class="works-row" id="works-row-{author_id}" style="display: none;">
-                    <td colspan="5">
-                        <div class="works-container" id="works-container-{author_id}" style="display: none;">
-                            <div class="works-heading">Works by {author_name}</div>
-                            <div class="loading-works" id="loading-works-{author_id}">
-                                <div class="loader"></div>
-                                <span>Loading works...</span>
-                            </div>
-                            <div class="works-list" id="works-list-{author_id}"></div>
-                        </div>
-                    </td>
-                </tr>
-"""
-
-    # Complete the HTML
-    html += """
-            </tbody>
-        </table>
-        
-        <!-- Pagination -->
-        <div class="pagination" id="pagination">
-            <button id="prev-page" disabled>&laquo; Previous</button>
-            <span id="page-info">Page 1</span>
-            <button id="next-page">Next &raquo;</button>
-        </div>
-        
-        <!-- JavaScript for functionality -->
-        <script src="/static/js/authors.js?v={int(time.time())}"></script>
+        <main>
+            <h1>Browse Authors</h1>
+            {status_filters_html}
+            {century_filters_html}
+            {type_filters_html}
+            {search_html}
+            {table_html}
+            {pagination_html}
+        </main>
     </div>
+    <!-- Do not load authors.js again, it's already loaded in the head -->
 </body>
 </html>"""
     

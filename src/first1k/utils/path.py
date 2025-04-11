@@ -102,7 +102,16 @@ def create_data_path(*parts):
     Returns:
         str: The relative path
     """
-    return os.path.join("data", *parts)
+    # Make sure all parts are strings
+    str_parts = []
+    for part in parts:
+        if isinstance(part, list):
+            # If a part is a list, join its elements first
+            str_parts.extend([str(item) for item in part])
+        else:
+            str_parts.append(str(part))
+            
+    return os.path.join("data", *str_parts)
 
 
 def create_file_url(path):

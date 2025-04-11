@@ -98,7 +98,7 @@ def get_author_works_for_api(author_id):
             file_path = os.path.join(work_dir_path, xml_file)
             
             # Create a relative path using the path utility
-            relative_path = create_data_path(author_id, work_dir_name, xml_file)
+            relative_path = os.path.join("data", str(author_id), str(work_dir_name), str(xml_file))
             
             # Determine language directly from filename
             language = 'grc'  # Default to Greek
@@ -212,16 +212,20 @@ def handle_get_author_works(query_params):
         if not os.path.exists(author_dir):
             logger.warning(f"Author directory not found: {author_dir}")
             return 404, 'application/json', json.dumps({"error": f"Author {author_id} not found"})
-            
-        # Get author works
-        works = get_author_works_for_api(author_id)
         
-        if not works:
-            logger.warning(f"No works found for author: {author_id}")
-            return 200, 'application/json', json.dumps([])
+        try:    
+            # Get author works
+            works = get_author_works_for_api(author_id)
             
-        logger.info(f"Successfully retrieved {len(works)} works for author {author_id}")
-        return 200, 'application/json', json.dumps(works)
+            if not works:
+                logger.warning(f"No works found for author: {author_id}")
+                return 200, 'application/json', json.dumps([])
+                
+            logger.info(f"Successfully retrieved {len(works)} works for author {author_id}")
+            return 200, 'application/json', json.dumps(works)
+        except Exception as inner_e:
+            logger.error(f"Error in get_author_works_for_api: {str(inner_e)}", exc_info=True)
+            return 500, 'application/json', json.dumps({"error": f"Error retrieving works: {str(inner_e)}"})
     except Exception as e:
         logger.error(f"Error retrieving works for {author_id}: {str(e)}", exc_info=True)
         return 500, 'application/json', json.dumps({"error": f"Error retrieving works: {str(e)}"}) 

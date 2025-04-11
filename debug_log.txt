@@ -1,0 +1,129 @@
+2025-04-11 21:10:45,844 - __main__ - DEBUG - Debug logging enabled
+2025-04-11 21:10:45,844 - __main__ - INFO - Starting First1KGreek Browser 1.2.0 (Fixed Version)
+2025-04-11 21:10:45,845 - __main__ - INFO - Configuration: port=8000, host=localhost, debug=True, open_browser=True
+2025-04-11 21:10:45,845 - src.first1k.server.server - INFO - Starting First1KGreek Browser - Fixed Version 1.2.0
+2025-04-11 21:10:45,845 - src.first1k.server.server - INFO - With dark theme and improved editor detection
+2025-04-11 21:10:45,845 - src.first1k.server.server - INFO - Running in debug mode
+2025-04-11 21:10:45,846 - src.first1k.utils.network - DEBUG - Port 8000 is in use
+2025-04-11 21:10:45,846 - src.first1k.server.server - WARNING - Port 8000 is already in use, trying another port
+2025-04-11 21:10:45,846 - src.first1k.utils.network - DEBUG - Searching for available port starting from 8001
+2025-04-11 21:10:45,846 - src.first1k.utils.network - DEBUG - Port 8001 is in use
+2025-04-11 21:10:45,846 - src.first1k.utils.network - DEBUG - Port 8002 is available
+2025-04-11 21:10:45,846 - src.first1k.utils.network - DEBUG - Found available port: 8002
+2025-04-11 21:10:45,846 - src.first1k.utils.network - DEBUG - Port 8002 is available
+2025-04-11 21:10:45,846 - src.first1k.server.server - INFO - Server running at http://localhost:8002/
+2025-04-11 21:10:46,159 - src.first1k.server.server - INFO - GET request: /
+127.0.0.1 - - [11/Apr/2025 21:10:46] "GET / HTTP/1.1" 200 -
+2025-04-11 21:10:46,162 - src.first1k.server.server - DEBUG - Request processed in 0.0032 seconds
+2025-04-11 21:10:46,387 - src.first1k.server.server - INFO - GET request: /static/css/main.css?v=1744402246
+127.0.0.1 - - [11/Apr/2025 21:10:46] "GET /static/css/main.css?v=1744402246 HTTP/1.1" 200 -
+2025-04-11 21:10:46,395 - src.first1k.server.server - DEBUG - Request processed in 0.0080 seconds
+2025-04-11 21:10:46,397 - src.first1k.server.server - INFO - GET request: /static/css/dark-theme.css?v=1744402246
+127.0.0.1 - - [11/Apr/2025 21:10:46] "GET /static/css/dark-theme.css?v=1744402246 HTTP/1.1" 200 -
+2025-04-11 21:10:46,407 - src.first1k.server.server - DEBUG - Request processed in 0.0102 seconds
+2025-04-11 21:10:46,407 - src.first1k.server.server - INFO - GET request: /static/css/editors-page.css?v=1744402246
+127.0.0.1 - - [11/Apr/2025 21:10:46] "GET /static/css/editors-page.css?v=1744402246 HTTP/1.1" 200 -
+2025-04-11 21:10:46,408 - src.first1k.server.server - DEBUG - Request processed in 0.0005 seconds
+2025-04-11 21:10:46,408 - src.first1k.server.server - INFO - GET request: /static/js/quit.js?v=1744402246
+127.0.0.1 - - [11/Apr/2025 21:10:46] "GET /static/js/quit.js?v=1744402246 HTTP/1.1" 200 -
+2025-04-11 21:10:46,408 - src.first1k.server.server - DEBUG - Request processed in 0.0005 seconds
+2025-04-11 21:10:59,495 - src.first1k.server.server - INFO - GET request: /browse/authors
+2025-04-11 21:10:59,566 - src.first1k.handlers.browse - INFO - Generated enhanced authors page with tabular format and filtering
+127.0.0.1 - - [11/Apr/2025 21:10:59] "GET /browse/authors HTTP/1.1" 200 -
+2025-04-11 21:10:59,567 - src.first1k.server.server - DEBUG - Request processed in 0.0726 seconds
+2025-04-11 21:10:59,583 - src.first1k.server.server - INFO - GET request: /static/css/main.css?v=1744402259
+127.0.0.1 - - [11/Apr/2025 21:10:59] "GET /static/css/main.css?v=1744402259 HTTP/1.1" 200 -
+2025-04-11 21:10:59,584 - src.first1k.server.server - DEBUG - Request processed in 0.0008 seconds
+2025-04-11 21:10:59,586 - src.first1k.server.server - INFO - GET request: /static/css/styles.css?v=1744402259
+127.0.0.1 - - [11/Apr/2025 21:10:59] "GET /static/css/styles.css?v=1744402259 HTTP/1.1" 200 -
+2025-04-11 21:10:59,588 - src.first1k.server.server - DEBUG - Request processed in 0.0015 seconds
+2025-04-11 21:10:59,590 - src.first1k.server.server - INFO - GET request: /static/css/authors-table.css?v=1744402259
+127.0.0.1 - - [11/Apr/2025 21:10:59] "GET /static/css/authors-table.css?v=1744402259 HTTP/1.1" 200 -
+2025-04-11 21:10:59,591 - src.first1k.server.server - DEBUG - Request processed in 0.0010 seconds
+2025-04-11 21:10:59,592 - src.first1k.server.server - INFO - GET request: /static/css/dark-theme.css?v=1744402259
+127.0.0.1 - - [11/Apr/2025 21:10:59] "GET /static/css/dark-theme.css?v=1744402259 HTTP/1.1" 200 -
+2025-04-11 21:10:59,592 - src.first1k.server.server - DEBUG - Request processed in 0.0003 seconds
+2025-04-11 21:10:59,592 - src.first1k.server.server - INFO - GET request: /static/css/authors-page.css?v=1744402259
+127.0.0.1 - - [11/Apr/2025 21:10:59] "GET /static/css/authors-page.css?v=1744402259 HTTP/1.1" 200 -
+2025-04-11 21:10:59,592 - src.first1k.server.server - DEBUG - Request processed in 0.0003 seconds
+2025-04-11 21:10:59,593 - src.first1k.server.server - INFO - GET request: /static/css/editors-page.css?v=1744402259
+127.0.0.1 - - [11/Apr/2025 21:10:59] "GET /static/css/editors-page.css?v=1744402259 HTTP/1.1" 200 -
+2025-04-11 21:10:59,593 - src.first1k.server.server - DEBUG - Request processed in 0.0002 seconds
+2025-04-11 21:10:59,593 - src.first1k.server.server - INFO - GET request: /static/js/authors.js?v=1744402259
+127.0.0.1 - - [11/Apr/2025 21:10:59] "GET /static/js/authors.js?v=1744402259 HTTP/1.1" 200 -
+2025-04-11 21:10:59,593 - src.first1k.server.server - DEBUG - Request processed in 0.0001 seconds
+2025-04-11 21:10:59,594 - src.first1k.server.server - INFO - GET request: /static/js/quit.js?v=1744402259
+127.0.0.1 - - [11/Apr/2025 21:10:59] "GET /static/js/quit.js?v=1744402259 HTTP/1.1" 200 -
+2025-04-11 21:10:59,594 - src.first1k.server.server - DEBUG - Request processed in 0.0002 seconds
+2025-04-11 21:11:03,971 - src.first1k.server.server - INFO - GET request: /
+127.0.0.1 - - [11/Apr/2025 21:11:03] "GET / HTTP/1.1" 200 -
+2025-04-11 21:11:03,971 - src.first1k.server.server - DEBUG - Request processed in 0.0003 seconds
+2025-04-11 21:11:07,523 - src.first1k.server.server - INFO - GET request: /browse/authors
+2025-04-11 21:11:07,563 - src.first1k.handlers.browse - INFO - Generated enhanced authors page with tabular format and filtering
+127.0.0.1 - - [11/Apr/2025 21:11:07] "GET /browse/authors HTTP/1.1" 200 -
+2025-04-11 21:11:07,564 - src.first1k.server.server - DEBUG - Request processed in 0.0409 seconds
+2025-04-11 21:11:15,626 - src.first1k.server.server - INFO - GET request: /get_author_works?author_id=tlg4084
+2025-04-11 21:11:15,627 - src.first1k.handlers.api - INFO - Handling /get_author_works request for author_id: ['tlg4084']
+2025-04-11 21:11:15,627 - src.first1k.handlers.api - ERROR - Error retrieving works for ['tlg4084']: join() argument must be str, bytes, or os.PathLike object, not 'list'
+Traceback (most recent call last):
+  File "/Users/james/Documents/GitHub/First1KGreek/src/first1k/handlers/api.py", line 209, in handle_get_author_works
+    author_dir = os.path.join(DATA_DIR, author_id)
+  File "<frozen posixpath>", line 90, in join
+  File "<frozen genericpath>", line 188, in _check_arg_types
+TypeError: join() argument must be str, bytes, or os.PathLike object, not 'list'
+127.0.0.1 - - [11/Apr/2025 21:11:15] "GET /get_author_works?author_id=tlg4084 HTTP/1.1" 500 -
+2025-04-11 21:11:15,632 - src.first1k.server.server - DEBUG - Request processed in 0.0057 seconds
+2025-04-11 21:11:57,893 - src.first1k.server.server - INFO - GET request: /get_author_works?author_id=tlg4084
+2025-04-11 21:11:57,894 - src.first1k.handlers.api - INFO - Handling /get_author_works request for author_id: ['tlg4084']
+2025-04-11 21:11:57,894 - src.first1k.handlers.api - ERROR - Error retrieving works for ['tlg4084']: join() argument must be str, bytes, or os.PathLike object, not 'list'
+Traceback (most recent call last):
+  File "/Users/james/Documents/GitHub/First1KGreek/src/first1k/handlers/api.py", line 209, in handle_get_author_works
+    author_dir = os.path.join(DATA_DIR, author_id)
+  File "<frozen posixpath>", line 90, in join
+  File "<frozen genericpath>", line 188, in _check_arg_types
+TypeError: join() argument must be str, bytes, or os.PathLike object, not 'list'
+127.0.0.1 - - [11/Apr/2025 21:11:57] "GET /get_author_works?author_id=tlg4084 HTTP/1.1" 500 -
+2025-04-11 21:11:57,896 - src.first1k.server.server - DEBUG - Request processed in 0.0029 seconds
+2025-04-11 21:12:21,643 - src.first1k.server.server - INFO - GET request: /get_author_works?author_id=tlg4084
+2025-04-11 21:12:21,643 - src.first1k.handlers.api - INFO - Handling /get_author_works request for author_id: ['tlg4084']
+2025-04-11 21:12:21,643 - src.first1k.handlers.api - ERROR - Error retrieving works for ['tlg4084']: join() argument must be str, bytes, or os.PathLike object, not 'list'
+Traceback (most recent call last):
+  File "/Users/james/Documents/GitHub/First1KGreek/src/first1k/handlers/api.py", line 209, in handle_get_author_works
+    author_dir = os.path.join(DATA_DIR, author_id)
+  File "<frozen posixpath>", line 90, in join
+  File "<frozen genericpath>", line 188, in _check_arg_types
+TypeError: join() argument must be str, bytes, or os.PathLike object, not 'list'
+127.0.0.1 - - [11/Apr/2025 21:12:21] "GET /get_author_works?author_id=tlg4084 HTTP/1.1" 500 -
+2025-04-11 21:12:21,644 - src.first1k.server.server - DEBUG - Request processed in 0.0010 seconds
+2025-04-11 21:12:30,189 - src.first1k.server.server - INFO - GET request: /get_author_works?author_id=tlg4084
+2025-04-11 21:12:30,189 - src.first1k.handlers.api - INFO - Handling /get_author_works request for author_id: ['tlg4084']
+2025-04-11 21:12:30,189 - src.first1k.handlers.api - ERROR - Error retrieving works for ['tlg4084']: join() argument must be str, bytes, or os.PathLike object, not 'list'
+Traceback (most recent call last):
+  File "/Users/james/Documents/GitHub/First1KGreek/src/first1k/handlers/api.py", line 209, in handle_get_author_works
+    author_dir = os.path.join(DATA_DIR, author_id)
+  File "<frozen posixpath>", line 90, in join
+  File "<frozen genericpath>", line 188, in _check_arg_types
+TypeError: join() argument must be str, bytes, or os.PathLike object, not 'list'
+127.0.0.1 - - [11/Apr/2025 21:12:30] "GET /get_author_works?author_id=tlg4084 HTTP/1.1" 500 -
+2025-04-11 21:12:30,190 - src.first1k.server.server - DEBUG - Request processed in 0.0008 seconds
+2025-04-11 21:13:02,556 - src.first1k.server.server - INFO - GET request: /browse/authors
+2025-04-11 21:13:02,594 - src.first1k.handlers.browse - INFO - Generated enhanced authors page with tabular format and filtering
+127.0.0.1 - - [11/Apr/2025 21:13:02] "GET /browse/authors HTTP/1.1" 200 -
+2025-04-11 21:13:02,596 - src.first1k.server.server - DEBUG - Request processed in 0.0397 seconds
+2025-04-11 21:13:14,619 - src.first1k.server.server - INFO - GET request: /get_author_works?author_id=tlg4084
+2025-04-11 21:13:14,619 - src.first1k.handlers.api - INFO - Handling /get_author_works request for author_id: ['tlg4084']
+2025-04-11 21:13:14,619 - src.first1k.handlers.api - ERROR - Error retrieving works for ['tlg4084']: join() argument must be str, bytes, or os.PathLike object, not 'list'
+Traceback (most recent call last):
+  File "/Users/james/Documents/GitHub/First1KGreek/src/first1k/handlers/api.py", line 209, in handle_get_author_works
+    author_dir = os.path.join(DATA_DIR, author_id)
+  File "<frozen posixpath>", line 90, in join
+  File "<frozen genericpath>", line 188, in _check_arg_types
+TypeError: join() argument must be str, bytes, or os.PathLike object, not 'list'
+127.0.0.1 - - [11/Apr/2025 21:13:14] "GET /get_author_works?author_id=tlg4084 HTTP/1.1" 500 -
+2025-04-11 21:13:14,620 - src.first1k.server.server - DEBUG - Request processed in 0.0010 seconds
+2025-04-11 21:21:33,133 - src.first1k.server.server - INFO - GET request: /shutdown
+127.0.0.1 - - [11/Apr/2025 21:21:33] "GET /shutdown HTTP/1.1" 200 -
+2025-04-11 21:21:33,134 - src.first1k.server.server - DEBUG - Request processed in 0.0011 seconds
+2025-04-11 21:21:34,138 - src.first1k.server.server - INFO - Server stopping...
+2025-04-11 21:21:34,637 - __main__ - INFO - Server ran for 648.8 seconds
+2025-04-11 21:21:34,638 - src.first1k.server.server - INFO - Server closed successfully
