@@ -393,4 +393,66 @@ def render_reader_view_page(file_path):
         <a href="/" class="button">Back to Home</a>
     </div>
 </body>
-</html>""" 
+</html>"""
+
+async def async_render_xml_view_page(file_path):
+    """Async wrapper for render_xml_view_page.
+    
+    Args:
+        file_path: Path to the XML file
+        
+    Returns:
+        str: HTML with syntax-highlighted XML
+    """
+    return render_xml_view_page(file_path)
+
+
+async def async_render_reader_view_page(file_path):
+    """Async wrapper for render_reader_view_page.
+    
+    Args:
+        file_path: Path to the XML file
+        
+    Returns:
+        str: HTML with reader-friendly content
+    """
+    return render_reader_view_page(file_path)
+
+
+async def async_handle_view_xml(query_params, post_data=None):
+    """Async wrapper for handle_view_xml.
+    
+    Args:
+        query_params: Query parameters from the request
+        post_data: POST data from the request
+        
+    Returns:
+        tuple: (status_code, content_type, response_data)
+    """
+    return handle_view_xml(query_params, post_data)
+
+
+async def async_handle_view_reader(query_params, post_data=None):
+    """Async wrapper for handle_view_reader.
+    
+    Args:
+        query_params: Query parameters from the request
+        post_data: POST data from the request
+        
+    Returns:
+        tuple: (status_code, content_type, response_data)
+    """
+    return handle_view_reader(query_params, post_data)
+
+
+async def async_handle_view_raw(query_params, post_data=None):
+    """Async wrapper for handle_view_raw.
+    
+    Args:
+        query_params: Query parameters from the request
+        post_data: POST data from the request
+        
+    Returns:
+        tuple: (status_code, content_type, response_data)
+    """
+    return handle_view_raw(query_params, post_data) 

@@ -48,8 +48,8 @@ async def search_corpus(
     start_time = time.time()
     
     try:
-        # Call the existing search function
-        raw_results = search_handler.search_corpus(query)
+        # Call the async search function
+        raw_results = await search_handler.async_search_corpus(query)
         
         # Filter results if necessary
         if authors:

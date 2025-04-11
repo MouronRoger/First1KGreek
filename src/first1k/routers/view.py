@@ -49,8 +49,8 @@ async def view_xml(
         if not path.endswith('.xml'):
             raise HTTPException(status_code=400, detail="Only XML files are supported")
         
-        # Call the existing handler
-        html_content = view_handler.render_xml_view_page(path)
+        # Call the async handler
+        html_content = await view_handler.async_render_xml_view_page(path)
         return HTMLResponse(content=html_content)
     except HTTPException:
         raise
@@ -86,8 +86,8 @@ async def view_reader(
         if not path.endswith('.xml'):
             raise HTTPException(status_code=400, detail="Only XML files are supported")
         
-        # Call the existing handler
-        html_content = view_handler.render_reader_view_page(path)
+        # Call the async handler
+        html_content = await view_handler.async_render_reader_view_page(path)
         return HTMLResponse(content=html_content)
     except HTTPException:
         raise
@@ -120,9 +120,11 @@ async def view_raw(
         if not os.path.exists(path):
             raise HTTPException(status_code=404, detail=f"File not found: {path}")
         
-        # Read the file content
-        with open(path, 'r', encoding='utf-8') as f:
-            content = f.read()
+        # Read the file content using the async handler
+        status_code, content_type, content = await view_handler.async_handle_view_raw({"path": path})
+        
+        if status_code != 200:
+            raise HTTPException(status_code=status_code, detail="Error reading file")
             
         return PlainTextResponse(content=content)
     except HTTPException:

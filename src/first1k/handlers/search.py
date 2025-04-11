@@ -97,6 +97,17 @@ def search_corpus(search_term):
     
     return results
 
+async def async_search_corpus(search_term):
+    """Async wrapper for search_corpus.
+    
+    Args:
+        search_term: Text to search for
+        
+    Returns:
+        list: List of search results
+    """
+    return search_corpus(search_term)
+
 def handle_search_request(query_params, post_data=None):
     """Handle search request from the user.
     
