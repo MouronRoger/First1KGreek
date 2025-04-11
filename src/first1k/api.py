@@ -187,6 +187,17 @@ async def get_author_works(author_id: str):
         logger.info(f"Successfully retrieved {len(works)} works for author {author_id}")
         logger.debug(f"Works data: {works}")
         
+        # Ensure we're returning plain data, not already serialized JSON
+        if isinstance(works, str):
+            try:
+                # If it's a JSON string, parse it to get the actual data
+                logger.info("Works is a string, attempting to parse as JSON")
+                works = json.loads(works)
+            except json.JSONDecodeError:
+                logger.warning("Could not parse works as JSON, using as is")
+                # In this case, it's a string but not JSON, so wrap it in a list
+                works = [works]
+                
         # Return works directly as JSON content
         return JSONResponse(content=works)
     except Exception as e:

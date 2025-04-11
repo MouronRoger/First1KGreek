@@ -7,6 +7,7 @@ import json
 import logging
 from xml.sax.saxutils import escape
 from ..config import CSS_DIR, DATA_DIR
+from ..utils.path import normalize_path, to_absolute_path, is_valid_path
 
 # Set up logging
 logger = logging.getLogger(__name__)
@@ -27,29 +28,12 @@ def handle_view_xml(query_params):
     if not path:
         return 400, 'text/html', "<h1>Error: No path specified</h1>"
     
-    # Convert absolute path to relative path if it's an absolute path containing the data directory
-    # This is crucial for compatibility between HTTP and FastAPI modes
     logger.info(f"Original path requested: {path}")
     
-    # If it's an absolute path that contains our data directory
-    if os.path.isabs(path) and DATA_DIR in path:
-        # Extract the relative part of the path from the data directory
-        relative_path = os.path.relpath(path, os.path.dirname(DATA_DIR))
-        logger.info(f"Converted absolute path to relative: {relative_path}")
-        path = relative_path
+    # Use the path utility to normalize the path
+    full_path, relative_path = normalize_path(path)
     
-    # Ensure the path is properly formatted for the file system
-    if not os.path.isabs(path):
-        # If it's already a relative path, make sure it's relative to data directory
-        if not path.startswith("data/"):
-            path = os.path.join("data", path)
-        full_path = os.path.join(os.path.dirname(DATA_DIR), path)
-    else:
-        full_path = path
-    
-    logger.info(f"Resolved full path: {full_path}")
-    
-    if not os.path.exists(full_path):
+    if not full_path or not os.path.exists(full_path):
         error_msg = f"<h1>Error: File not found</h1><p>Could not find file at path: {path}</p>"
         logger.error(f"File not found: {full_path}")
         return 404, 'text/html', error_msg
@@ -681,6 +665,24 @@ async def async_handle_view_xml(query_params):
     Returns:
         tuple: (status_code, content_type, html)
     """
+    path = query_params.get('path', '')
+    
+    # Normalize paths - handle both absolute and relative paths
+    if not path:
+        return 400, 'text/html', "<h1>Error: No path specified</h1>"
+    
+    logger.info(f"XML - Original path requested: {path}")
+    
+    # Use the path utility to normalize the path
+    full_path, relative_path = normalize_path(path)
+    
+    if not full_path or not os.path.exists(full_path):
+        error_msg = f"<h1>Error: File not found</h1><p>Could not find file at path: {path}</p>"
+        logger.error(f"XML - File not found: {full_path}")
+        return 404, 'text/html', error_msg
+    
+    # Pass the updated path to the original XML handler
+    query_params['path'] = full_path
     return handle_view_xml(query_params)
 
 
@@ -699,26 +701,15 @@ async def async_handle_view_reader(query_params):
     if not path:
         return 400, 'text/html', "<h1>Error: No path specified</h1>"
     
-    # Convert absolute path to relative path if it's an absolute path containing the data directory
     logger.info(f"Reader - Original path requested: {path}")
     
-    # If it's an absolute path that contains our data directory
-    if os.path.isabs(path) and DATA_DIR in path:
-        # Extract the relative part of the path from the data directory
-        relative_path = os.path.relpath(path, os.path.dirname(DATA_DIR))
-        logger.info(f"Reader - Converted absolute path to relative: {relative_path}")
-        path = relative_path
+    # Use the path utility to normalize the path
+    full_path, relative_path = normalize_path(path)
     
-    # Ensure the path is properly formatted for the file system
-    if not os.path.isabs(path):
-        # If it's already a relative path, make sure it's relative to data directory
-        if not path.startswith("data/"):
-            path = os.path.join("data", path)
-        full_path = os.path.join(os.path.dirname(DATA_DIR), path)
-    else:
-        full_path = path
-    
-    logger.info(f"Reader - Resolved full path: {full_path}")
+    if not full_path or not os.path.exists(full_path):
+        error_msg = f"<h1>Error: File not found</h1><p>Could not find file at path: {path}</p>"
+        logger.error(f"Reader - File not found: {full_path}")
+        return 404, 'text/html', error_msg
     
     # Pass the updated path to the original reader handler
     query_params['path'] = full_path

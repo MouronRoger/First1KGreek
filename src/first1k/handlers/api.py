@@ -10,6 +10,7 @@ import logging
 from pathlib import Path
 
 from ..config import DATA_DIR, USER_PREFS_FILE
+from ..utils.path import normalize_path, create_data_path
 
 logger = logging.getLogger(__name__)
 
@@ -96,9 +97,8 @@ def get_author_works_for_api(author_id):
         for xml_file in xml_files:
             file_path = os.path.join(work_dir_path, xml_file)
             
-            # Create a relative path that will work in both HTTP and FastAPI modes
-            # This is crucial for web links to work properly
-            relative_path = os.path.join("data", author_id, work_dir_name, xml_file)
+            # Create a relative path using the path utility
+            relative_path = create_data_path(author_id, work_dir_name, xml_file)
             
             # Determine language directly from filename
             language = 'grc'  # Default to Greek
