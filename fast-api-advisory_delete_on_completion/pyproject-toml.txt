@@ -1,0 +1,52 @@
+[build-system]
+requires = ["setuptools>=42", "wheel"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "first1kgreek"
+version = "1.2.0"
+description = "Browser for ancient Greek texts from the First 1000 Years Project"
+readme = "README.md"
+requires-python = ">=3.8"
+license = {text = "MIT"}
+authors = [
+    {name = "First1KGreek Team"}
+]
+dependencies = [
+    "fastapi>=0.95.1",
+    "uvicorn>=0.22.0",
+    "pydantic>=2.0.0",
+    "jinja2>=3.1.2",
+]
+
+[project.optional-dependencies]
+dev = [
+    "pytest>=8.0.0",
+    "pytest-cov>=4.1.0",
+    "pytest-mock>=3.11.1",
+    "pylint>=3.0.2",
+    "httpx>=0.24.0",
+    "black>=23.3.0",
+    "isort>=5.12.0",
+]
+
+[project.scripts]
+first1kgreek = "first1k.__main__:main"
+
+[tool.black]
+line-length = 120
+target-version = ['py38']
+include = '\.pyi?$'
+
+[tool.isort]
+profile = "black"
+line_length = 120
+
+[tool.pytest]
+testpaths = ["tests"]
+python_files = "test_*.py"
+pythonpath = ["."]
+
+[tool.setuptools]
+packages = ["first1k"]
+package-dir = {"" = "src"}

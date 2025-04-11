@@ -1,0 +1,636 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>First1K Greek - Authors</title>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="/static/css/main.css">
+    <link rel="stylesheet" href="/static/css/styles.css">
+    <link rel="stylesheet" href="/static/css/authors-table.css">
+    <link rel="stylesheet" href="/static/css/dark-theme.css">
+    <link rel="stylesheet" href="/static/css/authors-page.css">
+    <link rel="stylesheet" href="/static/css/editors-page.css">
+    <script src="/static/js/api-client.js"></script>
+    <script src="/static/js/quit.js"></script>
+</head>
+<body>
+    <div class="container">
+        <button class="quit-button" onclick="quitApplication()">Quit</button>
+        
+        <h1>Authors</h1>
+        
+        <div class="nav-links">
+            <a href="/" class="button">Home</a>
+            <a href="/editors" class="button">Browse Editors</a>
+            <a href="/search" class="button">Search</a>
+        </div>
+        
+        <!-- Search and filters -->
+        <div class="filter-container">
+            <div class="search-box">
+                <input type="text" id="author-search" placeholder="Search authors...">
+                <button onclick="searchAuthors()">Search</button>
+            </div>
+            
+            <div class="filter-section">
+                <span class="filter-label">View:</span>
+                <div class="status-filters">
+                    <button class="active" data-filter="all">All</button>
+                    <button data-filter="favorites">Favorites</button>
+                    <button data-filter="archived">Archived</button>
+                </div>
+            </div>
+            
+            <div class="filter-section">
+                <span class="filter-label">Century:</span>
+                <div class="century-filters">
+                    <button class="active" data-filter="all">All</button>
+                    <button data-filter="-8">8 BCE</button>
+                    <button data-filter="-5">5 BCE</button>
+                    <button data-filter="-4">4 BCE</button>
+                    <button data-filter="-3">3 BCE</button>
+                    <button data-filter="-2">2 BCE</button>
+                    <button data-filter="-1">1 BCE</button>
+                    <button data-filter="1">1 CE</button>
+                    <button data-filter="2">2 CE</button>
+                    <button data-filter="3">3 CE</button>
+                </div>
+            </div>
+            
+            <div class="filter-section">
+                <span class="filter-label">Type:</span>
+                <select id="type-filter" class="type-filter" onchange="filterByType()">
+                    <option value="all">All Types</option>
+                    <option value="Philosopher">Philosophers</option>
+                    <option value="Poet">Poets</option>
+                    <option value="Historian">Historians</option>
+                    <option value="Orator">Orators</option>
+                </select>
+            </div>
+        </div>
+        
+        <!-- Authors table -->
+        <table class="authors-table" id="authors-table">
+            <thead>
+                <tr>
+                    <th data-sort="author_name">Author <span class="sort-icon">&#9660;</span></th>
+                    <th data-sort="century">Century <span class="sort-icon"></span></th>
+                    <th data-sort="works">Works <span class="sort-icon"></span></th>
+                    <th data-sort="allegiance">Type <span class="sort-icon"></span></th>
+                    <th>Actions</th>
+                </tr>
+            </thead>
+            <tbody id="authors-table-body">
+                <!-- Authors will be loaded here via API -->
+                <tr>
+                    <td colspan="5" class="loading-message">Loading authors...</td>
+                </tr>
+            </tbody>
+        </table>
+        
+        <!-- Pagination -->
+        <div class="pagination" id="pagination">
+            <button id="prev-page" disabled>&laquo; Previous</button>
+            <span id="page-info">Page 1</span>
+            <button id="next-page">Next &raquo;</button>
+        </div>
+    </div>
+
+    <script>
+        // Current sort state
+        let currentSort = {
+            column: 'author_name',
+            direction: 'asc'
+        };
+
+        // Pagination state
+        let pagination = {
+            currentPage: 1,
+            rowsPerPage: 25,
+            totalPages: 1
+        };
+
+        // Filters state
+        let filters = {
+            status: 'all',
+            century: 'all',
+            type: 'all',
+            search: ''
+        };
+
+        // User preferences
+        let userPreferences = {
+            favorites: [],
+            archived: []
+        };
+
+        // Load authors via the API
+        function loadAuthors() {
+            const tableBody = document.getElementById('authors-table-body');
+            tableBody.innerHTML = '<tr><td colspan="5" class="loading-message">Loading authors...</td></tr>';
+            
+            // Prepare query parameters based on filters
+            const queryParams = {};
+            if (filters.search) queryParams.search = filters.search;
+            if (filters.century !== 'all') queryParams.century = parseInt(filters.century);
+            if (filters.type !== 'all') queryParams.type = filters.type;
+            queryParams.page = pagination.currentPage;
+            queryParams.limit = pagination.rowsPerPage;
+            
+            // Load user preferences first
+            window.apiClient.getPreferences()
+                .then(prefs => {
+                    userPreferences = prefs;
+                    
+                    // Then load authors
+                    return window.apiClient.getAuthors(queryParams);
+                })
+                .then(authors => {
+                    // Clear loading message
+                    tableBody.innerHTML = '';
+                    
+                    if (authors.length === 0) {
+                        tableBody.innerHTML = '<tr><td colspan="5" class="empty-message">No authors found</td></tr>';
+                        return;
+                    }
+                    
+                    // Render authors
+                    authors.forEach(author => {
+                        // Format century for display
+                        const century = author.century;
+                        const centuryDisplay = century !== 0 ? 
+                            `${Math.abs(century)}${century < 0 ? ' BCE' : ' CE'}` : 
+                            'Unknown';
+                        
+                        // Check if author is favorited or archived
+                        const isFavorite = author.is_favorite;
+                        const isArchived = author.is_archived;
+                        
+                        // Create table row
+                        const row = document.createElement('tr');
+                        row.dataset.authorId = author.id;
+                        row.dataset.century = author.century;
+                        row.dataset.type = author.type;
+                        if (isFavorite) row.classList.add('favorite');
+                        
+                        // Create table cells
+                        row.innerHTML = `
+                            <td data-column="author_name">
+                                ${author.name}
+                                <div class="author-type">${author.type || 'Unknown'}</div>
+                                <button class="toggle-works" onclick="toggleWorks('${author.id}')">Show works</button>
+                            </td>
+                            <td data-column="century">${centuryDisplay}</td>
+                            <td data-column="works">${author.works_count || 0}</td>
+                            <td data-column="allegiance">${author.type || 'Unknown'}</td>
+                            <td>
+                                <div class="actions">
+                                    <button class="favorite-btn ${isFavorite ? 'active' : ''}" onclick="toggleFavorite('${author.id}')">
+                                        ${isFavorite ? '★' : '☆'}
+                                    </button>
+                                    <button class="archive-btn ${isArchived ? 'active' : ''}" onclick="toggleArchive('${author.id}')">
+                                        ${isArchived ? 'Unarchive' : 'Archive'}
+                                    </button>
+                                    <button class="delete-btn" onclick="deleteAuthor('${author.id}')">
+                                        Delete
+                                    </button>
+                                </div>
+                            </td>
+                        `;
+                        
+                        tableBody.appendChild(row);
+                        
+                        // Create works row
+                        const worksRow = document.createElement('tr');
+                        worksRow.classList.add('works-row');
+                        worksRow.id = `works-row-${author.id}`;
+                        worksRow.style.display = 'none';
+                        worksRow.innerHTML = `
+                            <td colspan="5">
+                                <div class="works-container" id="works-container-${author.id}" style="display: none;">
+                                    <div class="works-heading">Works by ${author.name}</div>
+                                    <div class="loading-works" id="loading-works-${author.id}">
+                                        <div class="loader"></div>
+                                        <span>Loading works...</span>
+                                    </div>
+                                    <div class="works-list" id="works-list-${author.id}"></div>
+                                </div>
+                            </td>
+                        `;
+                        
+                        tableBody.appendChild(worksRow);
+                    });
+                    
+                    // Update pagination
+                    pagination.totalPages = Math.ceil(authors.length / pagination.rowsPerPage);
+                    updatePagination();
+                })
+                .catch(error => {
+                    console.error('Error loading authors:', error);
+                    tableBody.innerHTML = `<tr><td colspan="5" class="error-message">Error loading authors: ${error.message}</td></tr>`;
+                });
+        }
+
+        // Initialize on page load
+        document.addEventListener('DOMContentLoaded', function() {
+            // Load authors
+            loadAuthors();
+            
+            // Set up sorting
+            document.querySelectorAll('th[data-sort]').forEach(th => {
+                th.addEventListener('click', () => {
+                    const column = th.getAttribute('data-sort');
+                    sortTable(column);
+                });
+            });
+            
+            // Set up status filters
+            document.querySelectorAll('.status-filters button').forEach(btn => {
+                btn.addEventListener('click', () => {
+                    document.querySelectorAll('.status-filters button').forEach(b => b.classList.remove('active'));
+                    btn.classList.add('active');
+                    filters.status = btn.getAttribute('data-filter');
+                    applyFilters();
+                });
+            });
+            
+            // Set up century filters
+            document.querySelectorAll('.century-filters button').forEach(btn => {
+                btn.addEventListener('click', () => {
+                    document.querySelectorAll('.century-filters button').forEach(b => b.classList.remove('active'));
+                    btn.classList.add('active');
+                    filters.century = btn.getAttribute('data-filter');
+                    applyFilters();
+                });
+            });
+            
+            // Set up search input
+            document.getElementById('author-search').addEventListener('keyup', event => {
+                if (event.key === 'Enter') {
+                    searchAuthors();
+                }
+            });
+            
+            // Set up pagination
+            document.getElementById('prev-page').addEventListener('click', () => {
+                if (pagination.currentPage > 1) {
+                    pagination.currentPage--;
+                    loadAuthors();
+                }
+            });
+            
+            document.getElementById('next-page').addEventListener('click', () => {
+                if (pagination.currentPage < pagination.totalPages) {
+                    pagination.currentPage++;
+                    loadAuthors();
+                }
+            });
+        });
+
+        // Toggle favorite status
+        function toggleFavorite(authorId) {
+            const row = document.querySelector(`tr[data-author-id="${authorId}"]`);
+            const btn = row.querySelector('.favorite-btn');
+            const isFavorite = btn.classList.contains('active');
+            
+            // Update UI
+            if (isFavorite) {
+                // Remove from favorites
+                btn.classList.remove('active');
+                btn.innerHTML = '☆';
+                row.classList.remove('favorite');
+                userPreferences.favorites = userPreferences.favorites.filter(id => id !== authorId);
+            } else {
+                // Add to favorites
+                btn.classList.add('active');
+                btn.innerHTML = '★';
+                row.classList.add('favorite');
+                userPreferences.favorites.push(authorId);
+            }
+            
+            // Update preferences via API
+            window.apiClient.updateBatchPreferences(userPreferences)
+                .catch(error => {
+                    console.error('Error updating preferences:', error);
+                    // Revert UI changes on error
+                    loadAuthors();
+                });
+        }
+
+        // Toggle archive status
+        function toggleArchive(authorId) {
+            const row = document.querySelector(`tr[data-author-id="${authorId}"]`);
+            const btn = row.querySelector('.archive-btn');
+            const isArchived = btn.classList.contains('active');
+            
+            // Update UI
+            if (isArchived) {
+                // Remove from archived
+                btn.classList.remove('active');
+                btn.innerHTML = 'Archive';
+                userPreferences.archived = userPreferences.archived.filter(id => id !== authorId);
+            } else {
+                // Add to archived
+                btn.classList.add('active');
+                btn.innerHTML = 'Unarchive';
+                userPreferences.archived.push(authorId);
+                
+                // Hide if filter is not 'archived'
+                if (filters.status !== 'archived') {
+                    row.style.display = 'none';
+                    const worksRow = document.getElementById(`works-row-${authorId}`);
+                    if (worksRow) worksRow.style.display = 'none';
+                }
+            }
+            
+            // Update preferences via API
+            window.apiClient.updateBatchPreferences(userPreferences)
+                .catch(error => {
+                    console.error('Error updating preferences:', error);
+                    // Revert UI changes on error
+                    loadAuthors();
+                });
+        }
+
+        // Delete author (just visual, doesn't delete from filesystem)
+        function deleteAuthor(authorId) {
+            if (confirm('Are you sure you want to delete this author from your view?')) {
+                const row = document.querySelector(`tr[data-author-id="${authorId}"]`);
+                const worksRow = document.getElementById(`works-row-${authorId}`);
+                
+                // Remove from DOM
+                row.style.display = 'none';
+                worksRow.style.display = 'none';
+                
+                // Add to archived (using same mechanism as archive)
+                if (!userPreferences.archived.includes(authorId)) {
+                    userPreferences.archived.push(authorId);
+                    
+                    // Update preferences via API
+                    window.apiClient.updateBatchPreferences(userPreferences)
+                        .catch(error => {
+                            console.error('Error updating preferences:', error);
+                            // Revert UI changes on error
+                            loadAuthors();
+                        });
+                }
+            }
+        }
+
+        // Toggle works display
+        function toggleWorks(authorId) {
+            const container = document.getElementById(`works-container-${authorId}`);
+            const worksRow = document.getElementById(`works-row-${authorId}`);
+            const button = document.querySelector(`tr[data-author-id="${authorId}"] .toggle-works`);
+            
+            if (container.style.display === 'block') {
+                // Hide works
+                container.style.display = 'none';
+                worksRow.style.display = 'none';
+                button.textContent = 'Show works';
+            } else {
+                // Show works
+                container.style.display = 'block';
+                worksRow.style.display = 'table-row';
+                button.textContent = 'Hide works';
+                
+                // Check if works are already loaded
+                const worksList = document.getElementById(`works-list-${authorId}`);
+                if (worksList.children.length === 0) {
+                    // Load works data
+                    fetchAuthorWorks(authorId);
+                }
+            }
+        }
+
+        // Fetch author works data
+        function fetchAuthorWorks(authorId) {
+            const loading = document.getElementById(`loading-works-${authorId}`);
+            const worksList = document.getElementById(`works-list-${authorId}`);
+            
+            loading.style.display = 'flex';
+            worksList.style.display = 'none';
+            
+            // Fetch works data from API
+            window.apiClient.getAuthorWorks(authorId)
+                .then(works => {
+                    renderWorks(authorId, works);
+                })
+                .catch(error => {
+                    console.error('Error fetching works:', error);
+                    worksList.innerHTML = `<div class="works-error">Error loading works: ${error.message}</div>`;
+                })
+                .finally(() => {
+                    loading.style.display = 'none';
+                    worksList.style.display = 'grid';
+                });
+        }
+
+        // Render works data
+        function renderWorks(authorId, works) {
+            const worksList = document.getElementById(`works-list-${authorId}`);
+            worksList.innerHTML = '';
+            
+            if (!works || works.length === 0) {
+                worksList.innerHTML = '<div class="no-works">No works found</div>';
+                return;
+            }
+            
+            works.forEach(work => {
+                const workItem = document.createElement('div');
+                workItem.className = 'work-item';
+                workItem.dataset.workId = work.id;
+                
+                // Check if work is favorited or archived
+                const isFavorite = userPreferences.favorites.includes(work.id);
+                const isArchived = userPreferences.archived.includes(work.id);
+                
+                if (isFavorite) {
+                    workItem.classList.add('favorite');
+                }
+                
+                if (isArchived) {
+                    workItem.classList.add('archived');
+                }
+                
+                workItem.innerHTML = `
+                    <div class="work-content">
+                        <div class="work-title">${work.title || 'Untitled Work'}</div>
+                        <div class="work-info">Language: ${work.language || 'Unknown'}</div>
+                    </div>
+                    <div class="work-actions">
+                        <button class="action-btn favorite-btn ${isFavorite ? 'active' : ''}" 
+                                onclick="toggleWorkFavorite('${work.id}')">
+                            ${isFavorite ? '★' : '☆'}
+                        </button>
+                        <button class="action-btn archive-btn ${isArchived ? 'active' : ''}" 
+                                onclick="toggleWorkArchive('${work.id}')">
+                            ${isArchived ? 'Unarchive' : 'Archive'}
+                        </button>
+                        <button class="action-btn delete-btn" 
+                                onclick="deleteWork('${work.id}')">
+                            Delete
+                        </button>
+                        <a href="/view?path=${work.file_path}" class="view-link">View</a>
+                    </div>
+                `;
+                
+                worksList.appendChild(workItem);
+            });
+        }
+
+        // Toggle work favorite status
+        function toggleWorkFavorite(workId) {
+            // Check current state
+            const isFavorite = userPreferences.favorites.includes(workId);
+            
+            // Update UI
+            document.querySelectorAll(`.work-item[data-work-id="${workId}"]`).forEach(item => {
+                const btn = item.querySelector('.favorite-btn');
+                if (isFavorite) {
+                    // Remove from favorites
+                    item.classList.remove('favorite');
+                    btn.classList.remove('active');
+                    btn.innerHTML = '☆';
+                    userPreferences.favorites = userPreferences.favorites.filter(id => id !== workId);
+                } else {
+                    // Add to favorites
+                    item.classList.add('favorite');
+                    btn.classList.add('active');
+                    btn.innerHTML = '★';
+                    userPreferences.favorites.push(workId);
+                }
+            });
+            
+            // Update preferences via API
+            window.apiClient.updateWorkPreference({
+                workId: workId,
+                type: 'favorite',
+                action: isFavorite ? 'remove' : 'add'
+            })
+            .catch(error => {
+                console.error('Error updating work preference:', error);
+                // Revert UI changes on error
+                fetchAuthorWorks(workId.split('.')[0] + '.' + workId.split('.')[1]);
+            });
+        }
+
+        // Toggle work archive status
+        function toggleWorkArchive(workId) {
+            // Check current state
+            const isArchived = userPreferences.archived.includes(workId);
+            
+            // Update UI
+            document.querySelectorAll(`.work-item[data-work-id="${workId}"]`).forEach(item => {
+                const btn = item.querySelector('.archive-btn');
+                if (isArchived) {
+                    // Remove from archived
+                    item.classList.remove('archived');
+                    btn.classList.remove('active');
+                    btn.innerHTML = 'Archive';
+                    userPreferences.archived = userPreferences.archived.filter(id => id !== workId);
+                } else {
+                    // Add to archived
+                    item.classList.add('archived');
+                    btn.classList.add('active');
+                    btn.innerHTML = 'Unarchive';
+                    userPreferences.archived.push(workId);
+                }
+            });
+            
+            // Update preferences via API
+            window.apiClient.updateWorkPreference({
+                workId: workId,
+                type: 'archive',
+                action: isArchived ? 'remove' : 'add'
+            })
+            .catch(error => {
+                console.error('Error updating work preference:', error);
+                // Revert UI changes on error
+                fetchAuthorWorks(workId.split('.')[0] + '.' + workId.split('.')[1]);
+            });
+        }
+
+        // Delete work (just visual, doesn't delete from filesystem)
+        function deleteWork(workId) {
+            if (confirm('Are you sure you want to delete this work from your view?')) {
+                // Update UI
+                document.querySelectorAll(`.work-item[data-work-id="${workId}"]`).forEach(item => {
+                    item.style.display = 'none';
+                });
+                
+                // Add to archived (using same mechanism as archive)
+                if (!userPreferences.archived.includes(workId)) {
+                    userPreferences.archived.push(workId);
+                    
+                    // Update preferences via API
+                    window.apiClient.updateWorkPreference({
+                        workId: workId,
+                        type: 'delete',
+                        action: 'add'
+                    })
+                    .catch(error => {
+                        console.error('Error updating work preference:', error);
+                        // Revert UI changes on error
+                        fetchAuthorWorks(workId.split('.')[0] + '.' + workId.split('.')[1]);
+                    });
+                }
+            }
+        }
+
+        // Sort table by column
+        function sortTable(column) {
+            // Set sort direction
+            let direction = 'asc';
+            if (currentSort.column === column) {
+                direction = currentSort.direction === 'asc' ? 'desc' : 'asc';
+            }
+            
+            // Update current sort
+            currentSort.column = column;
+            currentSort.direction = direction;
+            
+            // Update sort icons
+            document.querySelectorAll('th .sort-icon').forEach(icon => {
+                icon.innerHTML = '';
+            });
+            
+            const sortIcon = document.querySelector(`th[data-sort="${column}"] .sort-icon`);
+            sortIcon.innerHTML = direction === 'asc' ? '&#9650;' : '&#9660;';
+            
+            // Reload authors with new sorting
+            loadAuthors();
+        }
+
+        // Apply all filters
+        function applyFilters() {
+            // Reset pagination
+            pagination.currentPage = 1;
+            
+            // Reload authors with filters
+            loadAuthors();
+        }
+
+        // Update pagination display
+        function updatePagination() {
+            document.getElementById('prev-page').disabled = pagination.currentPage <= 1;
+            document.getElementById('next-page').disabled = pagination.currentPage >= pagination.totalPages;
+            document.getElementById('page-info').textContent = `Page ${pagination.currentPage} of ${pagination.totalPages || 1}`;
+        }
+
+        // Search authors by name
+        function searchAuthors() {
+            const searchInput = document.getElementById('author-search');
+            filters.search = searchInput.value.trim();
+            applyFilters();
+        }
+
+        // Filter by author type
+        function filterByType() {
+            const typeSelect = document.getElementById('type-filter');
+            filters.type = typeSelect.value;
+            applyFilters();
+        }
+    </script>
+</body>
+</html>
