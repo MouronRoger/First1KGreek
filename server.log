@@ -23,3 +23,36 @@
 2025-04-11 19:35:30,815 - __main__ - INFO - Starting First1KGreek FastAPI Server 1.2.0 - Fixed Version
 2025-04-11 19:35:30,815 - __main__ - INFO - Server will be available at http://localhost:8000
 2025-04-11 19:35:30,815 - __main__ - INFO - API documentation will be available at http://localhost:8000/docs
+2025-04-11 19:37:50,236 - __main__ - INFO - Starting First1KGreek FastAPI Server 1.2.0 - Fixed Version
+2025-04-11 19:37:50,236 - __main__ - INFO - Server will be available at http://localhost:8000
+2025-04-11 19:37:50,236 - __main__ - INFO - API documentation will be available at http://localhost:8000/docs
+2025-04-11 19:39:50,738 - __main__ - WARNING - Port 8000 is already in use!
+2025-04-11 19:39:50,739 - __main__ - INFO - Using alternative port 8001
+2025-04-11 19:39:50,792 - __main__ - INFO - Starting First1KGreek FastAPI Server 1.2.0 - Fixed Version
+2025-04-11 19:39:50,792 - __main__ - INFO - Server will be available at http://localhost:8001
+2025-04-11 19:39:50,792 - __main__ - INFO - API documentation will be available at http://localhost:8001/docs
+2025-04-11 19:40:56,539 - __main__ - WARNING - Port 8000 is already in use!
+2025-04-11 19:40:56,540 - __main__ - INFO - Using alternative port 8001
+2025-04-11 19:40:56,598 - __main__ - INFO - Starting First1KGreek FastAPI Server 1.2.0 - Fixed Version
+2025-04-11 19:40:56,598 - __main__ - INFO - Server will be available at http://localhost:8001
+2025-04-11 19:40:56,598 - __main__ - INFO - API documentation will be available at http://localhost:8001/docs
+2025-04-11 19:40:57,920 - src.first1k.handlers.browse - INFO - Generated enhanced authors page with tabular format and filtering
+2025-04-11 19:41:59,378 - __main__ - WARNING - Port 8000 is already in use!
+2025-04-11 19:41:59,379 - __main__ - INFO - Using alternative port 8001
+2025-04-11 19:41:59,431 - __main__ - INFO - Starting First1KGreek FastAPI Server 1.2.0 - Fixed Version
+2025-04-11 19:41:59,432 - __main__ - INFO - Server will be available at http://localhost:8001
+2025-04-11 19:41:59,432 - __main__ - INFO - API documentation will be available at http://localhost:8001/docs
+2025-04-11 19:42:00,847 - src.first1k.handlers.browse - INFO - Generated enhanced authors page with tabular format and filtering
+2025-04-11 19:42:16,826 - src.first1k.api - INFO - Shutting down server...
+2025-04-11 19:42:39,626 - __main__ - WARNING - Port 8000 is already in use!
+2025-04-11 19:42:39,626 - __main__ - INFO - Using alternative port 8001
+2025-04-11 19:42:39,685 - __main__ - INFO - Starting First1KGreek FastAPI Server 1.2.0 - Fixed Version
+2025-04-11 19:42:39,685 - __main__ - INFO - Server will be available at http://localhost:8001
+2025-04-11 19:42:39,685 - __main__ - INFO - API documentation will be available at http://localhost:8001/docs
+2025-04-11 19:42:41,003 - src.first1k.handlers.browse - INFO - Generated enhanced authors page with tabular format and filtering
+2025-04-11 19:42:42,915 - src.first1k.handlers.api - INFO - Handling /get_author_works request for author_id: t
+2025-04-11 19:42:42,915 - src.first1k.handlers.api - WARNING - Author directory not found: data/t
+2025-04-11 19:42:45,467 - src.first1k.handlers.api - INFO - Handling /get_author_works request for author_id: t
+2025-04-11 19:42:45,467 - src.first1k.handlers.api - WARNING - Author directory not found: data/t
+2025-04-11 19:42:47,120 - src.first1k.handlers.api - INFO - Handling /get_author_works request for author_id: t
+2025-04-11 19:42:47,120 - src.first1k.handlers.api - WARNING - Author directory not found: data/t

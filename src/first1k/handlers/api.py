@@ -9,6 +9,8 @@ import json
 import logging
 from pathlib import Path
 
+from ..config import DATA_DIR, USER_PREFS_FILE
+
 logger = logging.getLogger(__name__)
 
 
@@ -23,13 +25,13 @@ def get_author_works_for_api(author_id):
         list: A list of work dictionaries formatted for the API
     """
     works_data = []
-    author_dir = os.path.join('data', author_id)
+    author_dir = os.path.join(DATA_DIR, author_id)
     
     if not os.path.exists(author_dir):
         logger.warning(f"Author directory not found: {author_dir}")
         return works_data
     
-    logger.info(f"Retrieving works for author: {author_id}")
+    logger.info(f"Retrieving works for author: {author_id} from {author_dir}")
     
     # Get user preferences for works
     user_prefs = get_user_preferences()
@@ -149,7 +151,7 @@ def get_user_preferences():
     Returns:
         dict: User preferences for favorites and archived items.
     """
-    prefs_file = Path("user_preferences.json")
+    prefs_file = Path(USER_PREFS_FILE)
     if prefs_file.exists():
         try:
             with open(prefs_file, 'r', encoding='utf-8') as f:
@@ -171,7 +173,7 @@ def handle_get_author_works(query_params):
     Returns:
         tuple: (status_code, content_type, response_data)
     """
-    author_id = query_params.get('author_id', [''])[0]
+    author_id = query_params.get('author_id')
     
     if not author_id:
         logger.error("Missing author_id parameter in request")
@@ -181,7 +183,9 @@ def handle_get_author_works(query_params):
     
     try:
         # Check if author directory exists
-        author_dir = os.path.join('data', author_id)
+        author_dir = os.path.join(DATA_DIR, author_id)
+        logger.info(f"Looking for author directory at: {author_dir}")
+        
         if not os.path.exists(author_dir):
             logger.warning(f"Author directory not found: {author_dir}")
             return 404, 'application/json', json.dumps({"error": f"Author {author_id} not found"})

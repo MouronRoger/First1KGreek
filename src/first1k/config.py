@@ -6,6 +6,13 @@ This module contains constants and configuration settings used throughout the ap
 
 import os
 
+# Base paths
+BASE_DIR = os.path.dirname(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
+DATA_DIR = os.path.join(BASE_DIR, "data")
+STATIC_DIR = os.path.join(BASE_DIR, "static")
+CSS_DIR = os.path.join(STATIC_DIR, "css")
+JS_DIR = os.path.join(STATIC_DIR, "js")
+
 # Server configuration
 PORT = 8000  # Default port
 HOST = "localhost"
@@ -19,13 +26,9 @@ LAST_UPDATED = "2025-03-07"
 FEATURES = "with dark theme and improved editor detection"
 
 # Paths
-AUTHORS_DATA_FILE = "authors_data.json"
-USER_PREFS_FILE = "user_preferences.json"
+AUTHORS_DATA_FILE = os.path.join(BASE_DIR, "authors_data.json")
+USER_PREFS_FILE = os.path.join(BASE_DIR, "user_preferences.json")
 LOG_FILE = "server.log"
-DATA_DIR = "data"
-STATIC_DIR = "static"
-CSS_DIR = f"{STATIC_DIR}/css"
-JS_DIR = f"{STATIC_DIR}/js"
 
 # Data directories
 BACKUP_DIR = "backup"
