@@ -6,6 +6,104 @@ import time
 from xml.sax.saxutils import escape
 from ..config import CSS_DIR
 
+def handle_view_xml(query_params, post_data=None):
+    """Handle request to view XML content.
+    
+    Args:
+        query_params: Query parameters from the request
+        post_data: POST data from the request
+        
+    Returns:
+        tuple: (status_code, content_type, response_data)
+    """
+    file_path = query_params.get('path', None)
+    
+    if not file_path:
+        return 400, 'text/html', "<h1>Error</h1><p>No file path specified</p>"
+    
+    try:
+        html = render_xml_view_page(file_path)
+        return 200, 'text/html', html
+    except Exception as e:
+        return 500, 'text/html', f"<h1>Error</h1><p>Failed to render XML view: {str(e)}</p>"
+
+def handle_view_text(query_params, post_data=None):
+    """Handle request to view plain text content.
+    
+    Args:
+        query_params: Query parameters from the request
+        post_data: POST data from the request
+        
+    Returns:
+        tuple: (status_code, content_type, response_data)
+    """
+    file_path = query_params.get('path', None)
+    
+    if not file_path:
+        return 400, 'text/html', "<h1>Error</h1><p>No file path specified</p>"
+    
+    try:
+        with open(file_path, 'r', encoding='utf-8') as f:
+            content = f.read()
+            
+        # Remove XML tags
+        text_content = re.sub(r'<[^>]+>', '', content)
+        return 200, 'text/plain', text_content
+    except Exception as e:
+        return 500, 'text/html', f"<h1>Error</h1><p>Failed to render text view: {str(e)}</p>"
+
+def handle_view_reader(query_params, post_data=None):
+    """Handle request to view content in reader mode.
+    
+    Args:
+        query_params: Query parameters from the request
+        post_data: POST data from the request
+        
+    Returns:
+        tuple: (status_code, content_type, response_data)
+    """
+    file_path = query_params.get('path', None)
+    
+    if not file_path:
+        return 400, 'text/html', "<h1>Error</h1><p>No file path specified</p>"
+    
+    try:
+        html = render_reader_view_page(file_path)
+        return 200, 'text/html', html
+    except Exception as e:
+        return 500, 'text/html', f"<h1>Error</h1><p>Failed to render reader view: {str(e)}</p>"
+
+def handle_view_raw(query_params, post_data=None):
+    """Handle request to view raw file content.
+    
+    Args:
+        query_params: Query parameters from the request
+        post_data: POST data from the request
+        
+    Returns:
+        tuple: (status_code, content_type, response_data)
+    """
+    file_path = query_params.get('path', None)
+    
+    if not file_path:
+        return 400, 'text/html', "<h1>Error</h1><p>No file path specified</p>"
+    
+    try:
+        with open(file_path, 'r', encoding='utf-8') as f:
+            content = f.read()
+        
+        # Determine content type based on file extension
+        if file_path.endswith('.xml'):
+            return 200, 'application/xml', content
+        elif file_path.endswith('.txt'):
+            return 200, 'text/plain', content
+        elif file_path.endswith('.html') or file_path.endswith('.htm'):
+            return 200, 'text/html', content
+        else:
+            return 200, 'text/plain', content
+    except Exception as e:
+        return 500, 'text/html', f"<h1>Error</h1><p>Failed to render raw view: {str(e)}</p>"
+
 def render_xml_view_page(file_path):
     """Generate XML view page."""
     try:

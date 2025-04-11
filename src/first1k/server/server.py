@@ -26,7 +26,7 @@ from ..handlers.import_text import (
 from ..handlers.view import render_xml_view_page, render_reader_view_page
 from ..handlers.works import render_works_page, render_editor_works_page
 from ..handlers.api import handle_get_author_works
-from ..handlers.preferences import handle_update_work_preference, handle_bulk_update_preferences
+from ..handlers.preferences import handle_update_work_preference, handle_update_preference
 
 # Global reference to the server
 server_instance = None
@@ -199,7 +199,7 @@ class CustomHTTPRequestHandler(http.server.SimpleHTTPRequestHandler):
             elif path == '/update_preferences':
                 content_length = int(self.headers['Content-Length'])
                 post_data = self.rfile.read(content_length).decode('utf-8')
-                status_code, content_type, response_data = handle_bulk_update_preferences(query_params, post_data)
+                status_code, content_type, response_data = handle_update_preference(query_params, post_data)
                 self.send_response(status_code)
                 self.send_header('Content-type', content_type)
                 self.end_headers()

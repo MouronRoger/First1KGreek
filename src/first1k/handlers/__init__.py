@@ -1,9 +1,12 @@
-"""Handler modules for First1KGreek Browser.
+"""First1KGreek HTTP request handler implementations.
 
-This package contains handler modules for different types of requests.
+This package contains handlers for different HTTP request types including browsing, search, and content viewing.
 """
 
+import logging
 import time
+
+logger = logging.getLogger(__name__)
 
 # UI handlers
 from .ui import render_main_page, get_base_js_scripts, get_base_css_links
@@ -12,22 +15,20 @@ from .ui import render_main_page, get_base_js_scripts, get_base_css_links
 from .browse import render_authors_page, render_editors_page, handle_browse_authors, handle_browse_editors, handle_home_page
 
 # Search handlers
-from .search import render_search_page, search_corpus
+from .search import handle_search_request, render_search_page
 
 # Import/Export handlers
-from .import_export import render_import_page, render_export_page
+from .import_text import render_import_page, handle_import_text
 
 # View handlers
-from .view import render_xml_view_page, render_reader_view_page
+from .view import handle_view_xml, handle_view_text, handle_view_reader, handle_view_raw
 
 # Works handlers
-from .works import render_works_page, render_editor_works_page, get_works_by_author, get_works_by_editor, get_author_works_for_api
-
-# API handlers
+from .works import get_author_works_for_api
 from .api import handle_get_author_works
 
 # Preferences handlers
-from .preferences import handle_update_work_preference, handle_bulk_update_preferences, get_user_preferences, update_user_preferences
+from .preferences import handle_update_work_preference, handle_update_preference, get_user_preferences
 
 # Common variable to include FastAPI JavaScript files
 # For use in page headers
@@ -55,31 +56,26 @@ __all__ = [
     
     # Search
     'render_search_page',
-    'search_corpus',
+    'handle_search_request',
     
     # Import/Export
     'render_import_page',
-    'render_export_page',
+    'handle_import_text',
     
     # View
-    'render_xml_view_page',
-    'render_reader_view_page',
+    'handle_view_xml',
+    'handle_view_text',
+    'handle_view_reader',
+    'handle_view_raw',
     
     # Works
-    'render_works_page',
-    'render_editor_works_page',
-    'get_works_by_author',
-    'get_works_by_editor',
     'get_author_works_for_api',
-    
-    # API
     'handle_get_author_works',
     
     # Preferences
     'handle_update_work_preference',
-    'handle_bulk_update_preferences',
+    'handle_update_preference',
     'get_user_preferences',
-    'update_user_preferences',
     
     # UI utilities
     'get_base_js_scripts',

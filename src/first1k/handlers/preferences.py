@@ -109,7 +109,7 @@ def handle_update_work_preference(query_params, post_data):
         return 500, 'application/json', json.dumps({"error": f"Error updating preference: {str(e)}"})
 
 
-def handle_bulk_update_preferences(query_params, post_data):
+def handle_update_preference(query_params, post_data):
     """
     Handle API request to update multiple preferences at once.
     

@@ -435,4 +435,60 @@ def render_import_error_page(error):
     </div>
 </body>
 </html>"""
-    return html 
+    return html
+
+def handle_import_text(query_params, post_data=None):
+    """Handle request to import text from Scaife.
+    
+    Args:
+        query_params: Query parameters from the request
+        post_data: POST data from the request
+        
+    Returns:
+        tuple: (status_code, content_type, response_data)
+    """
+    if not post_data:
+        # If GET request or no POST data, return the import form page
+        html = render_import_page()
+        return 200, 'text/html', html
+    
+    try:
+        # Process form submission
+        import_type = post_data.get('import_type', 'single')
+        
+        if import_type == 'single':
+            scaife_url = post_data.get('scaife_url')
+            author_name = post_data.get('author_name', '')
+            work_title = post_data.get('work_title', '')
+            
+            if not scaife_url:
+                return 400, 'text/html', render_import_error_page("No Scaife URL provided")
+            
+            result = import_text_from_scaife(scaife_url, author_name, work_title)
+            return 200, 'text/html', render_import_success_page(result)
+            
+        elif import_type == 'batch':
+            scaife_urls = post_data.get('scaife_urls', '').split('\n')
+            default_author_name = post_data.get('default_author_name', '')
+            
+            if not scaife_urls or not any(url.strip() for url in scaife_urls):
+                return 400, 'text/html', render_import_error_page("No Scaife URLs provided")
+            
+            results = []
+            for url in scaife_urls:
+                url = url.strip()
+                if url:  # Skip empty lines
+                    try:
+                        result = import_text_from_scaife(url, default_author_name, '')
+                        results.append(f"✓ {result}")
+                    except Exception as e:
+                        results.append(f"✗ Error importing {url}: {str(e)}")
+            
+            message = "<ul>" + "".join([f"<li>{r}</li>" for r in results]) + "</ul>"
+            return 200, 'text/html', render_import_success_page(message)
+            
+        else:
+            return 400, 'text/html', render_import_error_page("Invalid import type")
+            
+    except Exception as e:
+        return 500, 'text/html', render_import_error_page(f"Import failed: {str(e)}") 

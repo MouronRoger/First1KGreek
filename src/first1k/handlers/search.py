@@ -97,6 +97,40 @@ def search_corpus(search_term):
     
     return results
 
+def handle_search_request(query_params, post_data=None):
+    """Handle search request from the user.
+    
+    Args:
+        query_params: Query parameters from the request
+        post_data: POST data from the request
+        
+    Returns:
+        tuple: (status_code, content_type, response_data)
+    """
+    search_term = query_params.get('q', None)
+    
+    if not search_term:
+        # Show empty search page if no query
+        html = render_search_page()
+        return 200, 'text/html', html
+    
+    try:
+        # Perform search and render results
+        html = render_search_page(search_term)
+        return 200, 'text/html', html
+    except Exception as e:
+        error_html = f"""
+        <html>
+        <head><title>Search Error</title></head>
+        <body>
+            <h1>Search Error</h1>
+            <p>An error occurred while searching: {str(e)}</p>
+            <a href="/">Back to Home</a>
+        </body>
+        </html>
+        """
+        return 500, 'text/html', error_html
+
 def render_search_page(search_term=None):
     """Generate search results page."""
     results = []

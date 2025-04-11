@@ -495,3 +495,52 @@ def render_editors_page():
 </html>
 """
     return html 
+
+def handle_browse_authors(query_params):
+    """Handle request to browse authors.
+    
+    Args:
+        query_params: Query parameters from the request
+        
+    Returns:
+        tuple: (status_code, content_type, response_data)
+    """
+    try:
+        html = render_authors_page()
+        return 200, 'text/html', html
+    except Exception as e:
+        logger.error(f"Error rendering authors page: {str(e)}")
+        return 500, 'text/html', f"<h1>Error</h1><p>Failed to render authors page: {str(e)}</p>"
+
+def handle_browse_editors(query_params):
+    """Handle request to browse editors.
+    
+    Args:
+        query_params: Query parameters from the request
+        
+    Returns:
+        tuple: (status_code, content_type, response_data)
+    """
+    try:
+        html = render_editors_page()
+        return 200, 'text/html', html
+    except Exception as e:
+        logger.error(f"Error rendering editors page: {str(e)}")
+        return 500, 'text/html', f"<h1>Error</h1><p>Failed to render editors page: {str(e)}</p>"
+
+def handle_home_page(query_params):
+    """Handle request for the home page.
+    
+    Args:
+        query_params: Query parameters from the request
+        
+    Returns:
+        tuple: (status_code, content_type, response_data)
+    """
+    try:
+        from .ui import render_main_page
+        html = render_main_page()
+        return 200, 'text/html', html
+    except Exception as e:
+        logger.error(f"Error rendering home page: {str(e)}")
+        return 500, 'text/html', f"<h1>Error</h1><p>Failed to render home page: {str(e)}</p>" 

@@ -84,4 +84,29 @@ def render_main_page():
         </div>
     </div>
 </body>
-</html>""" 
+</html>"""
+
+def get_base_js_scripts():
+    """Get common JavaScript scripts used across pages.
+    
+    Returns:
+        str: HTML script tags for common JavaScript files
+    """
+    timestamp = int(time.time())
+    return f"""
+    <script src="/static/js/quit.js?v={timestamp}"></script>
+    <script src="/static/js/api.js?v={timestamp}"></script>
+    <script src="/static/js/api-adapters.js?v={timestamp}"></script>
+    """
+
+def get_base_css_links():
+    """Get common CSS links used across pages.
+    
+    Returns:
+        str: HTML link tags for common CSS files
+    """
+    timestamp = int(time.time())
+    return f"""
+    <link rel="stylesheet" href="/static/css/main.css?v={timestamp}">
+    <link rel="stylesheet" href="/static/css/dark-theme.css?v={timestamp}">
+    """ 
