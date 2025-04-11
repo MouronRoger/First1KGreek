@@ -1,139 +1,215 @@
-"""Integration tests for hybrid server mode in First1KGreek FastAPI implementation.
+#!/usr/bin/env python3
+"""Integration tests for the hybrid server mode.
 
-This module tests the hybrid server mode that runs both HTTP and FastAPI servers simultaneously.
+These tests verify that both HTTP and FastAPI servers can run simultaneously
+and communicate with the same data sources.
 """
 
-import pytest
-import requests
-import multiprocessing
-import time
 import os
-import signal
+import sys
+import unittest
+import time
+import json
 import socket
-from pathlib import Path
-from unittest.mock import patch
+import threading
+import requests
+from unittest import mock
+from contextlib import contextmanager
 
-# Import the hybrid server module
-from src.first1k.server.hybrid_server import run_hybrid_server
+# Add parent directory to path
+sys.path.insert(0, os.path.abspath(os.path.join(os.path.dirname(__file__), '../..')))
 
+from tests.test_base import BaseTest
+from src.first1k.utils.network import find_available_port
+from src.first1k.config import USER_PREFS_FILE
 
-def is_port_available(port):
-    """Check if a port is available for use."""
-    sock = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
-    result = False
-    try:
-        sock.bind(("127.0.0.1", port))
-        result = True
-    except socket.error:
-        pass
-    finally:
-        sock.close()
-    return result
-
-
-@pytest.fixture
-def available_ports():
-    """Find two available ports for testing."""
-    port1 = 8000
-    while not is_port_available(port1):
-        port1 += 1
-    
-    port2 = port1 + 1
-    while not is_port_available(port2):
-        port2 += 1
-    
-    return port1, port2
+# Import server modules - use try/except to handle possible import errors
+try:
+    from src.first1k.server.hybrid_server import HybridServer
+    HYBRID_SERVER_AVAILABLE = True
+except ImportError:
+    HYBRID_SERVER_AVAILABLE = False
 
 
-@pytest.fixture
-def hybrid_server(available_ports):
-    """Start a hybrid server process for testing."""
-    http_port, fastapi_port = available_ports
-    
-    # Ensure we're using a test preferences file
-    test_prefs_path = Path("test_user_preferences.json")
-    if not test_prefs_path.exists():
-        with open(test_prefs_path, "w") as f:
-            f.write('{"favorites": [], "archived": []}')
-    
-    # Start server in a separate process
-    with patch("src.first1k.server.hybrid_server.PREFERENCES_FILE", str(test_prefs_path)):
-        server_process = multiprocessing.Process(
-            target=run_hybrid_server,
-            kwargs={
-                "http_port": http_port,
-                "fastapi_port": fastapi_port,
-                "debug": True
-            }
+@unittest.skipIf(not HYBRID_SERVER_AVAILABLE, "Hybrid server not available")
+class HybridServerTests(BaseTest):
+    """Test cases for the hybrid server mode."""
+
+    def setUp(self):
+        """Set up test environment."""
+        super().setUp()
+
+        # Find available ports for testing
+        self.http_port = find_available_port(start_port=8800)
+        self.fastapi_port = find_available_port(start_port=8900)
+
+        # Set up patches for server configuration
+        self.config_patches = []
+        
+        # Patch USER_PREFS_FILE to use our test file
+        self.prefs_file_path = os.path.join(self.temp_dir, 'user_preferences.json')
+        self.prefs_patch = mock.patch('src.first1k.server.hybrid_server.USER_PREFS_FILE', 
+                                      self.prefs_file_path)
+        self.prefs_patch.start()
+        self.config_patches.append(self.prefs_patch)
+        
+        # Patch DATA_DIR to use our test directory
+        self.data_dir_patch = mock.patch('src.first1k.server.hybrid_server.DATA_DIR', 
+                                         self.data_dir)
+        self.data_dir_patch.start()
+        self.config_patches.append(self.data_dir_patch)
+        
+        # Other necessary patches to avoid file system dependencies
+        self.authors_data_patch = mock.patch('src.first1k.server.hybrid_server.AUTHORS_DATA', 
+                                             self.mock_authors_data)
+        self.authors_data_patch.start()
+        self.config_patches.append(self.authors_data_patch)
+
+    def tearDown(self):
+        """Clean up test environment."""
+        # Stop all patches
+        for patch in self.config_patches:
+            patch.stop()
+        
+        super().tearDown()
+
+    @contextmanager
+    def run_hybrid_server(self, timeout=5):
+        """Run the hybrid server in a separate thread with proper resource management.
+        
+        Args:
+            timeout: Maximum time to wait for server startup in seconds
+            
+        Yields:
+            tuple: (http_url, fastapi_url) for making requests
+        """
+        # Create the server
+        server = HybridServer(
+            http_port=self.http_port,
+            fastapi_port=self.fastapi_port,
+            debug=True,
+            no_browser=True
         )
-        server_process.start()
         
-        # Wait for server to start
-        time.sleep(2)
+        # Set server references for cleanup
+        http_server = None
+        fastapi_app = None
+        server_thread = None
         
-        yield (http_port, fastapi_port)  # Return both ports
-        
-        # Terminate server
-        os.kill(server_process.pid, signal.SIGTERM)
-        server_process.join(timeout=5)
-        if server_process.is_alive():
-            server_process.terminate()
-    
-    # Clean up test file
-    if test_prefs_path.exists():
-        test_prefs_path.unlink()
+        try:
+            # Start server in a separate thread
+            server_thread = threading.Thread(target=server.start)
+            server_thread.daemon = True  # Daemon thread will be killed when the main thread exits
+            server_thread.start()
+            
+            # Store references for cleanup
+            # Access these early to avoid AttributeError if server fails to start
+            if hasattr(server, 'http_server'):
+                http_server = server.http_server
+            if hasattr(server, 'fastapi_app'):
+                fastapi_app = server.fastapi_app
+            
+            # Wait for servers to start (with timeout)
+            start_time = time.time()
+            both_up = False
+            
+            while time.time() - start_time < timeout and not both_up:
+                try:
+                    # Check if HTTP server is up
+                    http_response = requests.get(f"http://localhost:{self.http_port}/", timeout=0.5)
+                    # Check if FastAPI server is up
+                    fastapi_response = requests.get(f"http://localhost:{self.fastapi_port}/", timeout=0.5)
+                    both_up = True
+                except (requests.RequestException, socket.error):
+                    # Wait a bit and retry
+                    time.sleep(0.1)
+            
+            if not both_up:
+                raise TimeoutError(f"Hybrid server failed to start within {timeout} seconds")
+            
+            # Provide the server URLs to the test
+            yield (
+                f"http://localhost:{self.http_port}",
+                f"http://localhost:{self.fastapi_port}"
+            )
+            
+        finally:
+            # Cleanup resources
+            if server and hasattr(server, 'stop'):
+                try:
+                    server.stop()
+                except Exception:
+                    pass  # Ignore errors during cleanup
+            
+            # Make sure server thread is terminated
+            if server_thread and server_thread.is_alive():
+                # Wait for thread to finish (with timeout)
+                server_thread.join(timeout=2)
+            
+            # Force cleanup of server resources if they still exist
+            # This handles the case where server.stop() fails
+            if http_server:
+                try:
+                    http_server.shutdown()
+                    http_server.server_close()
+                except Exception:
+                    pass
+            
+            # Sleep briefly to ensure sockets are fully released
+            time.sleep(0.5)
+
+    def test_http_server_home_page(self):
+        """Test that the HTTP server serves the home page."""
+        with self.run_hybrid_server() as (http_url, _):
+            # Make a request to the HTTP server
+            response = requests.get(http_url)
+            
+            # Verify the response
+            self.assertEqual(response.status_code, 200)
+            self.assertIn(b"<!DOCTYPE html>", response.content)
+            self.assertIn(b"First1K Greek Browser", response.content)
+
+    def test_fastapi_server_authors_endpoint(self):
+        """Test that the FastAPI server serves the authors API endpoint."""
+        with self.run_hybrid_server() as (_, fastapi_url):
+            # Make a request to the FastAPI server
+            response = requests.get(f"{fastapi_url}/api/authors/")
+            
+            # Verify the response
+            self.assertEqual(response.status_code, 200)
+            authors = response.json()
+            self.assertIsInstance(authors, list)
+
+    def test_both_servers_share_data(self):
+        """Test that both servers access the same data."""
+        with self.run_hybrid_server() as (http_url, fastapi_url):
+            # 1. Use HTTP server to add an author to favorites
+            author_id = "auth001"
+            http_response = requests.post(
+                f"{http_url}/update_preference",
+                data={"author_id": author_id, "pref_type": "favorites", "value": "true"}
+            )
+            self.assertEqual(http_response.status_code, 200)
+            
+            # 2. Check with FastAPI server that the author is now in favorites
+            fastapi_response = requests.get(f"{fastapi_url}/api/preferences/")
+            self.assertEqual(fastapi_response.status_code, 200)
+            prefs = fastapi_response.json()
+            self.assertIn(author_id, prefs["favorites"])
+
+    def test_error_handling(self):
+        """Test error handling in both servers."""
+        with self.run_hybrid_server() as (http_url, fastapi_url):
+            # Test HTTP server error handling
+            http_response = requests.get(f"{http_url}/nonexistent")
+            self.assertEqual(http_response.status_code, 404)
+            
+            # Test FastAPI server error handling
+            fastapi_response = requests.get(f"{fastapi_url}/api/authors/nonexistent")
+            self.assertEqual(fastapi_response.status_code, 404)
+            error = fastapi_response.json()
+            self.assertIn("detail", error)
 
 
-def test_hybrid_server_http_endpoint(hybrid_server):
-    """Test accessing an HTTP endpoint in hybrid mode."""
-    http_port, _ = hybrid_server
-    response = requests.get(f"http://localhost:{http_port}/")
-    assert response.status_code == 200
-    assert "First1KGreek" in response.text
-
-
-def test_hybrid_server_fastapi_endpoint(hybrid_server):
-    """Test accessing a FastAPI endpoint in hybrid mode."""
-    _, fastapi_port = hybrid_server
-    response = requests.get(f"http://localhost:{fastapi_port}/api/health")
-    assert response.status_code == 200
-    data = response.json()
-    assert data["status"] == "ok"
-
-
-def test_hybrid_server_http_authors_endpoint(hybrid_server):
-    """Test accessing the authors endpoint via HTTP server."""
-    http_port, _ = hybrid_server
-    response = requests.get(f"http://localhost:{http_port}/browse_authors")
-    assert response.status_code == 200
-    assert "Authors" in response.text
-
-
-def test_hybrid_server_fastapi_authors_endpoint(hybrid_server):
-    """Test accessing the authors endpoint via FastAPI server."""
-    _, fastapi_port = hybrid_server
-    response = requests.get(f"http://localhost:{fastapi_port}/api/authors")
-    assert response.status_code == 200
-    data = response.json()
-    assert isinstance(data, list)
-
-
-def test_hybrid_server_api_integration(hybrid_server):
-    """Test that both servers can access the same data sources."""
-    http_port, fastapi_port = hybrid_server
-    
-    # Get authors from FastAPI
-    fastapi_response = requests.get(f"http://localhost:{fastapi_port}/api/authors")
-    assert fastapi_response.status_code == 200
-    fastapi_authors = fastapi_response.json()
-    
-    # There should be at least one author
-    assert len(fastapi_authors) > 0
-    
-    # HTTP server's browse authors page should contain same author names
-    http_response = requests.get(f"http://localhost:{http_port}/browse_authors")
-    assert http_response.status_code == 200
-    
-    # At least one author name from FastAPI should be in HTTP response
-    author_name = fastapi_authors[0]["name"]
-    assert author_name in http_response.text 
+if __name__ == '__main__':
+    unittest.main() 

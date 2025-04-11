@@ -1,65 +1,97 @@
 # Integration Tests for First1KGreek
 
-This directory contains integration tests for the First1KGreek application, including the hybrid server mode that runs both HTTP and FastAPI servers simultaneously.
+This directory contains integration tests for the First1KGreek browser application. These tests verify that different components of the system work together correctly, with a specific focus on the hybrid server mode that runs both HTTP and FastAPI servers.
 
-## Test Structure
+## Purpose
 
-The integration tests are organized as follows:
+Integration tests serve several key purposes:
 
-- `test_server.py`: Tests for the HTTP server functionality
-- `test_hybrid_server.py`: Tests for the hybrid server mode that runs both HTTP and FastAPI servers
+1. **Component Interaction**: Verify that different components interact correctly
+2. **Real-world Scenarios**: Test end-to-end workflows that users would experience
+3. **System Configuration**: Ensure that configuration works correctly across components
+4. **Data Flow**: Verify that data flows correctly between components
+5. **Server Modes**: Test different server modes (HTTP, FastAPI, hybrid)
 
-## Running the Tests
+## Test Files
+
+- **test_hybrid_server.py**: Tests for the hybrid server mode that runs both HTTP and FastAPI servers simultaneously
+
+## Running Tests
 
 To run the integration tests:
 
 ```bash
-# Run all integration tests
-pytest tests/integration/ -v
+python -m pytest tests/integration/
+```
 
-# Run only hybrid server tests
-pytest tests/integration/test_hybrid_server.py -v
+To run with verbose output:
 
-# Run with the integration marker
-pytest -m integration -v
-
-# Run with the hybrid marker
-pytest -m hybrid -v
+```bash
+python -m pytest tests/integration/ -v
 ```
 
 ## Test Design
 
-The integration tests follow these design principles:
+The integration tests have several design considerations:
 
-1. **Full System Testing**: Tests use actual server processes to verify behavior
-2. **Resource Management**: Tests properly start and stop servers using pytest fixtures
-3. **Port Management**: Tests dynamically find available ports to avoid conflicts
-4. **Comprehensive Coverage**: Tests verify both HTTP and FastAPI endpoints
-5. **Data Isolation**: Tests use isolated data to avoid affecting production data
+### Resource Management
 
-## Test Prerequisites
+The tests use the `contextmanager` pattern to ensure proper cleanup of resources:
 
-Integration tests require:
+```python
+@contextmanager
+def run_hybrid_server(self, timeout=5):
+    # Create server and set up resources
+    try:
+        # Start server in a thread
+        # Wait for server to start
+        yield (http_url, fastapi_url)
+    finally:
+        # Cleanup resources
+        # Shutdown server
+```
 
-1. Both HTTP and FastAPI server implementations to be available
-2. Network ports to be available for testing
-3. All dependencies installed (`pip install -r requirements.txt`)
+### Multiprocessing and Threading Issues
 
-## Hybrid Server Testing
+The tests address potential issues with multiprocessing and threading:
 
-The hybrid server tests verify that:
+1. Use threading instead of multiprocessing when possible
+2. Use daemon threads to ensure proper cleanup
+3. Use timeouts to prevent hanging tests
+4. Implement proper cleanup of server resources
+5. Use exclusive ports to avoid conflicts
 
-1. Both HTTP and FastAPI servers can run simultaneously
-2. Both servers can access the same data sources
-3. Both servers properly handle requests
-4. Both servers can be gracefully shut down
+### Server Verification
+
+The tests verify that both server components (HTTP and FastAPI) work correctly:
+
+1. Test that the HTTP server serves pages correctly
+2. Test that the FastAPI server serves API endpoints correctly
+3. Test that both servers can access the same data
+4. Test error handling in both servers
 
 ## Adding New Integration Tests
 
-When adding new integration tests:
+When adding new integration tests, follow these guidelines:
 
-1. Follow the pattern established in existing test files
-2. Use proper fixture management for server processes
-3. Clean up all resources after tests complete
-4. Test realistic user scenarios
-5. Add appropriate pytest markers 
+1. Use the context manager pattern for resource management
+2. Implement proper cleanup of resources
+3. Use timeouts to prevent hanging tests
+4. Test realistic user workflows
+5. Verify data consistency across server modes
+
+## Debugging Integration Test Failures
+
+If integration tests fail, here are some troubleshooting steps:
+
+1. **Port Conflicts**: Ensure no other processes are using the same ports
+2. **Timeouts**: Check if the server startup timeout is sufficient
+3. **Resource Cleanup**: Verify that resources are properly cleaned up
+4. **Environmental Factors**: Check for environmental factors that might affect the tests
+5. **Logging**: Enable verbose logging for more detailed error information
+
+## Known Limitations
+
+1. These tests require resources that may be unavailable in some environments
+2. Server startup times may vary across different systems
+3. Some tests use mocking to isolate specific components, which may differ from real-world behavior 

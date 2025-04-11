@@ -20,6 +20,7 @@ import browse_texts_fixed
 try:
     from fastapi.testclient import TestClient
     from src.first1k.api import app as fastapi_app
+    from src.first1k.models import Author, Work, UserPreference
     FASTAPI_AVAILABLE = True
 except ImportError:
     FASTAPI_AVAILABLE = False
@@ -40,18 +41,71 @@ if FASTAPI_AVAILABLE:
         # Write initial preferences
         sample_prefs = {
             "favorites": ["tlg0007.tlg136.perseus-grc2"],
-            "archived": ["tlg0059.tlg030.perseus-grc2"]
+            "archived": ["tlg0059.tlg030.perseus-grc2"],
+            "deleted": []
         }
         with os.fdopen(fd, 'w') as f:
             json.dump(sample_prefs, f)
         
         # Override the preferences file path
-        with patch("src.first1k.handlers.preferences.prefs_file", path):
+        with patch("src.first1k.handlers.preferences.USER_PREFS_FILE", path):
             yield path
         
         # Cleanup
         if os.path.exists(path):
             os.unlink(path)
+
+    @pytest.fixture
+    def mock_author_models():
+        """Return mock author models for testing."""
+        return [
+            Author(id="auth001", name="Test Author 1", century=-5, type="Historian"),
+            Author(id="auth002", name="Test Author 2", century=1, type="Poet")
+        ]
+
+    @pytest.fixture
+    def mock_work_models():
+        """Return mock work models for testing."""
+        return [
+            Work(
+                id="work001",
+                title="Test Work 1",
+                author_id="auth001",
+                language="grc",
+                file_path="data/auth001/work001/test.xml",
+                is_favorite=True,
+                is_archived=False,
+                files=[{"name": "test.xml", "type": "xml", "path": "data/auth001/work001/test.xml"}]
+            ),
+            Work(
+                id="work002",
+                title="Test Work 2",
+                author_id="auth002",
+                language="eng",
+                file_path="data/auth002/work002/test.xml",
+                is_favorite=False,
+                is_archived=True,
+                files=[{"name": "test.xml", "type": "xml", "path": "data/auth002/work002/test.xml"}]
+            )
+        ]
+
+    @pytest.fixture
+    def async_mock():
+        """Create a mock that works with async functions.
+        
+        This fixture helps create mocks that can be used with async functions
+        by automatically wrapping the mock's return_value in a coroutine.
+        """
+        def _create_async_mock(return_value=None):
+            mock_obj = mock.MagicMock()
+            
+            async def _async_magic():
+                return return_value
+                
+            mock_obj.__call__.return_value = _async_magic()
+            return mock_obj
+            
+        return _create_async_mock
 
 
 @pytest.fixture(scope="session")

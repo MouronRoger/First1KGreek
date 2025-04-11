@@ -1,122 +1,132 @@
-# First1KGreek Test Reorganization
+# First1KGreek Test Suite
 
-## Directory Structure
+This directory contains the comprehensive test suite for the First1KGreek browser application, covering both the original HTTP server implementation and the new FastAPI implementation.
 
-The tests have been reorganized into a more structured directory layout:
+## Test Organization
 
-```
-tests/
-├── __init__.py
-├── conftest.py (moved to core/)
-├── core/
-│   ├── __init__.py
-│   ├── conftest.py
-│   ├── test_base.py
-│   ├── test_http_handler.py
-│   ├── test_page_generation.py
-│   ├── test_pytest_sample.py
-│   ├── test_server.py
-│   └── test_utils.py
-├── integration/
-│   ├── __init__.py
-│   └── test_server.py
-├── performance/
-│   ├── __init__.py
-│   ├── test_http_server.py
-│   └── test_xml_processing.py
-├── runners/
-│   ├── __init__.py
-│   ├── run_pytest.py
-│   └── run_tests.py
-└── unit/
-    ├── __init__.py
-    └── test_xml.py
-```
+The tests are organized into several categories:
 
-## What Was Done
+- **Core Tests**: Basic test utilities, fixtures, and base classes (`tests/core/`)
+- **API Tests**: Tests for the FastAPI implementation (`tests/api/`)
+- **Unit Tests**: Tests for individual components (`tests/unit/`)
+- **Integration Tests**: Tests for component interactions (`tests/integration/`)
+- **Performance Tests**: Tests for performance benchmarks (`tests/performance/`)
 
-1. Created a proper directory structure:
-   - `core/` - For core application test files
-   - `unit/`, `integration/`, `performance/` - Maintained existing categorization
-   - `runners/` - For test runner scripts
+## Running Tests
 
-2. Cleaned up duplicate files:
-   - Removed files with " 2" suffixes
-   - Backed up copies to `tests/backup/duplicates/`
+There are several ways to run the tests:
 
-3. Created a proper pytest.ini configuration file:
-   - Added test discovery patterns
-   - Configured test markers
-   - Set up basic pytest options
-
-4. Updated import paths in test files:
-   - Updated relative imports to work with the new structure
-   - Adjusted system path insertions in runner scripts
-
-5. Created a symlink to maintain backward compatibility:
-   - `run_pytest.py` in the project root links to `tests/runners/run_pytest.py`
-
-6. Made runner scripts executable:
-   - Both `run_pytest.py` and `run_tests.py` have executable permissions
-
-## Known Issues
-
-The tests are currently failing because of changes to the project's architecture:
-
-1. The tests are designed to work with the monolithic `browse_texts_fixed.py` file, but that file has been refactored to be a wrapper around the modular implementation in `src/first1k/`.
-
-2. The specific error is that the tests are trying to mock `browse_texts_fixed.AUTHORS_DATA`, but that variable no longer exists in the wrapper file.
-
-## Next Steps
-
-1. Update all tests to work with the new modular structure:
-   - Modify the imports to target the appropriate modules in `src/first1k/`
-   - Update mocks to patch the correct paths
-   - Adjust test expectations to match the new implementation
-
-2. Consider updating the test structure further:
-   - Mirror the module structure in `src/first1k/` with a corresponding test structure
-   - Create specific test files for each module in the new structure
-
-3. Create integration tests that verify the wrapper functionality:
-   - Test that `browse_texts_fixed.py` correctly forwards to the modular implementation
-   - Ensure that error handling in the wrapper works correctly
-
-4. Update the test documentation in `README_tests.md` with comprehensive information about the test approach for the modular architecture.
-
-## How to Use
-
-Use the runner scripts to execute tests:
+### Running All Tests
 
 ```bash
-# Using pytest (recommended)
-python tests/runners/run_pytest.py --unit
-python tests/runners/run_pytest.py --integration
-python tests/runners/run_pytest.py --performance
-python tests/runners/run_pytest.py --core
-python tests/runners/run_pytest.py --all --coverage
-
-# Using unittest
-python tests/runners/run_tests.py --unit
-python tests/runners/run_tests.py --integration
-python tests/runners/run_tests.py --performance
-python tests/runners/run_tests.py --core
-python tests/runners/run_tests.py --all
+python -m pytest
 ```
 
-Alternatively, use pytest or unittest directly:
+### Running by Category
 
 ```bash
-# Using pytest directly
-pytest tests/core/
-pytest tests/unit/
-pytest -m unit
-pytest -m integration
-pytest -m performance
+# Run only API tests
+python -m pytest tests/api/
 
-# Using unittest directly
-python -m unittest discover -s tests/core
-python -m unittest discover -s tests/unit
+# Run only integration tests
+python -m pytest tests/integration/
+
+# Run only performance tests
+python -m pytest tests/performance/
 ```
 
-See `README_tests.md` for more detailed information on the testing approach. 
+### Running by Test Class or Method
+
+```bash
+# Run a specific test file
+python -m pytest tests/api/test_authors_api.py
+
+# Run a specific test class
+python -m pytest tests/api/test_authors_api.py::AuthorsAPITests
+
+# Run a specific test method
+python -m pytest tests/api/test_authors_api.py::AuthorsAPITests::test_list_authors
+```
+
+## Test Configuration
+
+The test configuration is managed through several files:
+
+- **conftest.py**: Shared fixtures and test setup
+- **test_base.py**: Base test class with common utilities
+- **pytest.ini**: Pytest configuration and markers
+
+## Test Dependencies
+
+The tests have the following dependencies:
+
+- **pytest**: Core testing framework
+- **pytest-cov**: Coverage reporting
+- **fastapi**: FastAPI framework (for API tests)
+- **httpx**: HTTP client for FastAPI testing
+- **requests**: HTTP client for integration tests
+
+## Writing Tests
+
+When writing tests for the First1KGreek browser, follow these guidelines:
+
+1. **Test Isolation**: Tests should not depend on the state of other tests
+2. **Mocking**: Use mock objects to isolate tests from external dependencies
+3. **Clear Assertions**: Use descriptive assertion messages
+4. **Follow Patterns**: Use existing test patterns for consistency
+5. **Test Both Implementations**: Test both HTTP and FastAPI implementations
+
+## Testing Approach for Dual Server Implementation
+
+During the transition period, First1KGreek supports both the original HTTP server and the new FastAPI implementation. The test suite is designed to test both implementations:
+
+### HTTP Server Tests
+
+Legacy tests in `tests/unit/` and other directories test the original HTTP server implementation. These tests:
+
+- Use `browse_texts_fixed.CustomHTTPRequestHandler` as the primary test target
+- Mock requests and responses using `unittest.mock`
+- Verify that the correct HTML content is generated
+
+### FastAPI Tests
+
+Modern tests in `tests/api/` test the new FastAPI implementation. These tests:
+
+- Use FastAPI's `TestClient` to make requests to the API
+- Verify that the correct JSON responses are returned
+- Follow FastAPI's testing patterns and best practices
+
+### Hybrid Server Tests
+
+Integration tests in `tests/integration/test_hybrid_server.py` test the hybrid server mode that runs both implementations simultaneously. These tests:
+
+- Start both HTTP and FastAPI servers
+- Verify that both servers can be accessed
+- Verify that both servers share data correctly
+- Test concurrent access to both servers
+
+## Test Coverage
+
+To generate test coverage reports:
+
+```bash
+python -m pytest --cov=src.first1k
+```
+
+For HTML coverage reports:
+
+```bash
+python -m pytest --cov=src.first1k --cov-report=html
+```
+
+## Troubleshooting Tests
+
+If tests are failing, check:
+
+1. **Import Issues**: Ensure paths are correctly set up
+2. **Mock Objects**: Verify that mocks are correctly configured
+3. **Server Availability**: Check that servers can start correctly
+4. **Port Conflicts**: Ensure tests use different ports
+5. **Environment Variables**: Check if any environment variables need to be set
+
+For more detailed documentation on specific test categories, see the README files in each test subdirectory. 

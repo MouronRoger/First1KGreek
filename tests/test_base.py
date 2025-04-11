@@ -11,10 +11,23 @@ import sys
 from unittest import mock
 from contextlib import contextmanager
 
-# Add parent directory to the path so we can import the main module
+# Add parent directory to the path so we can import the modules
 sys.path.insert(0, os.path.abspath(os.path.join(os.path.dirname(__file__), '..')))
 
-# Import the main module under test
+# Import the modules under test
+from src.first1k.server.server import CustomHTTPRequestHandler
+from src.first1k.config import DATA_DIR as CONFIG_DATA_DIR, BASE_DIR, AUTHORS_DATA_FILE
+import src.first1k.api as api
+
+# Try to import FastAPI specific modules
+try:
+    from fastapi.testclient import TestClient
+    from src.first1k.models import Author, Work
+    FASTAPI_AVAILABLE = True
+except ImportError:
+    FASTAPI_AVAILABLE = False
+
+# Keep backward compatibility for now - we'll replace these imports progressively
 import browse_texts_fixed
 
 
@@ -92,20 +105,55 @@ class BaseTest(unittest.TestCase):
             f.write('<div type="textpart"><p>Test Greek text content.</p></div>')
         
         # Create a test CSS file
-        with open(os.path.join(self.static_dir, 'css', 'styles.css'), 'w') as f:
+        with open(os.path.join(self.static_dir, 'css', 'main.css'), 'w') as f:
             f.write('body { background-color: #2a2a2a; color: #f2f2f2; }')
         
+        # Create stylesheet files that match the new structure
+        with open(os.path.join(self.static_dir, 'css', 'reader.css'), 'w') as f:
+            f.write('body { font-family: "Gentium", serif; font-size: 18px; }')
+            
+        with open(os.path.join(self.static_dir, 'css', 'authors-table.css'), 'w') as f:
+            f.write('.authors-table { width: 100%; border-collapse: collapse; }')
+        
         # Create a test JS file
-        with open(os.path.join(self.static_dir, 'js', 'authors_table.js'), 'w') as f:
+        with open(os.path.join(self.static_dir, 'js', 'authors.js'), 'w') as f:
             f.write('console.log("Test JS");')
 
     def _setup_patches(self):
         """Setup common patches for the tests."""
-        # Patch the authors data
+        # Patch the authors data in both places (for backwards compatibility)
         authors_patch = mock.patch.object(
             browse_texts_fixed, 'AUTHORS_DATA', self.mock_authors_data)
         self.patches.append(authors_patch)
         authors_patch.start()
+        
+        # Patch AUTHORS_DATA in the data module if it exists
+        try:
+            import src.first1k.data.authors
+            authors_data_module_patch = mock.patch.object(
+                src.first1k.data.authors, 'AUTHORS_DATA', self.mock_authors_data)
+            self.patches.append(authors_data_module_patch)
+            authors_data_module_patch.start()
+        except (ImportError, AttributeError):
+            pass  # Module or attribute may not exist
+        
+        # Patch the DATA_DIR in the config module
+        data_dir_patch = mock.patch('src.first1k.config.DATA_DIR', self.data_dir)
+        self.patches.append(data_dir_patch)
+        data_dir_patch.start()
+        
+        # Patch the BASE_DIR in the config module
+        base_dir_patch = mock.patch('src.first1k.config.BASE_DIR', self.temp_dir)
+        self.patches.append(base_dir_patch)
+        base_dir_patch.start()
+        
+        # Patch AUTHORS_DATA_FILE
+        authors_data_file_patch = mock.patch(
+            'src.first1k.config.AUTHORS_DATA_FILE', 
+            os.path.join(self.temp_dir, 'authors_data.json')
+        )
+        self.patches.append(authors_data_file_patch)
+        authors_data_file_patch.start()
 
     @contextmanager
     def captured_output(self):
@@ -137,6 +185,23 @@ class BaseTest(unittest.TestCase):
         mock_request.wfile.write = mock.MagicMock()
         
         return mock_request
+        
+    def create_fastapi_test_client(self):
+        """Create a FastAPI TestClient for testing the API endpoints.
+        
+        Returns:
+            TestClient: A FastAPI test client, or None if FastAPI is not available
+        """
+        if not FASTAPI_AVAILABLE:
+            self.skipTest("FastAPI is not available for testing")
+        
+        # Additional setup for FastAPI testing
+        # We need to set environment variables or other configuration here
+        
+        # Apply any necessary patches specific to FastAPI
+        
+        # Return a test client for the FastAPI app
+        return TestClient(api.app)
 
 
 if __name__ == '__main__':
