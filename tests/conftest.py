@@ -8,12 +8,50 @@ import tempfile
 import shutil
 import json
 from unittest import mock
+from unittest.mock import patch
 
 # Add parent directory to the path so we can import the main module
 sys.path.insert(0, os.path.abspath(os.path.join(os.path.dirname(__file__), '..')))
 
 # Import the main module under test
 import browse_texts_fixed
+
+# Try to import FastAPI modules if available
+try:
+    from fastapi.testclient import TestClient
+    from src.first1k.api import app as fastapi_app
+    FASTAPI_AVAILABLE = True
+except ImportError:
+    FASTAPI_AVAILABLE = False
+
+# FastAPI-specific fixtures
+if FASTAPI_AVAILABLE:
+    @pytest.fixture
+    def api_client():
+        """Return a TestClient for the FastAPI app."""
+        return TestClient(fastapi_app)
+    
+    @pytest.fixture
+    def temp_preferences_file():
+        """Create a temporary preferences file for testing."""
+        # Create a temp file
+        fd, path = tempfile.mkstemp()
+        
+        # Write initial preferences
+        sample_prefs = {
+            "favorites": ["tlg0007.tlg136.perseus-grc2"],
+            "archived": ["tlg0059.tlg030.perseus-grc2"]
+        }
+        with os.fdopen(fd, 'w') as f:
+            json.dump(sample_prefs, f)
+        
+        # Override the preferences file path
+        with patch("src.first1k.handlers.preferences.prefs_file", path):
+            yield path
+        
+        # Cleanup
+        if os.path.exists(path):
+            os.unlink(path)
 
 
 @pytest.fixture(scope="session")

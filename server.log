@@ -1,196 +1,219 @@
-2025-04-11 18:13:21,941 - INFO - Starting First1KGreek Browser...
-2025-04-11 18:13:21,941 - INFO - Server configuration:
-2025-04-11 18:13:21,941 - INFO -   Host: localhost
-2025-04-11 18:13:21,941 - INFO -   Port: 8000 (will try other ports if busy)
-2025-04-11 18:13:21,941 - INFO -   Debug mode: False
-2025-04-11 18:13:21,941 - INFO -   Open browser: True
-2025-04-11 18:13:21,941 - INFO - Press Ctrl+C to stop the server
-2025-04-11 18:13:21,941 - INFO - Starting First1KGreek Browser - Fixed Version 1.2.0
-2025-04-11 18:13:21,941 - INFO - With dark theme and improved editor detection
-2025-04-11 18:13:21,943 - INFO - Server running at http://localhost:8000/
-2025-04-11 18:13:22,151 - INFO - GET request: /
-2025-04-11 18:13:22,241 - INFO - GET request: /static/css/main.css?v=1744391602
-2025-04-11 18:13:22,254 - INFO - GET request: /static/css/dark-theme.css?v=1744391602
-2025-04-11 18:13:22,257 - INFO - GET request: /static/css/editors-page.css?v=1744391602
-2025-04-11 18:13:22,259 - INFO - GET request: /static/js/quit.js?v=1744391602
-2025-04-11 18:13:25,065 - INFO - GET request: /browse/authors
-2025-04-11 18:13:25,146 - INFO - Generated enhanced authors page with tabular format and filtering
-2025-04-11 18:13:25,164 - INFO - GET request: /static/css/main.css?v=1744391605
-2025-04-11 18:13:25,168 - INFO - GET request: /static/css/styles.css?v=1744391605
-2025-04-11 18:13:25,169 - INFO - GET request: /static/css/authors-table.css?v=1744391605
-2025-04-11 18:13:25,169 - INFO - GET request: /static/css/dark-theme.css?v=1744391605
-2025-04-11 18:13:25,170 - INFO - GET request: /static/css/authors-page.css?v=1744391605
-2025-04-11 18:13:25,170 - INFO - GET request: /static/css/editors-page.css?v=1744391605
-2025-04-11 18:13:25,171 - INFO - GET request: /static/js/authors.js?v=1744391605
-2025-04-11 18:13:25,171 - INFO - GET request: /static/js/quit.js?v=1744391605
-2025-04-11 18:13:25,172 - INFO - GET request: /static/js/authors.js?v={int(time.time())}
-2025-04-11 18:13:32,268 - INFO - GET request: /get_author_works?author_id=tlg1681
-2025-04-11 18:13:32,268 - INFO - Handling /get_author_works request for author_id: tlg1681
-2025-04-11 18:13:32,269 - INFO - Retrieving works for author: tlg1681
-2025-04-11 18:13:32,269 - INFO - Found 1 potential work directories for author tlg1681
-2025-04-11 18:13:32,270 - INFO - Found 1 works for author tlg1681
-2025-04-11 18:13:32,271 - INFO - Successfully retrieved 1 works for author tlg1681
-2025-04-11 18:13:34,730 - INFO - GET request: /get_author_works?author_id=tlg0632
-2025-04-11 18:13:34,730 - INFO - Handling /get_author_works request for author_id: tlg0632
-2025-04-11 18:13:34,731 - INFO - Retrieving works for author: tlg0632
-2025-04-11 18:13:34,731 - INFO - Found 1 potential work directories for author tlg0632
-2025-04-11 18:13:34,732 - INFO - Found 1 works for author tlg0632
-2025-04-11 18:13:34,733 - INFO - Successfully retrieved 1 works for author tlg0632
-2025-04-11 18:13:38,083 - INFO - GET request: /view?path=data/tlg0632/tlg002/tlg0632.tlg002.1st1K-grc1.xml
-2025-04-11 18:13:38,102 - INFO - GET request: /static/css/main.css?v=1744391618
-2025-04-11 18:13:38,111 - INFO - GET request: /static/css/reader.css?v=1744391618
-2025-04-11 18:13:38,114 - INFO - GET request: /static/css/dark-theme.css?v=1744391618
-2025-04-11 18:13:52,128 - INFO - GET request: /browse/authors
-2025-04-11 18:13:52,195 - INFO - Generated enhanced authors page with tabular format and filtering
-2025-04-11 18:13:52,206 - INFO - GET request: /static/css/main.css?v=1744391632
-2025-04-11 18:13:52,206 - INFO - GET request: /static/css/styles.css?v=1744391632
-2025-04-11 18:13:52,207 - INFO - GET request: /static/css/authors-table.css?v=1744391632
-2025-04-11 18:13:52,207 - INFO - GET request: /static/css/dark-theme.css?v=1744391632
-2025-04-11 18:13:52,207 - INFO - GET request: /static/css/authors-page.css?v=1744391632
-2025-04-11 18:13:52,208 - INFO - GET request: /static/css/editors-page.css?v=1744391632
-2025-04-11 18:13:52,208 - INFO - GET request: /static/js/authors.js?v=1744391632
-2025-04-11 18:13:52,211 - INFO - GET request: /static/js/quit.js?v=1744391632
-2025-04-11 18:14:06,167 - INFO - GET request: /get_author_works?author_id=tlg0626
-2025-04-11 18:14:06,167 - INFO - Handling /get_author_works request for author_id: tlg0626
-2025-04-11 18:14:06,167 - INFO - Retrieving works for author: tlg0626
-2025-04-11 18:14:06,168 - INFO - Found 1 potential work directories for author tlg0626
-2025-04-11 18:14:06,169 - INFO - Found 1 works for author tlg0626
-2025-04-11 18:14:06,170 - INFO - Successfully retrieved 1 works for author tlg0626
-2025-04-11 18:14:09,326 - INFO - GET request: /get_author_works?author_id=tlg1414
-2025-04-11 18:14:09,326 - INFO - Handling /get_author_works request for author_id: tlg1414
-2025-04-11 18:14:09,326 - INFO - Retrieving works for author: tlg1414
-2025-04-11 18:14:09,327 - INFO - Found 1 potential work directories for author tlg1414
-2025-04-11 18:14:09,328 - INFO - Found 1 works for author tlg1414
-2025-04-11 18:14:09,328 - INFO - Successfully retrieved 1 works for author tlg1414
-2025-04-11 18:14:15,356 - INFO - GET request: /view?path=data/tlg0626/tlg002/tlg0626.tlg002.1st1K-grc1.xml
-2025-04-11 18:14:15,381 - INFO - GET request: /static/css/main.css?v=1744391655
-2025-04-11 18:14:15,381 - INFO - GET request: /static/css/reader.css?v=1744391655
-2025-04-11 18:14:15,382 - INFO - GET request: /static/css/dark-theme.css?v=1744391655
-2025-04-11 18:14:27,678 - INFO - GET request: /browse/authors
-2025-04-11 18:14:27,744 - INFO - Generated enhanced authors page with tabular format and filtering
-2025-04-11 18:14:27,763 - INFO - GET request: /static/css/main.css?v=1744391667
-2025-04-11 18:14:27,764 - INFO - GET request: /static/css/styles.css?v=1744391667
-2025-04-11 18:14:27,766 - INFO - GET request: /static/css/authors-table.css?v=1744391667
-2025-04-11 18:14:27,769 - INFO - GET request: /static/css/dark-theme.css?v=1744391667
-2025-04-11 18:14:27,770 - INFO - GET request: /static/css/authors-page.css?v=1744391667
-2025-04-11 18:14:27,770 - INFO - GET request: /static/css/editors-page.css?v=1744391667
-2025-04-11 18:14:27,771 - INFO - GET request: /static/js/authors.js?v=1744391667
-2025-04-11 18:14:27,771 - INFO - GET request: /static/js/quit.js?v=1744391667
-2025-04-11 18:14:39,961 - INFO - GET request: /get_author_works?author_id=tlg1414
-2025-04-11 18:14:39,961 - INFO - Handling /get_author_works request for author_id: tlg1414
-2025-04-11 18:14:39,962 - INFO - Retrieving works for author: tlg1414
-2025-04-11 18:14:39,962 - INFO - Found 1 potential work directories for author tlg1414
-2025-04-11 18:14:39,964 - INFO - Found 1 works for author tlg1414
-2025-04-11 18:14:39,964 - INFO - Successfully retrieved 1 works for author tlg1414
-2025-04-11 18:14:43,977 - INFO - GET request: /view?path=data/tlg1414/tlg001/tlg1414.tlg001.1st1K-grc1.xml
-2025-04-11 18:14:43,997 - INFO - GET request: /static/css/main.css?v=1744391683
-2025-04-11 18:14:43,998 - INFO - GET request: /static/css/reader.css?v=1744391683
-2025-04-11 18:14:44,002 - INFO - GET request: /static/css/dark-theme.css?v=1744391683
-2025-04-11 18:15:00,959 - INFO - GET request: /reader?path=data/tlg1414/tlg001/tlg1414.tlg001.1st1K-grc1.xml
-2025-04-11 18:15:00,986 - INFO - GET request: /static/css/main.css?v=1744391700
-2025-04-11 18:15:00,989 - INFO - GET request: /static/css/reader.css?v=1744391700
-2025-04-11 18:15:00,990 - INFO - GET request: /static/css/dark-theme.css?v=1744391700
-2025-04-11 18:15:11,779 - INFO - GET request: /browse/authors
-2025-04-11 18:15:11,847 - INFO - Generated enhanced authors page with tabular format and filtering
-2025-04-11 18:15:11,865 - INFO - GET request: /static/css/main.css?v=1744391711
-2025-04-11 18:15:11,869 - INFO - GET request: /static/css/styles.css?v=1744391711
-2025-04-11 18:15:11,871 - INFO - GET request: /static/css/authors-table.css?v=1744391711
-2025-04-11 18:15:11,871 - INFO - GET request: /static/css/dark-theme.css?v=1744391711
-2025-04-11 18:15:11,872 - INFO - GET request: /static/css/authors-page.css?v=1744391711
-2025-04-11 18:15:11,872 - INFO - GET request: /static/css/editors-page.css?v=1744391711
-2025-04-11 18:15:11,873 - INFO - GET request: /static/js/authors.js?v=1744391711
-2025-04-11 18:15:11,873 - INFO - GET request: /static/js/quit.js?v=1744391711
-2025-04-11 18:15:42,287 - INFO - GET request: /get_author_works?author_id=tlg0626
-2025-04-11 18:15:42,288 - INFO - Handling /get_author_works request for author_id: tlg0626
-2025-04-11 18:15:42,288 - INFO - Retrieving works for author: tlg0626
-2025-04-11 18:15:42,291 - INFO - Found 1 potential work directories for author tlg0626
-2025-04-11 18:15:42,293 - INFO - Found 1 works for author tlg0626
-2025-04-11 18:15:42,293 - INFO - Successfully retrieved 1 works for author tlg0626
-2025-04-11 18:17:05,712 - INFO - GET request: /search
-2025-04-11 18:17:05,740 - INFO - GET request: /static/css/main.css?v=1744391825
-2025-04-11 18:17:05,742 - INFO - GET request: /static/css/styles.css?v=1744391825
-2025-04-11 18:17:05,742 - INFO - GET request: /static/css/dark-theme.css?v=1744391825
-2025-04-11 18:17:09,064 - INFO - GET request: /search?q=cornutus
-2025-04-11 18:17:12,704 - INFO - GET request: /search?q=cornutus
-2025-04-11 18:17:15,584 - INFO - GET request: /static/css/main.css?v=1744391835
-2025-04-11 18:17:15,586 - INFO - GET request: /static/css/styles.css?v=1744391835
-2025-04-11 18:17:15,587 - INFO - GET request: /static/css/dark-theme.css?v=1744391835
-2025-04-11 18:17:32,389 - INFO - GET request: /reader?path=data/tlg0007/tlg084a/tlg0007.tlg084a.perseus-eng3.xml
-2025-04-11 18:17:32,412 - INFO - GET request: /static/css/main.css?v=1744391852
-2025-04-11 18:17:32,414 - INFO - GET request: /static/css/reader.css?v=1744391852
-2025-04-11 18:17:32,414 - INFO - GET request: /static/css/dark-theme.css?v=1744391852
-2025-04-11 18:28:03,621 - INFO - GET request: /search?q=%E1%BC%88%CE%BD%CE%B1%CE%BE%CE%AF%CE%BC%CE%B1%CE%BD%CE%B4%CF%81%CE%BF%CF%82
-2025-04-11 18:28:06,770 - ERROR - Error handling request: [Errno 32] Broken pipe
-2025-04-11 18:28:06,776 - INFO - GET request: /search?q=%E1%BC%88%CE%BD%CE%B1%CE%BE%CE%AF%CE%BC%CE%B1%CE%BD%CE%B4%CF%81%CE%BF%CF%82
-2025-04-11 18:28:09,727 - INFO - GET request: /static/css/main.css?v=1744392489
-2025-04-11 18:28:09,731 - INFO - GET request: /static/css/styles.css?v=1744392489
-2025-04-11 18:28:09,732 - INFO - GET request: /static/css/dark-theme.css?v=1744392489
-2025-04-11 18:32:18,124 - INFO - GET request: /search?q=%CE%9A%CE%BF%CF%81%CE%BD%CE%BF%E1%BF%A6%CF%84%CE%BF%CF%82
-2025-04-11 18:32:21,729 - INFO - GET request: /search?q=%CE%9A%CE%BF%CF%81%CE%BD%CE%BF%E1%BF%A6%CF%84%CE%BF%CF%82
-2025-04-11 18:32:24,575 - INFO - GET request: /static/css/main.css?v=1744392744
-2025-04-11 18:32:24,575 - INFO - GET request: /static/css/styles.css?v=1744392744
-2025-04-11 18:32:24,577 - INFO - GET request: /static/css/dark-theme.css?v=1744392744
-2025-04-11 18:33:23,893 - INFO - GET request: /browse/authors
-2025-04-11 18:33:23,959 - INFO - Generated enhanced authors page with tabular format and filtering
-2025-04-11 18:33:23,986 - INFO - GET request: /static/css/main.css?v=1744392803
-2025-04-11 18:33:23,987 - INFO - GET request: /static/css/styles.css?v=1744392803
-2025-04-11 18:33:23,988 - INFO - GET request: /static/css/authors-table.css?v=1744392803
-2025-04-11 18:33:23,988 - INFO - GET request: /static/css/dark-theme.css?v=1744392803
-2025-04-11 18:33:23,989 - INFO - GET request: /static/css/authors-page.css?v=1744392803
-2025-04-11 18:33:23,990 - INFO - GET request: /static/css/editors-page.css?v=1744392803
-2025-04-11 18:33:23,991 - INFO - GET request: /static/js/authors.js?v=1744392803
-2025-04-11 18:33:24,019 - INFO - GET request: /static/js/quit.js?v=1744392803
-2025-04-11 18:33:26,690 - INFO - GET request: /shutdown
-2025-04-11 18:33:27,693 - INFO - Server stopping...
-2025-04-11 18:33:28,195 - INFO - Server ran for 1206.3 seconds
-2025-04-11 18:33:28,195 - INFO - Server closed successfully
-2025-04-11 18:34:12,694 - __main__ - ERROR - Error running server: No module named 'uvicorn'
-2025-04-11 18:40:57,357 - __main__ - ERROR - Error running server: No module named 'uvicorn'
-2025-04-11 18:41:40,090 - __main__ - INFO - Starting First1KGreek FastAPI Server 1.2.0 - Fixed Version
-2025-04-11 18:41:40,090 - __main__ - INFO - Server will be available at http://localhost:8000
-2025-04-11 18:41:40,090 - __main__ - INFO - API documentation will be available at http://localhost:8000/docs
-2025-04-11 18:41:40,090 - __main__ - ERROR - Error running server: name 'threading' is not defined
-2025-04-11 18:41:51,117 - __main__ - INFO - Starting First1KGreek FastAPI Server 1.2.0 - Fixed Version
-2025-04-11 18:41:51,117 - __main__ - INFO - Server will be available at http://localhost:8000
-2025-04-11 18:41:51,117 - __main__ - INFO - API documentation will be available at http://localhost:8000/docs
-2025-04-11 18:41:51,883 - __main__ - ERROR - Error running FastAPI server: cannot import name 'get_base_js_scripts' from 'src.first1k.handlers.ui' (/Users/james/Documents/GitHub/First1KGreek/src/first1k/handlers/ui.py)
-2025-04-11 18:41:51,884 - __main__ - ERROR - Error running server: cannot import name 'get_base_js_scripts' from 'src.first1k.handlers.ui' (/Users/james/Documents/GitHub/First1KGreek/src/first1k/handlers/ui.py)
-2025-04-11 18:42:19,950 - __main__ - INFO - Starting First1KGreek FastAPI Server 1.2.0 - Fixed Version
-2025-04-11 18:42:19,950 - __main__ - INFO - Server will be available at http://localhost:8000
-2025-04-11 18:42:19,950 - __main__ - INFO - API documentation will be available at http://localhost:8000/docs
-2025-04-11 18:42:20,177 - __main__ - ERROR - Error running FastAPI server: cannot import name 'handle_browse_authors' from 'src.first1k.handlers.browse' (/Users/james/Documents/GitHub/First1KGreek/src/first1k/handlers/browse.py)
-2025-04-11 18:42:20,177 - __main__ - ERROR - Error running server: cannot import name 'handle_browse_authors' from 'src.first1k.handlers.browse' (/Users/james/Documents/GitHub/First1KGreek/src/first1k/handlers/browse.py)
-2025-04-11 18:43:06,246 - __main__ - INFO - Starting First1KGreek FastAPI Server 1.2.0 - Fixed Version
-2025-04-11 18:43:06,246 - __main__ - INFO - Server will be available at http://localhost:8000
-2025-04-11 18:43:06,246 - __main__ - INFO - API documentation will be available at http://localhost:8000/docs
-2025-04-11 18:43:06,420 - __main__ - ERROR - Error running FastAPI server: No module named 'src.first1k.handlers.import_export'
-2025-04-11 18:43:06,420 - __main__ - ERROR - Error running server: No module named 'src.first1k.handlers.import_export'
-2025-04-11 18:43:56,152 - __main__ - ERROR - Error running server: cannot import name 'handle_search_request' from 'src.first1k.handlers.search' (/Users/james/Documents/GitHub/First1KGreek/src/first1k/handlers/search.py)
-2025-04-11 18:44:39,520 - __main__ - ERROR - Error running server: cannot import name 'handle_view_xml' from 'src.first1k.handlers.view' (/Users/james/Documents/GitHub/First1KGreek/src/first1k/handlers/view.py)
-2025-04-11 18:45:06,589 - __main__ - ERROR - Error running server: cannot import name 'handle_get_author_works' from 'src.first1k.handlers.works' (/Users/james/Documents/GitHub/First1KGreek/src/first1k/handlers/works.py)
-2025-04-11 18:45:24,536 - __main__ - ERROR - Error running server: cannot import name 'handle_update_preference' from 'src.first1k.handlers.preferences' (/Users/james/Documents/GitHub/First1KGreek/src/first1k/handlers/preferences.py)
-2025-04-11 18:45:45,531 - __main__ - ERROR - Error running server: cannot import name 'handle_bulk_update_preferences' from 'src.first1k.handlers.preferences' (/Users/james/Documents/GitHub/First1KGreek/src/first1k/handlers/preferences.py)
-2025-04-11 18:46:02,552 - __main__ - INFO - Starting First1KGreek HTTP Server 1.2.0 - Fixed Version
-2025-04-11 18:46:02,553 - __main__ - INFO - Server will be available at http://localhost:8000
-2025-04-11 18:46:03,706 - src.first1k.server.server - INFO - GET request: /
-2025-04-11 18:46:03,783 - src.first1k.server.server - INFO - GET request: /static/css/main.css?v=1744393563
-2025-04-11 18:46:03,792 - src.first1k.server.server - INFO - GET request: /static/css/dark-theme.css?v=1744393563
-2025-04-11 18:46:03,794 - src.first1k.server.server - INFO - GET request: /static/css/editors-page.css?v=1744393563
-2025-04-11 18:46:03,795 - src.first1k.server.server - INFO - GET request: /static/js/quit.js?v=1744393563
-2025-04-11 18:46:08,120 - src.first1k.server.server - INFO - GET request: /browse/authors
-2025-04-11 18:46:08,168 - src.first1k.handlers.browse - INFO - Generated enhanced authors page with tabular format and filtering
-2025-04-11 18:46:08,179 - src.first1k.server.server - INFO - GET request: /static/css/main.css?v=1744393568
-2025-04-11 18:46:08,185 - src.first1k.server.server - INFO - GET request: /static/css/styles.css?v=1744393568
-2025-04-11 18:46:08,187 - src.first1k.server.server - INFO - GET request: /static/css/authors-table.css?v=1744393568
-2025-04-11 18:46:08,188 - src.first1k.server.server - INFO - GET request: /static/css/dark-theme.css?v=1744393568
-2025-04-11 18:46:08,189 - src.first1k.server.server - INFO - GET request: /static/css/authors-page.css?v=1744393568
-2025-04-11 18:46:08,189 - src.first1k.server.server - INFO - GET request: /static/css/editors-page.css?v=1744393568
-2025-04-11 18:46:08,190 - src.first1k.server.server - INFO - GET request: /static/js/authors.js?v=1744393568
-2025-04-11 18:46:08,191 - src.first1k.server.server - INFO - GET request: /static/js/quit.js?v=1744393568
-2025-04-11 18:46:22,889 - src.first1k.server.server - INFO - GET request: /browse/editors
-2025-04-11 18:46:22,889 - src.first1k.handlers.browse - INFO - Gathering editor data...
-2025-04-11 18:46:26,209 - src.first1k.handlers.browse - INFO - Found 438 editors
-2025-04-11 18:46:26,231 - src.first1k.server.server - INFO - GET request: /static/css/main.css?v=1744393586
-2025-04-11 18:46:26,232 - src.first1k.server.server - INFO - GET request: /static/css/dark-theme.css?v=1744393586
-2025-04-11 18:46:26,232 - src.first1k.server.server - INFO - GET request: /static/css/editors-page.css?v=1744393586
-2025-04-11 18:46:26,233 - src.first1k.server.server - INFO - GET request: /static/js/quit.js?v=1744393586
+2025-04-11 18:57:22,256 - INFO - Successfully imported modular implementation
+2025-04-11 18:57:22,410 - INFO - HTTP Request: GET http://testserver/api/authors "HTTP/1.1 307 Temporary Redirect"
+2025-04-11 18:57:22,411 - INFO - Listing authors with skip=0, limit=100, century=None, type=None
+2025-04-11 18:57:22,411 - INFO - Loading authors data from authors_data.json
+2025-04-11 18:57:22,411 - INFO - Loaded data for 368 authors
+2025-04-11 18:57:22,412 - INFO - HTTP Request: GET http://testserver/api/authors/ "HTTP/1.1 200 OK"
+2025-04-11 18:57:22,412 - INFO - HTTP Request: GET http://testserver/api/authors "HTTP/1.1 307 Temporary Redirect"
+2025-04-11 18:57:22,413 - INFO - Listing authors with skip=0, limit=100, century=None, type=None
+2025-04-11 18:57:22,413 - INFO - HTTP Request: GET http://testserver/api/authors/ "HTTP/1.1 200 OK"
+2025-04-11 18:57:22,414 - INFO - HTTP Request: GET http://testserver/api/authors "HTTP/1.1 307 Temporary Redirect"
+2025-04-11 18:57:22,414 - INFO - Listing authors with skip=0, limit=100, century=None, type=None
+2025-04-11 18:57:22,415 - INFO - HTTP Request: GET http://testserver/api/authors/ "HTTP/1.1 200 OK"
+2025-04-11 18:57:22,415 - INFO - HTTP Request: GET http://testserver/api/authors "HTTP/1.1 307 Temporary Redirect"
+2025-04-11 18:57:22,416 - INFO - Listing authors with skip=0, limit=100, century=None, type=None
+2025-04-11 18:57:22,416 - INFO - HTTP Request: GET http://testserver/api/authors/ "HTTP/1.1 200 OK"
+2025-04-11 18:57:22,417 - INFO - HTTP Request: GET http://testserver/api/authors "HTTP/1.1 307 Temporary Redirect"
+2025-04-11 18:57:22,417 - INFO - Listing authors with skip=0, limit=100, century=None, type=None
+2025-04-11 18:57:22,418 - INFO - HTTP Request: GET http://testserver/api/authors/ "HTTP/1.1 200 OK"
+2025-04-11 18:57:22,418 - INFO - HTTP Request: GET http://testserver/api/authors "HTTP/1.1 307 Temporary Redirect"
+2025-04-11 18:57:22,419 - INFO - Listing authors with skip=0, limit=100, century=None, type=None
+2025-04-11 18:57:22,419 - INFO - HTTP Request: GET http://testserver/api/authors/ "HTTP/1.1 200 OK"
+2025-04-11 18:57:22,420 - INFO - HTTP Request: GET http://testserver/api/authors "HTTP/1.1 307 Temporary Redirect"
+2025-04-11 18:57:22,421 - INFO - Listing authors with skip=0, limit=100, century=None, type=None
+2025-04-11 18:57:22,421 - INFO - HTTP Request: GET http://testserver/api/authors/ "HTTP/1.1 200 OK"
+2025-04-11 18:57:22,422 - INFO - HTTP Request: GET http://testserver/api/authors "HTTP/1.1 307 Temporary Redirect"
+2025-04-11 18:57:22,422 - INFO - Listing authors with skip=0, limit=100, century=None, type=None
+2025-04-11 18:57:22,422 - INFO - HTTP Request: GET http://testserver/api/authors/ "HTTP/1.1 200 OK"
+2025-04-11 18:57:22,423 - INFO - HTTP Request: GET http://testserver/api/authors "HTTP/1.1 307 Temporary Redirect"
+2025-04-11 18:57:22,423 - INFO - Listing authors with skip=0, limit=100, century=None, type=None
+2025-04-11 18:57:22,424 - INFO - HTTP Request: GET http://testserver/api/authors/ "HTTP/1.1 200 OK"
+2025-04-11 18:57:22,425 - INFO - HTTP Request: GET http://testserver/api/authors "HTTP/1.1 307 Temporary Redirect"
+2025-04-11 18:57:22,426 - INFO - Listing authors with skip=0, limit=100, century=None, type=None
+2025-04-11 18:57:22,429 - INFO - HTTP Request: GET http://testserver/api/authors/ "HTTP/1.1 200 OK"
+2025-04-11 18:57:22,430 - INFO - HTTP Request: GET http://testserver/api/authors "HTTP/1.1 307 Temporary Redirect"
+2025-04-11 18:57:22,431 - INFO - Listing authors with skip=0, limit=100, century=None, type=None
+2025-04-11 18:57:22,431 - INFO - HTTP Request: GET http://testserver/api/authors/ "HTTP/1.1 200 OK"
+2025-04-11 18:57:22,432 - INFO - Getting author details for heb0001
+2025-04-11 18:57:22,432 - INFO - HTTP Request: GET http://testserver/api/authors/heb0001 "HTTP/1.1 200 OK"
+2025-04-11 18:57:22,433 - INFO - Getting author details for heb0001
+2025-04-11 18:57:22,433 - INFO - HTTP Request: GET http://testserver/api/authors/heb0001 "HTTP/1.1 200 OK"
+2025-04-11 18:57:22,433 - INFO - Getting author details for heb0001
+2025-04-11 18:57:22,434 - INFO - HTTP Request: GET http://testserver/api/authors/heb0001 "HTTP/1.1 200 OK"
+2025-04-11 18:57:22,434 - INFO - Getting author details for heb0001
+2025-04-11 18:57:22,434 - INFO - HTTP Request: GET http://testserver/api/authors/heb0001 "HTTP/1.1 200 OK"
+2025-04-11 18:57:22,435 - INFO - Getting author details for heb0001
+2025-04-11 18:57:22,435 - INFO - HTTP Request: GET http://testserver/api/authors/heb0001 "HTTP/1.1 200 OK"
+2025-04-11 18:57:22,435 - INFO - Getting author details for heb0001
+2025-04-11 18:57:22,435 - INFO - HTTP Request: GET http://testserver/api/authors/heb0001 "HTTP/1.1 200 OK"
+2025-04-11 18:57:22,436 - INFO - Getting author details for heb0001
+2025-04-11 18:57:22,436 - INFO - HTTP Request: GET http://testserver/api/authors/heb0001 "HTTP/1.1 200 OK"
+2025-04-11 18:57:22,437 - INFO - Getting author details for heb0001
+2025-04-11 18:57:22,437 - INFO - HTTP Request: GET http://testserver/api/authors/heb0001 "HTTP/1.1 200 OK"
+2025-04-11 18:57:22,438 - INFO - Getting author details for heb0001
+2025-04-11 18:57:22,438 - INFO - HTTP Request: GET http://testserver/api/authors/heb0001 "HTTP/1.1 200 OK"
+2025-04-11 18:57:22,438 - INFO - Getting author details for heb0001
+2025-04-11 18:57:22,438 - INFO - HTTP Request: GET http://testserver/api/authors/heb0001 "HTTP/1.1 200 OK"
+2025-04-11 18:57:22,439 - INFO - HTTP Request: GET http://testserver/api/authors "HTTP/1.1 307 Temporary Redirect"
+2025-04-11 18:57:22,446 - INFO - Listing authors with skip=0, limit=100, century=None, type=None
+2025-04-11 18:57:22,446 - INFO - HTTP Request: GET http://testserver/api/authors/ "HTTP/1.1 200 OK"
+2025-04-11 18:57:22,447 - INFO - Getting works for author heb0001
+2025-04-11 18:57:22,447 - INFO - HTTP Request: GET http://testserver/api/authors/heb0001/works "HTTP/1.1 200 OK"
+2025-04-11 18:57:22,448 - INFO - Getting works for author heb0001
+2025-04-11 18:57:22,448 - INFO - HTTP Request: GET http://testserver/api/authors/heb0001/works "HTTP/1.1 200 OK"
+2025-04-11 18:57:22,448 - INFO - Getting works for author heb0001
+2025-04-11 18:57:22,449 - INFO - HTTP Request: GET http://testserver/api/authors/heb0001/works "HTTP/1.1 200 OK"
+2025-04-11 18:57:22,449 - INFO - Getting works for author heb0001
+2025-04-11 18:57:22,449 - INFO - HTTP Request: GET http://testserver/api/authors/heb0001/works "HTTP/1.1 200 OK"
+2025-04-11 18:57:22,450 - INFO - Getting works for author heb0001
+2025-04-11 18:57:22,451 - INFO - HTTP Request: GET http://testserver/api/authors/heb0001/works "HTTP/1.1 200 OK"
+2025-04-11 18:57:22,451 - INFO - Getting works for author heb0001
+2025-04-11 18:57:22,451 - INFO - HTTP Request: GET http://testserver/api/authors/heb0001/works "HTTP/1.1 200 OK"
+2025-04-11 18:57:22,452 - INFO - Getting works for author heb0001
+2025-04-11 18:57:22,452 - INFO - HTTP Request: GET http://testserver/api/authors/heb0001/works "HTTP/1.1 200 OK"
+2025-04-11 18:57:22,452 - INFO - Getting works for author heb0001
+2025-04-11 18:57:22,452 - INFO - HTTP Request: GET http://testserver/api/authors/heb0001/works "HTTP/1.1 200 OK"
+2025-04-11 18:57:22,453 - INFO - Getting works for author heb0001
+2025-04-11 18:57:22,453 - INFO - HTTP Request: GET http://testserver/api/authors/heb0001/works "HTTP/1.1 200 OK"
+2025-04-11 18:57:22,453 - INFO - Getting works for author heb0001
+2025-04-11 18:57:22,454 - INFO - HTTP Request: GET http://testserver/api/authors/heb0001/works "HTTP/1.1 200 OK"
+2025-04-11 18:57:22,459 - INFO - HTTP Request: GET http://testserver/api/authors "HTTP/1.1 307 Temporary Redirect"
+2025-04-11 18:57:22,460 - INFO - HTTP Request: GET http://testserver/api/authors "HTTP/1.1 307 Temporary Redirect"
+2025-04-11 18:57:22,461 - INFO - HTTP Request: GET http://testserver/api/authors "HTTP/1.1 307 Temporary Redirect"
+2025-04-11 18:57:22,461 - INFO - HTTP Request: GET http://testserver/api/authors "HTTP/1.1 307 Temporary Redirect"
+2025-04-11 18:57:22,462 - INFO - HTTP Request: GET http://testserver/api/authors "HTTP/1.1 307 Temporary Redirect"
+2025-04-11 18:57:22,462 - INFO - HTTP Request: GET http://testserver/api/authors "HTTP/1.1 307 Temporary Redirect"
+2025-04-11 18:57:22,463 - INFO - HTTP Request: GET http://testserver/api/authors "HTTP/1.1 307 Temporary Redirect"
+2025-04-11 18:57:22,463 - INFO - HTTP Request: GET http://testserver/api/authors "HTTP/1.1 307 Temporary Redirect"
+2025-04-11 18:57:22,463 - INFO - HTTP Request: GET http://testserver/api/authors "HTTP/1.1 307 Temporary Redirect"
+2025-04-11 18:57:22,464 - INFO - HTTP Request: GET http://testserver/api/authors "HTTP/1.1 307 Temporary Redirect"
+2025-04-11 18:57:22,464 - INFO - HTTP Request: GET http://testserver/api/authors "HTTP/1.1 307 Temporary Redirect"
+2025-04-11 18:57:22,464 - INFO - HTTP Request: GET http://testserver/api/authors "HTTP/1.1 307 Temporary Redirect"
+2025-04-11 18:57:22,465 - INFO - HTTP Request: GET http://testserver/api/authors "HTTP/1.1 307 Temporary Redirect"
+2025-04-11 18:57:22,465 - INFO - Listing authors with skip=0, limit=100, century=None, type=None
+2025-04-11 18:57:22,465 - INFO - Listing authors with skip=0, limit=100, century=None, type=None
+2025-04-11 18:57:22,466 - INFO - Listing authors with skip=0, limit=100, century=None, type=None
+2025-04-11 18:57:22,466 - INFO - HTTP Request: GET http://testserver/api/authors "HTTP/1.1 307 Temporary Redirect"
+2025-04-11 18:57:22,466 - INFO - HTTP Request: GET http://testserver/api/authors "HTTP/1.1 307 Temporary Redirect"
+2025-04-11 18:57:22,466 - INFO - Listing authors with skip=0, limit=100, century=None, type=None
+2025-04-11 18:57:22,467 - INFO - Listing authors with skip=0, limit=100, century=None, type=None
+2025-04-11 18:57:22,467 - INFO - HTTP Request: GET http://testserver/api/authors "HTTP/1.1 307 Temporary Redirect"
+2025-04-11 18:57:22,467 - INFO - Listing authors with skip=0, limit=100, century=None, type=None
+2025-04-11 18:57:22,467 - INFO - Listing authors with skip=0, limit=100, century=None, type=None
+2025-04-11 18:57:22,467 - INFO - Listing authors with skip=0, limit=100, century=None, type=None
+2025-04-11 18:57:22,467 - INFO - HTTP Request: GET http://testserver/api/authors "HTTP/1.1 307 Temporary Redirect"
+2025-04-11 18:57:22,468 - INFO - HTTP Request: GET http://testserver/api/authors "HTTP/1.1 307 Temporary Redirect"
+2025-04-11 18:57:22,468 - INFO - HTTP Request: GET http://testserver/api/authors "HTTP/1.1 307 Temporary Redirect"
+2025-04-11 18:57:22,469 - INFO - Listing authors with skip=0, limit=100, century=None, type=None
+2025-04-11 18:57:22,469 - INFO - Listing authors with skip=0, limit=100, century=None, type=None
+2025-04-11 18:57:22,470 - INFO - HTTP Request: GET http://testserver/api/authors "HTTP/1.1 307 Temporary Redirect"
+2025-04-11 18:57:22,470 - INFO - Listing authors with skip=0, limit=100, century=None, type=None
+2025-04-11 18:57:22,470 - INFO - Listing authors with skip=0, limit=100, century=None, type=None
+2025-04-11 18:57:22,471 - INFO - Listing authors with skip=0, limit=100, century=None, type=None
+2025-04-11 18:57:22,472 - INFO - Listing authors with skip=0, limit=100, century=None, type=None
+2025-04-11 18:57:22,473 - INFO - HTTP Request: GET http://testserver/api/authors/ "HTTP/1.1 200 OK"
+2025-04-11 18:57:22,473 - INFO - HTTP Request: GET http://testserver/api/authors/ "HTTP/1.1 200 OK"
+2025-04-11 18:57:22,473 - INFO - Listing authors with skip=0, limit=100, century=None, type=None
+2025-04-11 18:57:22,474 - INFO - HTTP Request: GET http://testserver/api/authors/ "HTTP/1.1 200 OK"
+2025-04-11 18:57:22,474 - INFO - HTTP Request: GET http://testserver/api/authors/ "HTTP/1.1 200 OK"
+2025-04-11 18:57:22,474 - INFO - Listing authors with skip=0, limit=100, century=None, type=None
+2025-04-11 18:57:22,474 - INFO - HTTP Request: GET http://testserver/api/authors/ "HTTP/1.1 200 OK"
+2025-04-11 18:57:22,474 - INFO - HTTP Request: GET http://testserver/api/authors/ "HTTP/1.1 200 OK"
+2025-04-11 18:57:22,475 - INFO - HTTP Request: GET http://testserver/api/authors/ "HTTP/1.1 200 OK"
+2025-04-11 18:57:22,476 - INFO - Listing authors with skip=0, limit=100, century=None, type=None
+2025-04-11 18:57:22,476 - INFO - Listing authors with skip=0, limit=100, century=None, type=None
+2025-04-11 18:57:22,477 - INFO - Listing authors with skip=0, limit=100, century=None, type=None
+2025-04-11 18:57:22,478 - INFO - Listing authors with skip=0, limit=100, century=None, type=None
+2025-04-11 18:57:22,478 - INFO - HTTP Request: GET http://testserver/api/authors/ "HTTP/1.1 200 OK"
+2025-04-11 18:57:22,478 - INFO - HTTP Request: GET http://testserver/api/authors/ "HTTP/1.1 200 OK"
+2025-04-11 18:57:22,478 - INFO - HTTP Request: GET http://testserver/api/authors/ "HTTP/1.1 200 OK"
+2025-04-11 18:57:22,479 - INFO - HTTP Request: GET http://testserver/api/authors/ "HTTP/1.1 200 OK"
+2025-04-11 18:57:22,479 - INFO - HTTP Request: GET http://testserver/api/authors/ "HTTP/1.1 200 OK"
+2025-04-11 18:57:22,479 - INFO - HTTP Request: GET http://testserver/api/authors/ "HTTP/1.1 200 OK"
+2025-04-11 18:57:22,479 - INFO - HTTP Request: GET http://testserver/api/authors/ "HTTP/1.1 200 OK"
+2025-04-11 18:57:22,481 - INFO - HTTP Request: GET http://testserver/api/authors/ "HTTP/1.1 200 OK"
+2025-04-11 18:57:22,482 - INFO - HTTP Request: GET http://testserver/api/authors/ "HTTP/1.1 200 OK"
+2025-04-11 18:57:22,482 - INFO - HTTP Request: GET http://testserver/api/authors/ "HTTP/1.1 200 OK"
+2025-04-11 18:57:22,482 - INFO - HTTP Request: GET http://testserver/api/authors/ "HTTP/1.1 200 OK"
+2025-04-11 18:57:22,483 - INFO - HTTP Request: GET http://testserver/api/authors/ "HTTP/1.1 200 OK"
+2025-04-11 18:57:22,483 - INFO - HTTP Request: GET http://testserver/api/authors/ "HTTP/1.1 200 OK"
+2025-04-11 18:57:22,489 - INFO - HTTP Request: GET http://testserver/api/preferences "HTTP/1.1 307 Temporary Redirect"
+2025-04-11 18:57:22,490 - INFO - HTTP Request: GET http://testserver/api/preferences "HTTP/1.1 307 Temporary Redirect"
+2025-04-11 18:57:22,490 - INFO - HTTP Request: GET http://testserver/api/preferences "HTTP/1.1 307 Temporary Redirect"
+2025-04-11 18:57:22,491 - INFO - HTTP Request: GET http://testserver/api/preferences "HTTP/1.1 307 Temporary Redirect"
+2025-04-11 18:57:22,492 - INFO - HTTP Request: GET http://testserver/api/preferences "HTTP/1.1 307 Temporary Redirect"
+2025-04-11 18:57:22,492 - INFO - Getting user preferences
+2025-04-11 18:57:22,492 - INFO - HTTP Request: GET http://testserver/api/preferences "HTTP/1.1 307 Temporary Redirect"
+2025-04-11 18:57:22,492 - INFO - HTTP Request: GET http://testserver/api/preferences "HTTP/1.1 307 Temporary Redirect"
+2025-04-11 18:57:22,492 - INFO - HTTP Request: GET http://testserver/api/preferences "HTTP/1.1 307 Temporary Redirect"
+2025-04-11 18:57:22,492 - INFO - HTTP Request: GET http://testserver/api/preferences "HTTP/1.1 307 Temporary Redirect"
+2025-04-11 18:57:22,493 - INFO - HTTP Request: GET http://testserver/api/preferences "HTTP/1.1 307 Temporary Redirect"
+2025-04-11 18:57:22,493 - INFO - Getting user preferences
+2025-04-11 18:57:22,493 - INFO - Getting user preferences
+2025-04-11 18:57:22,494 - INFO - HTTP Request: GET http://testserver/api/preferences "HTTP/1.1 307 Temporary Redirect"
+2025-04-11 18:57:22,494 - INFO - Getting user preferences
+2025-04-11 18:57:22,494 - INFO - HTTP Request: GET http://testserver/api/preferences "HTTP/1.1 307 Temporary Redirect"
+2025-04-11 18:57:22,494 - INFO - HTTP Request: GET http://testserver/api/preferences "HTTP/1.1 307 Temporary Redirect"
+2025-04-11 18:57:22,494 - INFO - Getting user preferences
+2025-04-11 18:57:22,495 - INFO - HTTP Request: GET http://testserver/api/preferences "HTTP/1.1 307 Temporary Redirect"
+2025-04-11 18:57:22,495 - INFO - HTTP Request: GET http://testserver/api/preferences "HTTP/1.1 307 Temporary Redirect"
+2025-04-11 18:57:22,495 - INFO - HTTP Request: GET http://testserver/api/preferences "HTTP/1.1 307 Temporary Redirect"
+2025-04-11 18:57:22,495 - INFO - HTTP Request: GET http://testserver/api/preferences "HTTP/1.1 307 Temporary Redirect"
+2025-04-11 18:57:22,495 - INFO - HTTP Request: GET http://testserver/api/preferences "HTTP/1.1 307 Temporary Redirect"
+2025-04-11 18:57:22,496 - INFO - Getting user preferences
+2025-04-11 18:57:22,496 - INFO - HTTP Request: GET http://testserver/api/preferences "HTTP/1.1 307 Temporary Redirect"
+2025-04-11 18:57:22,496 - INFO - HTTP Request: GET http://testserver/api/preferences "HTTP/1.1 307 Temporary Redirect"
+2025-04-11 18:57:22,497 - INFO - HTTP Request: GET http://testserver/api/preferences/ "HTTP/1.1 200 OK"
+2025-04-11 18:57:22,497 - INFO - Getting user preferences
+2025-04-11 18:57:22,497 - INFO - Getting user preferences
+2025-04-11 18:57:22,497 - INFO - Getting user preferences
+2025-04-11 18:57:22,497 - INFO - Getting user preferences
+2025-04-11 18:57:22,499 - INFO - Getting user preferences
+2025-04-11 18:57:22,500 - INFO - Getting user preferences
+2025-04-11 18:57:22,500 - INFO - Getting user preferences
+2025-04-11 18:57:22,500 - INFO - HTTP Request: GET http://testserver/api/preferences/ "HTTP/1.1 200 OK"
+2025-04-11 18:57:22,500 - INFO - Getting user preferences
+2025-04-11 18:57:22,500 - INFO - HTTP Request: GET http://testserver/api/preferences/ "HTTP/1.1 200 OK"
+2025-04-11 18:57:22,501 - INFO - Getting user preferences
+2025-04-11 18:57:22,501 - INFO - Getting user preferences
+2025-04-11 18:57:22,501 - INFO - HTTP Request: GET http://testserver/api/preferences/ "HTTP/1.1 200 OK"
+2025-04-11 18:57:22,501 - INFO - Getting user preferences
+2025-04-11 18:57:22,502 - INFO - Getting user preferences
+2025-04-11 18:57:22,502 - INFO - HTTP Request: GET http://testserver/api/preferences/ "HTTP/1.1 200 OK"
+2025-04-11 18:57:22,502 - INFO - Getting user preferences
+2025-04-11 18:57:22,502 - INFO - Getting user preferences
+2025-04-11 18:57:22,503 - INFO - HTTP Request: GET http://testserver/api/preferences/ "HTTP/1.1 200 OK"
+2025-04-11 18:57:22,503 - INFO - HTTP Request: GET http://testserver/api/preferences/ "HTTP/1.1 200 OK"
+2025-04-11 18:57:22,504 - INFO - HTTP Request: GET http://testserver/api/preferences/ "HTTP/1.1 200 OK"
+2025-04-11 18:57:22,505 - INFO - HTTP Request: GET http://testserver/api/preferences/ "HTTP/1.1 200 OK"
+2025-04-11 18:57:22,505 - INFO - HTTP Request: GET http://testserver/api/preferences/ "HTTP/1.1 200 OK"
+2025-04-11 18:57:22,505 - INFO - HTTP Request: GET http://testserver/api/preferences/ "HTTP/1.1 200 OK"
+2025-04-11 18:57:22,505 - INFO - HTTP Request: GET http://testserver/api/preferences/ "HTTP/1.1 200 OK"
+2025-04-11 18:57:22,506 - INFO - HTTP Request: GET http://testserver/api/preferences/ "HTTP/1.1 200 OK"
+2025-04-11 18:57:22,506 - INFO - HTTP Request: GET http://testserver/api/preferences/ "HTTP/1.1 200 OK"
+2025-04-11 18:57:22,506 - INFO - HTTP Request: GET http://testserver/api/preferences/ "HTTP/1.1 200 OK"
+2025-04-11 18:57:22,507 - INFO - HTTP Request: GET http://testserver/api/preferences/ "HTTP/1.1 200 OK"
+2025-04-11 18:57:22,507 - INFO - HTTP Request: GET http://testserver/api/preferences/ "HTTP/1.1 200 OK"
+2025-04-11 18:57:22,507 - INFO - HTTP Request: GET http://testserver/api/preferences/ "HTTP/1.1 200 OK"
+2025-04-11 18:57:22,507 - INFO - HTTP Request: GET http://testserver/api/preferences/ "HTTP/1.1 200 OK"
+2025-04-11 18:57:22,507 - INFO - HTTP Request: GET http://testserver/api/preferences/ "HTTP/1.1 200 OK"
+2025-04-11 18:57:22,514 - INFO - HTTP Request: GET http://testserver/api/health "HTTP/1.1 200 OK"
+2025-04-11 18:57:22,515 - INFO - HTTP Request: GET http://testserver/api/health "HTTP/1.1 200 OK"
+2025-04-11 18:57:22,515 - INFO - HTTP Request: GET http://testserver/api/health "HTTP/1.1 200 OK"
+2025-04-11 18:57:22,515 - INFO - HTTP Request: GET http://testserver/api/health "HTTP/1.1 200 OK"
+2025-04-11 18:57:22,515 - INFO - HTTP Request: GET http://testserver/api/health "HTTP/1.1 200 OK"
+2025-04-11 18:57:22,516 - INFO - HTTP Request: GET http://testserver/api/health "HTTP/1.1 200 OK"
+2025-04-11 18:57:22,516 - INFO - HTTP Request: GET http://testserver/api/health "HTTP/1.1 200 OK"
+2025-04-11 18:57:22,517 - INFO - HTTP Request: GET http://testserver/api/health "HTTP/1.1 200 OK"
+2025-04-11 18:57:22,517 - INFO - HTTP Request: GET http://testserver/api/health "HTTP/1.1 200 OK"
+2025-04-11 18:57:22,517 - INFO - HTTP Request: GET http://testserver/api/health "HTTP/1.1 200 OK"
+2025-04-11 18:57:22,518 - INFO - HTTP Request: GET http://testserver/api/health "HTTP/1.1 200 OK"
+2025-04-11 18:57:22,518 - INFO - HTTP Request: GET http://testserver/api/health "HTTP/1.1 200 OK"
+2025-04-11 18:57:22,518 - INFO - HTTP Request: GET http://testserver/api/health "HTTP/1.1 200 OK"
+2025-04-11 18:57:22,518 - INFO - HTTP Request: GET http://testserver/api/health "HTTP/1.1 200 OK"
+2025-04-11 18:57:22,518 - INFO - HTTP Request: GET http://testserver/api/health "HTTP/1.1 200 OK"
+2025-04-11 18:57:22,519 - INFO - HTTP Request: GET http://testserver/api/health "HTTP/1.1 200 OK"
+2025-04-11 18:57:22,519 - INFO - HTTP Request: GET http://testserver/api/health "HTTP/1.1 200 OK"
+2025-04-11 18:57:22,519 - INFO - HTTP Request: GET http://testserver/api/health "HTTP/1.1 200 OK"
+2025-04-11 18:57:22,519 - INFO - HTTP Request: GET http://testserver/api/health "HTTP/1.1 200 OK"
+2025-04-11 18:57:22,519 - INFO - HTTP Request: GET http://testserver/api/health "HTTP/1.1 200 OK"
