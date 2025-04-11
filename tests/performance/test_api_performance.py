@@ -102,6 +102,12 @@ class APIPerformanceTests(BaseTest):
         ]
         self.mock_get_works.return_value = self.mock_works
         
+        # Add mock for os.path.isdir to prevent 404 errors
+        self.isdir_patch = mock.patch('os.path.isdir')
+        self.mock_isdir = self.isdir_patch.start()
+        self.patches.append(self.isdir_patch)
+        self.mock_isdir.return_value = True
+        
         # Mock the async_search_corpus function
         self.search_patch = mock.patch(
             'src.first1k.handlers.search.async_search_corpus')
@@ -282,21 +288,33 @@ class APIPerformanceTests(BaseTest):
         success_count = 0
         failure_count = 0
         response_times = []
+        failed_endpoints = []
         
         # Execute concurrent requests
         with concurrent.futures.ThreadPoolExecutor(max_workers=len(all_endpoints)) as executor:
             start_time = time.time()
             futures = [executor.submit(endpoint) for endpoint in all_endpoints]
             
-            for future in concurrent.futures.as_completed(futures):
+            for i, future in enumerate(concurrent.futures.as_completed(futures)):
                 try:
                     response = future.result()
                     if response.status_code == 200:
                         success_count += 1
                     else:
                         failure_count += 1
-                except Exception:
+                        endpoint_index = i % len(endpoints)
+                        failed_endpoints.append({
+                            "endpoint": str(endpoints[endpoint_index]),
+                            "status_code": response.status_code,
+                            "response": response.text[:100]  # First 100 chars of response
+                        })
+                except Exception as e:
                     failure_count += 1
+                    endpoint_index = i % len(endpoints)
+                    failed_endpoints.append({
+                        "endpoint": str(endpoints[endpoint_index]),
+                        "error": str(e)
+                    })
         
         end_time = time.time()
         total_time = (end_time - start_time) * 1000  # Convert to ms
@@ -313,6 +331,12 @@ class APIPerformanceTests(BaseTest):
         print(f"  Failed: {failure_count}")
         print(f"  Total time: {total_time:.2f}ms")
         print(f"  Requests per second: {requests_per_second:.2f}")
+        
+        # Log failed endpoints for debugging
+        if failed_endpoints:
+            print(f"\nFailed endpoints:")
+            for failed in failed_endpoints:
+                print(f"  {failed}")
         
         # Check success rate
         self.assertEqual(

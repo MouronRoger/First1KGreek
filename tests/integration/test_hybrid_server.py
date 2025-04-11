@@ -48,13 +48,13 @@ class HybridServerTests(BaseTest):
         
         # Patch USER_PREFS_FILE to use our test file
         self.prefs_file_path = os.path.join(self.temp_dir, 'user_preferences.json')
-        self.prefs_patch = mock.patch('src.first1k.server.hybrid_server.USER_PREFS_FILE', 
+        self.prefs_patch = mock.patch('src.first1k.config.USER_PREFS_FILE', 
                                       self.prefs_file_path)
         self.prefs_patch.start()
         self.config_patches.append(self.prefs_patch)
         
         # Patch DATA_DIR to use our test directory
-        self.data_dir_patch = mock.patch('src.first1k.server.hybrid_server.DATA_DIR', 
+        self.data_dir_patch = mock.patch('src.first1k.config.DATA_DIR', 
                                          self.data_dir)
         self.data_dir_patch.start()
         self.config_patches.append(self.data_dir_patch)

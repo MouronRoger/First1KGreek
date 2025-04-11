@@ -31,7 +31,7 @@ class HTTPServerPerformanceTest(unittest.TestCase):
     def setUpClass(cls):
         """Start a server for testing."""
         # Find an available port
-        cls.port = find_available_port(8123)  # Use a different port than default
+        cls.port = find_available_port()  # Let it find any available port
         
         # Start server in a separate thread
         cls.server_thread = threading.Thread(
