@@ -1,41 +1,121 @@
-2025-04-10 02:45:34,435 - INFO - Starting First1KGreek Browser...
-2025-04-10 02:45:34,435 - INFO - Server configuration:
-2025-04-10 02:45:34,435 - INFO -   Host: localhost
-2025-04-10 02:45:34,435 - INFO -   Port: 8000 (will try other ports if busy)
-2025-04-10 02:45:34,435 - INFO -   Debug mode: False
-2025-04-10 02:45:34,435 - INFO -   Open browser: True
-2025-04-10 02:45:34,435 - INFO - Press Ctrl+C to stop the server
-2025-04-10 02:45:34,435 - INFO - Starting First1KGreek Browser - Fixed Version 1.2.0
-2025-04-10 02:45:34,435 - INFO - With dark theme and improved editor detection
-2025-04-10 02:45:34,437 - WARNING - Port 8000 is already in use, trying another port
-2025-04-10 02:45:34,438 - INFO - Server running at http://localhost:8002/
-2025-04-10 02:45:34,561 - INFO - GET request: /
-2025-04-10 02:45:34,574 - INFO - GET request: /static/css/main.css?v=1744249534
-2025-04-10 02:45:34,580 - INFO - GET request: /static/css/dark-theme.css?v=1744249534
-2025-04-10 02:45:34,582 - INFO - GET request: /static/css/editors-page.css?v=1744249534
-2025-04-10 02:45:34,584 - INFO - GET request: /static/js/quit.js?v=1744249534
-2025-04-10 02:45:50,322 - INFO - GET request: /browse/editors
-2025-04-10 02:45:50,322 - INFO - Gathering editor data...
-2025-04-10 02:45:53,640 - INFO - Found 438 editors
-2025-04-10 02:45:53,641 - ERROR - Error handling request: [Errno 32] Broken pipe
-2025-04-10 02:45:53,647 - INFO - GET request: /browse/editors
-2025-04-10 02:45:53,647 - INFO - Gathering editor data...
-2025-04-10 02:45:56,239 - INFO - Found 438 editors
-2025-04-10 02:45:56,240 - ERROR - Error handling request: [Errno 32] Broken pipe
-2025-04-10 02:45:56,241 - INFO - GET request: /browse/authors
-2025-04-10 02:45:56,273 - INFO - Generated enhanced authors page with tabular format and filtering
-2025-04-10 02:45:56,296 - INFO - GET request: /static/css/main.css?v=1744249556
-2025-04-10 02:45:56,299 - INFO - GET request: /static/css/styles.css?v=1744249556
-2025-04-10 02:45:56,300 - INFO - GET request: /static/css/authors-table.css?v=1744249556
-2025-04-10 02:45:56,301 - INFO - GET request: /static/css/dark-theme.css?v=1744249556
-2025-04-10 02:45:56,302 - INFO - GET request: /static/css/authors-page.css?v=1744249556
-2025-04-10 02:45:56,302 - INFO - GET request: /static/css/editors-page.css?v=1744249556
-2025-04-10 02:45:56,303 - INFO - GET request: /static/js/authors.js?v=1744249556
-2025-04-10 02:45:56,304 - INFO - GET request: /static/js/quit.js?v=1744249556
-2025-04-10 02:45:58,052 - INFO - GET request: /browse/editors
-2025-04-10 02:45:58,052 - INFO - Gathering editor data...
-2025-04-10 02:46:00,536 - INFO - Found 438 editors
-2025-04-10 02:46:00,561 - INFO - GET request: /static/css/main.css?v=1744249560
-2025-04-10 02:46:00,562 - INFO - GET request: /static/css/dark-theme.css?v=1744249560
-2025-04-10 02:46:00,563 - INFO - GET request: /static/css/editors-page.css?v=1744249560
-2025-04-10 02:46:00,564 - INFO - GET request: /static/js/quit.js?v=1744249560
+2025-04-11 18:13:21,941 - INFO - Starting First1KGreek Browser...
+2025-04-11 18:13:21,941 - INFO - Server configuration:
+2025-04-11 18:13:21,941 - INFO -   Host: localhost
+2025-04-11 18:13:21,941 - INFO -   Port: 8000 (will try other ports if busy)
+2025-04-11 18:13:21,941 - INFO -   Debug mode: False
+2025-04-11 18:13:21,941 - INFO -   Open browser: True
+2025-04-11 18:13:21,941 - INFO - Press Ctrl+C to stop the server
+2025-04-11 18:13:21,941 - INFO - Starting First1KGreek Browser - Fixed Version 1.2.0
+2025-04-11 18:13:21,941 - INFO - With dark theme and improved editor detection
+2025-04-11 18:13:21,943 - INFO - Server running at http://localhost:8000/
+2025-04-11 18:13:22,151 - INFO - GET request: /
+2025-04-11 18:13:22,241 - INFO - GET request: /static/css/main.css?v=1744391602
+2025-04-11 18:13:22,254 - INFO - GET request: /static/css/dark-theme.css?v=1744391602
+2025-04-11 18:13:22,257 - INFO - GET request: /static/css/editors-page.css?v=1744391602
+2025-04-11 18:13:22,259 - INFO - GET request: /static/js/quit.js?v=1744391602
+2025-04-11 18:13:25,065 - INFO - GET request: /browse/authors
+2025-04-11 18:13:25,146 - INFO - Generated enhanced authors page with tabular format and filtering
+2025-04-11 18:13:25,164 - INFO - GET request: /static/css/main.css?v=1744391605
+2025-04-11 18:13:25,168 - INFO - GET request: /static/css/styles.css?v=1744391605
+2025-04-11 18:13:25,169 - INFO - GET request: /static/css/authors-table.css?v=1744391605
+2025-04-11 18:13:25,169 - INFO - GET request: /static/css/dark-theme.css?v=1744391605
+2025-04-11 18:13:25,170 - INFO - GET request: /static/css/authors-page.css?v=1744391605
+2025-04-11 18:13:25,170 - INFO - GET request: /static/css/editors-page.css?v=1744391605
+2025-04-11 18:13:25,171 - INFO - GET request: /static/js/authors.js?v=1744391605
+2025-04-11 18:13:25,171 - INFO - GET request: /static/js/quit.js?v=1744391605
+2025-04-11 18:13:25,172 - INFO - GET request: /static/js/authors.js?v={int(time.time())}
+2025-04-11 18:13:32,268 - INFO - GET request: /get_author_works?author_id=tlg1681
+2025-04-11 18:13:32,268 - INFO - Handling /get_author_works request for author_id: tlg1681
+2025-04-11 18:13:32,269 - INFO - Retrieving works for author: tlg1681
+2025-04-11 18:13:32,269 - INFO - Found 1 potential work directories for author tlg1681
+2025-04-11 18:13:32,270 - INFO - Found 1 works for author tlg1681
+2025-04-11 18:13:32,271 - INFO - Successfully retrieved 1 works for author tlg1681
+2025-04-11 18:13:34,730 - INFO - GET request: /get_author_works?author_id=tlg0632
+2025-04-11 18:13:34,730 - INFO - Handling /get_author_works request for author_id: tlg0632
+2025-04-11 18:13:34,731 - INFO - Retrieving works for author: tlg0632
+2025-04-11 18:13:34,731 - INFO - Found 1 potential work directories for author tlg0632
+2025-04-11 18:13:34,732 - INFO - Found 1 works for author tlg0632
+2025-04-11 18:13:34,733 - INFO - Successfully retrieved 1 works for author tlg0632
+2025-04-11 18:13:38,083 - INFO - GET request: /view?path=data/tlg0632/tlg002/tlg0632.tlg002.1st1K-grc1.xml
+2025-04-11 18:13:38,102 - INFO - GET request: /static/css/main.css?v=1744391618
+2025-04-11 18:13:38,111 - INFO - GET request: /static/css/reader.css?v=1744391618
+2025-04-11 18:13:38,114 - INFO - GET request: /static/css/dark-theme.css?v=1744391618
+2025-04-11 18:13:52,128 - INFO - GET request: /browse/authors
+2025-04-11 18:13:52,195 - INFO - Generated enhanced authors page with tabular format and filtering
+2025-04-11 18:13:52,206 - INFO - GET request: /static/css/main.css?v=1744391632
+2025-04-11 18:13:52,206 - INFO - GET request: /static/css/styles.css?v=1744391632
+2025-04-11 18:13:52,207 - INFO - GET request: /static/css/authors-table.css?v=1744391632
+2025-04-11 18:13:52,207 - INFO - GET request: /static/css/dark-theme.css?v=1744391632
+2025-04-11 18:13:52,207 - INFO - GET request: /static/css/authors-page.css?v=1744391632
+2025-04-11 18:13:52,208 - INFO - GET request: /static/css/editors-page.css?v=1744391632
+2025-04-11 18:13:52,208 - INFO - GET request: /static/js/authors.js?v=1744391632
+2025-04-11 18:13:52,211 - INFO - GET request: /static/js/quit.js?v=1744391632
+2025-04-11 18:14:06,167 - INFO - GET request: /get_author_works?author_id=tlg0626
+2025-04-11 18:14:06,167 - INFO - Handling /get_author_works request for author_id: tlg0626
+2025-04-11 18:14:06,167 - INFO - Retrieving works for author: tlg0626
+2025-04-11 18:14:06,168 - INFO - Found 1 potential work directories for author tlg0626
+2025-04-11 18:14:06,169 - INFO - Found 1 works for author tlg0626
+2025-04-11 18:14:06,170 - INFO - Successfully retrieved 1 works for author tlg0626
+2025-04-11 18:14:09,326 - INFO - GET request: /get_author_works?author_id=tlg1414
+2025-04-11 18:14:09,326 - INFO - Handling /get_author_works request for author_id: tlg1414
+2025-04-11 18:14:09,326 - INFO - Retrieving works for author: tlg1414
+2025-04-11 18:14:09,327 - INFO - Found 1 potential work directories for author tlg1414
+2025-04-11 18:14:09,328 - INFO - Found 1 works for author tlg1414
+2025-04-11 18:14:09,328 - INFO - Successfully retrieved 1 works for author tlg1414
+2025-04-11 18:14:15,356 - INFO - GET request: /view?path=data/tlg0626/tlg002/tlg0626.tlg002.1st1K-grc1.xml
+2025-04-11 18:14:15,381 - INFO - GET request: /static/css/main.css?v=1744391655
+2025-04-11 18:14:15,381 - INFO - GET request: /static/css/reader.css?v=1744391655
+2025-04-11 18:14:15,382 - INFO - GET request: /static/css/dark-theme.css?v=1744391655
+2025-04-11 18:14:27,678 - INFO - GET request: /browse/authors
+2025-04-11 18:14:27,744 - INFO - Generated enhanced authors page with tabular format and filtering
+2025-04-11 18:14:27,763 - INFO - GET request: /static/css/main.css?v=1744391667
+2025-04-11 18:14:27,764 - INFO - GET request: /static/css/styles.css?v=1744391667
+2025-04-11 18:14:27,766 - INFO - GET request: /static/css/authors-table.css?v=1744391667
+2025-04-11 18:14:27,769 - INFO - GET request: /static/css/dark-theme.css?v=1744391667
+2025-04-11 18:14:27,770 - INFO - GET request: /static/css/authors-page.css?v=1744391667
+2025-04-11 18:14:27,770 - INFO - GET request: /static/css/editors-page.css?v=1744391667
+2025-04-11 18:14:27,771 - INFO - GET request: /static/js/authors.js?v=1744391667
+2025-04-11 18:14:27,771 - INFO - GET request: /static/js/quit.js?v=1744391667
+2025-04-11 18:14:39,961 - INFO - GET request: /get_author_works?author_id=tlg1414
+2025-04-11 18:14:39,961 - INFO - Handling /get_author_works request for author_id: tlg1414
+2025-04-11 18:14:39,962 - INFO - Retrieving works for author: tlg1414
+2025-04-11 18:14:39,962 - INFO - Found 1 potential work directories for author tlg1414
+2025-04-11 18:14:39,964 - INFO - Found 1 works for author tlg1414
+2025-04-11 18:14:39,964 - INFO - Successfully retrieved 1 works for author tlg1414
+2025-04-11 18:14:43,977 - INFO - GET request: /view?path=data/tlg1414/tlg001/tlg1414.tlg001.1st1K-grc1.xml
+2025-04-11 18:14:43,997 - INFO - GET request: /static/css/main.css?v=1744391683
+2025-04-11 18:14:43,998 - INFO - GET request: /static/css/reader.css?v=1744391683
+2025-04-11 18:14:44,002 - INFO - GET request: /static/css/dark-theme.css?v=1744391683
+2025-04-11 18:15:00,959 - INFO - GET request: /reader?path=data/tlg1414/tlg001/tlg1414.tlg001.1st1K-grc1.xml
+2025-04-11 18:15:00,986 - INFO - GET request: /static/css/main.css?v=1744391700
+2025-04-11 18:15:00,989 - INFO - GET request: /static/css/reader.css?v=1744391700
+2025-04-11 18:15:00,990 - INFO - GET request: /static/css/dark-theme.css?v=1744391700
+2025-04-11 18:15:11,779 - INFO - GET request: /browse/authors
+2025-04-11 18:15:11,847 - INFO - Generated enhanced authors page with tabular format and filtering
+2025-04-11 18:15:11,865 - INFO - GET request: /static/css/main.css?v=1744391711
+2025-04-11 18:15:11,869 - INFO - GET request: /static/css/styles.css?v=1744391711
+2025-04-11 18:15:11,871 - INFO - GET request: /static/css/authors-table.css?v=1744391711
+2025-04-11 18:15:11,871 - INFO - GET request: /static/css/dark-theme.css?v=1744391711
+2025-04-11 18:15:11,872 - INFO - GET request: /static/css/authors-page.css?v=1744391711
+2025-04-11 18:15:11,872 - INFO - GET request: /static/css/editors-page.css?v=1744391711
+2025-04-11 18:15:11,873 - INFO - GET request: /static/js/authors.js?v=1744391711
+2025-04-11 18:15:11,873 - INFO - GET request: /static/js/quit.js?v=1744391711
+2025-04-11 18:15:42,287 - INFO - GET request: /get_author_works?author_id=tlg0626
+2025-04-11 18:15:42,288 - INFO - Handling /get_author_works request for author_id: tlg0626
+2025-04-11 18:15:42,288 - INFO - Retrieving works for author: tlg0626
+2025-04-11 18:15:42,291 - INFO - Found 1 potential work directories for author tlg0626
+2025-04-11 18:15:42,293 - INFO - Found 1 works for author tlg0626
+2025-04-11 18:15:42,293 - INFO - Successfully retrieved 1 works for author tlg0626
+2025-04-11 18:17:05,712 - INFO - GET request: /search
+2025-04-11 18:17:05,740 - INFO - GET request: /static/css/main.css?v=1744391825
+2025-04-11 18:17:05,742 - INFO - GET request: /static/css/styles.css?v=1744391825
+2025-04-11 18:17:05,742 - INFO - GET request: /static/css/dark-theme.css?v=1744391825
+2025-04-11 18:17:09,064 - INFO - GET request: /search?q=cornutus
+2025-04-11 18:17:12,704 - INFO - GET request: /search?q=cornutus
+2025-04-11 18:17:15,584 - INFO - GET request: /static/css/main.css?v=1744391835
+2025-04-11 18:17:15,586 - INFO - GET request: /static/css/styles.css?v=1744391835
+2025-04-11 18:17:15,587 - INFO - GET request: /static/css/dark-theme.css?v=1744391835
+2025-04-11 18:17:32,389 - INFO - GET request: /reader?path=data/tlg0007/tlg084a/tlg0007.tlg084a.perseus-eng3.xml
+2025-04-11 18:17:32,412 - INFO - GET request: /static/css/main.css?v=1744391852
+2025-04-11 18:17:32,414 - INFO - GET request: /static/css/reader.css?v=1744391852
+2025-04-11 18:17:32,414 - INFO - GET request: /static/css/dark-theme.css?v=1744391852
