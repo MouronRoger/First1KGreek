@@ -1,135 +1,247 @@
 #!/usr/bin/env python3
 """
-First1KGreek Browser - Standalone Server Runner
+Main run script for First1KGreek.
 
-This script provides a simple way to run the First1KGreek Browser application
-without having to install the package. It serves as the main entry point
-for the application in production.
-
-Usage:
-    python run_server.py [--port PORT] [--debug] [--help]
+This script has been updated to use FastAPI as the primary server,
+while maintaining backward compatibility with the original HTTP server.
 """
 
-import sys
-import os
 import argparse
 import logging
-import traceback
+import os
+import socket
+import sys
 import time
+import webbrowser
+from pathlib import Path
 
-# Add the current directory to the Python path to ensure imports work
-sys.path.insert(0, os.path.abspath('.'))
+from src.first1k.config import PORT, HOST, VERSION, VERSION_NAME
+from src.first1k.utils.network import is_port_in_use, find_available_port
 
 # Configure logging
 logging.basicConfig(
     level=logging.INFO,
-    format='%(asctime)s - %(levelname)s - %(message)s',
+    format="%(asctime)s - %(name)s - %(levelname)s - %(message)s",
     handlers=[
         logging.StreamHandler(),
-        logging.FileHandler("server.log", mode='w')
+        logging.FileHandler("server.log")
     ]
 )
+
 logger = logging.getLogger(__name__)
 
+
 def parse_args():
-    """
-    Parse command line arguments.
+    """Parse command-line arguments.
     
     Returns:
-        argparse.Namespace: The parsed command line arguments
+        argparse.Namespace: Parsed arguments
     """
-    parser = argparse.ArgumentParser(
-        description='Run First1KGreek Browser Server',
-        formatter_class=argparse.ArgumentDefaultsHelpFormatter
+    parser = argparse.ArgumentParser(description="Run First1KGreek Browser")
+    
+    parser.add_argument(
+        "--host",
+        type=str,
+        default=HOST,
+        help=f"Host to bind the server to (default: {HOST})"
     )
-    parser.add_argument('--port', type=int, default=8000, 
-                        help='Port to run the server on')
-    parser.add_argument('--debug', action='store_true', 
-                        help='Enable debug mode with additional logging')
-    parser.add_argument('--version', action='store_true',
-                        help='Show version information and exit')
-    parser.add_argument('--no-browser', action='store_true',
-                        help='Do not automatically open a web browser')
-    parser.add_argument('--host', type=str, default='localhost',
-                        help='Host to bind the server to (use 0.0.0.0 to allow external connections)')
+    
+    parser.add_argument(
+        "--port",
+        type=int,
+        default=PORT,
+        help=f"Port to bind the server to (default: {PORT})"
+    )
+    
+    parser.add_argument(
+        "--mode",
+        choices=["fastapi", "http", "hybrid"],
+        default="fastapi",
+        help="Server mode to run (default: fastapi)"
+    )
+    
+    parser.add_argument(
+        "--debug",
+        action="store_true",
+        help="Enable debug mode"
+    )
+    
+    parser.add_argument(
+        "--reload",
+        action="store_true",
+        help="Enable auto-reload for FastAPI (only in fastapi or hybrid mode)"
+    )
+    
+    parser.add_argument(
+        "--no-browser",
+        action="store_true",
+        help="Don't open browser automatically"
+    )
+    
+    parser.add_argument(
+        "--version",
+        action="store_true",
+        help="Show version information and exit"
+    )
+    
     return parser.parse_args()
 
-def show_version():
-    """Display version information and exit."""
-    try:
-        from src.first1k import __version__
-        version = __version__
-    except ImportError:
-        version = "unknown"
-    
-    print(f"First1KGreek Browser version {version}")
-    print("A tool for browsing and analyzing ancient Greek texts")
-    print("© 2025")
-    sys.exit(0)
 
-def main():
+def run_fastapi_server(host, port, debug, reload, no_browser):
+    """Run the FastAPI server.
+    
+    Args:
+        host: Host to bind the server to
+        port: Port to bind the server to
+        debug: Whether to enable debug mode
+        reload: Whether to enable auto-reload
+        no_browser: Whether to open browser automatically
     """
-    Main entry point for the application.
+    import uvicorn
     
-    Parses command line arguments and starts the server.
-    """
-    # Parse command line arguments
-    args = parse_args()
+    # Configure log level
+    log_level = "debug" if debug else "info"
     
-    # Show version information if requested
-    if args.version:
-        show_version()
+    logger.info(f"Starting First1KGreek FastAPI Server {VERSION} - {VERSION_NAME}")
+    logger.info(f"Server will be available at http://{host}:{port}")
+    logger.info(f"API documentation will be available at http://{host}:{port}/docs")
     
-    # Set debug level based on arguments
-    if args.debug:
-        logger.setLevel(logging.DEBUG)
-        logging.getLogger('src.first1k').setLevel(logging.DEBUG)
+    # Open browser if requested
+    if not no_browser:
+        url = f"http://{host}:{port}"
+        threading.Timer(1.0, lambda: webbrowser.open(url)).start()
     
-    # Import the server module from src.first1k
+    # Start the FastAPI server
     try:
-        from src.first1k.server.server import run_server
-        logger.info("Starting First1KGreek Browser...")
+        uvicorn.run(
+            "src.first1k.api:app",
+            host=host,
+            port=port,
+            reload=reload,
+            log_level=log_level
+        )
+    except Exception as e:
+        logger.error(f"Error running FastAPI server: {e}")
+        raise
+
+
+def run_http_server(host, port, debug, no_browser):
+    """Run the traditional HTTP server.
+    
+    Args:
+        host: Host to bind the server to
+        port: Port to bind the server to
+        debug: Whether to enable debug mode
+        no_browser: Whether to open browser automatically
+    """
+    from http.server import HTTPServer
+    from src.first1k.server.server import CustomHTTPRequestHandler
+    
+    logger.info(f"Starting First1KGreek HTTP Server {VERSION} - {VERSION_NAME}")
+    logger.info(f"Server will be available at http://{host}:{port}")
+    
+    # Set debug mode if specified
+    if debug:
+        CustomHTTPRequestHandler.DEBUG = True
+    
+    # Create and configure HTTP server
+    try:
+        server = HTTPServer((host, port), CustomHTTPRequestHandler)
         
-        # Display connection information
-        port = args.port
-        host = args.host
-        open_browser = not args.no_browser
-        
-        # Log configuration
-        logger.info(f"Server configuration:")
-        logger.info(f"  Host: {host}")
-        logger.info(f"  Port: {port} (will try other ports if busy)")
-        logger.info(f"  Debug mode: {args.debug}")
-        logger.info(f"  Open browser: {open_browser}")
-        
-        logger.info("Press Ctrl+C to stop the server")
+        # Open browser if requested
+        if not no_browser:
+            url = f"http://{host}:{port}"
+            threading.Timer(1.0, lambda: webbrowser.open(url)).start()
         
         # Start the server
-        start_time = time.time()
-        run_server(
-            port=port, 
-            debug=args.debug, 
-            host=host, 
-            open_browser=open_browser
-        )
-        
-        # Log server runtime on shutdown
-        runtime = time.time() - start_time
-        logger.info(f"Server ran for {runtime:.1f} seconds")
+        server.serve_forever()
+    except Exception as e:
+        logger.error(f"Error running HTTP server: {e}")
+        raise
+
+
+def run_hybrid_server(host, port, debug, reload, no_browser):
+    """Run the hybrid server with both HTTP and FastAPI.
     
-    except ImportError as e:
-        logger.error(f"Error importing server module: {e}")
-        logger.error("Ensure the src/first1k package is properly installed")
-        logger.error("Try running: PYTHONPATH=. python run_server.py")
-        sys.exit(1)
-    except KeyboardInterrupt:
-        logger.info("Server stopped by user (KeyboardInterrupt)")
-    except SystemExit:
-        pass  # Normal exit
+    Args:
+        host: Host to bind the server to
+        port: Port to bind the server to
+        debug: Whether to enable debug mode
+        reload: Whether to enable auto-reload
+        no_browser: Whether to open browser automatically
+    """
+    from src.first1k.server.hybrid_server import run_hybrid_server
+    
+    # Use port+1 for FastAPI server in hybrid mode
+    fastapi_port = port + 1
+    
+    logger.info(f"Starting First1KGreek Hybrid Server {VERSION} - {VERSION_NAME}")
+    logger.info(f"HTTP server will be available at http://{host}:{port}")
+    logger.info(f"FastAPI server will be available at http://{host}:{fastapi_port}")
+    logger.info(f"API documentation will be available at http://{host}:{fastapi_port}/docs")
+    
+    # Open browser to HTTP server if requested
+    if not no_browser:
+        url = f"http://{host}:{port}"
+        threading.Timer(1.0, lambda: webbrowser.open(url)).start()
+    
+    # Start the hybrid server
+    try:
+        run_hybrid_server(
+            http_host=host,
+            http_port=port,
+            fastapi_host=host,
+            fastapi_port=fastapi_port,
+            debug=debug,
+            reload=reload
+        )
+    except Exception as e:
+        logger.error(f"Error running hybrid server: {e}")
+        raise
+
+
+def main():
+    """Run the server based on specified mode."""
+    import threading
+    
+    args = parse_args()
+    
+    if args.version:
+        print(f"First1KGreek Browser {VERSION} - {VERSION_NAME}")
+        return 0
+    
+    # Check if port is available
+    if is_port_in_use(args.port):
+        if args.mode == "hybrid":
+            logger.warning(f"Port {args.port} is already in use!")
+            alt_port = find_available_port(args.port + 2)
+            logger.info(f"Using alternative port {alt_port}")
+            args.port = alt_port
+        else:
+            logger.warning(f"Port {args.port} is already in use!")
+            alt_port = find_available_port(args.port + 1)
+            logger.info(f"Using alternative port {alt_port}")
+            args.port = alt_port
+    
+    # Check if hybrid mode requires additional port
+    if args.mode == "hybrid" and is_port_in_use(args.port + 1):
+        logger.warning(f"Port {args.port + 1} (for FastAPI in hybrid mode) is already in use!")
+        alt_port = find_available_port(args.port + 2)
+        logger.info(f"Using alternative port {alt_port}")
+        args.port = alt_port
+    
+    try:
+        if args.mode == "fastapi":
+            run_fastapi_server(args.host, args.port, args.debug, args.reload, args.no_browser)
+        elif args.mode == "http":
+            run_http_server(args.host, args.port, args.debug, args.no_browser)
+        elif args.mode == "hybrid":
+            run_hybrid_server(args.host, args.port, args.debug, args.reload, args.no_browser)
+        return 0
     except Exception as e:
         logger.error(f"Error running server: {e}")
-        logger.error(traceback.format_exc())
-        sys.exit(1)
+        return 1
+
 
 if __name__ == "__main__":
-    main() 
+    sys.exit(main()) 

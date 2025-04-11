@@ -232,3 +232,4 @@
 {"type":"relation","from":"First1KGreek FastAPI Migration","to":"Hybrid Server Mode","relationType":"includes","createdAt":"2025-04-11T17:10:22.353Z","version":1}
 {"type":"relation","from":"Hybrid Server Mode","to":"FastAPI Application Structure","relationType":"uses","createdAt":"2025-04-11T17:10:22.353Z","version":1}
 {"type":"relation","from":"First1KGreek FastAPI Migration","to":"First1KGreek","relationType":"enhances","createdAt":"2025-04-11T17:10:22.353Z","version":1}
+{"type":"relation","from":"First1KGreek FastAPI Migration","to":"FastAPI","relationType":"uses","createdAt":"2025-04-11T17:28:34.079Z","version":1}

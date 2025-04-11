@@ -11,6 +11,9 @@ from fastapi.openapi.utils import get_openapi
 
 # Import routers
 from .routers.authors import router as authors_router
+from .routers.preferences import router as preferences_router
+from .routers.search import router as search_router
+from .routers.view import router as view_router
 
 # Setup logging
 logging.basicConfig(level=logging.INFO)
@@ -70,9 +73,6 @@ async def health_check():
 
 # Include routers
 app.include_router(authors_router)
-
-# These will be implemented in separate modules
-# app.include_router(works_router)
-# app.include_router(preferences_router)
-# app.include_router(search_router)
-# app.include_router(view_router) 
+app.include_router(preferences_router)
+app.include_router(search_router)
+app.include_router(view_router) 

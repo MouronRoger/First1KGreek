@@ -6,77 +6,125 @@ A specialized tool for browsing, searching, and analyzing ancient Greek texts fr
 
 ## Features
 
-- Browse authors by name, century, and type
-- View works by author
-- Read texts in both readable and raw XML formats
-- Search functionality across the corpus
+- Browser-based interface for ancient Greek texts
+- Searchable author and work listings
+- XML and reader views for texts
+- Dark theme for comfortable reading
 - User preferences (favorites, archived, deleted)
 - Dark theme UI for better readability
 
-## Installation
+## FastAPI Migration
 
-### Prerequisites
+The First1KGreek Browser has been migrated to use FastAPI for improved API performance, documentation, and type validation. The migration follows a phased approach to maintain backward compatibility during the transition period.
 
-- Python 3.6 or higher
+### New Features
 
-### Setup
+- **Modern API**: Built with FastAPI, providing automatic documentation, request validation, and better performance.
+- **API Documentation**: Available at `/docs` for interactive API exploration.
+- **Multiple Server Modes**: Choose between FastAPI, traditional HTTP, or hybrid mode during transition.
+- **JavaScript API Client**: Easy-to-use client-side functions for interacting with the API.
 
-1. Clone the repository:
-   ```
-   git clone https://github.com/yourusername/First1KGreek.git
-   cd First1KGreek
-   ```
+### Running the Server
 
-2. Install dependencies (minimal, uses standard library):
-   ```
-   pip install -e .
-   ```
+The server can be run in three different modes:
 
-## Usage
-
-There are multiple ways to run the First1KGreek Browser:
-
-### 1. Using the run_server.py script (recommended)
-
-This is the simplest way to run the application:
+#### FastAPI Mode (Recommended)
 
 ```bash
+python run_server.py --mode fastapi
+```
+
+#### HTTP Mode (Legacy)
+
+```bash
+python run_server.py --mode http
+```
+
+#### Hybrid Mode (Transition)
+
+```bash
+python run_server.py --mode hybrid
+```
+
+### Command-line Options
+
+```
+--host HOST           Host to bind the server to (default: localhost)
+--port PORT           Port to bind the server to (default: 8000)
+--mode {fastapi,http,hybrid}
+                      Server mode to run (default: fastapi)
+--debug               Enable debug mode
+--reload              Enable auto-reload for FastAPI (only in fastapi or hybrid mode)
+--no-browser          Don't open browser automatically
+--version             Show version information and exit
+```
+
+### JavaScript API Client
+
+The JavaScript API client is available at `/static/js/api.js` and provides easy-to-use functions for interacting with the API:
+
+```javascript
+// Example: Get all authors
+First1KAPI.getAuthors()
+  .then(authors => {
+    console.log('Authors:', authors);
+  })
+  .catch(error => {
+    console.error('Error:', error);
+  });
+```
+
+### API Adapters
+
+During the transition period, adapter functions are available at `/static/js/api-adapters.js` to maintain backward compatibility:
+
+```javascript
+// Legacy-compatible function
+First1KAdapters.loadAuthorWorks('tlg0001', function(data) {
+  console.log('Author works:', data);
+});
+```
+
+## Original Documentation
+
+[Original documentation content goes here]
+
+## Installation
+
+```bash
+# Clone the repository
+git clone https://github.com/yourusername/First1KGreek.git
+cd First1KGreek
+
+# Install dependencies
+pip install -r requirements.txt
+
+# Run the server
 python run_server.py
 ```
 
-Options:
-- `--port PORT`: Specify the port to run on (default: 8000)
-- `--debug`: Enable debug mode with verbose logging
-- `--version`: Show version information and exit
-- `--no-browser`: Don't automatically open a browser window
-- `--host HOST`: Host to bind to (use 0.0.0.0 for network access)
+## Usage
 
-Example:
 ```bash
-python run_server.py --port 8080 --debug
+# Run with default settings
+python run_server.py
+
+# Run on a specific port
+python run_server.py --port 8080
+
+# Run with debug mode
+python run_server.py --debug
 ```
 
-### 2. Using the modular package directly
-
-Run as a Python module:
+You can also run as a module:
 
 ```bash
 python -m src.first1k
 ```
 
-Options are the same as above.
-
-### 3. Using the package entry point (if installed)
-
-If you've installed the package, you can use:
-
-```bash
-first1k
-```
-
 ## Performance Testing
 
-To run performance tests:
+The application includes performance tests:
 
 ```bash
 python tests/run_tests.py --performance
@@ -96,13 +144,29 @@ src/first1k/
 ├── __init__.py           # Package initialization
 ├── __main__.py           # Entry point when run as a module
 ├── config.py             # Configuration settings
+├── api.py                # FastAPI implementation
+├── models.py             # Pydantic models for API
 ├── handlers/             # Request handlers for different routes
 ├── server/               # HTTP server implementation
+├── routers/              # FastAPI router modules
+├── data/                 # Data access modules
 ├── utils/                # Utility functions
 ├── xml_utils/            # XML processing utilities
 ├── search/               # Search functionality
 ├── import_export/        # Import/export functionality
 └── editor/               # Editor management
+```
+
+## Development
+
+For development work:
+
+```bash
+# Install development dependencies
+pip install -r requirements-dev.txt
+
+# Run tests
+python run_pytest.py
 ```
 
 ## Contributing
