@@ -36,6 +36,7 @@ SAMPLE_AUTHOR_WORKS = [
     {
         "id": "tlg0007.tlg136.perseus-grc2",
         "title": "De Stoicorum Repugnantiis",
+        "author_id": "tlg0007",
         "language": "Greek",
         "file_path": "data/tlg0007/tlg136/tlg0007.tlg136.perseus-grc2.xml",
         "is_favorite": False,

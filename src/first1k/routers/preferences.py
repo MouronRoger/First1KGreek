@@ -3,6 +3,7 @@
 This module implements API endpoints for managing user preferences in the First1KGreek corpus.
 """
 
+import json
 import logging
 from typing import List, Dict, Optional
 from fastapi import APIRouter, HTTPException, Depends, Path
@@ -44,8 +45,11 @@ async def update_work_preference(preference: UserPreference):
             "action": "add" if preference.value else "remove"
         }
         
+        # Convert post_data to JSON string (handle_update_work_preference expects a JSON string, not a dict)
+        post_data_json = json.dumps(post_data)
+        
         # Call the existing handler (without query params)
-        status_code, _, response_json = prefs_handlers.handle_update_work_preference({}, post_data)
+        status_code, _, response_json = prefs_handlers.handle_update_work_preference({}, post_data_json)
         
         if status_code == 200:
             return APIResponse(
@@ -86,7 +90,10 @@ async def update_batch_preferences(preferences: BatchPreferences):
                 "action": "add" if pref.value else "remove"
             }
             
-            status_code, _, _ = prefs_handlers.handle_update_work_preference({}, post_data)
+            # Convert post_data to JSON string
+            post_data_json = json.dumps(post_data)
+            
+            status_code, _, _ = prefs_handlers.handle_update_work_preference({}, post_data_json)
             
             if status_code != 200:
                 raise HTTPException(

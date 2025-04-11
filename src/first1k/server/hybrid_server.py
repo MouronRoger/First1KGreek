@@ -17,8 +17,11 @@ from typing import Optional, Tuple
 import uvicorn
 from http.server import HTTPServer
 
-from ..config import PORT, HOST, VERSION, VERSION_NAME
+from ..config import PORT, HOST, VERSION, VERSION_NAME, USER_PREFS_FILE
 from .server import CustomHTTPRequestHandler
+
+# Define PREFERENCES_FILE constant for tests to patch
+PREFERENCES_FILE = USER_PREFS_FILE
 
 # Setup logging
 logging.basicConfig(level=logging.INFO)

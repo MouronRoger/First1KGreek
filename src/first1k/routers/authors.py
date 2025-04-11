@@ -83,7 +83,7 @@ async def get_author(
     logger.info(f"Getting author details for {author_id}")
     
     try:
-        author = await authors_dao.async_get_author(author_id)
+        author = await authors_dao.async_get_author_by_id(author_id)
         
         if not author:
             raise HTTPException(status_code=404, detail=f"Author {author_id} not found")
@@ -119,11 +119,30 @@ async def get_author_works(
     """
     logger.info(f"Getting works for author {author_id}")
     
-    # Check if author exists
-    author = await authors_dao.async_get_author(author_id)
-    if not author:
-        raise HTTPException(status_code=404, detail=f"Author {author_id} not found")
-    
-    # TODO: Implement get_works_by_author in a works data access module
-    # For now, return empty list
-    return [] 
+    try:
+        # Check if author exists
+        author_exists = await authors_dao.async_author_exists(author_id)
+        if not author_exists:
+            raise HTTPException(status_code=404, detail=f"Author {author_id} not found")
+        
+        # Get works for the author
+        works = await authors_dao.async_get_author_works(author_id)
+        
+        # Convert to Pydantic models
+        return [
+            Work(
+                id=work["id"],
+                title=work["title"],
+                author_id=work["author_id"],
+                language=work["language"],
+                file_path=work["file_path"],
+                is_favorite=work.get("is_favorite", False),
+                is_archived=work.get("is_archived", False),
+            )
+            for work in works
+        ]
+    except HTTPException:
+        raise
+    except Exception as e:
+        logger.error(f"Error getting works for author {author_id}: {e}")
+        raise HTTPException(status_code=500, detail=f"Error getting author works: {str(e)}") 
