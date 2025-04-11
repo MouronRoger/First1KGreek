@@ -7,10 +7,14 @@ import logging
 import sys
 import os
 import json
-from fastapi import FastAPI, Request, HTTPException
+import re
+import time
+from pathlib import Path
+from typing import Union, List
+from fastapi import FastAPI, Request, HTTPException, Depends, Path as FastAPIPath, Query
 from fastapi.staticfiles import StaticFiles
 from fastapi.middleware.cors import CORSMiddleware
-from fastapi.responses import HTMLResponse, RedirectResponse, JSONResponse
+from fastapi.responses import HTMLResponse, RedirectResponse, JSONResponse, FileResponse
 from fastapi.openapi.utils import get_openapi
 
 from .config import VERSION, VERSION_NAME, DATA_DIR, BASE_DIR
@@ -143,6 +147,30 @@ async def reader_view(path: str):
     # Return the HTML response with appropriate status code
     return HTMLResponse(content=html, status_code=status_code)
 
+@app.get("/view", response_class=HTMLResponse)
+async def legacy_view(path: str):
+    """Legacy view endpoint for backward compatibility.
+    
+    This endpoint maintains compatibility with the original HTTP server's /view route.
+    
+    Args:
+        path (str): Path to the XML file
+        
+    Returns:
+        HTMLResponse: The HTML content
+    """
+    logger.info(f"Legacy View requested for path: {path}")
+    
+    # Handle the request using the updated view handler with proper path handling
+    status_code, content_type, html = await view_handler.async_handle_view_xml({"path": path})
+    
+    # If error, log it
+    if status_code != 200:
+        logger.error(f"Error rendering legacy view: {status_code}")
+        
+    # Return the HTML response with appropriate status code
+    return HTMLResponse(content=html, status_code=status_code)
+
 @app.get("/search", response_class=HTMLResponse)
 async def search_page(q: str = None):
     """Render the search page."""
@@ -154,7 +182,7 @@ async def search_page(q: str = None):
 
 # Add the missing legacy API endpoints
 @app.get("/get_author_works")
-async def get_author_works(author_id: str):
+async def get_author_works(author_id: str = Query(..., description="Author ID")):
     """Legacy endpoint to get works for an author.
     
     Args:
@@ -182,22 +210,12 @@ async def get_author_works(author_id: str):
         
         if not works:
             logger.warning(f"No works found for author: {author_id}")
+            # Return an empty array, not an empty object
             return JSONResponse(content=[])
             
         logger.info(f"Successfully retrieved {len(works)} works for author {author_id}")
         logger.debug(f"Works data: {works}")
         
-        # Ensure we're returning plain data, not already serialized JSON
-        if isinstance(works, str):
-            try:
-                # If it's a JSON string, parse it to get the actual data
-                logger.info("Works is a string, attempting to parse as JSON")
-                works = json.loads(works)
-            except json.JSONDecodeError:
-                logger.warning("Could not parse works as JSON, using as is")
-                # In this case, it's a string but not JSON, so wrap it in a list
-                works = [works]
-                
         # Return works directly as JSON content
         return JSONResponse(content=works)
     except Exception as e:

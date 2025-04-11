@@ -140,6 +140,133 @@ def render_authors_page():
     centuries = sorted(list(set(author["century"] for author in authors_data if "century" in author)))
     author_types = sorted(list(set(author["type"] for author in authors_data if "type" in author)))
     
+    # Generate the filter HTML components
+    status_filters_html = """
+    <div class="filter-group status-filters">
+        <h3>Status</h3>
+        <div class="filter-options">
+            <label><input type="checkbox" class="status-filter" value="all" checked> All</label>
+            <label><input type="checkbox" class="status-filter" value="favorite"> Favorites</label>
+            <label><input type="checkbox" class="status-filter" value="archived"> Archived</label>
+        </div>
+    </div>
+    """
+    
+    century_filters_html = """
+    <div class="filter-group century-filters">
+        <h3>Century</h3>
+        <div class="filter-options">
+            <label><input type="checkbox" class="century-filter" value="all" checked> All</label>
+    """
+    for century in centuries:
+        display = f"{abs(century)} {'BCE' if century < 0 else 'CE'}"
+        century_filters_html += f'<label><input type="checkbox" class="century-filter" value="{century}"> {display}</label>\n'
+    century_filters_html += """
+        </div>
+    </div>
+    """
+    
+    type_filters_html = """
+    <div class="filter-group type-filters">
+        <h3>Type</h3>
+        <select id="type-filter" onchange="filterByType()">
+            <option value="all">All</option>
+    """
+    for author_type in author_types:
+        if author_type and author_type != "Unknown":
+            type_filters_html += f'<option value="{author_type}">{author_type}</option>\n'
+    type_filters_html += """
+        </select>
+    </div>
+    """
+    
+    search_html = """
+    <div class="search-container">
+        <input type="text" id="author-search" placeholder="Search authors...">
+        <button onclick="searchAuthors()">Search</button>
+    </div>
+    """
+    
+    # Generate the table HTML
+    table_html = """
+    <table id="authors-table">
+        <thead>
+            <tr>
+                <th class="sortable" data-sort="name">Author</th>
+                <th class="sortable" data-sort="century">Century</th>
+                <th class="sortable" data-sort="type">Type</th>
+                <th class="sortable" data-sort="works">Works</th>
+                <th>Actions</th>
+            </tr>
+        </thead>
+        <tbody>
+    """
+    
+    for author in authors_data:
+        author_id = author["id"]
+        name = author["name"]
+        century = author.get("century", 0)
+        author_type = author.get("type", "Unknown")
+        
+        century_display = f"{abs(century)} {'BCE' if century < 0 else 'CE'}" if century != 0 else "Unknown"
+        
+        # Get the count of works for this author
+        works_count = get_author_works_count(author_id)
+        
+        # Determine status classes
+        status_class = []
+        if author_id in favorites:
+            status_class.append("favorite")
+        if author_id in archived:
+            status_class.append("archived")
+        
+        # Create icon HTML based on status
+        favorite_icon = "★" if author_id in favorites else "☆"
+        archive_icon = "📦" if author_id in archived else "📁"
+        
+        # Name for display/toggle
+        author_name = name
+        
+        table_html += f"""
+        <tr data-id="{author_id}" data-century="{century}" data-type="{author_type}" class="{' '.join(status_class)}">
+            <td class="author-name" data-column="name">
+                <a href="#" class="toggle-works" data-author-id="{author_id}">{author_name}</a>
+                <div class="author-type">{author_type}</div>
+            </td>
+            <td data-column="century">{century_display}</td>
+            <td data-column="type">{author_type}</td>
+            <td data-column="works">{works_count}</td>
+            <td>
+                <button class="favorite-btn" onclick="toggleFavorite('{author_id}')">{favorite_icon}</button>
+                <button class="archive-btn" onclick="toggleArchive('{author_id}')">{archive_icon}</button>
+            </td>
+        </tr>
+        <tr id="works-row-{author_id}" class="works-row" style="display: none;">
+            <td colspan="5">
+                <div id="works-container-{author_id}" class="works-container" style="display: none;">
+                    <div id="loading-works-{author_id}" class="loading-works">
+                        <div class="spinner"></div>
+                        <span>Loading works...</span>
+                    </div>
+                    <div id="works-list-{author_id}" class="works-list"></div>
+                </div>
+            </td>
+        </tr>
+        """
+    
+    table_html += """
+        </tbody>
+    </table>
+    """
+    
+    pagination_html = """
+    <div class="pagination">
+        <button id="prev-page" disabled>Previous</button>
+        <span id="page-info">Page 1 of 1</span>
+        <button id="next-page" disabled>Next</button>
+    </div>
+    """
+    
     # Create the HTML structure
     html = f"""<!DOCTYPE html>
 <html lang="en">

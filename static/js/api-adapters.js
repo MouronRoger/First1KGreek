@@ -22,23 +22,73 @@ function isApiClientAvailable() {
  * @param {function} errorCallback - Callback function for error
  */
 function loadAuthorWorks(authorId, successCallback, errorCallback) {
+    console.log(`API-Adapter: Loading works for author: ${authorId}`);
+
     // If API client is not available, fall back to original endpoint
     if (!isApiClientAvailable()) {
+        console.log('API-Adapter: Using direct fetch for works (API client not available)');
+
         fetch(`/get_author_works?author_id=${encodeURIComponent(authorId)}`)
-            .then(response => response.json())
-            .then(data => successCallback(data))
+            .then(response => {
+                console.log(`API-Adapter: Response status: ${response.status}`);
+
+                if (!response.ok) {
+                    throw new Error(`Server error: ${response.status} ${response.statusText}`);
+                }
+
+                return response.json();
+            })
+            .then(data => {
+                console.log('API-Adapter: Received data:', data);
+
+                // Ensure data is an array
+                if (!Array.isArray(data)) {
+                    // If it's an object with an error property, throw an error
+                    if (data && data.error) {
+                        throw new Error(data.error);
+                    }
+
+                    // If it's an object but not an array, and doesn't have an error property,
+                    // it might be a single work or some other unexpected format
+                    console.warn('API-Adapter: Data is not an array, wrapping in array:', data);
+                    data = [data];
+                }
+
+                console.log(`API-Adapter: Returning ${data.length} works`);
+                successCallback(data);
+            })
             .catch(error => {
-                console.error('Error loading author works:', error);
+                console.error('API-Adapter: Error loading author works:', error);
                 if (errorCallback) errorCallback(error);
             });
         return;
     }
 
     // Use the new API client
+    console.log('API-Adapter: Using API client for works');
+
     window.First1KAPI.getAuthorWorks(authorId)
-        .then(data => successCallback(data))
+        .then(data => {
+            console.log('API-Adapter: Received data from API client:', data);
+
+            // Ensure data is an array
+            if (!Array.isArray(data)) {
+                // If it's an object with an error property, throw an error
+                if (data && data.error) {
+                    throw new Error(data.error);
+                }
+
+                // If it's an object but not an array, and doesn't have an error property,
+                // it might be a single work or some other unexpected format
+                console.warn('API-Adapter: Data from API client is not an array, wrapping in array:', data);
+                data = [data];
+            }
+
+            console.log(`API-Adapter: Returning ${data.length} works from API client`);
+            successCallback(data);
+        })
         .catch(error => {
-            console.error('Error loading author works:', error);
+            console.error('API-Adapter: Error loading author works via API client:', error);
             if (errorCallback) errorCallback(error);
         });
 }

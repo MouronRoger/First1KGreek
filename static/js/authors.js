@@ -32,45 +32,116 @@ let userPreferences = {
 
 // Initialize on page load
 document.addEventListener('DOMContentLoaded', function () {
+    console.log('DOM fully loaded, initializing authors page...');
+
     // Load user preferences
     loadUserPreferences();
 
+    // Set up click handlers for author rows
+    setupToggleWorks();
+
     // Set up sorting
-    document.querySelectorAll('th[data-sort]').forEach(th => {
-        th.addEventListener('click', () => {
-            const column = th.getAttribute('data-sort');
-            sortTable(column);
-        });
-    });
+    setupSorting();
 
     // Set up status filters
-    document.querySelectorAll('.status-filters button').forEach(btn => {
-        btn.addEventListener('click', () => {
-            document.querySelectorAll('.status-filters button').forEach(b => b.classList.remove('active'));
-            btn.classList.add('active');
-            filters.status = btn.getAttribute('data-filter');
-            applyFilters();
-        });
-    });
+    setupStatusFilters();
 
     // Set up century filters
-    document.querySelectorAll('.century-filters button').forEach(btn => {
-        btn.addEventListener('click', () => {
-            document.querySelectorAll('.century-filters button').forEach(b => b.classList.remove('active'));
-            btn.classList.add('active');
-            filters.century = btn.getAttribute('data-filter');
-            applyFilters();
-        });
-    });
+    setupCenturyFilters();
+
+    // Set up type filters
+    setupTypeFilters();
 
     // Set up search input
-    document.getElementById('author-search').addEventListener('keyup', event => {
+    document.getElementById('author-search').addEventListener('keyup', function (event) {
         if (event.key === 'Enter') {
             searchAuthors();
         }
     });
 
     // Set up pagination
+    setupPagination();
+
+    // Initial sort by name column
+    currentSort = { column: 'name', direction: 'asc' };
+    sortTable('name');
+
+    console.log('Authors page initialization complete');
+});
+
+// Set up click handlers for toggling works
+function setupToggleWorks() {
+    console.log('Setting up toggle works handlers');
+    document.querySelectorAll('.toggle-works').forEach(link => {
+        link.addEventListener('click', function (event) {
+            event.preventDefault();
+            const authorId = this.getAttribute('data-author-id');
+            console.log(`Toggle works clicked for author: ${authorId}`);
+            toggleWorks(authorId);
+        });
+    });
+}
+
+// Set up sorting handlers
+function setupSorting() {
+    document.querySelectorAll('th.sortable').forEach(th => {
+        th.addEventListener('click', function () {
+            const column = this.getAttribute('data-sort');
+            sortTable(column);
+        });
+    });
+}
+
+// Set up status filter handlers
+function setupStatusFilters() {
+    document.querySelectorAll('.status-filter').forEach(checkbox => {
+        checkbox.addEventListener('change', function () {
+            // If this is checked, uncheck all others
+            if (this.checked) {
+                document.querySelectorAll('.status-filter').forEach(cb => {
+                    if (cb !== this) cb.checked = false;
+                });
+
+                filters.status = this.value;
+                applyFilters();
+            } else {
+                // Don't allow unchecking the last one
+                this.checked = true;
+            }
+        });
+    });
+}
+
+// Set up century filter handlers
+function setupCenturyFilters() {
+    document.querySelectorAll('.century-filter').forEach(checkbox => {
+        checkbox.addEventListener('change', function () {
+            // If this is checked, uncheck all others
+            if (this.checked) {
+                document.querySelectorAll('.century-filter').forEach(cb => {
+                    if (cb !== this) cb.checked = false;
+                });
+
+                filters.century = this.value;
+                applyFilters();
+            } else {
+                // Don't allow unchecking the last one
+                this.checked = true;
+            }
+        });
+    });
+}
+
+// Set up type filter handlers
+function setupTypeFilters() {
+    document.getElementById('type-filter').addEventListener('change', function () {
+        filters.type = this.value;
+        applyFilters();
+    });
+}
+
+// Set up pagination handlers
+function setupPagination() {
     document.getElementById('prev-page').addEventListener('click', () => {
         if (pagination.currentPage > 1) {
             pagination.currentPage--;
@@ -84,10 +155,7 @@ document.addEventListener('DOMContentLoaded', function () {
             updatePagination();
         }
     });
-
-    // Initial sort and pagination
-    sortTable('author_name');
-});
+}
 
 // Load user preferences
 function loadUserPreferences() {
@@ -129,8 +197,24 @@ function saveUserPreferences() {
 
 // Toggle favorite status
 function toggleFavorite(authorId) {
-    const row = document.querySelector(`tr[data-author-id="${authorId}"]`);
+    console.log(`Toggling favorite status for: ${authorId}`);
+
+    // Try to find the row with either data-id or data-author-id
+    let row = document.querySelector(`tr[data-id="${authorId}"]`);
+    if (!row) {
+        row = document.querySelector(`tr[data-author-id="${authorId}"]`);
+    }
+
+    if (!row) {
+        console.error(`Could not find row for author ID: ${authorId}`);
+        return;
+    }
+
     const btn = row.querySelector('.favorite-btn');
+    if (!btn) {
+        console.error(`Could not find favorite button for author: ${authorId}`);
+        return;
+    }
 
     if (userPreferences.favorites.includes(authorId)) {
         // Remove from favorites
@@ -151,7 +235,18 @@ function toggleFavorite(authorId) {
 
 // Toggle archive status
 function toggleArchive(authorId) {
-    const row = document.querySelector(`tr[data-author-id="${authorId}"]`);
+    console.log(`Toggling archive status for: ${authorId}`);
+
+    // Try to find the row with either data-id or data-author-id
+    let row = document.querySelector(`tr[data-id="${authorId}"]`);
+    if (!row) {
+        row = document.querySelector(`tr[data-author-id="${authorId}"]`);
+    }
+
+    if (!row) {
+        console.error(`Could not find row for author ID: ${authorId}`);
+        return;
+    }
 
     if (userPreferences.archived.includes(authorId)) {
         // Remove from archived
@@ -192,24 +287,51 @@ function deleteAuthor(authorId) {
 
 // Toggle works display
 function toggleWorks(authorId) {
-    const container = document.getElementById(`works-container-${authorId}`);
     const worksRow = document.getElementById(`works-row-${authorId}`);
-    const button = document.querySelector(`tr[data-author-id="${authorId}"] .toggle-works`);
+    const container = document.getElementById(`works-container-${authorId}`);
+
+    // Try different selectors to find the author row
+    let authorRow = document.querySelector(`tr[data-id="${authorId}"]`);
+    if (!authorRow) {
+        authorRow = document.querySelector(`tr[data-author-id="${authorId}"]`);
+        if (!authorRow) {
+            console.error(`Could not find author row for ID: ${authorId}`);
+            return;
+        }
+    }
+
+    // Get the toggle link
+    const toggleLink = authorRow.querySelector('.toggle-works');
+    if (!toggleLink) {
+        console.error(`Could not find toggle link for author ID: ${authorId}`);
+        return;
+    }
+
+    console.log(`Toggling works for author ${authorId}`);
+    console.log(`Works row element:`, worksRow);
+    console.log(`Container element:`, container);
+    console.log(`Author row element:`, authorRow);
+    console.log(`Toggle link element:`, toggleLink);
+
+    if (!worksRow || !container) {
+        console.error(`Missing required elements for author ${authorId}`);
+        return;
+    }
 
     if (container.style.display === 'block') {
         // Hide works
         container.style.display = 'none';
         worksRow.style.display = 'none';
-        button.textContent = 'Show works';
+        toggleLink.textContent = authorRow.querySelector('.author-name a').textContent;
     } else {
         // Show works
         container.style.display = 'block';
         worksRow.style.display = 'table-row';
-        button.textContent = 'Hide works';
+        toggleLink.textContent = authorRow.querySelector('.author-name a').textContent;
 
         // Check if works are already loaded
         const worksList = document.getElementById(`works-list-${authorId}`);
-        if (worksList.children.length === 0) {
+        if (worksList && worksList.children.length === 0) {
             // Load works data
             fetchAuthorWorks(authorId);
         }
@@ -442,13 +564,29 @@ function deleteWork(workId) {
 
 // Sort table by column
 function sortTable(column) {
+    console.log(`Sorting table by column: ${column}`);
     const table = document.getElementById('authors-table');
-    const tbody = table.querySelector('tbody');
-    const rows = Array.from(tbody.querySelectorAll('tr:not(.works-row)'));
+    if (!table) {
+        console.error('Authors table not found');
+        return;
+    }
 
-    // Remove sort icons from all headers
-    document.querySelectorAll('th .sort-icon').forEach(icon => {
-        icon.innerHTML = '';
+    const tbody = table.querySelector('tbody');
+    if (!tbody) {
+        console.error('Table body not found');
+        return;
+    }
+
+    const rows = Array.from(tbody.querySelectorAll('tr:not(.works-row)'));
+    if (rows.length === 0) {
+        console.warn('No rows found to sort');
+        return;
+    }
+
+    // Remove sort indicators from all headers
+    document.querySelectorAll('th.sortable').forEach(th => {
+        // Remove sort classes
+        th.classList.remove('sort-asc', 'sort-desc');
     });
 
     // Set sort direction
@@ -460,26 +598,50 @@ function sortTable(column) {
     // Update current sort
     currentSort = { column, direction };
 
-    // Update sort icon
-    const sortIcon = document.querySelector(`th[data-sort="${column}"] .sort-icon`);
-    sortIcon.innerHTML = direction === 'asc' ? '&#9650;' : '&#9660;';
+    // Update current header to show sort direction
+    const currentHeader = document.querySelector(`th[data-sort="${column}"]`);
+    if (currentHeader) {
+        currentHeader.classList.add(direction === 'asc' ? 'sort-asc' : 'sort-desc');
+
+        // Add sort indicator if needed
+        let sortIcon = currentHeader.querySelector('.sort-icon');
+        if (!sortIcon) {
+            sortIcon = document.createElement('span');
+            sortIcon.className = 'sort-icon';
+            currentHeader.appendChild(sortIcon);
+        }
+
+        if (sortIcon) {
+            sortIcon.innerHTML = direction === 'asc' ? '&#9650;' : '&#9660;';
+        }
+    }
 
     // Sort the rows
     rows.sort((a, b) => {
         let aValue, bValue;
 
-        if (column === 'author_name') {
-            aValue = a.querySelector(`td[data-column="${column}"]`).textContent.trim();
-            bValue = b.querySelector(`td[data-column="${column}"]`).textContent.trim();
+        if (column === 'name') {
+            // Get text from author name cell
+            const aCell = a.querySelector('td.author-name');
+            const bCell = b.querySelector('td.author-name');
+
+            aValue = aCell ? aCell.querySelector('a').textContent.trim() : '';
+            bValue = bCell ? bCell.querySelector('a').textContent.trim() : '';
         } else if (column === 'century') {
             aValue = parseInt(a.getAttribute('data-century')) || 0;
             bValue = parseInt(b.getAttribute('data-century')) || 0;
         } else if (column === 'works') {
-            aValue = parseInt(a.querySelector(`td[data-column="${column}"]`).textContent) || 0;
-            bValue = parseInt(b.querySelector(`td[data-column="${column}"]`).textContent) || 0;
-        } else if (column === 'allegiance') {
-            aValue = a.getAttribute('data-type');
-            bValue = b.getAttribute('data-type');
+            const aCell = a.querySelector('td[data-column="works"]');
+            const bCell = b.querySelector('td[data-column="works"]');
+
+            aValue = aCell ? parseInt(aCell.textContent) || 0 : 0;
+            bValue = bCell ? parseInt(bCell.textContent) || 0 : 0;
+        } else if (column === 'type') {
+            const aCell = a.querySelector('td[data-column="type"]');
+            const bCell = b.querySelector('td[data-column="type"]');
+
+            aValue = aCell ? aCell.textContent.trim() : '';
+            bValue = bCell ? bCell.textContent.trim() : '';
         }
 
         if (typeof aValue === 'string' && typeof bValue === 'string') {
@@ -493,8 +655,8 @@ function sortTable(column) {
 
     // Reorder the table
     rows.forEach(row => {
-        const authorId = row.getAttribute('data-author-id');
-        const worksRow = document.getElementById(`works-row-${authorId}`);
+        const authorId = row.getAttribute('data-id');
+        const worksRow = authorId ? document.getElementById(`works-row-${authorId}`) : null;
 
         tbody.appendChild(row);
         if (worksRow) {
@@ -508,16 +670,45 @@ function sortTable(column) {
 
 // Apply all filters
 function applyFilters() {
+    console.log('Applying filters:', filters);
     const table = document.getElementById('authors-table');
+    if (!table) {
+        console.error('Authors table not found');
+        return;
+    }
+
     const rows = table.querySelectorAll('tbody tr:not(.works-row)');
+    if (!rows.length) {
+        console.warn('No rows found to filter');
+        return;
+    }
 
     let visibleCount = 0;
 
     rows.forEach(row => {
-        const authorId = row.getAttribute('data-author-id');
+        // Get author ID - try both data attributes
+        const authorId = row.getAttribute('data-id') || row.getAttribute('data-author-id');
+        if (!authorId) {
+            console.warn('Row missing author ID attributes:', row);
+            return;
+        }
+
+        // Get other attributes
         const century = row.getAttribute('data-century');
         const type = row.getAttribute('data-type');
-        const name = row.querySelector('td[data-column="author_name"]').textContent.toLowerCase();
+
+        // Get name - try both attribute selectors
+        let name = '';
+        const nameCell = row.querySelector('td.author-name a');
+        if (nameCell) {
+            name = nameCell.textContent.toLowerCase();
+        } else {
+            const altNameCell = row.querySelector('td[data-column="name"]');
+            if (altNameCell) {
+                name = altNameCell.textContent.toLowerCase();
+            }
+        }
+
         const worksRow = document.getElementById(`works-row-${authorId}`);
 
         // Check if row should be hidden based on status filter
@@ -544,7 +735,7 @@ function applyFilters() {
 
         // Check if row should be hidden based on search
         let hideBySearch = false;
-        if (filters.search && !name.includes(filters.search.toLowerCase())) {
+        if (filters.search && name && !name.includes(filters.search.toLowerCase())) {
             hideBySearch = true;
         }
 
@@ -565,26 +756,53 @@ function applyFilters() {
 
 // Update pagination display and hide/show rows accordingly
 function updatePagination() {
+    console.log('Updating pagination:', pagination);
+
     // Update buttons and info
-    document.getElementById('prev-page').disabled = pagination.currentPage <= 1;
-    document.getElementById('next-page').disabled = pagination.currentPage >= pagination.totalPages;
-    document.getElementById('page-info').textContent = `Page ${pagination.currentPage} of ${pagination.totalPages || 1}`;
+    const prevBtn = document.getElementById('prev-page');
+    const nextBtn = document.getElementById('next-page');
+    const pageInfo = document.getElementById('page-info');
+
+    if (!prevBtn || !nextBtn || !pageInfo) {
+        console.warn('Pagination controls not found');
+        return;
+    }
+
+    prevBtn.disabled = pagination.currentPage <= 1;
+    nextBtn.disabled = pagination.currentPage >= pagination.totalPages;
+    pageInfo.textContent = `Page ${pagination.currentPage} of ${pagination.totalPages || 1}`;
 
     // Hide/show rows based on current page
     const table = document.getElementById('authors-table');
+    if (!table) {
+        console.error('Authors table not found');
+        return;
+    }
+
     const rows = Array.from(table.querySelectorAll('tbody tr:not(.works-row)'));
+    if (!rows.length) {
+        console.warn('No rows found for pagination');
+        return;
+    }
 
     let visibleRows = rows.filter(row => row.style.display !== 'none');
     let startIdx = (pagination.currentPage - 1) * pagination.rowsPerPage;
     let endIdx = startIdx + pagination.rowsPerPage;
 
     visibleRows.forEach((row, idx) => {
-        const authorId = row.getAttribute('data-author-id');
+        // Get author ID - try both data attributes
+        const authorId = row.getAttribute('data-id') || row.getAttribute('data-author-id');
+        if (!authorId) {
+            console.warn('Row missing author ID attributes in pagination:', row);
+            return;
+        }
+
         const worksRow = document.getElementById(`works-row-${authorId}`);
+        const container = worksRow ? worksRow.querySelector('.works-container') : null;
 
         if (idx >= startIdx && idx < endIdx) {
             row.style.display = 'table-row';
-            if (worksRow && worksRow.querySelector('.works-container').style.display === 'block') {
+            if (worksRow && container && container.style.display === 'block') {
                 worksRow.style.display = 'table-row';
             }
         } else {
