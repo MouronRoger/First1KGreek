@@ -128,6 +128,12 @@ async def get_author_works(
         author_dir = create_data_path(author_id)
         author_dir_full = to_absolute_path(author_dir)
         
+        logger.info(f"API Router - Author dir relative path: {author_dir}")
+        logger.info(f"API Router - Author dir full path: {author_dir_full}")
+        logger.info(f"API Router - Current working directory: {os.getcwd()}")
+        logger.info(f"API Router - Does relative path exist? {os.path.exists(author_dir)}")
+        logger.info(f"API Router - Does full path exist? {os.path.exists(author_dir_full)}")
+        
         if not is_valid_path(author_dir):
             logger.warning(f"API Router - Author {author_id} directory not found at {author_dir_full}")
             raise HTTPException(status_code=404, detail=f"Author {author_id} not found")

@@ -211,7 +211,10 @@ async function getAuthor(authorId) {
  * @returns {Promise<Array>} - List of author's works
  */
 async function getAuthorWorks(authorId) {
-    const url = `${API_CONFIG.baseUrl}/api/authors/${encodeURIComponent(authorId)}/works`;
+    // Using the legacy endpoint instead of the new API endpoint until the API is fixed
+    const url = `${API_CONFIG.baseUrl}/get_author_works?author_id=${encodeURIComponent(authorId)}`;
+    // Previously: const url = `${API_CONFIG.baseUrl}/api/authors/${encodeURIComponent(authorId)}/works`;
+
     const response = await fetchWithRetry(url);
     return handleResponse(response);
 }

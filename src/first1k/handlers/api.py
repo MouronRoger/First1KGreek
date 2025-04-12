@@ -30,6 +30,9 @@ def get_author_works_for_api(author_id):
     
     logger.info(f"API - Retrieving works for author: {author_id}")
     logger.info(f"API - Looking in directory: {author_dir}")
+    logger.info(f"API - DATA_DIR is: {DATA_DIR}")
+    logger.info(f"API - Current working directory: {os.getcwd()}")
+    logger.info(f"API - Does author_dir exist? {os.path.exists(author_dir)}")
     
     if not os.path.exists(author_dir):
         logger.warning(f"API - Author directory not found: {author_dir}")
