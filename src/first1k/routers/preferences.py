@@ -45,11 +45,12 @@ async def update_work_preference(preference: UserPreference):
             "action": "add" if preference.value else "remove"
         }
         
-        # Convert post_data to JSON string (handle_update_work_preference expects a JSON string, not a dict)
-        post_data_json = json.dumps(post_data)
-        
         # Call the existing handler (without query params)
-        status_code, _, response_json = prefs_handlers.handle_update_work_preference({}, post_data_json)
+        status_code, _, response_data = prefs_handlers.handle_update_work_preference({}, post_data)
+        
+        # Parse the JSON string if needed
+        if isinstance(response_data, str):
+            response_data = json.loads(response_data)
         
         if status_code == 200:
             return APIResponse(
@@ -60,7 +61,7 @@ async def update_work_preference(preference: UserPreference):
         else:
             raise HTTPException(
                 status_code=status_code,
-                detail=f"Failed to update preference: {response_json}"
+                detail=response_data.get("error", "Failed to update preference")
             )
     except HTTPException:
         raise
@@ -90,16 +91,16 @@ async def update_batch_preferences(preferences: BatchPreferences):
                 "action": "add" if pref.value else "remove"
             }
             
-            # Convert post_data to JSON string
-            post_data_json = json.dumps(post_data)
+            # Call the existing handler (passing the post_data directly)
+            status_code, _, response_data = prefs_handlers.handle_update_work_preference({}, post_data)
             
-            status_code, _, _ = prefs_handlers.handle_update_work_preference({}, post_data_json)
+            # Parse the JSON string if needed
+            if isinstance(response_data, str):
+                response_data = json.loads(response_data)
             
             if status_code != 200:
-                raise HTTPException(
-                    status_code=400,
-                    detail=f"Failed to update preference for {pref.work_id or pref.author_id}"
-                )
+                error_message = response_data.get("error", f"Failed to update preference for {pref.work_id or pref.author_id}")
+                raise HTTPException(status_code=400, detail=error_message)
                 
         return APIResponse(
             success=True,

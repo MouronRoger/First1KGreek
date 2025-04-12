@@ -266,6 +266,8 @@ def render_authors_page():
         <button id="next-page" disabled>Next</button>
     </div>
     """
+
+    timestamp = int(time.time())
     
     # Create the HTML structure
     html = f"""<!DOCTYPE html>
@@ -274,10 +276,15 @@ def render_authors_page():
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>First1K Greek Browser - Authors</title>
-    <link rel="stylesheet" href="/static/css/main.css?v={int(time.time())}">
-    <link rel="stylesheet" href="/static/css/authors-page.css?v={int(time.time())}">
-    <script src="/static/js/authors.js?v={int(time.time())}"></script>
-    <script src="/static/js/api-adapters.js?v={int(time.time())}"></script>
+    <link rel="stylesheet" href="/static/css/main.css?v={timestamp}">
+    <link rel="stylesheet" href="/static/css/authors-page.css?v={timestamp}">
+    <!-- Include API scripts -->
+    <script src="/static/js/api.js?v={timestamp}"></script>
+    <script src="/static/js/api-adapters.js?v={timestamp}"></script>
+    <script src="/static/js/error-handler.js?v={timestamp}"></script>
+    <script src="/static/js/loading-state.js?v={timestamp}"></script>
+    <!-- Include page-specific script after API scripts -->
+    <script src="/static/js/authors.js?v={timestamp}"></script>
 </head>
 <body>
     <div class="container">
@@ -300,7 +307,6 @@ def render_authors_page():
             {pagination_html}
         </main>
     </div>
-    <!-- Do not load authors.js again, it's already loaded in the head -->
 </body>
 </html>"""
     

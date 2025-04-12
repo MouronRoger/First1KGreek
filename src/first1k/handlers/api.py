@@ -209,7 +209,12 @@ def handle_get_author_works(query_params):
     
     if not author_id:
         logger.error("Missing author_id parameter in request")
-        return 400, 'application/json', json.dumps({"error": "Missing author_id parameter"})
+        return 400, 'application/json', {"error": "Missing author_id parameter"}
+    
+    # Handle case where author_id might be a list
+    if isinstance(author_id, list) and author_id:
+        logger.info(f"Received author_id as a list, using first item: {author_id[0]}")
+        author_id = author_id[0]
     
     logger.info(f"Handling /get_author_works request for author_id: {author_id}")
     
@@ -220,7 +225,7 @@ def handle_get_author_works(query_params):
         
         if not os.path.exists(author_dir):
             logger.warning(f"Author directory not found: {author_dir}")
-            return 404, 'application/json', json.dumps({"error": f"Author {author_id} not found"})
+            return 404, 'application/json', {"error": f"Author {author_id} not found"}
         
         try:    
             # Get author works
@@ -228,13 +233,13 @@ def handle_get_author_works(query_params):
             
             if not works:
                 logger.warning(f"No works found for author: {author_id}")
-                return 200, 'application/json', json.dumps([])
+                return 200, 'application/json', []
                 
             logger.info(f"Successfully retrieved {len(works)} works for author {author_id}")
-            return 200, 'application/json', json.dumps(works)
+            return 200, 'application/json', works
         except Exception as inner_e:
             logger.error(f"Error in get_author_works_for_api: {str(inner_e)}", exc_info=True)
-            return 500, 'application/json', json.dumps({"error": f"Error retrieving works: {str(inner_e)}"})
+            return 500, 'application/json', {"error": f"Error retrieving works: {str(inner_e)}"}
     except Exception as e:
         logger.error(f"Error retrieving works for {author_id}: {str(e)}", exc_info=True)
-        return 500, 'application/json', json.dumps({"error": f"Error retrieving works: {str(e)}"}) 
+        return 500, 'application/json', {"error": f"Error retrieving works: {str(e)}"} 

@@ -3,46 +3,52 @@
 This module provides API endpoints for managing user preferences.
 """
 
+import os
 import json
 import logging
 from pathlib import Path
+
+from ..config import USER_PREFS_FILE
 
 logger = logging.getLogger(__name__)
 
 
 def get_user_preferences():
     """
-    Get user preferences from JSON file.
+    Load user preferences from file.
     
     Returns:
-        dict: User preferences for favorites and archived items.
+        dict: User preferences including favorites and archived items
     """
-    prefs_file = Path("user_preferences.json")
-    if prefs_file.exists():
-        try:
-            with open(prefs_file, 'r', encoding='utf-8') as f:
-                return json.load(f)
-        except Exception as e:
-            logger.error(f"Error reading user preferences: {str(e)}")
-    
-    # Default empty preferences
-    return {"favorites": [], "archived": []}
+    try:
+        if not os.path.exists(USER_PREFS_FILE):
+            logger.warning(f"Preferences file not found at {USER_PREFS_FILE}, creating new")
+            return {'favorites': [], 'archived': []}
+            
+        with open(USER_PREFS_FILE, 'r') as f:
+            return json.load(f)
+    except Exception as e:
+        logger.error(f"Error loading preferences: {str(e)}")
+        return {'favorites': [], 'archived': []}
 
 
 def update_user_preferences(prefs):
     """
-    Update user preferences file.
+    Save user preferences to file.
     
     Args:
         prefs (dict): User preferences to save
+        
+    Returns:
+        bool: True if saved successfully, False otherwise
     """
-    prefs_file = Path("user_preferences.json")
     try:
-        with open(prefs_file, 'w', encoding='utf-8') as f:
-            json.dump(prefs, f, indent=2)
-        logger.info("User preferences updated successfully")
+        with open(USER_PREFS_FILE, 'w') as f:
+            json.dump(prefs, f)
+        return True
     except Exception as e:
-        logger.error(f"Error updating user preferences: {str(e)}")
+        logger.error(f"Error saving preferences: {str(e)}")
+        return False
 
 
 def handle_update_work_preference(query_params, post_data):
@@ -57,15 +63,20 @@ def handle_update_work_preference(query_params, post_data):
         tuple: (status_code, content_type, response_data)
     """
     try:
-        data = json.loads(post_data)
+        # Parse JSON if post_data is a string
+        if isinstance(post_data, str):
+            data = json.loads(post_data)
+        else:
+            data = post_data
+            
         work_id = data.get('work_id')
         preference_type = data.get('type')  # 'favorite', 'archive', or 'delete'
         action = data.get('action')  # 'add' or 'remove'
         
         if not work_id or not preference_type or not action:
-            return 400, 'application/json', json.dumps({
+            return 400, 'application/json', {
                 "error": "Missing required parameters: work_id, type, and action"
-            })
+            }
         
         # Load existing preferences
         user_prefs = get_user_preferences()
@@ -97,16 +108,16 @@ def handle_update_work_preference(query_params, post_data):
         # Save updated preferences
         update_user_preferences(user_prefs)
         
-        return 200, 'application/json', json.dumps({
+        return 200, 'application/json', {
             "status": "success",
             "message": f"Updated {preference_type} preference for {work_id}"
-        })
+        }
         
     except json.JSONDecodeError:
-        return 400, 'application/json', json.dumps({"error": "Invalid JSON in request body"})
+        return 400, 'application/json', {"error": "Invalid JSON in request body"}
     except Exception as e:
         logger.error(f"Error updating work preference: {str(e)}")
-        return 500, 'application/json', json.dumps({"error": f"Error updating preference: {str(e)}"})
+        return 500, 'application/json', {"error": f"Error updating preference: {str(e)}"}
 
 
 def handle_update_preference(query_params, post_data):
@@ -121,16 +132,21 @@ def handle_update_preference(query_params, post_data):
         tuple: (status_code, content_type, response_data)
     """
     try:
-        new_prefs = json.loads(post_data)
+        # Parse JSON if post_data is a string
+        if isinstance(post_data, str):
+            new_prefs = json.loads(post_data)
+        else:
+            new_prefs = post_data
+            
         if not isinstance(new_prefs, dict):
-            return 400, 'application/json', json.dumps({"error": "Request body must be a JSON object"})
+            return 400, 'application/json', {"error": "Request body must be a JSON object"}
         
         # Validate the preferences structure
         if 'favorites' in new_prefs and not isinstance(new_prefs['favorites'], list):
-            return 400, 'application/json', json.dumps({"error": "'favorites' must be an array"})
+            return 400, 'application/json', {"error": "'favorites' must be an array"}
         
         if 'archived' in new_prefs and not isinstance(new_prefs['archived'], list):
-            return 400, 'application/json', json.dumps({"error": "'archived' must be an array"})
+            return 400, 'application/json', {"error": "'archived' must be an array"}
         
         # Load existing preferences
         user_prefs = get_user_preferences()
@@ -145,13 +161,13 @@ def handle_update_preference(query_params, post_data):
         # Save updated preferences
         update_user_preferences(user_prefs)
         
-        return 200, 'application/json', json.dumps({
+        return 200, 'application/json', {
             "status": "success",
             "message": "Preferences updated successfully"
-        })
+        }
         
     except json.JSONDecodeError:
-        return 400, 'application/json', json.dumps({"error": "Invalid JSON in request body"})
+        return 400, 'application/json', {"error": "Invalid JSON in request body"}
     except Exception as e:
         logger.error(f"Error updating preferences: {str(e)}")
-        return 500, 'application/json', json.dumps({"error": f"Error updating preferences: {str(e)}"}) 
+        return 500, 'application/json', {"error": f"Error updating preferences: {str(e)}"} 

@@ -10,6 +10,7 @@ from fastapi import APIRouter, HTTPException, Query, Path
 from fastapi.responses import HTMLResponse, PlainTextResponse
 
 from ..handlers import view as view_handler
+from ..utils.path import is_valid_path, to_absolute_path, normalize_path
 
 # Setup logging
 logger = logging.getLogger(__name__)
@@ -42,15 +43,18 @@ async def view_xml(
     logger.info(f"Viewing XML content for {path}")
     
     try:
+        # Convert to absolute path and validate
+        full_path = to_absolute_path(path)
+        
         # Validate that the file exists and is an XML file
-        if not os.path.exists(path):
+        if not is_valid_path(path):
             raise HTTPException(status_code=404, detail=f"File not found: {path}")
             
-        if not path.endswith('.xml'):
+        if not full_path.endswith('.xml'):
             raise HTTPException(status_code=400, detail="Only XML files are supported")
         
         # Call the async handler
-        html_content = await view_handler.async_render_xml_view_page(path)
+        html_content = await view_handler.async_render_xml_view_page(full_path)
         return HTMLResponse(content=html_content)
     except HTTPException:
         raise
@@ -79,15 +83,18 @@ async def view_reader(
     logger.info(f"Viewing reader content for {path}")
     
     try:
+        # Convert to absolute path and validate
+        full_path = to_absolute_path(path)
+        
         # Validate that the file exists and is an XML file
-        if not os.path.exists(path):
+        if not is_valid_path(path):
             raise HTTPException(status_code=404, detail=f"File not found: {path}")
             
-        if not path.endswith('.xml'):
+        if not full_path.endswith('.xml'):
             raise HTTPException(status_code=400, detail="Only XML files are supported")
         
         # Call the async handler
-        html_content = await view_handler.async_render_reader_view_page(path)
+        html_content = await view_handler.async_render_reader_view_page(full_path)
         return HTMLResponse(content=html_content)
     except HTTPException:
         raise
@@ -116,12 +123,15 @@ async def view_raw(
     logger.info(f"Viewing raw content for {path}")
     
     try:
+        # Convert to absolute path and validate
+        full_path = to_absolute_path(path)
+        
         # Validate that the file exists
-        if not os.path.exists(path):
+        if not is_valid_path(path):
             raise HTTPException(status_code=404, detail=f"File not found: {path}")
         
         # Read the file content using the async handler
-        status_code, content_type, content = await view_handler.async_handle_view_raw({"path": path})
+        status_code, content_type, content = await view_handler.async_handle_view_raw({"path": full_path})
         
         if status_code != 200:
             raise HTTPException(status_code=status_code, detail="Error reading file")

@@ -38,10 +38,13 @@ def get_api_js_scripts():
     Returns:
         str: HTML script tags for FastAPI JavaScript files
     """
-    return """
+    timestamp = int(time.time())
+    return f"""
     <script src="/static/js/api.js?v={timestamp}" defer></script>
     <script src="/static/js/api-adapters.js?v={timestamp}" defer></script>
-    """.format(timestamp=int(time.time()))
+    <script src="/static/js/error-handler.js?v={timestamp}" defer></script>
+    <script src="/static/js/loading-state.js?v={timestamp}" defer></script>
+    """
 
 __all__ = [
     # UI

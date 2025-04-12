@@ -120,6 +120,11 @@ class CustomHTTPRequestHandler(http.server.SimpleHTTPRequestHandler):
                 self.send_header('Access-Control-Allow-Headers', 'Content-Type')
                 self.send_header('Cache-Control', 'no-cache, no-store, must-revalidate')
                 self.end_headers()
+                
+                # Convert response_data to a JSON string if it's a dict or list
+                if isinstance(response_data, (dict, list)):
+                    response_data = json.dumps(response_data)
+                
                 self.wfile.write(response_data.encode('utf-8'))
                 
             elif path == '/shutdown':
@@ -194,6 +199,11 @@ class CustomHTTPRequestHandler(http.server.SimpleHTTPRequestHandler):
                 self.send_response(status_code)
                 self.send_header('Content-type', content_type)
                 self.end_headers()
+                
+                # Convert response_data to a JSON string if it's a dict or list
+                if isinstance(response_data, (dict, list)):
+                    response_data = json.dumps(response_data)
+                
                 self.wfile.write(response_data.encode('utf-8'))
                 
             elif path == '/update_preferences':
@@ -203,6 +213,11 @@ class CustomHTTPRequestHandler(http.server.SimpleHTTPRequestHandler):
                 self.send_response(status_code)
                 self.send_header('Content-type', content_type)
                 self.end_headers()
+                
+                # Convert response_data to a JSON string if it's a dict or list
+                if isinstance(response_data, (dict, list)):
+                    response_data = json.dumps(response_data)
+                
                 self.wfile.write(response_data.encode('utf-8'))
                 
             else:

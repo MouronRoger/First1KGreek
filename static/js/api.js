@@ -5,10 +5,107 @@
  */
 
 /**
- * Base API URL
- * In production, this could be configured based on environment
+ * API Client configuration
  */
-const API_BASE_URL = window.location.origin;
+const API_CONFIG = {
+    baseUrl: window.location.origin,
+    timeout: 10000, // 10 seconds default timeout
+    retryAttempts: 2, // Number of retry attempts for failed requests
+    retryDelay: 1000, // Initial delay between retries in ms (doubles with each retry)
+    debug: false // Whether to log debug information
+};
+
+/**
+ * Log debug information if debug is enabled
+ * @param {...any} args - Arguments to log
+ */
+function logDebug(...args) {
+    if (API_CONFIG.debug) {
+        console.log('[First1KAPI]', ...args);
+    }
+}
+
+/**
+ * Create a request with timeout support
+ * @param {string} url - The URL to fetch
+ * @param {Object} options - Fetch options
+ * @returns {Promise} - Promise that resolves with the response or rejects on timeout
+ */
+async function fetchWithTimeout(url, options = {}) {
+    const timeout = options.timeout || API_CONFIG.timeout;
+
+    const controller = new AbortController();
+    const id = setTimeout(() => controller.abort(), timeout);
+
+    try {
+        const response = await fetch(url, {
+            ...options,
+            signal: controller.signal
+        });
+        clearTimeout(id);
+        return response;
+    } catch (error) {
+        clearTimeout(id);
+        if (error.name === 'AbortError') {
+            throw new Error(`Request timeout after ${timeout}ms`);
+        }
+        throw error;
+    }
+}
+
+/**
+ * Execute a fetch request with retry capability
+ * @param {string} url - The URL to fetch
+ * @param {Object} options - Fetch options
+ * @returns {Promise} - Promise that resolves with the response
+ */
+async function fetchWithRetry(url, options = {}) {
+    let attempts = 0;
+    const maxAttempts = options.retryAttempts || API_CONFIG.retryAttempts;
+
+    while (true) {
+        attempts++;
+        try {
+            logDebug(`Request to ${url} (attempt ${attempts}/${maxAttempts + 1})`);
+            const response = await fetchWithTimeout(url, options);
+            return response;
+        } catch (error) {
+            logDebug(`Request failed:`, error);
+
+            // Don't retry if we've reached max attempts or error isn't retryable
+            if (attempts > maxAttempts || !isRetryableError(error)) {
+                throw error;
+            }
+
+            // Calculate exponential backoff delay
+            const delay = API_CONFIG.retryDelay * Math.pow(2, attempts - 1);
+            logDebug(`Retrying in ${delay}ms...`);
+
+            // Wait before retrying
+            await new Promise(resolve => setTimeout(resolve, delay));
+        }
+    }
+}
+
+/**
+ * Determine if an error is retryable
+ * @param {Error} error - The error to check
+ * @returns {boolean} - Whether the error is retryable
+ */
+function isRetryableError(error) {
+    // Network errors are retryable
+    if (error.name === 'TypeError' && error.message.includes('NetworkError')) {
+        return true;
+    }
+
+    // Timeout errors are retryable
+    if (error.message.includes('timeout')) {
+        return true;
+    }
+
+    // For other errors, don't retry
+    return false;
+}
 
 /**
  * Generic error handler for API requests
@@ -21,18 +118,53 @@ async function handleResponse(response) {
     if (!response.ok) {
         // Try to get error details from response
         let errorMessage = `Error: ${response.status} ${response.statusText}`;
-        if (contentType && contentType.includes('application/json')) {
-            const errorData = await response.json();
-            errorMessage = errorData.detail || errorMessage;
+        let errorDetails = null;
+
+        try {
+            if (contentType && contentType.includes('application/json')) {
+                const errorData = await response.json();
+                errorMessage = errorData.detail || errorData.message || errorMessage;
+                errorDetails = errorData;
+            } else if (contentType && contentType.includes('text/')) {
+                // Try to get text error message
+                const errorText = await response.text();
+                if (errorText) {
+                    errorMessage = errorText;
+                }
+            }
+        } catch (e) {
+            // If parsing fails, use the default message
+            logDebug('Error parsing error response:', e);
         }
-        throw new Error(errorMessage);
+
+        // Create custom error with status code and details
+        const error = new Error(errorMessage);
+        error.status = response.status;
+        error.statusText = response.statusText;
+        error.details = errorDetails;
+        throw error;
     }
 
-    // Return JSON if response is JSON, otherwise return text
-    if (contentType && contentType.includes('application/json')) {
-        return response.json();
+    // Return data based on content type
+    try {
+        if (contentType && contentType.includes('application/json')) {
+            return await response.json();
+        } else if (contentType && contentType.includes('text/html')) {
+            return await response.text();
+        } else if (contentType && contentType.includes('text/plain')) {
+            return await response.text();
+        } else {
+            // Default to trying JSON first, then falling back to text
+            try {
+                return await response.json();
+            } catch (e) {
+                return await response.text();
+            }
+        }
+    } catch (error) {
+        logDebug('Error parsing response:', error);
+        throw new Error(`Failed to parse response: ${error.message}`);
     }
-    return response.text();
 }
 
 /**
@@ -57,8 +189,8 @@ async function getAuthors({ skip = 0, limit = 100, century, type } = {}) {
         params.append('type', type);
     }
 
-    const url = `${API_BASE_URL}/api/authors/?${params.toString()}`;
-    const response = await fetch(url);
+    const url = `${API_CONFIG.baseUrl}/api/authors/?${params.toString()}`;
+    const response = await fetchWithRetry(url);
     return handleResponse(response);
 }
 
@@ -68,8 +200,8 @@ async function getAuthors({ skip = 0, limit = 100, century, type } = {}) {
  * @returns {Promise<Object>} - Author details
  */
 async function getAuthor(authorId) {
-    const url = `${API_BASE_URL}/api/authors/${encodeURIComponent(authorId)}`;
-    const response = await fetch(url);
+    const url = `${API_CONFIG.baseUrl}/api/authors/${encodeURIComponent(authorId)}`;
+    const response = await fetchWithRetry(url);
     return handleResponse(response);
 }
 
@@ -79,8 +211,8 @@ async function getAuthor(authorId) {
  * @returns {Promise<Array>} - List of author's works
  */
 async function getAuthorWorks(authorId) {
-    const url = `${API_BASE_URL}/api/authors/${encodeURIComponent(authorId)}/works`;
-    const response = await fetch(url);
+    const url = `${API_CONFIG.baseUrl}/api/authors/${encodeURIComponent(authorId)}/works`;
+    const response = await fetchWithRetry(url);
     return handleResponse(response);
 }
 
@@ -94,8 +226,8 @@ async function getAuthorWorks(authorId) {
  * @returns {Promise<Object>} - Result of the operation
  */
 async function updateWorkPreference(preference) {
-    const url = `${API_BASE_URL}/api/preferences/work`;
-    const response = await fetch(url, {
+    const url = `${API_CONFIG.baseUrl}/api/preferences/work`;
+    const response = await fetchWithRetry(url, {
         method: 'POST',
         headers: {
             'Content-Type': 'application/json'
@@ -112,8 +244,8 @@ async function updateWorkPreference(preference) {
  * @returns {Promise<Object>} - Result of the operation
  */
 async function updateBatchPreferences(batchPreferences) {
-    const url = `${API_BASE_URL}/api/preferences/batch`;
-    const response = await fetch(url, {
+    const url = `${API_CONFIG.baseUrl}/api/preferences/batch`;
+    const response = await fetchWithRetry(url, {
         method: 'POST',
         headers: {
             'Content-Type': 'application/json'
@@ -128,8 +260,8 @@ async function updateBatchPreferences(batchPreferences) {
  * @returns {Promise<Object>} - User preferences
  */
 async function getPreferences() {
-    const url = `${API_BASE_URL}/api/preferences/`;
-    const response = await fetch(url);
+    const url = `${API_CONFIG.baseUrl}/api/preferences/`;
+    const response = await fetchWithRetry(url);
     return handleResponse(response);
 }
 
@@ -164,8 +296,8 @@ async function searchCorpus({ query, authors, language, max_results = 100 } = {}
         });
     }
 
-    const url = `${API_BASE_URL}/api/search/?${params.toString()}`;
-    const response = await fetch(url);
+    const url = `${API_CONFIG.baseUrl}/api/search/?${params.toString()}`;
+    const response = await fetchWithRetry(url);
     return handleResponse(response);
 }
 
@@ -178,8 +310,8 @@ async function viewXml(path) {
     const params = new URLSearchParams();
     params.append('path', path);
 
-    const url = `${API_BASE_URL}/api/view/xml?${params.toString()}`;
-    const response = await fetch(url);
+    const url = `${API_CONFIG.baseUrl}/api/view/xml?${params.toString()}`;
+    const response = await fetchWithRetry(url);
     return handleResponse(response);
 }
 
@@ -192,8 +324,8 @@ async function viewReader(path) {
     const params = new URLSearchParams();
     params.append('path', path);
 
-    const url = `${API_BASE_URL}/api/view/reader?${params.toString()}`;
-    const response = await fetch(url);
+    const url = `${API_CONFIG.baseUrl}/api/view/reader?${params.toString()}`;
+    const response = await fetchWithRetry(url);
     return handleResponse(response);
 }
 
@@ -206,13 +338,23 @@ async function viewRaw(path) {
     const params = new URLSearchParams();
     params.append('path', path);
 
-    const url = `${API_BASE_URL}/api/view/raw?${params.toString()}`;
-    const response = await fetch(url);
+    const url = `${API_CONFIG.baseUrl}/api/view/raw?${params.toString()}`;
+    const response = await fetchWithRetry(url);
     return handleResponse(response);
+}
+
+/**
+ * Configure the API client
+ * @param {Object} config - Configuration options
+ */
+function configure(config = {}) {
+    Object.assign(API_CONFIG, config);
+    logDebug('API client configured:', API_CONFIG);
 }
 
 // Export API functions
 window.First1KAPI = {
+    // Core API methods
     getAuthors,
     getAuthor,
     getAuthorWorks,
@@ -222,5 +364,9 @@ window.First1KAPI = {
     searchCorpus,
     viewXml,
     viewReader,
-    viewRaw
+    viewRaw,
+
+    // Configuration and utilities
+    configure,
+    config: API_CONFIG
 }; 

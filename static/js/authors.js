@@ -340,15 +340,60 @@ function toggleWorks(authorId) {
 
 // Fetch author works data
 function fetchAuthorWorks(authorId) {
-    const loading = document.getElementById(`loading-works-${authorId}`);
     const worksList = document.getElementById(`works-list-${authorId}`);
+    const container = document.getElementById(`works-container-${authorId}`);
 
-    loading.style.display = 'flex';
-    worksList.style.display = 'none';
+    // Create loading state
+    const loading = First1KLoading.show(container, {
+        message: 'Loading works...',
+        color: '#4299e1',
+    });
 
     console.log(`Fetching works for author: ${authorId}`);
 
-    // Check if API adapter is available (for FastAPI compatibility)
+    // Define retry function for error handling
+    const retryFetch = () => {
+        // Hide any existing error notifications
+        First1KLoading.hideAll();
+        // Retry the fetch
+        fetchAuthorWorks(authorId);
+    };
+
+    // Use the API client directly if available
+    if (window.First1KAPI && typeof window.First1KAPI.getAuthorWorks === 'function') {
+        console.log('Using First1KAPI client to fetch works');
+
+        window.First1KAPI.getAuthorWorks(authorId)
+            .then(data => {
+                console.log(`Works data received:`, data);
+
+                // Validate that data is an array
+                if (!Array.isArray(data)) {
+                    console.error('Data is not an array:', data);
+                    throw new Error('Expected an array of works but received: ' + typeof data);
+                }
+
+                renderWorks(authorId, data);
+            })
+            .catch(error => {
+                console.error('Error fetching works:', error);
+                // Use error handler to display user-friendly message with retry option
+                First1KErrorHandler.handle(error, {
+                    context: `Fetching works for ${authorId}`,
+                    onRetry: retryFetch
+                });
+
+                // Show error in works list
+                worksList.innerHTML = `<div class="works-error">Error loading works. <a href="#" onclick="fetchAuthorWorks('${authorId}'); return false;">Retry</a></div>`;
+            })
+            .finally(() => {
+                // Hide loading state
+                loading.hide();
+            });
+        return;
+    }
+
+    // Fall back to adapter if available
     if (window.First1KAdapters && typeof window.First1KAdapters.loadAuthorWorks === 'function') {
         console.log('Using API adapter to fetch works');
 
@@ -362,28 +407,33 @@ function fetchAuthorWorks(authorId) {
                 // Validate that data is an array
                 if (!Array.isArray(data)) {
                     console.error('Data is not an array:', data);
+                    First1KErrorHandler.handle(
+                        new Error('Expected an array of works but received: ' + typeof data),
+                        { context: `Parsing works for ${authorId}` }
+                    );
                     worksList.innerHTML = `<div class="works-error">Error: Expected an array of works but received: ${typeof data}</div>`;
-                    loading.style.display = 'none';
-                    worksList.style.display = 'grid';
+                    loading.hide();
                     return;
                 }
 
                 renderWorks(authorId, data);
-                loading.style.display = 'none';
-                worksList.style.display = 'grid';
+                loading.hide();
             },
             // Error callback
             (error) => {
                 console.error('Error fetching works:', error);
-                worksList.innerHTML = `<div class="works-error">Error loading works: ${error.message}</div>`;
-                loading.style.display = 'none';
-                worksList.style.display = 'grid';
+                First1KErrorHandler.handle(error, {
+                    context: `Fetching works for ${authorId}`,
+                    onRetry: retryFetch
+                });
+                worksList.innerHTML = `<div class="works-error">Error loading works. <a href="#" onclick="fetchAuthorWorks('${authorId}'); return false;">Retry</a></div>`;
+                loading.hide();
             }
         );
         return;
     }
 
-    // Fallback to direct fetch if adapter is not available
+    // Last resort: direct fetch if no API client or adapter is available
     console.log('Fallback: Using direct fetch for works');
 
     // Fetch works data from API
@@ -430,11 +480,15 @@ function fetchAuthorWorks(authorId) {
         })
         .catch(error => {
             console.error('Error fetching works:', error);
-            worksList.innerHTML = `<div class="works-error">Error loading works: ${error.message}</div>`;
+            First1KErrorHandler.handle(error, {
+                context: `Fetching works for ${authorId}`,
+                onRetry: retryFetch
+            });
+            worksList.innerHTML = `<div class="works-error">Error loading works. <a href="#" onclick="fetchAuthorWorks('${authorId}'); return false;">Retry</a></div>`;
         })
         .finally(() => {
-            loading.style.display = 'none';
-            worksList.style.display = 'grid';
+            // Hide loading state
+            loading.hide();
         });
 }
 

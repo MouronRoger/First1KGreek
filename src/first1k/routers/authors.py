@@ -12,6 +12,7 @@ from pydantic import BaseModel
 from ..models import Author, Work, APIResponse, WorkFile
 from ..data import authors as authors_dao
 from ..utils import api_handler
+from ..utils.path import is_valid_path, create_data_path, to_absolute_path
 from ..config import DATA_DIR
 
 # Setup logging
@@ -124,9 +125,11 @@ async def get_author_works(
     
     try:
         # Check if author exists by directly checking the directory
-        author_dir = os.path.join(DATA_DIR, author_id)
-        if not os.path.exists(author_dir) or not os.path.isdir(author_dir):
-            logger.warning(f"API Router - Author {author_id} directory not found at {author_dir}")
+        author_dir = create_data_path(author_id)
+        author_dir_full = to_absolute_path(author_dir)
+        
+        if not is_valid_path(author_dir):
+            logger.warning(f"API Router - Author {author_id} directory not found at {author_dir_full}")
             raise HTTPException(status_code=404, detail=f"Author {author_id} not found")
         
         # Get works directly using the handler function

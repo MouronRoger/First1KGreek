@@ -21,6 +21,7 @@ from .config import VERSION, VERSION_NAME, DATA_DIR, BASE_DIR
 from .routers import authors, preferences, search, view
 from .handlers import browse, ui, works, view as view_handler, search as search_handler
 from .handlers import api as api_handler
+from .utils.path import is_valid_path, create_data_path
 
 # Setup logging
 logging.basicConfig(level=logging.INFO)
@@ -193,12 +194,16 @@ async def get_author_works(author_id: str = Query(..., description="Author ID"))
     """
     logger.info(f"Handling /get_author_works request for author_id: {author_id}")
     
+    # Handle the case where author_id is received as a list
+    if isinstance(author_id, list):
+        logger.info(f"Received author_id as a list, using first item: {author_id[0]}")
+        author_id = author_id[0]
+    
     try:
-        # Check if author directory exists
-        author_dir = os.path.join(DATA_DIR, author_id)
-        logger.info(f"Looking for author directory at: {author_dir}")
+        # Check if author directory exists using path utilities
+        author_dir = create_data_path(author_id)
         
-        if not os.path.exists(author_dir):
+        if not is_valid_path(author_dir):
             logger.warning(f"Author directory not found: {author_dir}")
             return JSONResponse(
                 status_code=404,
@@ -237,12 +242,11 @@ async def update_work_preference(request: Request):
     """
     post_data = await request.json()
     status_code, content_type, response_data = preferences.handle_update_work_preference({}, post_data)
-    
-    # Parse the JSON string if it's not already a dict/list
-    if isinstance(response_data, str):
-        response_data = json.loads(response_data)
         
-    return JSONResponse(content=response_data)
+    return JSONResponse(
+        status_code=status_code,
+        content=response_data
+    )
 
 @app.post("/update_preferences")
 async def update_preferences(request: Request):
@@ -257,11 +261,10 @@ async def update_preferences(request: Request):
     post_data = await request.json()
     status_code, content_type, response_data = preferences.handle_update_preference({}, post_data)
     
-    # Parse the JSON string if it's not already a dict/list
-    if isinstance(response_data, str):
-        response_data = json.loads(response_data)
-        
-    return JSONResponse(content=response_data)
+    return JSONResponse(
+        status_code=status_code,
+        content=response_data
+    )
 
 # Custom OpenAPI schema
 def custom_openapi():
