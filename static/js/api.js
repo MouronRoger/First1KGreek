@@ -9,10 +9,10 @@
  */
 const API_CONFIG = {
     baseUrl: window.location.origin,
-    timeout: 10000, // 10 seconds default timeout
+    timeout: 5000, // 5 seconds timeout to prevent long hanging requests
     retryAttempts: 2, // Number of retry attempts for failed requests
     retryDelay: 1000, // Initial delay between retries in ms (doubles with each retry)
-    debug: false // Whether to log debug information
+    debug: true // Enable debug logging to diagnose issues
 };
 
 /**

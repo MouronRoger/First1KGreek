@@ -21,7 +21,7 @@ from .config import VERSION, VERSION_NAME, DATA_DIR, BASE_DIR
 from .routers import authors, preferences, search, view
 from .handlers import browse, ui, works, view as view_handler, search as search_handler
 from .handlers import api as api_handler
-from .utils.path import is_valid_path, create_data_path
+from .utils.path import is_valid_path, create_data_path, robust_author_path
 
 # Setup logging
 logging.basicConfig(level=logging.INFO)
@@ -200,10 +200,10 @@ async def get_author_works(author_id: str = Query(..., description="Author ID"))
         author_id = author_id[0]
     
     try:
-        # Check if author directory exists using path utilities
-        author_dir = create_data_path(author_id)
+        # Use the robust path utility for checking author directory
+        author_dir = robust_author_path(author_id)
         
-        if not is_valid_path(author_dir):
+        if not author_dir or not os.path.exists(author_dir):
             logger.warning(f"Author directory not found: {author_dir}")
             return JSONResponse(
                 status_code=404,

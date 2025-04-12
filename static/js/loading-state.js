@@ -11,7 +11,7 @@
 const LoadingConfig = {
     defaultSpinnerColor: '#4299e1', // Default spinner color
     defaultSpinnerSize: '20px', // Default spinner size
-    defaultTimeout: 30000, // Default timeout for loading operations (30 seconds)
+    defaultTimeout: 15000, // Default timeout for loading operations (15 seconds)
     onTimeout: null, // Function to call when loading times out
     useDefaultStyles: true, // Whether to apply default styles to loading indicators
 };

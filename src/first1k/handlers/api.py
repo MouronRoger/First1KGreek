@@ -7,10 +7,11 @@ import os
 import re
 import json
 import logging
+import time
 from pathlib import Path
 
 from ..config import DATA_DIR, USER_PREFS_FILE
-from ..utils.path import normalize_path, create_data_path
+from ..utils.path import normalize_path, create_data_path, robust_author_path
 
 logger = logging.getLogger(__name__)
 
@@ -25,8 +26,10 @@ def get_author_works_for_api(author_id):
     Returns:
         list: A list of work dictionaries formatted for the API
     """
+    start_time = time.time()
     works_data = []
-    author_dir = os.path.join(DATA_DIR, author_id)
+    # Use the robust path utility for consistent path handling
+    author_dir = robust_author_path(author_id)
     
     logger.info(f"API - Retrieving works for author: {author_id}")
     logger.info(f"API - Looking in directory: {author_dir}")
@@ -34,26 +37,35 @@ def get_author_works_for_api(author_id):
     logger.info(f"API - Current working directory: {os.getcwd()}")
     logger.info(f"API - Does author_dir exist? {os.path.exists(author_dir)}")
     
-    if not os.path.exists(author_dir):
+    if not author_dir or not os.path.exists(author_dir):
         logger.warning(f"API - Author directory not found: {author_dir}")
+        logger.info(f"API - Total processing time: {time.time() - start_time:.4f}s")
         return works_data  # Return empty list
     
     logger.info(f"API - Successfully found author directory at: {author_dir}")
     
+    path_resolution_time = time.time() - start_time
+    logger.info(f"API - Path resolution completed in: {path_resolution_time:.4f}s")
+    
     try:
         # Get user preferences for works
+        prefs_start_time = time.time()
         user_prefs = get_user_preferences()
         favorites = user_prefs.get("favorites", [])
         archived = user_prefs.get("archived", [])
+        logger.info(f"API - Preferences loaded in: {time.time() - prefs_start_time:.4f}s")
         
         # Process each work directory
+        dirs_start_time = time.time()
         work_dirs = [d for d in os.listdir(author_dir) if os.path.isdir(os.path.join(author_dir, d))]
         logger.info(f"API - Found {len(work_dirs)} potential work directories for author {author_id}")
+        logger.info(f"API - Directory listing completed in: {time.time() - dirs_start_time:.4f}s")
         
         # Log the work directories to help with debugging
         logger.debug(f"API - Work directories: {work_dirs}")
         
         for work_dir_name in work_dirs:
+            work_start_time = time.time()
             work_dir_path = os.path.join(author_dir, work_dir_name)
             
             # Create work ID base
@@ -70,6 +82,7 @@ def get_author_works_for_api(author_id):
             logger.debug(f"API - Processing work {work_id_base} with {len(xml_files)} XML files")
             
             # Load titles from __cts__.xml if available
+            cts_start_time = time.time()
             title_map = {}  # Maps language code to title
             work_cts_path = os.path.join(work_dir_path, '__cts__.xml')
             
@@ -97,8 +110,11 @@ def get_author_works_for_api(author_id):
                 except Exception as e:
                     logger.error(f"API - Error reading work metadata: {str(e)}")
             
+            logger.debug(f"API - CTS parsing completed in: {time.time() - cts_start_time:.4f}s")
+            
             # Process each XML file directly
             for xml_file in xml_files:
+                xml_start_time = time.time()
                 file_path = os.path.join(work_dir_path, xml_file)
                 
                 # Create a relative path using the path utility
@@ -159,6 +175,8 @@ def get_author_works_for_api(author_id):
                 }
                 
                 works_data.append(work_data)
+            
+            logger.debug(f"API - Work {work_id_base} processed in: {time.time() - work_start_time:.4f}s")
         
         # Log the final works data structure
         logger.info(f"API - Final works_data has {len(works_data)} items")
@@ -170,11 +188,14 @@ def get_author_works_for_api(author_id):
         if not isinstance(works_data, list):
             logger.warning(f"API - works_data is not a list! Converting to list: {type(works_data)}")
             works_data = [works_data]
-            
+        
+        total_time = time.time() - start_time
+        logger.info(f"API - Total processing time: {total_time:.4f}s")
         return works_data
         
     except Exception as e:
         logger.error(f"API - Error getting works for author {author_id}: {str(e)}", exc_info=True)
+        logger.info(f"API - Failed after: {time.time() - start_time:.4f}s")
         # Return empty list on error
         return []
 
@@ -222,11 +243,11 @@ def handle_get_author_works(query_params):
     logger.info(f"Handling /get_author_works request for author_id: {author_id}")
     
     try:
-        # Check if author directory exists
-        author_dir = os.path.join(DATA_DIR, author_id)
+        # Use the robust path utility for checking author directory
+        author_dir = robust_author_path(author_id)
         logger.info(f"Looking for author directory at: {author_dir}")
         
-        if not os.path.exists(author_dir):
+        if not author_dir or not os.path.exists(author_dir):
             logger.warning(f"Author directory not found: {author_dir}")
             return 404, 'application/json', {"error": f"Author {author_id} not found"}
         

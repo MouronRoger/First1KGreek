@@ -6,10 +6,14 @@ ensuring consistent behavior between HTTP and FastAPI modes.
 
 import os
 import logging
-from ..config import DATA_DIR
+import functools
+from ..config import DATA_DIR, BASE_DIR
 
 # Set up logging
 logger = logging.getLogger(__name__)
+
+# Add a cache for author paths to reduce redundant path resolution
+_author_path_cache = {}
 
 
 def normalize_path(path):
@@ -124,4 +128,46 @@ def create_file_url(path):
         str: The URL
     """
     _, relative_path = normalize_path(path)
-    return f"/view?path={relative_path}" if relative_path else None 
+    return f"/view?path={relative_path}" if relative_path else None
+
+
+@functools.lru_cache(maxsize=128)
+def robust_author_path(author_id):
+    """Get absolute path to author directory regardless of working context.
+    
+    This function resolves path issues between HTTP and FastAPI implementations
+    by always using absolute paths anchored at BASE_DIR, avoiding working
+    directory context issues.
+    
+    This implementation uses caching to reduce redundant path resolution.
+    
+    Args:
+        author_id (str): The ID of the author
+        
+    Returns:
+        str: The absolute path to the author directory
+    """
+    if not author_id:
+        logger.error("Empty author_id provided to robust_author_path")
+        return None
+    
+    # Check cache first
+    if author_id in _author_path_cache:
+        logger.debug(f"PATHDEBUG: Using cached path for author_id: {author_id}")
+        return _author_path_cache[author_id]
+    
+    logger.info(f"PATHDEBUG: robust_author_path called with author_id: {author_id}")
+    logger.debug(f"PATHDEBUG: Current working directory: {os.getcwd()}")
+    logger.debug(f"PATHDEBUG: BASE_DIR is set to: {BASE_DIR}")
+    logger.debug(f"PATHDEBUG: DATA_DIR is set to: {DATA_DIR}")
+    
+    # Always use absolute paths with BASE_DIR as anchor
+    author_path = os.path.join(BASE_DIR, "data", author_id)
+    
+    logger.info(f"PATHDEBUG: robust_author_path returning: {author_path}")
+    logger.debug(f"PATHDEBUG: Path exists: {os.path.exists(author_path)}")
+    
+    # Cache the result for future use
+    _author_path_cache[author_id] = author_path
+    
+    return author_path 

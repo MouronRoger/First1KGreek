@@ -20,7 +20,8 @@ from .path import (
     to_relative_path, 
     is_valid_path, 
     create_data_path, 
-    create_file_url
+    create_file_url,
+    robust_author_path
 )
 
 # Import api_handler for compatibility with routers
@@ -41,6 +42,7 @@ __all__ = [
     'is_valid_path',
     'create_data_path',
     'create_file_url',
+    'robust_author_path',
     
     # API handlers
     'api_handler',

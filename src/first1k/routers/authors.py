@@ -12,7 +12,7 @@ from pydantic import BaseModel
 from ..models import Author, Work, APIResponse, WorkFile
 from ..data import authors as authors_dao
 from ..utils import api_handler
-from ..utils.path import is_valid_path, create_data_path, to_absolute_path
+from ..utils.path import is_valid_path, robust_author_path
 from ..config import DATA_DIR
 
 # Setup logging
@@ -124,18 +124,15 @@ async def get_author_works(
     logger.info(f"API Router - Getting works for author {author_id}")
     
     try:
-        # Check if author exists by directly checking the directory
-        author_dir = create_data_path(author_id)
-        author_dir_full = to_absolute_path(author_dir)
+        # Use the robust path utility instead
+        author_dir = robust_author_path(author_id)
         
-        logger.info(f"API Router - Author dir relative path: {author_dir}")
-        logger.info(f"API Router - Author dir full path: {author_dir_full}")
+        logger.info(f"API Router - Author dir absolute path: {author_dir}")
         logger.info(f"API Router - Current working directory: {os.getcwd()}")
-        logger.info(f"API Router - Does relative path exist? {os.path.exists(author_dir)}")
-        logger.info(f"API Router - Does full path exist? {os.path.exists(author_dir_full)}")
+        logger.info(f"API Router - Does author_dir exist? {os.path.exists(author_dir)}")
         
-        if not is_valid_path(author_dir):
-            logger.warning(f"API Router - Author {author_id} directory not found at {author_dir_full}")
+        if not author_dir or not os.path.exists(author_dir):
+            logger.warning(f"API Router - Author {author_id} directory not found at {author_dir}")
             raise HTTPException(status_code=404, detail=f"Author {author_id} not found")
         
         # Get works directly using the handler function

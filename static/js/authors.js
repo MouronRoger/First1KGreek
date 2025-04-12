@@ -343,10 +343,15 @@ function fetchAuthorWorks(authorId) {
     const worksList = document.getElementById(`works-list-${authorId}`);
     const container = document.getElementById(`works-container-${authorId}`);
 
-    // Create loading state
+    // Create loading state with a lower timeout
     const loading = First1KLoading.show(container, {
         message: 'Loading works...',
         color: '#4299e1',
+        timeout: 10000, // 10 second timeout to prevent UI from hanging indefinitely
+        onTimeout: () => {
+            console.error(`Loading works for ${authorId} timed out after 10 seconds`);
+            worksList.innerHTML = `<div class="works-error">Request timed out. <a href="#" onclick="fetchAuthorWorks('${authorId}'); return false;">Retry</a></div>`;
+        }
     });
 
     console.log(`Fetching works for author: ${authorId}`);
@@ -359,12 +364,24 @@ function fetchAuthorWorks(authorId) {
         fetchAuthorWorks(authorId);
     };
 
+    // Create a fetch timeout controller
+    const fetchTimeout = setTimeout(() => {
+        console.error(`API request for author ${authorId} works is taking too long - forcing timeout`);
+        loading.hide();
+        First1KErrorHandler.handle(new Error('Request timeout'), {
+            context: `Fetching works for ${authorId}`,
+            onRetry: retryFetch
+        });
+        worksList.innerHTML = `<div class="works-error">Request timed out. <a href="#" onclick="fetchAuthorWorks('${authorId}'); return false;">Retry</a></div>`;
+    }, 8000); // Force timeout after 8 seconds
+
     // Use the API client directly if available
     if (window.First1KAPI && typeof window.First1KAPI.getAuthorWorks === 'function') {
         console.log('Using First1KAPI client to fetch works');
 
         window.First1KAPI.getAuthorWorks(authorId)
             .then(data => {
+                clearTimeout(fetchTimeout);
                 console.log(`Works data received:`, data);
 
                 // Validate that data is an array
@@ -376,6 +393,7 @@ function fetchAuthorWorks(authorId) {
                 renderWorks(authorId, data);
             })
             .catch(error => {
+                clearTimeout(fetchTimeout);
                 console.error('Error fetching works:', error);
                 // Use error handler to display user-friendly message with retry option
                 First1KErrorHandler.handle(error, {
@@ -387,6 +405,7 @@ function fetchAuthorWorks(authorId) {
                 worksList.innerHTML = `<div class="works-error">Error loading works. <a href="#" onclick="fetchAuthorWorks('${authorId}'); return false;">Retry</a></div>`;
             })
             .finally(() => {
+                clearTimeout(fetchTimeout);
                 // Hide loading state
                 loading.hide();
             });
@@ -402,6 +421,7 @@ function fetchAuthorWorks(authorId) {
             authorId,
             // Success callback
             (data) => {
+                clearTimeout(fetchTimeout);
                 console.log(`Works data received through adapter:`, data);
 
                 // Validate that data is an array
@@ -421,6 +441,7 @@ function fetchAuthorWorks(authorId) {
             },
             // Error callback
             (error) => {
+                clearTimeout(fetchTimeout);
                 console.error('Error fetching works:', error);
                 First1KErrorHandler.handle(error, {
                     context: `Fetching works for ${authorId}`,
@@ -436,9 +457,17 @@ function fetchAuthorWorks(authorId) {
     // Last resort: direct fetch if no API client or adapter is available
     console.log('Fallback: Using direct fetch for works');
 
-    // Fetch works data from API
-    fetch(`/get_author_works?author_id=${authorId}`)
+    // Fetch works data from API with a timeout
+    const fetchController = new AbortController();
+    const fetchSignal = fetchController.signal;
+
+    // Set a timeout for the fetch operation
+    const fetchTimeoutId = setTimeout(() => fetchController.abort(), 5000);
+
+    fetch(`/get_author_works?author_id=${authorId}`, { signal: fetchSignal })
         .then(response => {
+            clearTimeout(fetchTimeoutId);
+            clearTimeout(fetchTimeout);
             console.log(`Response status: ${response.status} ${response.statusText}`);
             console.log(`Response content type: ${response.headers.get('content-type')}`);
 
@@ -468,6 +497,7 @@ function fetchAuthorWorks(authorId) {
             }
         })
         .then(data => {
+            clearTimeout(fetchTimeout);
             console.log(`Works data received:`, data);
 
             // Validate that data is an array
@@ -479,6 +509,8 @@ function fetchAuthorWorks(authorId) {
             renderWorks(authorId, data);
         })
         .catch(error => {
+            clearTimeout(fetchTimeoutId);
+            clearTimeout(fetchTimeout);
             console.error('Error fetching works:', error);
             First1KErrorHandler.handle(error, {
                 context: `Fetching works for ${authorId}`,
@@ -487,6 +519,8 @@ function fetchAuthorWorks(authorId) {
             worksList.innerHTML = `<div class="works-error">Error loading works. <a href="#" onclick="fetchAuthorWorks('${authorId}'); return false;">Retry</a></div>`;
         })
         .finally(() => {
+            clearTimeout(fetchTimeoutId);
+            clearTimeout(fetchTimeout);
             // Hide loading state
             loading.hide();
         });
