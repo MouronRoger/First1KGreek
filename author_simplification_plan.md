@@ -1,46 +1,5 @@
 # First1KGreek Browser Implementation Plan
 
-Remembering...
-Here's a conceptual explanation of the First1KGreek browser project you can share with Cursor:
-First1KGreek Browser: Conceptual Overview
-The First1KGreek Browser started as a simple file navigator for the Perseus Digital Library's Greek texts collection. In its original form, it was literally just a "browser" - a way to navigate through a directory structure of XML files containing ancient Greek texts.
-Original Architecture
-The system had minimal architecture:
-
-Directory structure organized by author ID and work ID
-XML files with TEI markup containing the actual texts
-Navigation directly mapped to filesystem hierarchy
-No intermediate data layer or index
-
-This created significant performance problems when trying to display works, as it required:
-
-Real-time directory traversal
-On-the-fly XML parsing for metadata extraction
-Complex fallback mechanisms to handle inconsistencies
-
-Simplified Approach
-Our new approach inserts a lightweight index layer:
-[File System] → [JSON Index] → [User Interface]
-The index captures all essential metadata in a simple JSON structure:
-
-Author information (name, century, type)
-Work information (titles in different languages)
-Text versions with language and file paths
-
-This creates a fast lookup mechanism while preserving the original file organization. The browser becomes a two-step process:
-
-Consult the index for navigation and metadata (fast)
-Access the XML files directly only when viewing a specific text
-
-Benefits
-
-Performance: Navigation becomes instant, no more XML parsing until needed
-Simplicity: Clean separation between data structure and viewing logic
-Maintainability: Single source of truth for metadata
-Extensibility: Foundation for additional features (search, preferences, vectorization)
-
-This approach keeps the system true to its roots as a "browser" while addressing the performance bottlenecks that were causing issues.
-
 ## Phase 1: Create Index Structure
 
 1. **Design the JSON Index Schema**
@@ -76,42 +35,24 @@ This approach keeps the system true to its roots as a "browser" while addressing
    }
    ```
 
-2. **Create Indexing Script**
-   - Script to scan the data directory for author folders
-   - Parse `__cts__.xml` files for titles and metadata
-   - Extract language information from filenames
-   - Build and save the index as JSON 
-   
-3. There should be a prompt to "reindex when data is modified 
+2. **Create Indexer Module (src/first1k/indexer/)**
+   - **models.py**: Pydantic models for authors, works, and text versions
+   - **builder.py**: Index construction functions that scan data directory and XML files
+   - **accessor.py**: Cached index access functions with performance optimizations
+   - **__init__.py**: Package exports with clear API for index functions
 
-Manual trigger with prompt: Provide a clear UI button for manual reindexing with a confirmation prompt
-Detection with notification: Detect when data files have been added, modified, or removed, and show a notification suggesting reindexing
-Optional automatic mode: Include a configuration setting to enable fully automatic reindexing
+3. **Add Utility Functions**
+   - **src/first1k/utils/file_utils.py**: Change detection in data files for reindexing
+   - **src/first1k/utils/index_utils.py**: Index management and validation
 
-Rationale
-This hybrid approach works well because:
+4. **Implement Hybrid Reindexing**
+   - Manual trigger with confirmation prompt
+   - Notification system for detected file changes
+   - Optional automatic mode configurable in settings
 
-Data stability: The Perseus collection is relatively static, so automatic reindexing on every start would be unnecessary overhead
-Performance consideration: Reindexing could be resource-intensive with a large collection
-User control: Scholars might be adding or modifying texts in batches and would prefer to control when reindexing happens
-Transparency: Users should understand when/why reindexing is happening
+5. **Update Configuration**
+   - Update **src/first1k/config.py** with index file paths and reindexing settings
 
-Implementation Approach
-pythondef check_for_changes():
-    """Check if data directory has changes since last indexing."""
-    # Compare modification timestamps or hash of directory listing
-    # with stored values from last indexing
-    return changes_detected
-
-# In main application
-if check_for_changes():
-    if config.get('auto_reindex'):
-        # Automatically reindex
-        build_index()
-    else:
-        # Show notification
-        show_notification("Data changes detected. Would you like to reindex?", 
-                          actions=["Reindex Now", "Remind Later"])
 ## Phase 2: Create FastAPI Endpoints
 
 1. **Define Core Routes**
@@ -122,10 +63,21 @@ if check_for_changes():
    - `/view/raw/{file_path:path}` - View raw XML
    - `/view/reader/{author_id}/{work_id}/{language}` - View reader-friendly version
 
-2. **Implement Handlers**
-   - Simple index loading and lookup functions
-   - XML-to-reader conversion function (for reader view only)
-   - Static file serving for raw XML
+2. **Implement API Handlers**
+   - Type-safe handlers with Pydantic models
+   - Dependency injection for index access
+   - Error handling with appropriate HTTP status codes
+   - Comprehensive response models with proper documentation
+
+3. **Optimize Performance**
+   - Implement caching for frequent requests
+   - Use async handlers for I/O-bound operations
+   - Efficient index lookups with minimal XML parsing
+   
+4. **API Documentation**
+   - Auto-generated Swagger UI documentation
+   - Clear endpoint descriptions and example responses
+   - Proper parameter validation and error documentation
 
 ## Phase 3: Frontend Templates
 
@@ -167,46 +119,141 @@ if check_for_changes():
 1. **Setup Project Structure**
    ```
    first1k/
-   ├── data/                 # Original XML data
-   ├── static/               # CSS, JS, and static assets
-   ├── templates/            # HTML templates
-   ├── app.py                # FastAPI application
-   ├── indexer.py            # Indexing script
-   ├── utils.py              # Helper functions
-   └── index.json            # Generated index file
+   ├── data/                       # Original XML data
+   ├── static/                     # CSS, JS, and static assets
+   │   ├── css/                    # Stylesheets
+   │   └── js/                     # JavaScript files
+   ├── src/                        # Source code
+   │   └── first1k/
+   │       ├── indexer/            # Indexing module
+   │       │   ├── __init__.py     # Package exports
+   │       │   ├── models.py       # Pydantic models
+   │       │   ├── builder.py      # Index construction
+   │       │   └── accessor.py     # Index access with caching
+   │       ├── utils/              # Utility functions
+   │       │   ├── __init__.py
+   │       │   ├── file_utils.py   # File change detection
+   │       │   └── index_utils.py  # Index management
+   │       ├── config.py           # Configuration settings
+   │       └── api.py              # FastAPI application
+   ├── templates/                  # HTML templates
+   ├── index.json                  # Generated index file
+   └── setup.cfg                   # Linting configuration
    ```
 
-2. **Create Indexing Script**
-   - Implement the index builder in `indexer.py`
-   - Run to generate initial `index.json`
+2. **Update Configuration Settings**
+   - Add index file paths and configuration to `src/first1k/config.py`
+   - Configure reindexing settings and file change detection
 
-3. **FastAPI Setup**
-   - Install dependencies: `fastapi`, `uvicorn`, `jinja2`
+3. **Implement Index Module**
+   - Create Pydantic models in `src/first1k/indexer/models.py`
+   - Implement index builder in `src/first1k/indexer/builder.py`
+   - Add cached access functions in `src/first1k/indexer/accessor.py`
+   - Create package API in `src/first1k/indexer/__init__.py`
+
+4. **Implement Utility Functions**
+   - Add file change detection in `src/first1k/utils/file_utils.py`
+   - Implement index management in `src/first1k/utils/index_utils.py`
+
+5. **FastAPI Setup**
+   - Install dependencies: `fastapi`, `uvicorn`, `jinja2`, `pydantic`
    - Configure Jinja2 templates
-   - Implement routes in `app.py`
+   - Implement API routes in `src/first1k/api.py`
 
-4. **Frontend Development**
+6. **Frontend Development**
    - Create HTML templates with minimal JavaScript
    - Implement basic CSS for styling
    - Add client-side functionality for preferences
 
-5. **Testing**
+7. **Code Standards Implementation**
+   - Configure Black formatting (120-character line length)
+   - Set up flake8 with appropriate rules
+   - Add pydocstyle D100s requirements for docstrings
+   - Ensure proper type annotations throughout the codebase
+
+8. **Testing**
    - Test navigation flow
    - Verify XML and reader views
-   - Check performance with large datasets
+   - Check index performance with large datasets
+   - Test reindexing functionality
 
 ## Code Samples
 
-### Indexing Script Example
+### Modular Implementation Examples
 
+#### src/first1k/indexer/models.py
 ```python
+"""Pydantic models for First1KGreek index data."""
+from typing import Dict, List, Optional, Literal
+from pydantic import BaseModel, Field
+
+
+class TextVersion(BaseModel):
+    """A specific version of a text in a particular language."""
+    
+    id: str = Field(..., description="Unique identifier for the text version")
+    language: str = Field(..., description="Language of the text (Greek or English)")
+    path: str = Field(..., description="Path to the XML file")
+
+
+class WorkTitles(BaseModel):
+    """Titles for a work in different languages."""
+    
+    latin: Optional[str] = Field(None, description="Latin title")
+    english: Optional[str] = Field(None, description="English title")
+    greek: Optional[str] = Field(None, description="Greek title")
+
+
+class Work(BaseModel):
+    """A literary work by an author."""
+    
+    id: str = Field(..., description="Work identifier (e.g., 'tlg008')")
+    titles: WorkTitles = Field(..., description="Titles in different languages")
+    texts: List[TextVersion] = Field(default_factory=list, description="Available text versions")
+
+
+class Author(BaseModel):
+    """An author in the First1KGreek corpus."""
+    
+    id: str = Field(..., description="Author identifier (e.g., 'tlg0032')")
+    name: str = Field(..., description="Author name")
+    century: Optional[int] = Field(None, description="Century (negative for BCE, positive for CE)")
+    type: Optional[str] = Field(None, description="Author type (e.g., 'Historian')")
+    works: Dict[str, Work] = Field(default_factory=dict, description="Works by this author")
+
+
+class Index(BaseModel):
+    """The complete First1KGreek index."""
+    
+    authors: Dict[str, Author] = Field(default_factory=dict, description="Authors by ID")
+    version: str = Field("1.0.0", description="Index format version")
+    generated_at: str = Field(..., description="Timestamp when index was generated")
+```
+
+#### src/first1k/indexer/builder.py
+```python
+"""Index builder for First1KGreek Browser."""
 import os
 import json
 import re
 import xml.etree.ElementTree as ET
+from datetime import datetime
+from typing import Dict, List, Optional, Any, Set
 
-def get_author_name(author_id):
-    """Get author name from metadata or known mapping."""
+from .models import Index, Author, Work, WorkTitles, TextVersion
+from ..utils.file_utils import get_modified_files
+from ..config import DATA_DIR, INDEX_FILE_PATH
+
+
+def get_author_name(author_id: str) -> str:
+    """Get author name from metadata or known mapping.
+    
+    Args:
+        author_id: Author identifier (e.g., 'tlg0032')
+        
+    Returns:
+        Author name or fallback if not found
+    """
     author_map = {
         "tlg0032": "Xenophon",
         "tlg0059": "Plato",
@@ -214,8 +261,17 @@ def get_author_name(author_id):
     }
     return author_map.get(author_id, f"Author {author_id}")
 
-def get_work_title(author_path, work_dir):
-    """Extract work title from __cts__.xml file."""
+
+def get_work_title(author_path: str, work_dir: str) -> str:
+    """Extract work title from __cts__.xml file.
+    
+    Args:
+        author_path: Path to author directory
+        work_dir: Work directory name
+        
+    Returns:
+        Work title or fallback if not found
+    """
     cts_path = os.path.join(author_path, work_dir, "__cts__.xml")
     if not os.path.exists(cts_path):
         return f"Work {work_dir}"
@@ -230,19 +286,29 @@ def get_work_title(author_path, work_dir):
     
     return f"Work {work_dir}"
 
-def build_index():
-    """Build the index from the data directory."""
-    index = {"authors": {}}
+
+def build_index() -> Index:
+    """Build the complete index from the data directory.
+    
+    Returns:
+        Complete index of authors and works
+    """
+    # Initialize with empty authors dictionary
+    index_data = {
+        "authors": {},
+        "version": "1.0.0",
+        "generated_at": datetime.now().isoformat()
+    }
     
     # Scan for author folders
-    for author_dir in os.listdir("data"):
-        author_path = os.path.join("data", author_dir)
+    for author_dir in os.listdir(DATA_DIR):
+        author_path = os.path.join(DATA_DIR, author_dir)
         if not os.path.isdir(author_path) or not author_dir.startswith(('tlg', 'ggm')):
             continue
             
         # Add author entry
         author_id = author_dir
-        index["authors"][author_id] = {
+        index_data["authors"][author_id] = {
             "id": author_id,
             "name": get_author_name(author_id),
             "works": {}
@@ -254,13 +320,16 @@ def build_index():
             if not os.path.isdir(work_path):
                 continue
                 
-            # Add work entry
+            # Add work entry with titles
             work_id = work_dir
-            title = get_work_title(author_path, work_dir)
+            english_title = get_work_title(author_path, work_dir)
             
-            index["authors"][author_id]["works"][work_id] = {
+            index_data["authors"][author_id]["works"][work_id] = {
                 "id": work_id,
-                "title": title,
+                "titles": {
+                    "latin": english_title,  # Default to same as English
+                    "english": english_title
+                },
                 "texts": []
             }
             
@@ -272,23 +341,238 @@ def build_index():
                 language = "Greek" if "grc" in file_name else "English" if "eng" in file_name else "Unknown"
                 text_id = file_name.replace(".xml", "")
                 
-                index["authors"][author_id]["works"][work_id]["texts"].append({
+                index_data["authors"][author_id]["works"][work_id]["texts"].append({
                     "id": text_id,
                     "language": language,
                     "path": os.path.join(author_path, work_dir, file_name)
                 })
     
+    # Create Pydantic model for validation and export
+    index = Index.parse_obj(index_data)
+    
     # Save index
-    with open("index.json", 'w') as f:
-        json.dump(index, f, indent=2)
+    with open(INDEX_FILE_PATH, 'w') as f:
+        json.dump(index.dict(), f, indent=2)
         
     return index
 
-if __name__ == "__main__":
-    print("Building index...")
-    index = build_index()
-    print(f"Index built with {len(index['authors'])} authors")
+
+def update_index() -> Index:
+    """Update existing index with modified files only.
+    
+    Returns:
+        Updated index
+    """
+    # Load existing index if available
+    if os.path.exists(INDEX_FILE_PATH):
+        with open(INDEX_FILE_PATH, 'r') as f:
+            try:
+                existing_index = Index.parse_raw(f.read())
+            except:
+                # If parsing fails, rebuild from scratch
+                return build_index()
+    else:
+        # If no index exists, build from scratch
+        return build_index()
+    
+    # Get modified files
+    modified_files = get_modified_files(DATA_DIR)
+    
+    # If no modifications, return existing index
+    if not modified_files:
+        return existing_index
+    
+    # TODO: Implement incremental update logic
+    # For simplicity, rebuild the entire index for now
+    return build_index()
 ```
+
+#### src/first1k/indexer/accessor.py
+```python
+"""Index access functions with caching for First1KGreek Browser."""
+import os
+import json
+from typing import Dict, List, Optional, Any
+from functools import lru_cache
+
+from .models import Index, Author, Work, TextVersion
+from .builder import build_index, update_index
+from ..config import INDEX_FILE_PATH
+
+
+@lru_cache(maxsize=1)
+def load_index() -> Index:
+    """Load the index from disk with caching.
+    
+    Returns:
+        Loaded index
+    """
+    if not os.path.exists(INDEX_FILE_PATH):
+        # Build index if it doesn't exist
+        return build_index()
+        
+    with open(INDEX_FILE_PATH, 'r') as f:
+        index_data = json.load(f)
+        return Index.parse_obj(index_data)
+
+
+def get_author(author_id: str) -> Optional[Author]:
+    """Get a specific author by ID.
+    
+    Args:
+        author_id: Author identifier
+        
+    Returns:
+        Author object or None if not found
+    """
+    index = load_index()
+    if author_id in index.authors:
+        return index.authors[author_id]
+    return None
+
+
+def get_work(author_id: str, work_id: str) -> Optional[Work]:
+    """Get a specific work by author ID and work ID.
+    
+    Args:
+        author_id: Author identifier
+        work_id: Work identifier
+        
+    Returns:
+        Work object or None if not found
+    """
+    author = get_author(author_id)
+    if author and work_id in author.works:
+        return author.works[work_id]
+    return None
+
+
+def get_all_authors() -> List[Author]:
+    """Get all authors in the index.
+    
+    Returns:
+        List of all authors
+    """
+    index = load_index()
+    return list(index.authors.values())
+
+
+def get_texts_by_language(language: str) -> List[TextVersion]:
+    """Get all texts in a specific language.
+    
+    Args:
+        language: Language to filter by
+        
+    Returns:
+        List of text versions in the specified language
+    """
+    index = load_index()
+    result = []
+    
+    for author in index.authors.values():
+        for work in author.works.values():
+            for text in work.texts:
+                if text.language.lower() == language.lower():
+                    result.append(text)
+    
+    return result
+
+
+def clear_cache() -> None:
+    """Clear the index cache to force reload."""
+    load_index.cache_clear()
+```
+
+#### src/first1k/utils/file_utils.py
+```python
+"""File utilities for First1KGreek Browser."""
+import os
+import hashlib
+from typing import Set, Optional
+from datetime import datetime
+import json
+
+from ..config import LAST_INDEX_TIME_FILE
+
+
+def get_file_hash(file_path: str) -> str:
+    """Get SHA-256 hash of a file.
+    
+    Args:
+        file_path: Path to the file
+        
+    Returns:
+        Hex digest of file hash
+    """
+    sha256 = hashlib.sha256()
+    with open(file_path, 'rb') as f:
+        for chunk in iter(lambda: f.read(4096), b''):
+            sha256.update(chunk)
+    return sha256.hexdigest()
+
+
+def get_modified_files(directory: str) -> Set[str]:
+    """Get set of files modified since last indexing.
+    
+    Args:
+        directory: Directory to check for modifications
+        
+    Returns:
+        Set of modified file paths
+    """
+    # Get last indexing time
+    last_index_time = get_last_index_time()
+    if not last_index_time:
+        # If no last index time, return empty set (will trigger full rebuild)
+        return set()
+    
+    modified_files = set()
+    
+    # Walk directory and check modification times
+    for root, _, files in os.walk(directory):
+        for file in files:
+            if not file.endswith('.xml'):
+                continue
+                
+            file_path = os.path.join(root, file)
+            mod_time = os.path.getmtime(file_path)
+            
+            # Convert to datetime for comparison
+            mod_datetime = datetime.fromtimestamp(mod_time)
+            
+            if mod_datetime > last_index_time:
+                modified_files.add(file_path)
+    
+    return modified_files
+
+
+def get_last_index_time() -> Optional[datetime]:
+    """Get timestamp of last indexing operation.
+    
+    Returns:
+        Datetime of last indexing or None if not available
+    """
+    if not os.path.exists(LAST_INDEX_TIME_FILE):
+        return None
+        
+    try:
+        with open(LAST_INDEX_TIME_FILE, 'r') as f:
+            data = json.load(f)
+            return datetime.fromisoformat(data['last_index_time'])
+    except (json.JSONDecodeError, KeyError, ValueError):
+        return None
+
+
+def update_last_index_time() -> None:
+    """Update the timestamp of last indexing operation."""
+    data = {
+        'last_index_time': datetime.now().isoformat()
+    }
+    
+    with open(LAST_INDEX_TIME_FILE, 'w') as f:
+        json.dump(data, f)
+```
+
 
 ### FastAPI App Example
 

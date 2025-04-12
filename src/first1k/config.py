@@ -37,6 +37,13 @@ BACKUP_DIR = "backup"
 CATALOG_PATH = 'catalog.json'
 BACKUP_FILE = 'browse_texts_fixed.py.bak'
 
+# Index configuration
+INDEX_FILE_PATH = os.path.join(BASE_DIR, "index.json")
+LAST_INDEX_TIME_FILE = os.path.join(BASE_DIR, "last_index_time.json")
+AUTO_REINDEX = False  # Don't reindex automatically by default
+INDEX_CHECK_INTERVAL = 3600  # Check for file changes every hour (in seconds)
+INDEX_NOTIFICATION = True  # Notify when changes are detected but don't reindex automatically
+
 # Create necessary directories
 os.makedirs(DATA_DIR, exist_ok=True)
 os.makedirs(BACKUP_DIR, exist_ok=True) 
